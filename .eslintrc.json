@@ -1,0 +1,14 @@
+{
+  "plugins": [
+    "react"
+  ],
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "env": {
+    "browser": 1,
+    "node": 1,
+    "mocha": 1
+  },
+  "rules": {
+    "quotes": [2, "double"]
+  }
+}

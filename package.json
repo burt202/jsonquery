@@ -1,0 +1,16 @@
+{
+  "name": "jsonquery",
+  "version": "0.0.1",
+  "license": "ISC",
+  "dependencies": {
+    "ramda": "^0.21.0",
+    "react": "^15.0.1",
+    "react-dom": "^15.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.1.1",
+    "eslint-plugin-react": "^4.2.3",
+    "jsx-loader": "^0.13.2",
+    "webpack": "^1.13.1"
+  }
+}
