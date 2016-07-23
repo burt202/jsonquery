@@ -2,6 +2,8 @@ var React = require("react");
 var ReactDOM = require("react-dom");
 var R = require("ramda");
 
+require("./site.css");
+
 var schema = {
   auto: "bool",
   errorCode: "int",
@@ -93,20 +95,25 @@ var Main = React.createClass({
   },
 
   getFilterRows: function () {
-    return this.state.filters.map(function (filter) {
-      return (
-        <div key={filter.name}>
-          <span>{filter.name}</span>
-          {this.getInputControlByType(schema[filter.name], filter.name, filter.value)}
-          <button onClick={this.onDeleteFilter} data-name={filter.name}>Remove</button>
-        </div>
-      );
-    }.bind(this));
+    if (this.state.filters.length) {
+      return this.state.filters.map(function (filter) {
+        return (
+          <tr key={filter.name}>
+            <td>{filter.name}</td>
+            <td>{this.getInputControlByType(schema[filter.name], filter.name, filter.value)}</td>
+            <td><a href="#" onClick={this.onDeleteFilter} data-name={filter.name}>Remove</a></td>
+          </tr>
+        );
+      }.bind(this));
+    } else {
+      return (<tr><td>No filters</td></tr>);
+    }
   },
 
   getEmptyRow: function () {
     return (
-      <div>
+      <div className="input-control">
+        <span>Add Filter:</span>
         <select onChange={this.onAddFilter}>
           <option></option>
           {this.getFilterOptions()}
@@ -131,7 +138,8 @@ var Main = React.createClass({
 
   getGroupByControl: function () {
     return (
-      <div>
+      <div className="input-control">
+        <span>Group By:</span>
         <select onChange={this.onGroupByChange}>
           <option></option>
           {this.getGroupByOptions()}
@@ -165,20 +173,22 @@ var Main = React.createClass({
   },
 
   showSummary: function (filtered, grouped) {
-    var summary = {
-      total: filtered.length
-    };
+    var formattedGroups = "None";
 
     if (this.state.groupBy) {
-      var grouping = Object.keys(grouped).map(function (key) {
-        return {name: key, count: grouped[key].length};
+      var groups = Object.keys(grouped).map(function (key) {
+        return key + " (" + grouped[key].length + ")";
       });
 
-      summary = R.merge(summary, {"grouping": grouping});
+      formattedGroups = groups.join(", ");
     }
 
     return (
-      <pre>{JSON.stringify(summary, null, 2)}</pre>
+      <div>
+        <h3>Summary</h3>
+        <p>Total: {filtered.length}</p>
+        <p>Groups: {formattedGroups}</p>
+      </div>
     );
   },
 
@@ -188,11 +198,25 @@ var Main = React.createClass({
 
     return (
       <div>
-        {this.getFilterRows()}
         {this.getEmptyRow()}
+        <table className="table filters">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Value</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.getFilterRows()}
+          </tbody>
+        </table>
         {this.getGroupByControl()}
         {this.showSummary(filtered, grouped)}
-        <pre>{JSON.stringify(grouped, null, 2)}</pre>
+        <div>
+          <h3>Results</h3>
+          <pre>{JSON.stringify(grouped, null, 2)}</pre>
+        </div>
       </div>
     )
   }
