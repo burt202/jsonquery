@@ -4,21 +4,6 @@ var R = require("ramda");
 
 require("./site.css");
 
-var schema = {
-  auto: "bool",
-  errorCode: "int",
-  type: "string"
-};
-
-var data = [
-  {auto: true, errorCode: 0, type: "cash"},
-  {auto: true, errorCode: 402, type: "cash"},
-  {auto: false, errorCode: 403, type: "cash"},
-  {auto: true, errorCode: 403, type: "card"},
-  {auto: false, errorCode: 0, type: "loan"},
-  {auto: null, errorCode: 0, type: "card"}
-];
-
 function updateWhere(find, update, data) {
   var index = R.findIndex(R.whereEq(find), data);
   return R.adjust(R.merge(R.__, update), index, data);
@@ -51,7 +36,9 @@ var Main = React.createClass({
   getInitialState: function () {
     return {
       filters: [],
-      groupBy: null
+      groupBy: null,
+      schema: null,
+      data: null
     };
   },
 
@@ -59,7 +46,7 @@ var Main = React.createClass({
     var filterOptions = R.pipe(
       R.keys,
       R.without(R.pluck("name", this.state.filters))
-    )(schema);
+    )(this.state.schema);
 
     return filterOptions.map(function (value) {
       return (
@@ -100,7 +87,7 @@ var Main = React.createClass({
         return (
           <tr key={filter.name}>
             <td>{filter.name}</td>
-            <td>{this.getInputControlByType(schema[filter.name], filter.name, filter.value)}</td>
+            <td>{this.getInputControlByType(this.state.schema[filter.name], filter.name, filter.value)}</td>
             <td><a href="#" onClick={this.onDeleteFilter} data-name={filter.name}>Remove</a></td>
           </tr>
         );
@@ -123,7 +110,7 @@ var Main = React.createClass({
   },
 
   getGroupByOptions: function () {
-    return Object.keys(schema).map(function (value) {
+    return Object.keys(this.state.schema).map(function (value) {
       return (
         <option value={value} key={value}>{value}</option>
       );
@@ -150,7 +137,7 @@ var Main = React.createClass({
 
   filterData: function () {
     var filters = R.reduce(function (acc, filter) {
-      var type = schema[filter.name];
+      var type = this.state.schema[filter.name];
       if (type === "string") acc[filter.name] = R.equals(filter.value);
       if (type === "int") acc[filter.name] = R.equals(parseInt(filter.value, 10));
       if (type === "bool") {
@@ -159,9 +146,9 @@ var Main = React.createClass({
         if (filter.value === "") acc[filter.name] = R.isNil;
       }
       return acc;
-    }, {}, this.state.filters);
+    }.bind(this), {}, this.state.filters);
 
-    return R.filter(R.where(filters), data);
+    return R.filter(R.where(filters), this.state.data);
   },
 
   groupData: function (filtered) {
@@ -192,33 +179,59 @@ var Main = React.createClass({
     );
   },
 
-  render: function () {
-    var filtered = this.filterData();
-    var grouped = this.groupData(filtered);
+  onFileUpload: function (name, evt) {
+    var file = evt.target.files[0];
+    var reader = new FileReader();
 
+    reader.onload = function () {
+      var stateObj = {};
+      stateObj[name] = JSON.parse(reader.result);
+      this.setState(stateObj);
+    }.bind(this);
+
+    reader.readAsText(file);
+  },
+
+  getUploadInputs: function () {
     return (
       <div>
-        {this.getEmptyRow()}
-        <table className="table filters">
-          <thead>
-            <tr>
-              <th>Field</th>
-              <th>Value</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.getFilterRows()}
-          </tbody>
-        </table>
-        {this.getGroupByControl()}
-        {this.showSummary(filtered, grouped)}
-        <div>
-          <h3>Results</h3>
-          <pre>{JSON.stringify(grouped, null, 2)}</pre>
-        </div>
+        Schema: <input type="file" onChange={this.onFileUpload.bind(this, "schema")} />
+        Data: <input type="file" onChange={this.onFileUpload.bind(this, "data")} />
       </div>
-    )
+    );
+  },
+
+  render: function () {
+    if (!this.state.schema || !this.state.data) {
+      return this.getUploadInputs();
+    } else {
+      var filtered = this.filterData();
+      var grouped = this.groupData(filtered);
+
+      return (
+        <div>
+          {this.getEmptyRow()}
+          <table className="table filters">
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Value</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.getFilterRows()}
+            </tbody>
+          </table>
+          {this.getGroupByControl()}
+          {this.showSummary(filtered, grouped)}
+          <div>
+            <h3>Results</h3>
+            <pre>{JSON.stringify(grouped, null, 2)}</pre>
+          </div>
+        </div>
+      )
+    }
   }
 });
 
