@@ -48,7 +48,8 @@ var typeMap = {
 var Main = React.createClass({
   getInitialState: function () {
     return {
-      filters: []
+      filters: [],
+      groupBy: null
     };
   },
 
@@ -65,7 +66,7 @@ var Main = React.createClass({
     });
   },
 
-  onSelectChange: function (e) {
+  onAddFilter: function (e) {
     this.setState({
       filters: R.append({name: e.target.value, value: ""}, this.state.filters)
     });
@@ -106,7 +107,7 @@ var Main = React.createClass({
   getEmptyRow: function () {
     return (
       <div>
-        <select onChange={this.onSelectChange}>
+        <select onChange={this.onAddFilter}>
           <option></option>
           {this.getFilterOptions()}
         </select>
@@ -114,7 +115,32 @@ var Main = React.createClass({
     );
   },
 
-  getFilteredContent: function () {
+  getGroupByOptions: function () {
+    return Object.keys(schema).map(function (value) {
+      return (
+        <option value={value} key={value}>{value}</option>
+      );
+    });
+  },
+
+  onGroupByChange: function (e) {
+    this.setState({
+      groupBy: e.target.value
+    });
+  },
+
+  getGroupByControl: function () {
+    return (
+      <div>
+        <select onChange={this.onGroupByChange}>
+          <option></option>
+          {this.getGroupByOptions()}
+        </select>
+      </div>
+    );
+  },
+
+  filterData: function () {
     var filters = R.reduce(function (acc, filter) {
       var type = schema[filter.name];
       if (type === "string") acc[filter.name] = R.equals(filter.value);
@@ -127,19 +153,46 @@ var Main = React.createClass({
       return acc;
     }, {}, this.state.filters);
 
-    var filtered = R.filter(R.where(filters), data);
+    return R.filter(R.where(filters), data);
+  },
+
+  groupData: function (filtered) {
+    if (this.state.groupBy) {
+      return R.groupBy(R.prop(this.state.groupBy), filtered);
+    } else {
+      return filtered;
+    }
+  },
+
+  showSummary: function (filtered, grouped) {
+    var summary = {
+      total: filtered.length
+    };
+
+    if (this.state.groupBy) {
+      var grouping = Object.keys(grouped).map(function (key) {
+        return {name: key, count: grouped[key].length};
+      });
+
+      summary = R.merge(summary, {"grouping": grouping});
+    }
 
     return (
-      <pre>{JSON.stringify(filtered, null, 2)}</pre>
+      <pre>{JSON.stringify(summary, null, 2)}</pre>
     );
   },
 
   render: function () {
+    var filtered = this.filterData();
+    var grouped = this.groupData(filtered);
+
     return (
       <div>
         {this.getFilterRows()}
         {this.getEmptyRow()}
-        {this.getFilteredContent()}
+        {this.getGroupByControl()}
+        {this.showSummary(filtered, grouped)}
+        <pre>{JSON.stringify(grouped, null, 2)}</pre>
       </div>
     )
   }
