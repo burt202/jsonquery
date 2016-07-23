@@ -16,6 +16,34 @@ var data = [
   {auto: false, errorCode: 0, type: "loan"}
 ];
 
+function updateWhere(find, update, data) {
+  var index = R.findIndex(R.whereEq(find), data);
+  return R.adjust(R.merge(R.__, update), index, data);
+}
+
+function getStringInput (name, value, onChange) {
+  return (<input type="text" name={name} value={value} onChange={onChange.bind(this, name)} />);
+}
+
+function getIntInput (name, value, onChange) {
+  return (<input type="number" name={name} value={value} onChange={onChange.bind(this, name)} />);
+}
+function getBoolInput (name, value, onChange) {
+  return (
+    <select name={name} value={value} onChange={onChange.bind(this, name)}>
+      <option value="">NULL</option>
+      <option value="true">TRUE</option>
+      <option value="false">FALSE</option>
+    </select>
+  );
+}
+
+var typeMap = {
+  string: getStringInput,
+  int: getIntInput,
+  bool: getBoolInput
+};
+
 var Main = React.createClass({
   getInitialState: function () {
     return {
@@ -38,14 +66,28 @@ var Main = React.createClass({
 
   onSelectChange: function (e) {
     this.setState({
-      filters: R.append({name: e.target.value, value: null}, this.state.filters)
-    })
+      filters: R.append({name: e.target.value, value: ""}, this.state.filters)
+    });
   },
 
   onDeleteFilter: function (e) {
     this.setState({
       filters: R.reject(R.propEq("name", e.target.dataset.name), this.state.filters)
-    })
+    });
+  },
+
+  updateFilterValue: function (name, e) {
+    this.setState({
+      filters: updateWhere({name: name}, {value: e.target.value}, this.state.filters)
+    });
+  },
+
+  getInputControlByType: function (type, name, value) {
+    if (typeMap[type]) {
+      return typeMap[type].bind(this)(name, value, this.updateFilterValue);
+    } else {
+      return "Invalid Type"
+    }
   },
 
   getFilterRows: function () {
@@ -53,6 +95,7 @@ var Main = React.createClass({
       return (
         <div key={filter.name}>
           <span>{filter.name}</span>
+          {this.getInputControlByType(schema[filter.name], filter.name, filter.value)}
           <button onClick={this.onDeleteFilter} data-name={filter.name}>Remove</button>
         </div>
       );
