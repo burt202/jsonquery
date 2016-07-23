@@ -13,7 +13,8 @@ var data = [
   {auto: true, errorCode: 402, type: "cash"},
   {auto: false, errorCode: 403, type: "cash"},
   {auto: true, errorCode: 403, type: "card"},
-  {auto: false, errorCode: 0, type: "loan"}
+  {auto: false, errorCode: 0, type: "loan"},
+  {auto: null, errorCode: 0, type: "card"}
 ];
 
 function updateWhere(find, update, data) {
@@ -113,11 +114,32 @@ var Main = React.createClass({
     );
   },
 
+  getFilteredContent: function () {
+    var filters = R.reduce(function (acc, filter) {
+      var type = schema[filter.name];
+      if (type === "string") acc[filter.name] = R.equals(filter.value);
+      if (type === "int") acc[filter.name] = R.equals(parseInt(filter.value, 10));
+      if (type === "bool") {
+        if (filter.value === "true") acc[filter.name] = R.equals(true);
+        if (filter.value === "false") acc[filter.name] = R.equals(false);
+        if (filter.value === "") acc[filter.name] = R.isNil;
+      }
+      return acc;
+    }, {}, this.state.filters);
+
+    var filtered = R.filter(R.where(filters), data);
+
+    return (
+      <pre>{JSON.stringify(filtered, null, 2)}</pre>
+    );
+  },
+
   render: function () {
     return (
       <div>
         {this.getFilterRows()}
         {this.getEmptyRow()}
+        {this.getFilteredContent()}
       </div>
     )
   }
