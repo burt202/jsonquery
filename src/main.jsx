@@ -2,7 +2,7 @@ var React = require("react");
 var ReactDOM = require("react-dom");
 var R = require("ramda");
 
-require("./site.css");
+require("./app.css");
 
 function updateWhere(find, update, data) {
   var index = R.findIndex(R.whereEq(find), data);
