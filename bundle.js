@@ -58,10 +58,11 @@
 	var actionCreator = __webpack_require__(174);
 	var store = __webpack_require__(179);
 
-	var Upload = __webpack_require__(182);
-	var Filters = __webpack_require__(183);
+	var formatter = __webpack_require__(182);
+	var Upload = __webpack_require__(183);
+	var Filters = __webpack_require__(184);
 
-	__webpack_require__(184);
+	__webpack_require__(185);
 
 	var Main = React.createClass({displayName: "Main",
 	  getInitialState: function () {
@@ -80,6 +81,18 @@
 	    this.setState(store.getState());
 	  },
 
+	  onAddFilter: function (e) {
+	    actionCreator.addFilter(e.target.value);
+	  },
+
+	  onGroupByChange: function (e) {
+	    actionCreator.groupBy(e.target.value);
+	  },
+
+	  onReset: function () {
+	    actionCreator.reset();
+	  },
+
 	  getFilterOptions: function () {
 	    var filterOptions = R.pipe(
 	      R.keys,
@@ -93,15 +106,7 @@
 	    });
 	  },
 
-	  onAddFilter: function (e) {
-	    actionCreator.addFilter(e.target.value);
-	  },
-
-	  onReset: function () {
-	    actionCreator.reset();
-	  },
-
-	  getEmptyRow: function () {
+	  getFilterControl: function () {
 	    return (
 	      React.createElement("div", {className: "input-control"}, 
 	        React.createElement("span", null, "Add Filter:"), 
@@ -121,10 +126,6 @@
 	    });
 	  },
 
-	  onGroupByChange: function (e) {
-	    actionCreator.groupBy(e.target.value);
-	  },
-
 	  getGroupByControl: function () {
 	    return (
 	      React.createElement("div", {className: "input-control"}, 
@@ -137,28 +138,10 @@
 	    );
 	  },
 
-	  filterData: function () {
-	    var filters = R.reduce(function (acc, filter) {
-	      var type = this.state.schema[filter.name];
-	      if (type === "string") acc[filter.name] = R.equals(filter.value);
-	      if (type === "int") acc[filter.name] = R.equals(parseInt(filter.value, 10));
-	      if (type === "bool") {
-	        if (filter.value === "true") acc[filter.name] = R.equals(true);
-	        if (filter.value === "false") acc[filter.name] = R.equals(false);
-	        if (filter.value === "") acc[filter.name] = R.isNil;
-	      }
-	      return acc;
-	    }.bind(this), {}, this.state.filters);
-
-	    return R.filter(R.where(filters), this.state.data);
-	  },
-
-	  groupData: function (filtered) {
-	    if (this.state.groupBy) {
-	      return R.groupBy(R.prop(this.state.groupBy), filtered);
-	    } else {
-	      return filtered;
-	    }
+	  getResetControl: function () {
+	    return (
+	      React.createElement("p", null, React.createElement("a", {href: "#", onClick: this.onReset}, "Reset"))
+	    );
 	  },
 
 	  showSummary: function (filtered, grouped) {
@@ -187,19 +170,19 @@
 	        actionCreator: actionCreator}
 	      )
 	    } else {
-	      var filtered = this.filterData();
-	      var grouped = this.groupData(filtered);
+	      var filtered = formatter.filter(this.state.data, this.state.schema, this.state.filters);
+	      var grouped = formatter.group(filtered, this.state.groupBy);
 
 	      return (
 	        React.createElement("div", null, 
-	          this.getEmptyRow(), 
+	          this.getFilterControl(), 
 	          React.createElement(Filters, {
 	            actionCreator: actionCreator, 
 	            filters: this.state.filters, 
 	            schema: this.state.schema}
 	          ), 
 	          this.getGroupByControl(), 
-	          React.createElement("p", null, React.createElement("a", {href: "#", onClick: this.onReset}, "Reset")), 
+	          this.getResetControl(), 
 	          this.showSummary(filtered, grouped), 
 	          React.createElement("div", null, 
 	            React.createElement("h3", null, "Results"), 
@@ -30819,6 +30802,39 @@
 /* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var R = __webpack_require__(173);
+
+	module.exports = {
+	  filter: function (data, schema, filters) {
+	    var builtFilters = R.reduce(function (acc, filter) {
+	      var type = schema[filter.name];
+	      if (type === "string") acc[filter.name] = R.equals(filter.value);
+	      if (type === "int") acc[filter.name] = R.equals(parseInt(filter.value, 10));
+	      if (type === "bool") {
+	        if (filter.value === "true") acc[filter.name] = R.equals(true);
+	        if (filter.value === "false") acc[filter.name] = R.equals(false);
+	        if (filter.value === "") acc[filter.name] = R.isNil;
+	      }
+	      return acc;
+	    }.bind(this), {}, filters);
+
+	    return R.filter(R.where(builtFilters), data);
+	  },
+
+	  group: function (filtered, groupBy) {
+	    if (groupBy) {
+	      return R.groupBy(R.prop(groupBy), filtered);
+	    } else {
+	      return filtered;
+	    }
+	  }
+	};
+
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(2);
 
 	var Upload = React.createClass({
@@ -30854,7 +30870,7 @@
 
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(2);
@@ -30946,7 +30962,7 @@
 
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
