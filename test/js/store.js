@@ -21,14 +21,63 @@ describe("store", function () {
 
   describe("saveJson", function () {
     it("should save json under the passed prop name", function () {
-      expect(store.getState().schema).to.eql(null);
-
       dispatcher.dispatch({
         name: "saveJson",
         value: {name: "schema", data: "foo"}
       });
 
       expect(store.getState().schema).to.eql("foo");
+    });
+  });
+
+  describe("addFilter", function () {
+    it("should add filter", function () {
+      dispatcher.dispatch({
+        name: "addFilter",
+        value: {name: "foo"}
+      });
+
+      expect(store.getState().filters).to.eql([{name: "foo", value: ""}]);
+    });
+  });
+
+  describe("deleteFilter", function () {
+    beforeEach(function () {
+      dispatcher.dispatch({
+        name: "addFilter",
+        value: {name: "foo"}
+      });
+    });
+
+    it("should delete filter", function () {
+      expect(store.getState().filters).to.eql([{name: "foo", value: ""}]);
+
+      dispatcher.dispatch({
+        name: "deleteFilter",
+        value: {name: "foo"}
+      });
+
+      expect(store.getState().filters).to.eql([]);
+    });
+  });
+
+  describe("updateFilter", function () {
+    beforeEach(function () {
+      dispatcher.dispatch({
+        name: "addFilter",
+        value: {name: "foo"}
+      });
+    });
+
+    it("should update filter", function () {
+      expect(store.getState().filters).to.eql([{name: "foo", value: ""}]);
+
+      dispatcher.dispatch({
+        name: "updateFilter",
+        value: {name: "foo", value: "bar"}
+      });
+
+      expect(store.getState().filters).to.eql([{name: "foo", value: "bar"}]);
     });
   });
 
@@ -56,6 +105,17 @@ describe("store", function () {
 
       expect(store.getState().filters).to.eql([]);
       expect(store.getState().groupBy).to.eql(null);
+    });
+  });
+
+  describe("groupBy", function () {
+    it("should add groupBy", function () {
+      dispatcher.dispatch({
+        name: "groupBy",
+        value: {name: "foo"}
+      });
+
+      expect(store.getState().groupBy).to.eql("foo");
     });
   });
 });
