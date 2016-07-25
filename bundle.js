@@ -150,6 +150,13 @@
 	    }
 	  },
 
+	  onReset: function () {
+	    this.setState({
+	      filters: [],
+	      groupBy: null
+	    });
+	  },
+
 	  getEmptyRow: function () {
 	    return (
 	      React.createElement("div", {className: "input-control"}, 
@@ -180,7 +187,7 @@
 	    return (
 	      React.createElement("div", {className: "input-control"}, 
 	        React.createElement("span", null, "Group By:"), 
-	        React.createElement("select", {onChange: this.onGroupByChange}, 
+	        React.createElement("select", {onChange: this.onGroupByChange, value: this.state.groupBy || ""}, 
 	          React.createElement("option", null), 
 	          this.getGroupByOptions()
 	        )
@@ -277,6 +284,7 @@
 	            )
 	          ), 
 	          this.getGroupByControl(), 
+	          React.createElement("p", null, React.createElement("a", {href: "#", onClick: this.onReset}, "Reset")), 
 	          this.showSummary(filtered, grouped), 
 	          React.createElement("div", null, 
 	            React.createElement("h3", null, "Results"), 
