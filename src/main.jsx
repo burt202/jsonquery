@@ -2,12 +2,10 @@ var React = require("react");
 var ReactDOM = require("react-dom");
 var R = require("ramda");
 
-require("./app.css");
+var actionCreator = require("./action-creator");
+var store = require("./store");
 
-function updateWhere(find, update, data) {
-  var index = R.findIndex(R.whereEq(find), data);
-  return R.adjust(R.merge(R.__, update), index, data);
-}
+require("./app.css");
 
 function getStringInput (name, value, onChange) {
   return (<input type="text" name={name} value={value} onChange={onChange.bind(this, name)} />);
@@ -16,6 +14,7 @@ function getStringInput (name, value, onChange) {
 function getIntInput (name, value, onChange) {
   return (<input type="number" name={name} value={value} onChange={onChange.bind(this, name)} />);
 }
+
 function getBoolInput (name, value, onChange) {
   return (
     <select name={name} value={value} onChange={onChange.bind(this, name)}>
@@ -34,12 +33,19 @@ var typeMap = {
 
 var Main = React.createClass({
   getInitialState: function () {
-    return {
-      filters: [],
-      groupBy: null,
-      schema: null,
-      data: null
-    };
+    return store.getState();
+  },
+
+  componentDidMount: function () {
+    store.addChangeListener(this.update);
+  },
+
+  componentWillUnmount: function () {
+    store.removeChangeListener(this.update);
+  },
+
+  update: function () {
+    this.setState(store.getState());
   },
 
   getFilterOptions: function () {
@@ -56,21 +62,15 @@ var Main = React.createClass({
   },
 
   onAddFilter: function (e) {
-    this.setState({
-      filters: R.append({name: e.target.value, value: ""}, this.state.filters)
-    });
+    actionCreator.addFilter(e.target.value);
   },
 
   onDeleteFilter: function (e) {
-    this.setState({
-      filters: R.reject(R.propEq("name", e.target.dataset.name), this.state.filters)
-    });
+    actionCreator.deleteFilter(e.target.dataset.name);
   },
 
   updateFilterValue: function (name, e) {
-    this.setState({
-      filters: updateWhere({name: name}, {value: e.target.value}, this.state.filters)
-    });
+    actionCreator.updateFilter(name, e.target.value);
   },
 
   getInputControlByType: function (type, name, value) {
@@ -98,10 +98,7 @@ var Main = React.createClass({
   },
 
   onReset: function () {
-    this.setState({
-      filters: [],
-      groupBy: null
-    });
+    actionCreator.reset();
   },
 
   getEmptyRow: function () {
@@ -125,9 +122,7 @@ var Main = React.createClass({
   },
 
   onGroupByChange: function (e) {
-    this.setState({
-      groupBy: e.target.value
-    });
+    actionCreator.groupBy(e.target.value);
   },
 
   getGroupByControl: function () {
@@ -191,9 +186,8 @@ var Main = React.createClass({
     var reader = new FileReader();
 
     reader.onload = function () {
-      var stateObj = {};
-      stateObj[name] = JSON.parse(reader.result);
-      this.setState(stateObj);
+      var json = JSON.parse(reader.result);
+      actionCreator.saveJson(name, json);
     }.bind(this);
 
     reader.readAsText(file);
