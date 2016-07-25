@@ -31,7 +31,11 @@ gulp.task("webpack-prod", function () {
         "NODE_ENV": JSON.stringify("production")
       }
     }),
-    new webpack.optimize.UglifyJsPlugin()
+    new webpack.optimize.UglifyJsPlugin({
+      compress:{
+        warnings: false
+      }
+    })
   ], webpackConfig.plugins), webpackConfig);
 
   return gulp.src("src/main.jsx")
