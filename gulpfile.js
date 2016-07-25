@@ -46,6 +46,7 @@ gulp.task("webpack-prod", function () {
 gulp.task("copy-scaffolding", function () {
   return gulp.src([
       "src/index.html",
+      "src/favicon.ico",
       "CNAME"
     ])
     .pipe(gulp.dest("build"));
