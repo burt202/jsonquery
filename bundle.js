@@ -58,31 +58,10 @@
 	var actionCreator = __webpack_require__(174);
 	var store = __webpack_require__(179);
 
-	__webpack_require__(182);
+	var Upload = __webpack_require__(182);
+	var Filters = __webpack_require__(183);
 
-	function getStringInput (name, value, onChange) {
-	  return (React.createElement("input", {type: "text", name: name, value: value, onChange: onChange.bind(this, name)}));
-	}
-
-	function getIntInput (name, value, onChange) {
-	  return (React.createElement("input", {type: "number", name: name, value: value, onChange: onChange.bind(this, name)}));
-	}
-
-	function getBoolInput (name, value, onChange) {
-	  return (
-	    React.createElement("select", {name: name, value: value, onChange: onChange.bind(this, name)}, 
-	      React.createElement("option", {value: ""}, "NULL"), 
-	      React.createElement("option", {value: "true"}, "TRUE"), 
-	      React.createElement("option", {value: "false"}, "FALSE")
-	    )
-	  );
-	}
-
-	var typeMap = {
-	  string: getStringInput,
-	  int: getIntInput,
-	  bool: getBoolInput
-	};
+	__webpack_require__(184);
 
 	var Main = React.createClass({displayName: "Main",
 	  getInitialState: function () {
@@ -116,38 +95,6 @@
 
 	  onAddFilter: function (e) {
 	    actionCreator.addFilter(e.target.value);
-	  },
-
-	  onDeleteFilter: function (e) {
-	    actionCreator.deleteFilter(e.target.dataset.name);
-	  },
-
-	  updateFilterValue: function (name, e) {
-	    actionCreator.updateFilter(name, e.target.value);
-	  },
-
-	  getInputControlByType: function (type, name, value) {
-	    if (typeMap[type]) {
-	      return typeMap[type].bind(this)(name, value, this.updateFilterValue);
-	    } else {
-	      return "Invalid Type"
-	    }
-	  },
-
-	  getFilterRows: function () {
-	    if (this.state.filters.length) {
-	      return this.state.filters.map(function (filter) {
-	        return (
-	          React.createElement("tr", {key: filter.name}, 
-	            React.createElement("td", null, filter.name), 
-	            React.createElement("td", null, this.getInputControlByType(this.state.schema[filter.name], filter.name, filter.value)), 
-	            React.createElement("td", null, React.createElement("a", {href: "#", onClick: this.onDeleteFilter, "data-name": filter.name}, "Remove"))
-	          )
-	        );
-	      }.bind(this));
-	    } else {
-	      return (React.createElement("tr", null, React.createElement("td", null, "No filters")));
-	    }
 	  },
 
 	  onReset: function () {
@@ -234,30 +181,11 @@
 	    );
 	  },
 
-	  onFileUpload: function (name, evt) {
-	    var file = evt.target.files[0];
-	    var reader = new FileReader();
-
-	    reader.onload = function () {
-	      var json = JSON.parse(reader.result);
-	      actionCreator.saveJson(name, json);
-	    }.bind(this);
-
-	    reader.readAsText(file);
-	  },
-
-	  getUploadInputs: function () {
-	    return (
-	      React.createElement("div", null, 
-	        "Schema: ", React.createElement("input", {type: "file", onChange: this.onFileUpload.bind(this, "schema")}), 
-	        "Data: ", React.createElement("input", {type: "file", onChange: this.onFileUpload.bind(this, "data")})
-	      )
-	    );
-	  },
-
 	  render: function () {
 	    if (!this.state.schema || !this.state.data) {
-	      return this.getUploadInputs();
+	      return React.createElement(Upload, {
+	        actionCreator: actionCreator}
+	      )
 	    } else {
 	      var filtered = this.filterData();
 	      var grouped = this.groupData(filtered);
@@ -265,17 +193,10 @@
 	      return (
 	        React.createElement("div", null, 
 	          this.getEmptyRow(), 
-	          React.createElement("table", {className: "table filters"}, 
-	            React.createElement("thead", null, 
-	              React.createElement("tr", null, 
-	                React.createElement("th", null, "Field"), 
-	                React.createElement("th", null, "Value"), 
-	                React.createElement("th", null)
-	              )
-	            ), 
-	            React.createElement("tbody", null, 
-	              this.getFilterRows()
-	            )
+	          React.createElement(Filters, {
+	            actionCreator: actionCreator, 
+	            filters: this.state.filters, 
+	            schema: this.state.schema}
 	          ), 
 	          this.getGroupByControl(), 
 	          React.createElement("p", null, React.createElement("a", {href: "#", onClick: this.onReset}, "Reset")), 
@@ -30896,6 +30817,136 @@
 
 /***/ },
 /* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(2);
+
+	var Upload = React.createClass({
+	  displayName: "Upload",
+
+	  propTypes: {
+	    actionCreator: React.PropTypes.object.isRequired
+	  },
+
+	  onFileUpload: function (name, evt) {
+	    var file = evt.target.files[0];
+	    var reader = new FileReader();
+
+	    reader.onload = function () {
+	      var json = JSON.parse(reader.result);
+	      this.props.actionCreator.saveJson(name, json);
+	    }.bind(this);
+
+	    reader.readAsText(file);
+	  },
+
+	  render: function () {
+	    return (
+	      React.createElement("div", null, 
+	        "Schema: ", React.createElement("input", {type: "file", onChange: this.onFileUpload.bind(this, "schema")}), 
+	        "Data: ", React.createElement("input", {type: "file", onChange: this.onFileUpload.bind(this, "data")})
+	      )
+	    );
+	  }
+	});
+
+	module.exports = Upload;
+
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(2);
+
+	function getStringInput (name, value, onChange) {
+	  return (React.createElement("input", {type: "text", name: name, value: value, onChange: onChange.bind(this, name)}));
+	}
+
+	function getIntInput (name, value, onChange) {
+	  return (React.createElement("input", {type: "number", name: name, value: value, onChange: onChange.bind(this, name)}));
+	}
+
+	function getBoolInput (name, value, onChange) {
+	  return (
+	    React.createElement("select", {name: name, value: value, onChange: onChange.bind(this, name)}, 
+	      React.createElement("option", {value: ""}, "NULL"), 
+	      React.createElement("option", {value: "true"}, "TRUE"), 
+	      React.createElement("option", {value: "false"}, "FALSE")
+	    )
+	  );
+	}
+
+	var typeMap = {
+	  string: getStringInput,
+	  int: getIntInput,
+	  bool: getBoolInput
+	};
+
+	var Filters = React.createClass({
+	  displayName: "Filters",
+
+	  propTypes: {
+	    actionCreator: React.PropTypes.object.isRequired,
+	    filters: React.PropTypes.array.isRequired,
+	    schema: React.PropTypes.object.isRequired
+	  },
+
+	  getInputControlByType: function (type, name, value) {
+	    if (typeMap[type]) {
+	      return typeMap[type].bind(this)(name, value, this.updateFilter);
+	    } else {
+	      return "Invalid Type"
+	    }
+	  },
+
+	  getFilterRows: function () {
+	    if (this.props.filters.length) {
+	      return this.props.filters.map(function (filter) {
+	        return (
+	          React.createElement("tr", {key: filter.name}, 
+	            React.createElement("td", null, filter.name), 
+	            React.createElement("td", null, this.getInputControlByType(this.props.schema[filter.name], filter.name, filter.value)), 
+	            React.createElement("td", null, React.createElement("a", {href: "#", onClick: this.deleteFilter, "data-name": filter.name}, "Remove"))
+	          )
+	        );
+	      }.bind(this));
+	    } else {
+	      return (React.createElement("tr", null, React.createElement("td", null, "No filters")));
+	    }
+	  },
+
+	  deleteFilter: function (e) {
+	    this.props.actionCreator.deleteFilter(e.target.dataset.name);
+	  },
+
+	  updateFilter: function (name, e) {
+	    this.props.actionCreator.updateFilter(name, e.target.value);
+	  },
+
+	  render: function () {
+	    return (
+	      React.createElement("table", {className: "table filters"}, 
+	        React.createElement("thead", null, 
+	          React.createElement("tr", null, 
+	            React.createElement("th", null, "Field"), 
+	            React.createElement("th", null, "Value"), 
+	            React.createElement("th", null)
+	          )
+	        ), 
+	        React.createElement("tbody", null, 
+	          this.getFilterRows()
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = Filters;
+
+
+/***/ },
+/* 184 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
