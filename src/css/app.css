@@ -20,6 +20,7 @@ body {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+  width: 650px;
 }
 
 a {
@@ -121,8 +122,4 @@ pre {
   background-color: #f5f5f5;
   border: 1px solid #ccc;
   border-radius: 4px;
-}
-
-.upload-cont p {
-  width: 650px;
 }

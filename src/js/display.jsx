@@ -109,7 +109,7 @@ var Display = React.createClass({
     var grouped = formatter.group(filtered, this.props.groupBy);
 
     return (
-      <div className="display-cont">
+      <div>
         <p><a className="site-link" onClick={this.onBackClick}>Back</a></p>
         {this.getFilterControl()}
         <Filters

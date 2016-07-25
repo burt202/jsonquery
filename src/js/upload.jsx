@@ -41,17 +41,17 @@ var Upload = React.createClass({
 
   render: function () {
     return (
-      <div className="upload-cont">
+      <div>
         <p>Query your JSON with ease.</p>
-        <p>Takes a JSON array, with a schema, and allows multiple filters and a grouping to enable you to find results you want. See below for an example.</p>
+        <p>Takes a JSON array, with a schema, and allows you to add multiple filters and a grouping to enable you to find results you want. Use the inputs below to supply your files. We do not do anything with your data!</p>
         Schema: <input type="file" onChange={this.onFileUpload.bind(this, "schema")} />
         JSON: <input type="file" onChange={this.onFileUpload.bind(this, "data")} />
 
         <h3>Example</h3>
-        <p><a className="site-link" onClick={this.showDemo}>See it in action</a></p>
-        <p>The schema should be a simple JSON object describing the fields you want to query on, matched with their type. This is then used to build up the dynamic filters on the next screen. Currently supported types are 'string', 'int' and 'bool'.</p>
+        <p>The schema should be a simple JSON object describing the fields you want to query on, matched with their type. This is then used to build up the dynamic filters on the next screen.</p>
+        <p>Currently supported types are <i>string</i>, <i>int</i> and <i>bool</i>.</p>
         <pre>{JSON.stringify(testSchema, null, 2)}</pre>
-        <p>The data should be a flat JSON array</p>
+        <p>...and the data should be a flat JSON array. That's it! <a className="site-link" onClick={this.showDemo}>See it in action</a></p>
         <pre>{JSON.stringify(testData, null, 2)}</pre>
       </div>
     );
