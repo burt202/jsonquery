@@ -30817,7 +30817,7 @@
 
 	  getResetControl: function () {
 	    return (
-	      React.createElement("p", null, React.createElement("a", {href: "#", onClick: this.onReset}, "Reset"))
+	      React.createElement("p", null, React.createElement("a", {className: "site-link", onClick: this.onReset}, "Reset"))
 	    );
 	  },
 
@@ -30955,7 +30955,7 @@
 	          React.createElement("tr", {key: filter.name}, 
 	            React.createElement("td", null, filter.name), 
 	            React.createElement("td", null, this.getInputControlByType(this.props.schema[filter.name], filter.name, filter.value)), 
-	            React.createElement("td", null, React.createElement("a", {href: "#", onClick: this.deleteFilter, "data-name": filter.name}, "Remove"))
+	            React.createElement("td", null, React.createElement("a", {className: "site-link", onClick: this.deleteFilter, "data-name": filter.name}, "Remove"))
 	          )
 	        );
 	      }.bind(this));
