@@ -118,4 +118,47 @@ describe("store", function () {
       expect(store.getState().groupBy).to.eql("foo");
     });
   });
+
+  describe("goBack", function () {
+    beforeEach(function () {
+      dispatcher.dispatch({
+        name: "addFilter",
+        value: {name: "foo"}
+      });
+
+      dispatcher.dispatch({
+        name: "groupBy",
+        value: {name: "bar"}
+      });
+
+      dispatcher.dispatch({
+        name: "saveJson",
+        value: {name: "schema", data: "baz"}
+      });
+
+      dispatcher.dispatch({
+        name: "saveJson",
+        value: {name: "data", data: "abc"}
+      });
+    });
+
+    it("should reset filters and groupBy values to their defaults", function () {
+      expect(store.getState().filters).to.eql([{name: "foo", value: ""}]);
+      expect(store.getState().groupBy).to.eql("bar");
+      expect(store.getState().schema).to.eql("baz");
+      expect(store.getState().data).to.eql("abc");
+
+      dispatcher.dispatch({
+        name: "goBack",
+        value: {}
+      });
+
+      expect(store.getState()).to.eql({
+        filters: [],
+        groupBy: null,
+        schema: null,
+        data: null
+      });
+    });
+  });
 });

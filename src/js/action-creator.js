@@ -41,5 +41,12 @@ module.exports = {
       name: "groupBy",
       value: {name: name}
     });
+  },
+
+  goBack: function () {
+    dispatcher.dispatch({
+      name: "goBack",
+      value: {}
+    });
   }
 };

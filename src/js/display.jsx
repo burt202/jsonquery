@@ -27,6 +27,10 @@ var Display = React.createClass({
     this.props.actionCreator.reset();
   },
 
+  onBackClick: function () {
+    this.props.actionCreator.goBack();
+  },
+
   getFilterOptions: function () {
     var filterOptions = R.pipe(
       R.keys,
@@ -104,6 +108,7 @@ var Display = React.createClass({
 
     return (
       <div>
+        <p><a className="site-link" onClick={this.onBackClick}>Back</a></p>
         {this.getFilterControl()}
         <Filters
           actionCreator={this.props.actionCreator}

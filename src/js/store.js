@@ -49,6 +49,10 @@ var handlers = {
     return R.merge(contents, {
       groupBy: payload.name
     });
+  },
+
+  goBack: function (contents) {
+    return R.merge(contents, defaults);
   }
 };
 
