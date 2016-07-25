@@ -5,31 +5,10 @@ var R = require("ramda");
 var actionCreator = require("./action-creator");
 var store = require("./store");
 
+var Upload = require("./upload");
+var Filters = require("./filters");
+
 require("./app.css");
-
-function getStringInput (name, value, onChange) {
-  return (<input type="text" name={name} value={value} onChange={onChange.bind(this, name)} />);
-}
-
-function getIntInput (name, value, onChange) {
-  return (<input type="number" name={name} value={value} onChange={onChange.bind(this, name)} />);
-}
-
-function getBoolInput (name, value, onChange) {
-  return (
-    <select name={name} value={value} onChange={onChange.bind(this, name)}>
-      <option value="">NULL</option>
-      <option value="true">TRUE</option>
-      <option value="false">FALSE</option>
-    </select>
-  );
-}
-
-var typeMap = {
-  string: getStringInput,
-  int: getIntInput,
-  bool: getBoolInput
-};
 
 var Main = React.createClass({
   getInitialState: function () {
@@ -63,38 +42,6 @@ var Main = React.createClass({
 
   onAddFilter: function (e) {
     actionCreator.addFilter(e.target.value);
-  },
-
-  onDeleteFilter: function (e) {
-    actionCreator.deleteFilter(e.target.dataset.name);
-  },
-
-  updateFilterValue: function (name, e) {
-    actionCreator.updateFilter(name, e.target.value);
-  },
-
-  getInputControlByType: function (type, name, value) {
-    if (typeMap[type]) {
-      return typeMap[type].bind(this)(name, value, this.updateFilterValue);
-    } else {
-      return "Invalid Type"
-    }
-  },
-
-  getFilterRows: function () {
-    if (this.state.filters.length) {
-      return this.state.filters.map(function (filter) {
-        return (
-          <tr key={filter.name}>
-            <td>{filter.name}</td>
-            <td>{this.getInputControlByType(this.state.schema[filter.name], filter.name, filter.value)}</td>
-            <td><a href="#" onClick={this.onDeleteFilter} data-name={filter.name}>Remove</a></td>
-          </tr>
-        );
-      }.bind(this));
-    } else {
-      return (<tr><td>No filters</td></tr>);
-    }
   },
 
   onReset: function () {
@@ -181,30 +128,11 @@ var Main = React.createClass({
     );
   },
 
-  onFileUpload: function (name, evt) {
-    var file = evt.target.files[0];
-    var reader = new FileReader();
-
-    reader.onload = function () {
-      var json = JSON.parse(reader.result);
-      actionCreator.saveJson(name, json);
-    }.bind(this);
-
-    reader.readAsText(file);
-  },
-
-  getUploadInputs: function () {
-    return (
-      <div>
-        Schema: <input type="file" onChange={this.onFileUpload.bind(this, "schema")} />
-        Data: <input type="file" onChange={this.onFileUpload.bind(this, "data")} />
-      </div>
-    );
-  },
-
   render: function () {
     if (!this.state.schema || !this.state.data) {
-      return this.getUploadInputs();
+      return <Upload
+        actionCreator={actionCreator}
+      />
     } else {
       var filtered = this.filterData();
       var grouped = this.groupData(filtered);
@@ -212,18 +140,11 @@ var Main = React.createClass({
       return (
         <div>
           {this.getEmptyRow()}
-          <table className="table filters">
-            <thead>
-              <tr>
-                <th>Field</th>
-                <th>Value</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.getFilterRows()}
-            </tbody>
-          </table>
+          <Filters
+            actionCreator={actionCreator}
+            filters={this.state.filters}
+            schema={this.state.schema}
+          />
           {this.getGroupByControl()}
           <p><a href="#" onClick={this.onReset}>Reset</a></p>
           {this.showSummary(filtered, grouped)}
