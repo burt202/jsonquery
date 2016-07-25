@@ -97,6 +97,13 @@ var Main = React.createClass({
     }
   },
 
+  onReset: function () {
+    this.setState({
+      filters: [],
+      groupBy: null
+    });
+  },
+
   getEmptyRow: function () {
     return (
       <div className="input-control">
@@ -127,7 +134,7 @@ var Main = React.createClass({
     return (
       <div className="input-control">
         <span>Group By:</span>
-        <select onChange={this.onGroupByChange}>
+        <select onChange={this.onGroupByChange} value={this.state.groupBy || ""}>
           <option></option>
           {this.getGroupByOptions()}
         </select>
@@ -224,6 +231,7 @@ var Main = React.createClass({
             </tbody>
           </table>
           {this.getGroupByControl()}
+          <p><a href="#" onClick={this.onReset}>Reset</a></p>
           {this.showSummary(filtered, grouped)}
           <div>
             <h3>Results</h3>
