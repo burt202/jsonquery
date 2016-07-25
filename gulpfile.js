@@ -21,8 +21,11 @@ gulp.task("webpack", function () {
     .pipe(gulp.dest("build"));
 });
 
-gulp.task("copy-index", function () {
-  return gulp.src("src/index.html")
+gulp.task("copy-scaffolding", function () {
+  return gulp.src([
+      "src/index.html",
+      "CNAME"
+    ])
     .pipe(gulp.dest("build"));
 });
 
@@ -30,7 +33,7 @@ gulp.task("build", function (callback) {
   runSequence(
     "clean",
     "webpack",
-    "copy-index",
+    "copy-scaffolding",
     callback
   );
 });
