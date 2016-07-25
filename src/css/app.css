@@ -38,6 +38,10 @@ a:hover {
   text-decoration: underline;
 }
 
+a.site-link {
+  cursor: pointer;
+}
+
 .filters {
   margin: 10px 0 15px 0;
 }

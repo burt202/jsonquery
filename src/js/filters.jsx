@@ -48,7 +48,7 @@ var Filters = React.createClass({
           <tr key={filter.name}>
             <td>{filter.name}</td>
             <td>{this.getInputControlByType(this.props.schema[filter.name], filter.name, filter.value)}</td>
-            <td><a href="#" onClick={this.deleteFilter} data-name={filter.name}>Remove</a></td>
+            <td><a className="site-link" onClick={this.deleteFilter} data-name={filter.name}>Remove</a></td>
           </tr>
         );
       }.bind(this));

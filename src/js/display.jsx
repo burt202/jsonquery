@@ -74,7 +74,7 @@ var Display = React.createClass({
 
   getResetControl: function () {
     return (
-      <p><a href="#" onClick={this.onReset}>Reset</a></p>
+      <p><a className="site-link" onClick={this.onReset}>Reset</a></p>
     );
   },
 
