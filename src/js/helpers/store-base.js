@@ -10,6 +10,10 @@ module.exports = function (defaults, handlers) {
 
   var store = R.mergeAll([{}, EventEmitter.prototype, {
 
+    resetState: function () {
+      contents = defaults;
+    },
+
     getState: function () {
       return contents;
     },

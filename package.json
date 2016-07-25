@@ -12,6 +12,7 @@
     "react-dom": "^15.0.1"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "css-loader": "^0.23.1",
     "eslint": "^2.7.0",
     "eslint-plugin-react": "^4.2.3",
@@ -21,6 +22,7 @@
     "gulp-gh-pages": "^0.5.4",
     "gulp-webpack": "^1.5.0",
     "jsx-loader": "^0.13.2",
+    "mocha": "^2.5.3",
     "run-sequence": "^1.2.2",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.1"
