@@ -5,6 +5,7 @@ var R = require("ramda");
 var actionCreator = require("./action-creator");
 var store = require("./store");
 
+var formatter = require("./formatter");
 var Upload = require("./upload");
 var Filters = require("./filters");
 
@@ -27,6 +28,18 @@ var Main = React.createClass({
     this.setState(store.getState());
   },
 
+  onAddFilter: function (e) {
+    actionCreator.addFilter(e.target.value);
+  },
+
+  onGroupByChange: function (e) {
+    actionCreator.groupBy(e.target.value);
+  },
+
+  onReset: function () {
+    actionCreator.reset();
+  },
+
   getFilterOptions: function () {
     var filterOptions = R.pipe(
       R.keys,
@@ -40,15 +53,7 @@ var Main = React.createClass({
     });
   },
 
-  onAddFilter: function (e) {
-    actionCreator.addFilter(e.target.value);
-  },
-
-  onReset: function () {
-    actionCreator.reset();
-  },
-
-  getEmptyRow: function () {
+  getFilterControl: function () {
     return (
       <div className="input-control">
         <span>Add Filter:</span>
@@ -68,10 +73,6 @@ var Main = React.createClass({
     });
   },
 
-  onGroupByChange: function (e) {
-    actionCreator.groupBy(e.target.value);
-  },
-
   getGroupByControl: function () {
     return (
       <div className="input-control">
@@ -84,28 +85,10 @@ var Main = React.createClass({
     );
   },
 
-  filterData: function () {
-    var filters = R.reduce(function (acc, filter) {
-      var type = this.state.schema[filter.name];
-      if (type === "string") acc[filter.name] = R.equals(filter.value);
-      if (type === "int") acc[filter.name] = R.equals(parseInt(filter.value, 10));
-      if (type === "bool") {
-        if (filter.value === "true") acc[filter.name] = R.equals(true);
-        if (filter.value === "false") acc[filter.name] = R.equals(false);
-        if (filter.value === "") acc[filter.name] = R.isNil;
-      }
-      return acc;
-    }.bind(this), {}, this.state.filters);
-
-    return R.filter(R.where(filters), this.state.data);
-  },
-
-  groupData: function (filtered) {
-    if (this.state.groupBy) {
-      return R.groupBy(R.prop(this.state.groupBy), filtered);
-    } else {
-      return filtered;
-    }
+  getResetControl: function () {
+    return (
+      <p><a href="#" onClick={this.onReset}>Reset</a></p>
+    );
   },
 
   showSummary: function (filtered, grouped) {
@@ -134,19 +117,19 @@ var Main = React.createClass({
         actionCreator={actionCreator}
       />
     } else {
-      var filtered = this.filterData();
-      var grouped = this.groupData(filtered);
+      var filtered = formatter.filter(this.state.data, this.state.schema, this.state.filters);
+      var grouped = formatter.group(filtered, this.state.groupBy);
 
       return (
         <div>
-          {this.getEmptyRow()}
+          {this.getFilterControl()}
           <Filters
             actionCreator={actionCreator}
             filters={this.state.filters}
             schema={this.state.schema}
           />
           {this.getGroupByControl()}
-          <p><a href="#" onClick={this.onReset}>Reset</a></p>
+          {this.getResetControl()}
           {this.showSummary(filtered, grouped)}
           <div>
             <h3>Results</h3>
