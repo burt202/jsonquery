@@ -103,11 +103,13 @@ var Display = React.createClass({
   },
 
   render: function () {
+    window.scrollTo(0, 0);
+
     var filtered = formatter.filter(this.props.data, this.props.schema, this.props.filters);
     var grouped = formatter.group(filtered, this.props.groupBy);
 
     return (
-      <div>
+      <div className="display-cont">
         <p><a className="site-link" onClick={this.onBackClick}>Back</a></p>
         {this.getFilterControl()}
         <Filters

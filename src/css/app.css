@@ -122,3 +122,7 @@ pre {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+.upload-cont p {
+  width: 650px;
+}
