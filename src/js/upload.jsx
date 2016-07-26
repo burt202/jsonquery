@@ -15,6 +15,16 @@ var testData = [
   {model: "Astra", color: "red", automatic: false, noOfDoors: 3}
 ]
 
+function isValidJSON (str) {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+
+  return true;
+}
+
 var Upload = React.createClass({
   displayName: "Upload",
 
@@ -22,16 +32,18 @@ var Upload = React.createClass({
     actionCreator: React.PropTypes.object.isRequired
   },
 
-  onFileUpload: function (name, evt) {
-    var file = evt.target.files[0];
+  onFileUploadStart: function (name, evt) {
     var reader = new FileReader();
+    reader.onload = function () { this.onFileUploadEnd(name, reader.result); }.bind(this);
+    reader.readAsText(evt.target.files[0]);
+  },
 
-    reader.onload = function () {
-      var json = JSON.parse(reader.result);
-      this.props.actionCreator.saveJson(name, json);
-    }.bind(this);
-
-    reader.readAsText(file);
+  onFileUploadEnd: function (name, res) {
+    if (isValidJSON(res)) {
+      this.props.actionCreator.saveJson(name, JSON.parse(res));
+    } else {
+      alert("Not valid JSON!");
+    }
   },
 
   showDemo: function () {
@@ -44,8 +56,8 @@ var Upload = React.createClass({
       <div>
         <p>Query your JSON with ease.</p>
         <p>Takes a JSON array, with a schema, and allows you to add multiple filters and a grouping to enable you to find results you want. Use the inputs below to supply your files. We do not do anything with your data!</p>
-        Schema: <input type="file" onChange={this.onFileUpload.bind(this, "schema")} />
-        JSON: <input type="file" onChange={this.onFileUpload.bind(this, "data")} />
+        Schema: <input type="file" onChange={this.onFileUploadStart.bind(this, "schema")} />
+        JSON: <input type="file" onChange={this.onFileUploadStart.bind(this, "data")} />
 
         <h3>Example</h3>
         <p>The schema should be a simple JSON object describing the fields you want to query on, matched with their type. This is then used to build up the dynamic filters on the next screen.</p>
