@@ -32,15 +32,17 @@ var Upload = React.createClass({
     actionCreator: React.PropTypes.object.isRequired
   },
 
-  onFileUploadStart: function (name, evt) {
+  onFileUploadStart: function (name, e) {
     var reader = new FileReader();
-    reader.onload = function () { this.onFileUploadEnd(name, reader.result); }.bind(this);
-    reader.readAsText(evt.target.files[0]);
+    reader.onload = this.onFileUploadEnd.bind(this, name);
+    reader.readAsText(e.target.files[0]);
   },
 
-  onFileUploadEnd: function (name, res) {
-    if (isValidJSON(res)) {
-      this.props.actionCreator.saveJson(name, JSON.parse(res));
+  onFileUploadEnd: function (name, e) {
+    var json = e.target.result;
+
+    if (isValidJSON(json)) {
+      this.props.actionCreator.saveJson(name, JSON.parse(json));
     } else {
       alert("Not valid JSON!");
     }
