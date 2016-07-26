@@ -4,6 +4,8 @@ var R = require("ramda");
 var formatter = require("./formatter");
 var Filters = require("./filters");
 
+var FILTER_THRESHOLD = 100;
+
 var Display = React.createClass({
   displayName: "Display",
 
@@ -85,7 +87,7 @@ var Display = React.createClass({
   showSummary: function (filtered, grouped) {
     var formattedGroups = "None";
 
-    if (this.props.groupBy) {
+    if (grouped) {
       var groups = Object.keys(grouped).map(function (key) {
         return key + " (" + grouped[key].length + ")";
       });
@@ -102,11 +104,52 @@ var Display = React.createClass({
     );
   },
 
+  downloadResults: function (data) {
+    var dataStr = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], {type: "application/json"}));
+    var downloadLink = document.getElementById("hidden-download-link");
+    downloadLink.setAttribute("href", dataStr);
+    downloadLink.setAttribute("download", new Date().toISOString() + ".json");
+    downloadLink.click();
+    downloadLink.setAttribute("href", "");
+  },
+
+  getLimitText: function (filtered) {
+    return (
+      <div>
+        <p>NOTE: results display limited to {FILTER_THRESHOLD}</p>
+        <p>To download the whole lot <a className="site-link" onClick={this.downloadResults.bind(this, filtered)}>click here</a></p>
+      </div>
+    );
+  },
+
+  showResults: function (filtered, grouped) {
+    var dataToDisplay = grouped || filtered;
+    var resultsText = (<p><a className="site-link" onClick={this.downloadResults.bind(this, dataToDisplay)}>Download as JSON</a></p>);
+
+    if (!grouped && filtered.length > FILTER_THRESHOLD) {
+      dataToDisplay = R.take(FILTER_THRESHOLD, filtered);
+      resultsText = this.getLimitText(filtered);
+    }
+
+    return (
+      <div>
+        <h3>Results</h3>
+        {resultsText}
+        <pre>{JSON.stringify(dataToDisplay, null, 2)}</pre>
+        <a id="hidden-download-link" style={{display: "none"}}></a>
+      </div>
+    );
+  },
+
   render: function () {
     window.scrollTo(0, 0);
 
     var filtered = formatter.filter(this.props.data, this.props.schema, this.props.filters);
-    var grouped = formatter.group(filtered, this.props.groupBy);
+    var grouped = null;
+
+    if (this.props.groupBy) {
+      grouped = formatter.group(filtered, this.props.groupBy);
+    }
 
     return (
       <div>
@@ -120,10 +163,7 @@ var Display = React.createClass({
         {this.getGroupByControl()}
         {this.getResetControl()}
         {this.showSummary(filtered, grouped)}
-        <div>
-          <h3>Results</h3>
-          <pre>{JSON.stringify(grouped, null, 2)}</pre>
-        </div>
+        {this.showResults(filtered, grouped)}
       </div>
     )
   }

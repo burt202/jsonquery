@@ -18,10 +18,6 @@ module.exports = {
   },
 
   group: function (filtered, groupBy) {
-    if (groupBy) {
-      return R.groupBy(R.prop(groupBy), filtered);
-    } else {
-      return filtered;
-    }
+    return R.groupBy(R.prop(groupBy), filtered);
   }
 };

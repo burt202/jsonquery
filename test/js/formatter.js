@@ -114,9 +114,5 @@ describe("formatter", function () {
         ]
        });
     });
-
-    it("should do nothing if no groupBy argument is passed", function () {
-      expect(formatter.group(mockDataForGrouping)).to.eql(mockDataForGrouping);
-    });
   });
 });
