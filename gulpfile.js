@@ -6,6 +6,8 @@ var deploy = require("gulp-gh-pages");
 var gulpWebpack = require("gulp-webpack");
 var webpack = require("webpack");
 var webpackConfig = require("./webpack.config.js");
+var swig = require("gulp-swig");
+var data = require("gulp-data");
 
 gulp.task("default", ["watch"]);
 
@@ -43,12 +45,25 @@ gulp.task("webpack-prod", function () {
     .pipe(gulp.dest("build"));
 });
 
-gulp.task("copy-scaffolding", function () {
+gulp.task("copy-files", function () {
   return gulp.src([
-      "src/index.html",
       "src/favicon.ico",
       "CNAME"
     ])
+    .pipe(gulp.dest("build"));
+});
+
+gulp.task("swig", function () {
+  return gulp.src("src/index.html")
+    .pipe(data({production: false}))
+    .pipe(swig())
+    .pipe(gulp.dest("build"));
+});
+
+gulp.task("swig-prod", function () {
+  return gulp.src("src/index.html")
+    .pipe(data({production: true}))
+    .pipe(swig())
     .pipe(gulp.dest("build"));
 });
 
@@ -56,19 +71,21 @@ gulp.task("build", function (callback) {
   runSequence(
     "clean",
     "webpack",
-    "copy-scaffolding",
-    callback
-  );
-});
-gulp.task("build-prod", function (callback) {
-  runSequence(
-    "clean",
-    "webpack-prod",
-    "copy-scaffolding",
+    "swig",
+    "copy-files",
     callback
   );
 });
 
+gulp.task("build-prod", function (callback) {
+  runSequence(
+    "clean",
+    "webpack-prod",
+    "swig-prod",
+    "copy-files",
+    callback
+  );
+});
 
 gulp.task("deploy", ["build-prod"], function () {
   return gulp.src("./build/**/*")
