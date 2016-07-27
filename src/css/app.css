@@ -123,3 +123,8 @@ pre {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+.upload-cont label {
+  width: 100px;
+  display: inline-block;
+}

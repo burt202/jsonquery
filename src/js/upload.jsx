@@ -55,11 +55,11 @@ var Upload = React.createClass({
 
   render: function () {
     return (
-      <div>
+      <div className="upload-cont">
         <p>Query your JSON with ease.</p>
         <p>Takes a JSON array, with a schema, and allows you to add multiple filters and a grouping to enable you to find results you want. Use the inputs below to supply your files. We do not do anything with your data!</p>
-        Schema: <input type="file" onChange={this.onFileUploadStart.bind(this, "schema")} />
-        JSON: <input type="file" onChange={this.onFileUploadStart.bind(this, "data")} />
+        <p><label>Schema:</label><input type="file" onChange={this.onFileUploadStart.bind(this, "schema")} /></p>
+        <p><label>JSON:</label><input type="file" onChange={this.onFileUploadStart.bind(this, "data")} /></p>
 
         <h3>Example</h3>
         <p>The schema should be a simple JSON object describing the fields you want to query on, matched with their type. This is then used to build up the dynamic filters on the next screen.</p>
