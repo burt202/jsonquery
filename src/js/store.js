@@ -22,7 +22,7 @@ var handlers = {
 
   addFilter: function (contents, payload) {
     return R.merge(contents, {
-      filters: R.append({name: payload.name, value: ""}, contents.filters)
+      filters: R.append({name: payload.name, value: "", operator: "eq"}, contents.filters)
     });
   },
 

@@ -4,9 +4,11 @@ var expect = chai.expect;
 var formatter = require("../../src/js/formatter");
 
 var mockDataForFiltering = [
-  {type: "cash", name: "foo", code: 101, deleted: true},
-  {type: "cash", name: "bar", code: 102, deleted: false},
-  {type: "loan", name: "baz", code: 103}
+  {name: "foo", type: "cash", code: 101, deleted: true},
+  {name: "bar", type: "cash", code: 102, deleted: false},
+  {name: "baz", type: "loan", code: 103, deleted: null},
+  {name: "abc", type: null, code: 103, deleted: true},
+  {name: "123", type: "card", code: null, deleted: false}
 ];
 
 var mockDataForGrouping = [
@@ -30,24 +32,69 @@ describe("formatter", function () {
       expect(res).to.eql(mockDataForFiltering);
     });
 
-    it("should filter on a 'string' field", function () {
+    it("should filter on a 'string' field when operator is 'eq'", function () {
       var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "type", value: "cash"}
+        {name: "type", value: "cash", operator: "eq"}
       ]);
 
       expect(res).to.eql([
         {type: "cash", name: "foo", code: 101, deleted: true},
-        {type: "cash", name: "bar", code: 102, deleted: false},
+        {type: "cash", name: "bar", code: 102, deleted: false}
       ]);
     });
 
-    it("should filter on a 'int' field", function () {
+    it("should filter on a 'string' field when operator is 'neq'", function () {
       var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "code", value: 102}
+        {name: "type", value: "cash", operator: "neq"}
+      ]);
+
+      expect(res).to.eql([
+        {type: "loan", name: "baz", code: 103, deleted: null},
+        {type: null, name: "abc", code: 103, deleted: true},
+        {name: "123", type: "card", code: null, deleted: false}
+      ]);
+    });
+
+    it("should filter on a 'string' field when operator is 'nl'", function () {
+      var res = formatter.filter(mockDataForFiltering, mockSchema, [
+        {name: "type", operator: "nl"}
+      ]);
+
+      expect(res).to.eql([
+        {type: null, name: "abc", code: 103, deleted: true}
+      ]);
+    });
+
+    it("should filter on a 'int' field when operator is 'eq'", function () {
+      var res = formatter.filter(mockDataForFiltering, mockSchema, [
+        {name: "code", value: 102, operator: "eq"}
       ]);
 
       expect(res).to.eql([
         {type: "cash", name: "bar", code: 102, deleted: false}
+      ]);
+    });
+
+    it("should filter on a 'int' field when operator is 'neq'", function () {
+      var res = formatter.filter(mockDataForFiltering, mockSchema, [
+        {name: "code", value: 102, operator: "neq"}
+      ]);
+
+      expect(res).to.eql([
+        {type: "cash", name: "foo", code: 101, deleted: true},
+        {type: "loan", name: "baz", code: 103, deleted: null},
+        {type: null, name: "abc", code: 103, deleted: true},
+        {name: "123", type: "card", code: null, deleted: false}
+      ]);
+    });
+
+    it("should filter on a 'int' field when operator is 'nl'", function () {
+      var res = formatter.filter(mockDataForFiltering, mockSchema, [
+        {name: "code", operator: "nl"}
+      ]);
+
+      expect(res).to.eql([
+        {name: "123", type: "card", code: null, deleted: false}
       ]);
     });
 
@@ -57,7 +104,8 @@ describe("formatter", function () {
       ]);
 
       expect(res).to.eql([
-        {type: "cash", name: "foo", code: 101, deleted: true}
+        {type: "cash", name: "foo", code: 101, deleted: true},
+        {type: null, name: "abc", code: 103, deleted: true}
       ]);
     });
 
@@ -67,7 +115,8 @@ describe("formatter", function () {
       ]);
 
       expect(res).to.eql([
-        {type: "cash", name: "bar", code: 102, deleted: false}
+        {type: "cash", name: "bar", code: 102, deleted: false},
+        {name: "123", type: "card", code: null, deleted: false}
       ]);
     });
 
@@ -77,13 +126,13 @@ describe("formatter", function () {
       ]);
 
       expect(res).to.eql([
-        {type: "loan", name: "baz", code: 103}
+        {type: "loan", name: "baz", code: 103, deleted: null}
       ]);
     });
 
     it("should filter on multiple fields", function () {
       var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "type", value: "cash"},
+        {name: "type", value: "cash", operator: "eq"},
         {name: "deleted", value: "false"}
       ]);
 

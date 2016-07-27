@@ -37,7 +37,7 @@ describe("store", function () {
         value: {name: "foo"}
       });
 
-      expect(store.getState().filters).to.eql([{name: "foo", value: ""}]);
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}]);
     });
   });
 
@@ -50,7 +50,7 @@ describe("store", function () {
     });
 
     it("should delete filter", function () {
-      expect(store.getState().filters).to.eql([{name: "foo", value: ""}]);
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}]);
 
       dispatcher.dispatch({
         name: "deleteFilter",
@@ -70,14 +70,14 @@ describe("store", function () {
     });
 
     it("should update filter", function () {
-      expect(store.getState().filters).to.eql([{name: "foo", value: ""}]);
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}]);
 
       dispatcher.dispatch({
         name: "updateFilter",
         value: {name: "foo", value: "bar"}
       });
 
-      expect(store.getState().filters).to.eql([{name: "foo", value: "bar"}]);
+      expect(store.getState().filters).to.eql([{name: "foo", value: "bar", operator: "eq"}]);
     });
   });
 
@@ -95,7 +95,7 @@ describe("store", function () {
     });
 
     it("should reset filters and groupBy values to their defaults", function () {
-      expect(store.getState().filters).to.eql([{name: "foo", value: ""}]);
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}]);
       expect(store.getState().groupBy).to.eql("bar");
 
       dispatcher.dispatch({
@@ -143,7 +143,7 @@ describe("store", function () {
     });
 
     it("should reset filters and groupBy values to their defaults", function () {
-      expect(store.getState().filters).to.eql([{name: "foo", value: ""}]);
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}]);
       expect(store.getState().groupBy).to.eql("bar");
       expect(store.getState().schema).to.eql("baz");
       expect(store.getState().data).to.eql("abc");
