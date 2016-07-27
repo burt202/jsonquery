@@ -98,6 +98,52 @@ describe("formatter", function () {
       ]);
     });
 
+    it("should filter on a 'int' field when operator is 'gt'", function () {
+      var res = formatter.filter(mockDataForFiltering, mockSchema, [
+        {name: "code", value: 102, operator: "gt"}
+      ]);
+
+      expect(res).to.eql([
+        {name: "baz", type: "loan", code: 103, deleted: null},
+        {name: "abc", type: null, code: 103, deleted: true}
+      ]);
+    });
+
+    it("should filter on a 'int' field when operator is 'lt'", function () {
+      var res = formatter.filter(mockDataForFiltering, mockSchema, [
+        {name: "code", value: 102, operator: "lt"}
+      ]);
+
+      expect(res).to.eql([
+        {name: "foo", type: "cash", code: 101, deleted: true},
+        {name: "123", type: "card", code: null, deleted: false}
+      ]);
+    });
+
+    it("should filter on a 'int' field when operator is 'gte'", function () {
+      var res = formatter.filter(mockDataForFiltering, mockSchema, [
+        {name: "code", value: 102, operator: "gte"}
+      ]);
+
+      expect(res).to.eql([
+        {type: "cash", name: "bar", code: 102, deleted: false},
+        {name: "baz", type: "loan", code: 103, deleted: null},
+        {name: "abc", type: null, code: 103, deleted: true}
+      ]);
+    });
+
+    it("should filter on a 'int' field when operator is 'lte'", function () {
+      var res = formatter.filter(mockDataForFiltering, mockSchema, [
+        {name: "code", value: 102, operator: "lte"}
+      ]);
+
+      expect(res).to.eql([
+        {name: "foo", type: "cash", code: 101, deleted: true},
+        {type: "cash", name: "bar", code: 102, deleted: false},
+        {name: "123", type: "card", code: null, deleted: false}
+      ]);
+    });
+
     it("should filter on a 'bool' field when true", function () {
       var res = formatter.filter(mockDataForFiltering, mockSchema, [
         {name: "deleted", value: "true"}
