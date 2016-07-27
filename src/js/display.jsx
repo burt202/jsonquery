@@ -154,13 +154,13 @@ var Display = React.createClass({
 
     return (
       <div>
-        <p><a className="site-link" onClick={this.onBackClick}>Back</a></p>
-        {this.getFilterControl()}
+        <p><a className="site-link" onClick={this.onBackClick}>Go back</a></p>
         <Filters
           actionCreator={this.props.actionCreator}
           filters={this.props.filters}
           schema={this.props.schema}
         />
+        {this.getFilterControl()}
         {this.getGroupByControl()}
         {this.getResetControl()}
         {this.showSummary(filtered, grouped)}

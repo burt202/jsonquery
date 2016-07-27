@@ -67,18 +67,21 @@ var Filters = React.createClass({
 
   render: function () {
     return (
-      <table className="table filters">
-        <thead>
-          <tr>
-            <th>Field</th>
-            <th>Value</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.getFilterRows()}
-        </tbody>
-      </table>
+      <div>
+      <h3>Filters and Grouping</h3>
+        <table className="table filters">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Value</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.getFilterRows()}
+          </tbody>
+        </table>
+      </div>
     );
   }
 });
