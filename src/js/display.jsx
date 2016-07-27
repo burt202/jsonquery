@@ -4,7 +4,7 @@ var R = require("ramda");
 var formatter = require("./formatter");
 var Filters = require("./filters");
 
-var FILTER_THRESHOLD = 100;
+var FILTER_THRESHOLD = 500;
 
 var Display = React.createClass({
   displayName: "Display",
@@ -126,8 +126,9 @@ var Display = React.createClass({
     var dataToDisplay = grouped || filtered;
     var resultsText = (<p><a className="site-link" onClick={this.downloadResults.bind(this, dataToDisplay)}>Download as JSON</a></p>);
 
-    if (!grouped && filtered.length > FILTER_THRESHOLD) {
+    if (filtered.length > FILTER_THRESHOLD) {
       dataToDisplay = R.take(FILTER_THRESHOLD, filtered);
+      if (grouped) dataToDisplay = formatter.group(dataToDisplay, this.props.groupBy)
       resultsText = this.getLimitText(filtered);
     }
 
