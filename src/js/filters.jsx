@@ -2,7 +2,7 @@ var React = require("react");
 
 function getStringInput (filter, onChange) {
   return (
-    <div>
+    <div className="filter-controls">
       <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
         <option value="eq">Equal</option>
         <option value="neq">Not equal</option>
@@ -15,7 +15,7 @@ function getStringInput (filter, onChange) {
 
 function getIntInput (filter, onChange) {
   return (
-    <div>
+    <div className="filter-controls">
       <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
         <option value="eq">Equal</option>
         <option value="neq">Not equal</option>
@@ -32,7 +32,7 @@ function getIntInput (filter, onChange) {
 
 function getBoolInput (filter, onChange) {
   return (
-    <div>
+    <div className="filter-controls">
       <select name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "value")}>
         <option value="">NULL</option>
         <option value="true">TRUE</option>

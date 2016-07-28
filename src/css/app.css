@@ -128,3 +128,7 @@ pre {
   width: 100px;
   display: inline-block;
 }
+
+.filter-controls select {
+  margin-right: 10px;
+}
