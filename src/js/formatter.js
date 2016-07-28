@@ -1,4 +1,17 @@
 var R = require("ramda");
+var moment = require("moment");
+
+var isSame = R.curry(function (filterValue, dataValue) {
+  return moment(dataValue).isSame(filterValue, "day");
+});
+
+var isBefore = R.curry(function (filterValue, dataValue) {
+  return moment(dataValue).isBefore(filterValue);
+});
+
+var isAfter = R.curry(function (filterValue, dataValue) {
+  return moment(dataValue).isAfter(filterValue);
+});
 
 module.exports = {
   filter: function (data, schema, filters) {
@@ -25,6 +38,12 @@ module.exports = {
         if (filter.value === "true") acc[filter.name] = R.equals(true);
         if (filter.value === "false") acc[filter.name] = R.equals(false);
         if (filter.value === "") acc[filter.name] = R.isNil;
+      }
+
+      if (type === "date" && filter.value.length === 8 && moment(filter.value, "YYYYMMDD").isValid()) {
+        if (filter.operator === "eq") acc[filter.name] = isSame(filter.value);
+        if (filter.operator === "be") acc[filter.name] = isBefore(filter.value);
+        if (filter.operator === "at") acc[filter.name] = isAfter(filter.value);
       }
 
       return acc;
