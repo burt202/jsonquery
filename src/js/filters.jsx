@@ -6,7 +6,7 @@ function getStringInput (filter, onChange) {
       <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
         <option value="eq">Equal</option>
         <option value="neq">Not equal</option>
-        <option value="nl">Is Null</option>
+        <option value="nl">Is null</option>
       </select>
       <input type="text" name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "value")} />
     </div>
@@ -19,7 +19,7 @@ function getIntInput (filter, onChange) {
       <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
         <option value="eq">Equal</option>
         <option value="neq">Not equal</option>
-        <option value="nl">Is Null</option>
+        <option value="nl">Is null</option>
         <option value="gt">Greater than</option>
         <option value="gte">Greater than or equal to</option>
         <option value="lt">Less than</option>
@@ -49,6 +49,7 @@ function getDateInput (filter, onChange) {
         <option value="eq">Is same day</option>
         <option value="be">Is before</option>
         <option value="at">Is after</option>
+        <option value="nl">Is null</option>
       </select>
       <input type="text" name={filter.name} value={filter.value} placeholder="YYYYMMDD" maxLength="8" onChange={onChange.bind(this, filter.name, "value")} />
     </div>

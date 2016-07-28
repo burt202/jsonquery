@@ -40,10 +40,14 @@ module.exports = {
         if (filter.value === "") acc[filter.name] = R.isNil;
       }
 
-      if (type === "date" && filter.value.length === 8 && moment(filter.value, "YYYYMMDD").isValid()) {
-        if (filter.operator === "eq") acc[filter.name] = isSame(filter.value);
-        if (filter.operator === "be") acc[filter.name] = isBefore(filter.value);
-        if (filter.operator === "at") acc[filter.name] = isAfter(filter.value);
+      if (type === "date") {
+        if (filter.value.length === 8 && moment(filter.value, "YYYYMMDD").isValid()) {
+          if (filter.operator === "eq") acc[filter.name] = isSame(filter.value);
+          if (filter.operator === "be") acc[filter.name] = isBefore(filter.value);
+          if (filter.operator === "at") acc[filter.name] = isAfter(filter.value);
+        }
+
+        if (filter.operator === "nl") acc[filter.name] = R.isNil;
       }
 
       return acc;
