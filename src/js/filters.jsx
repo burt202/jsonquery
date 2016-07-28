@@ -1,20 +1,44 @@
 var React = require("react");
 
-function getStringInput (name, value, onChange) {
-  return (<input type="text" name={name} value={value} onChange={onChange.bind(this, name)} />);
-}
-
-function getIntInput (name, value, onChange) {
-  return (<input type="number" name={name} value={value} onChange={onChange.bind(this, name)} />);
-}
-
-function getBoolInput (name, value, onChange) {
+function getStringInput (filter, onChange) {
   return (
-    <select name={name} value={value} onChange={onChange.bind(this, name)}>
-      <option value="">NULL</option>
-      <option value="true">TRUE</option>
-      <option value="false">FALSE</option>
-    </select>
+    <div>
+      <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
+        <option value="eq">Equal</option>
+        <option value="neq">Not equal</option>
+        <option value="nl">Is Null</option>
+      </select>
+      <input type="text" name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "value")} />
+    </div>
+  )
+}
+
+function getIntInput (filter, onChange) {
+  return (
+    <div>
+      <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
+        <option value="eq">Equal</option>
+        <option value="neq">Not equal</option>
+        <option value="nl">Is Null</option>
+        <option value="gt">Greater than</option>
+        <option value="gte">Greater than or equal to</option>
+        <option value="lt">Less than</option>
+        <option value="lte">Less than or equal to</option>
+      </select>
+      <input type="number" name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "value")} />
+    </div>
+  );
+}
+
+function getBoolInput (filter, onChange) {
+  return (
+    <div>
+      <select name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "value")}>
+        <option value="">NULL</option>
+        <option value="true">TRUE</option>
+        <option value="false">FALSE</option>
+      </select>
+    </div>
   );
 }
 
@@ -33,9 +57,9 @@ var Filters = React.createClass({
     schema: React.PropTypes.object.isRequired
   },
 
-  getInputControlByType: function (type, name, value) {
+  getInputControlByType: function (type, filter) {
     if (typeMap[type]) {
-      return typeMap[type].bind(this)(name, value, this.updateFilter);
+      return typeMap[type].bind(this)(filter, this.updateFilter);
     } else {
       return "Invalid Type"
     }
@@ -47,7 +71,7 @@ var Filters = React.createClass({
         return (
           <tr key={filter.name}>
             <td>{filter.name}</td>
-            <td>{this.getInputControlByType(this.props.schema[filter.name], filter.name, filter.value)}</td>
+            <td>{this.getInputControlByType(this.props.schema[filter.name], filter)}</td>
             <td><a className="site-link" onClick={this.deleteFilter} data-name={filter.name}>Remove</a></td>
           </tr>
         );
@@ -61,8 +85,10 @@ var Filters = React.createClass({
     this.props.actionCreator.deleteFilter(e.target.dataset.name);
   },
 
-  updateFilter: function (name, e) {
-    this.props.actionCreator.updateFilter(name, e.target.value);
+  updateFilter: function (name, prop, e) {
+    var toUpdate = {};
+    toUpdate[prop] = e.target.value;
+    this.props.actionCreator.updateFilter(name, toUpdate);
   },
 
   render: function () {

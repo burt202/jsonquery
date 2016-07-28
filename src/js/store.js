@@ -34,7 +34,7 @@ var handlers = {
 
   updateFilter: function (contents, payload) {
     return R.merge(contents, {
-      filters: updateWhere({name: payload.name}, {value: payload.value}, contents.filters)
+      filters: updateWhere({name: payload.name}, payload.value, contents.filters)
     });
   },
 

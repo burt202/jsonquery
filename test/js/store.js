@@ -74,7 +74,7 @@ describe("store", function () {
 
       dispatcher.dispatch({
         name: "updateFilter",
-        value: {name: "foo", value: "bar"}
+        value: {name: "foo", value: {value: "bar"}}
       });
 
       expect(store.getState().filters).to.eql([{name: "foo", value: "bar", operator: "eq"}]);
