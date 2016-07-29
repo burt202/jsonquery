@@ -4,11 +4,11 @@ var expect = chai.expect;
 var formatter = require("../../src/js/formatter");
 
 var mockDataForFiltering = [
-  {name: "foo", type: "cash", code: 101, deleted: true},
-  {name: "bar", type: "cash", code: 102, deleted: false},
-  {name: "baz", type: "loan", code: 103, deleted: null},
-  {name: "abc", type: null, code: 103, deleted: true},
-  {name: "123", type: "card", code: null, deleted: false}
+  {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
+  {name: "bar", type: "cash", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
+  {name: "baz", type: "loan", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
+  {name: "abc", type: null, code: 103, deleted: true, dateCreated: null},
+  {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"}
 ];
 
 var mockDataForGrouping = [
@@ -20,7 +20,8 @@ var mockDataForGrouping = [
 var mockSchema = {
   type: "string",
   code: "int",
-  deleted: "bool"
+  deleted: "bool",
+  dateCreated: "date"
 };
 
 describe("formatter", function () {
@@ -32,150 +33,6 @@ describe("formatter", function () {
       expect(res).to.eql(mockDataForFiltering);
     });
 
-    it("should filter on a 'string' field when operator is 'eq'", function () {
-      var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "type", value: "cash", operator: "eq"}
-      ]);
-
-      expect(res).to.eql([
-        {type: "cash", name: "foo", code: 101, deleted: true},
-        {type: "cash", name: "bar", code: 102, deleted: false}
-      ]);
-    });
-
-    it("should filter on a 'string' field when operator is 'neq'", function () {
-      var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "type", value: "cash", operator: "neq"}
-      ]);
-
-      expect(res).to.eql([
-        {type: "loan", name: "baz", code: 103, deleted: null},
-        {type: null, name: "abc", code: 103, deleted: true},
-        {name: "123", type: "card", code: null, deleted: false}
-      ]);
-    });
-
-    it("should filter on a 'string' field when operator is 'nl'", function () {
-      var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "type", operator: "nl"}
-      ]);
-
-      expect(res).to.eql([
-        {type: null, name: "abc", code: 103, deleted: true}
-      ]);
-    });
-
-    it("should filter on a 'int' field when operator is 'eq'", function () {
-      var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "code", value: 102, operator: "eq"}
-      ]);
-
-      expect(res).to.eql([
-        {type: "cash", name: "bar", code: 102, deleted: false}
-      ]);
-    });
-
-    it("should filter on a 'int' field when operator is 'neq'", function () {
-      var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "code", value: 102, operator: "neq"}
-      ]);
-
-      expect(res).to.eql([
-        {type: "cash", name: "foo", code: 101, deleted: true},
-        {type: "loan", name: "baz", code: 103, deleted: null},
-        {type: null, name: "abc", code: 103, deleted: true},
-        {name: "123", type: "card", code: null, deleted: false}
-      ]);
-    });
-
-    it("should filter on a 'int' field when operator is 'nl'", function () {
-      var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "code", operator: "nl"}
-      ]);
-
-      expect(res).to.eql([
-        {name: "123", type: "card", code: null, deleted: false}
-      ]);
-    });
-
-    it("should filter on a 'int' field when operator is 'gt'", function () {
-      var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "code", value: 102, operator: "gt"}
-      ]);
-
-      expect(res).to.eql([
-        {name: "baz", type: "loan", code: 103, deleted: null},
-        {name: "abc", type: null, code: 103, deleted: true}
-      ]);
-    });
-
-    it("should filter on a 'int' field when operator is 'lt'", function () {
-      var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "code", value: 102, operator: "lt"}
-      ]);
-
-      expect(res).to.eql([
-        {name: "foo", type: "cash", code: 101, deleted: true},
-        {name: "123", type: "card", code: null, deleted: false}
-      ]);
-    });
-
-    it("should filter on a 'int' field when operator is 'gte'", function () {
-      var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "code", value: 102, operator: "gte"}
-      ]);
-
-      expect(res).to.eql([
-        {type: "cash", name: "bar", code: 102, deleted: false},
-        {name: "baz", type: "loan", code: 103, deleted: null},
-        {name: "abc", type: null, code: 103, deleted: true}
-      ]);
-    });
-
-    it("should filter on a 'int' field when operator is 'lte'", function () {
-      var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "code", value: 102, operator: "lte"}
-      ]);
-
-      expect(res).to.eql([
-        {name: "foo", type: "cash", code: 101, deleted: true},
-        {type: "cash", name: "bar", code: 102, deleted: false},
-        {name: "123", type: "card", code: null, deleted: false}
-      ]);
-    });
-
-    it("should filter on a 'bool' field when true", function () {
-      var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "deleted", value: "true"}
-      ]);
-
-      expect(res).to.eql([
-        {type: "cash", name: "foo", code: 101, deleted: true},
-        {type: null, name: "abc", code: 103, deleted: true}
-      ]);
-    });
-
-    it("should filter on a 'bool' field when false", function () {
-      var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "deleted", value: "false"}
-      ]);
-
-      expect(res).to.eql([
-        {type: "cash", name: "bar", code: 102, deleted: false},
-        {name: "123", type: "card", code: null, deleted: false}
-      ]);
-    });
-
-    it("should filter on a 'bool' field when null", function () {
-      var res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "deleted", value: ""}
-      ]);
-
-      expect(res).to.eql([
-        {type: "loan", name: "baz", code: 103, deleted: null}
-      ]);
-    });
-
     it("should filter on multiple fields", function () {
       var res = formatter.filter(mockDataForFiltering, mockSchema, [
         {name: "type", value: "cash", operator: "eq"},
@@ -183,8 +40,205 @@ describe("formatter", function () {
       ]);
 
       expect(res).to.eql([
-        {type: "cash", name: "bar", code: 102, deleted: false}
+        {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"}
       ]);
+    });
+
+    describe("string", function () {
+
+      it("should filter when operator is 'eq'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "type", value: "cash", operator: "eq"}
+        ]);
+
+        expect(res).to.eql([
+          {type: "cash", name: "foo", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
+          {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"}
+        ]);
+      });
+
+      it("should filter when operator is 'neq'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "type", value: "cash", operator: "neq"}
+        ]);
+
+        expect(res).to.eql([
+          {type: "loan", name: "baz", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
+          {type: null, name: "abc", code: 103, deleted: true, dateCreated: null},
+          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"}
+        ]);
+      });
+
+      it("should filter when operator is 'nl'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "type", operator: "nl"}
+        ]);
+
+        expect(res).to.eql([
+          {type: null, name: "abc", code: 103, deleted: true, dateCreated: null}
+        ]);
+      });
+    });
+
+    describe("int", function () {
+
+      it("should filter when operator is 'eq'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "code", value: 102, operator: "eq"}
+        ]);
+
+        expect(res).to.eql([
+          {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"}
+        ]);
+      });
+
+      it("should filter when operator is 'neq'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "code", value: 102, operator: "neq"}
+        ]);
+
+        expect(res).to.eql([
+          {type: "cash", name: "foo", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
+          {type: "loan", name: "baz", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
+          {type: null, name: "abc", code: 103, deleted: true, dateCreated: null},
+          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"}
+        ]);
+      });
+
+      it("should filter when operator is 'nl'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "code", operator: "nl"}
+        ]);
+
+        expect(res).to.eql([
+          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"}
+        ]);
+      });
+
+      it("should filter when operator is 'gt'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "code", value: 102, operator: "gt"}
+        ]);
+
+        expect(res).to.eql([
+          {name: "baz", type: "loan", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
+          {name: "abc", type: null, code: 103, deleted: true, dateCreated: null}
+        ]);
+      });
+
+      it("should filter when operator is 'lt'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "code", value: 102, operator: "lt"}
+        ]);
+
+        expect(res).to.eql([
+          {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
+          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"}
+        ]);
+      });
+
+      it("should filter when operator is 'gte'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "code", value: 102, operator: "gte"}
+        ]);
+
+        expect(res).to.eql([
+          {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
+          {name: "baz", type: "loan", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
+          {name: "abc", type: null, code: 103, deleted: true, dateCreated: null}
+        ]);
+      });
+
+      it("should filter when operator is 'lte'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "code", value: 102, operator: "lte"}
+        ]);
+
+        expect(res).to.eql([
+          {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
+          {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
+          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"}
+        ]);
+      });
+    });
+
+    describe("bool", function () {
+
+      it("should filter when true", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "deleted", value: "true"}
+        ]);
+
+        expect(res).to.eql([
+          {type: "cash", name: "foo", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
+          {type: null, name: "abc", code: 103, deleted: true, dateCreated: null}
+        ]);
+      });
+
+      it("should filter when false", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "deleted", value: "false"}
+        ]);
+
+        expect(res).to.eql([
+          {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
+          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"}
+        ]);
+      });
+
+      it("should filter when null", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "deleted", value: ""}
+        ]);
+
+        expect(res).to.eql([
+          {type: "loan", name: "baz", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"}
+        ]);
+      });
+    });
+
+    describe("date", function () {
+      it("should filter when operator is 'nl'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "dateCreated", operator: "nl", value: ""}
+        ]);
+
+        expect(res).to.eql([
+          {type: null, name: "abc", code: 103, deleted: true, dateCreated: null}
+        ]);
+      });
+
+      it("should filter when operator is 'eq'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "dateCreated", operator: "eq", value: "20160611"}
+        ]);
+
+        expect(res).to.eql([
+          {type: "loan", name: "baz", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"}
+        ]);
+      });
+
+      it("should filter when operator is 'be'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "dateCreated", operator: "be", value: "20160811"}
+        ]);
+
+        expect(res).to.eql([
+          {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
+          {name: "baz", type: "loan", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
+          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"}
+        ]);
+      });
+
+      it("should filter when operator is 'at'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "dateCreated", operator: "at", value: "20160712"}
+        ]);
+
+        expect(res).to.eql([
+          {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"}
+        ]);
+      });
     });
   });
 

@@ -63,7 +63,7 @@ var Upload = React.createClass({
 
         <h3>Example</h3>
         <p>The schema should be a simple JSON object describing the fields you want to query on, matched with their type. This is then used to build up the dynamic filters on the next screen.</p>
-        <p>Currently supported types are <i>string</i>, <i>int</i> and <i>bool</i>.</p>
+        <p>Currently supported types are <i>string</i>, <i>int</i>, <i>bool</i> and <i>date</i>.</p>
         <pre>{JSON.stringify(testSchema, null, 2)}</pre>
         <p>...and the data should be a flat JSON array. That's it! <a className="site-link" onClick={this.showDemo}>See it in action</a></p>
         <pre>{JSON.stringify(testData, null, 2)}</pre>
