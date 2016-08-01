@@ -88,11 +88,18 @@ var Display = React.createClass({
     var formattedGroups = "None";
 
     if (grouped) {
-      var groups = Object.keys(grouped).map(function (key) {
-        return key + " (" + grouped[key].length + ")";
-      });
-
-      formattedGroups = groups.join(", ");
+      formattedGroups = R.pipe(
+        R.toPairs,
+        R.map(function (pair) {
+          return {name: pair[0], total: pair[1].length}
+        }),
+        R.sortBy(R.prop("total")),
+        R.reverse,
+        R.map(function (group) {
+          return group.name + " (" + group.total + ")";
+        }),
+        R.join(",")
+      )(grouped);
     }
 
     return (
