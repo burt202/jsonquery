@@ -23,6 +23,21 @@ body {
   width: 650px;
 }
 
+.header {
+  display: flex;
+}
+
+.header h1 {
+  width: 50%;
+}
+
+.header span {
+  text-align: right;
+  width: 50%;
+  margin-top: 5px;
+  font-size: 12px;
+}
+
 a {
   color: #337ab7;
   text-decoration: none;

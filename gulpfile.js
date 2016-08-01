@@ -8,6 +8,11 @@ var webpack = require("webpack");
 var webpackConfig = require("./webpack.config.js");
 var swig = require("gulp-swig");
 var data = require("gulp-data");
+var packageJson = require("./package.json");
+
+var baseData = {
+  version: packageJson.version
+};
 
 gulp.task("default", ["watch"]);
 
@@ -55,14 +60,14 @@ gulp.task("copy-files", function () {
 
 gulp.task("swig", function () {
   return gulp.src("src/index.html")
-    .pipe(data({production: false}))
+    .pipe(data(R.merge(baseData, {production: false})))
     .pipe(swig())
     .pipe(gulp.dest("build"));
 });
 
 gulp.task("swig-prod", function () {
   return gulp.src("src/index.html")
-    .pipe(data({production: true}))
+    .pipe(data(R.merge(baseData, {production: true})))
     .pipe(swig())
     .pipe(gulp.dest("build"));
 });
