@@ -132,3 +132,7 @@ pre {
 .filter-controls select {
   margin-right: 10px;
 }
+
+.filter-controls input[type=number] {
+  width: 100px;
+}
