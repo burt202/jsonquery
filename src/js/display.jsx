@@ -6,6 +6,29 @@ var Filters = require("./filters");
 
 var FILTER_THRESHOLD = 500;
 
+var round = R.curry(function (decimals, num) {
+  return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
+});
+
+function max (arr) {
+  return Math.max.apply(null, arr);
+}
+
+function min (arr) {
+  return Math.min.apply(null, arr);
+}
+
+function getMode (arr) {
+  return arr.reduce(function(current, item) {
+    var val = current.numMapping[item] = (current.numMapping[item] || 0) + 1;
+    if (val > current.greatestFreq) {
+      current.greatestFreq = val;
+      current.mode = item;
+    }
+    return current;
+  }, {mode: null, greatestFreq: -Infinity, numMapping: {}}, arr).mode;
+}
+
 var Display = React.createClass({
   displayName: "Display",
 
@@ -85,7 +108,7 @@ var Display = React.createClass({
   },
 
   showSummary: function (filtered, grouped) {
-    var groupTotal = "None";
+    var groupBreakdown = "None";
     var formattedGroups = null;
 
     if (grouped) {
@@ -99,17 +122,37 @@ var Display = React.createClass({
         R.map(function (group) {
           return group.name + " (" + group.total + ")";
         }),
-        R.join(",")
+        R.join(", ")
       )(grouped);
 
-      groupTotal = Object.keys(grouped).length;
+      var groupLengths = R.pipe(
+        R.toPairs,
+        R.map(function (pair) {
+          return pair[1].length;
+        })
+      )(grouped);
+
+      var count = {name: "Count", value: Object.keys(grouped).length};
+      var highest = {name: "Max Size", value: max(groupLengths)};
+      var lowest = {name: "Min Size", value: min(groupLengths)};
+      var mean = {name: "Mean Size", value: R.compose(round(2), R.mean)(groupLengths)};
+      var median = {name: "Median Size", value: R.compose(round(2), R.median)(groupLengths)};
+      var mode = {name: "Mode Size", value: getMode(groupLengths)};
+
+      groupBreakdown = R.pipe(
+        R.map(function (obj) {
+          return obj.name + ": " + obj.value
+        }),
+        R.join(", ")
+      )([count, highest, lowest, mean, median, mode]);
     }
 
     return (
       <div>
         <h3>Summary</h3>
         <p>Total: {filtered.length}</p>
-        <p>Groups: {groupTotal}</p>
+        <p><u><strong>Groups</strong></u></p>
+        <p>{groupBreakdown}</p>
         <p>{formattedGroups}</p>
       </div>
     );
