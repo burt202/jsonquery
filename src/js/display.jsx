@@ -139,12 +139,15 @@ var Display = React.createClass({
       var median = {name: "Median Size", value: R.compose(round(2), R.median)(groupLengths)};
       var mode = {name: "Mode Size", value: getMode(groupLengths)};
 
+      var stats = [count];
+      if (count.value) stats = stats.concat([highest, lowest, mean, median, mode]);
+
       groupBreakdown = R.pipe(
         R.map(function (obj) {
           return obj.name + ": " + obj.value
         }),
         R.join(", ")
-      )([count, highest, lowest, mean, median, mode]);
+      )(stats);
     }
 
     return (
