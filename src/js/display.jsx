@@ -85,7 +85,8 @@ var Display = React.createClass({
   },
 
   showSummary: function (filtered, grouped) {
-    var formattedGroups = "None";
+    var groupTotal = "None";
+    var formattedGroups = null;
 
     if (grouped) {
       formattedGroups = R.pipe(
@@ -100,13 +101,16 @@ var Display = React.createClass({
         }),
         R.join(",")
       )(grouped);
+
+      groupTotal = Object.keys(grouped).length;
     }
 
     return (
       <div>
         <h3>Summary</h3>
         <p>Total: {filtered.length}</p>
-        <p>Groups: {formattedGroups}</p>
+        <p>Groups: {groupTotal}</p>
+        <p>{formattedGroups}</p>
       </div>
     );
   },
