@@ -13,6 +13,31 @@ var isAfter = R.curry(function (filterValue, dataValue) {
   return moment(dataValue).isAfter(filterValue);
 });
 
+var round = R.curry(function (decimals, num) {
+  return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
+});
+
+function getMax (arr) {
+  return Math.max.apply(null, arr);
+}
+
+function getMin (arr) {
+  return Math.min.apply(null, arr);
+}
+
+var getMode = R.compose(
+  R.map(parseInt),
+  R.map(R.head),
+  R.defaultTo([]),
+  R.converge(R.prop, [
+    R.compose(R.last, R.sortBy(parseInt), R.keys),
+    R.identity
+  ]),
+  R.groupBy(R.last),
+  R.toPairs,
+  R.countBy(R.identity)
+);
+
 module.exports = {
   filter: function (data, schema, filters) {
     var builtFilters = R.reduce(function (acc, filter) {
@@ -58,5 +83,31 @@ module.exports = {
 
   group: function (filtered, groupBy) {
     return R.groupBy(R.prop(groupBy), filtered);
+  },
+
+  getGroupStats: function (grouped) {
+    var groupLengths = R.pipe(
+      R.toPairs,
+      R.map(function (pair) {
+        return pair[1].length;
+      })
+    )(grouped);
+
+    var count = {name: "Count", value: Object.keys(grouped).length};
+    var max = {name: "Max Size", value: getMax(groupLengths)};
+    var min = {name: "Min Size", value: getMin(groupLengths)};
+    var mean = {name: "Mean Size", value: R.compose(round(2), R.mean)(groupLengths)};
+    var median = {name: "Median Size", value: R.compose(round(2), R.median)(groupLengths)};
+    var mode = {name: "Mode Size", value: getMode(groupLengths).join(", ")};
+
+    var stats = {count: count};
+
+    return (count.value) ? R.merge(stats, {
+      max: max,
+      min: min,
+      mean: mean,
+      median: median,
+      mode: mode
+    }) : stats;
   }
 };

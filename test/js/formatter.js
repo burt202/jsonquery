@@ -264,4 +264,56 @@ describe("formatter", function () {
        });
     });
   });
+
+  describe("getGroupStats", function () {
+    it("should return the total number of groups", function () {
+      var res = formatter.getGroupStats({foo: [], bar: []});
+
+      expect(res.count).to.eql({name: "Count", value: 2});
+    });
+
+    it("should return the size of the biggest group", function () {
+      var res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]});
+
+      expect(res.max).to.eql({name: "Max Size", value: 3});
+    });
+
+    it("should return the size of the smallest group", function () {
+      var res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]});
+
+      expect(res.min).to.eql({name: "Min Size", value: 1});
+    });
+
+    it("should return the mean average group size", function () {
+      var res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]});
+
+      expect(res.mean).to.eql({name: "Mean Size", value: 2});
+    });
+
+    it("should return the median average group size", function () {
+      var res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]});
+
+      expect(res.median).to.eql({name: "Median Size", value: 2});
+    });
+
+    it("should return the mode average group size", function () {
+      var res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1], baz: [2]});
+
+      expect(res.mode).to.eql({name: "Mode Size", value: "1"});
+    });
+
+    it("should return be able to return multiple modes", function () {
+      var res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1], baz: [2], abc: [5, 6], def: [5, 6]});
+
+      expect(res.mode).to.eql({name: "Mode Size", value: "1, 2"});
+    });
+
+    it("should not return all properties when there are no group", function () {
+      var res = formatter.getGroupStats({});
+
+      expect(res).to.eql({
+        count: {name: "Count", value: 0}
+      });
+    });
+  });
 });
