@@ -56,7 +56,7 @@ var Upload = React.createClass({
   render: function () {
     return (
       <div className="upload-cont">
-        <p>Query your JSON with ease.</p>
+        <p>Online JSON Querying Tool. Query your JSON with ease.</p>
         <p>Takes a JSON array, with a schema, and allows you to add multiple filters and a grouping to enable you to find results you want. Use the inputs below to supply your files. We do not do anything with your data!</p>
         <p><label>Schema:</label><input type="file" onChange={this.onFileUploadStart.bind(this, "schema")} /></p>
         <p><label>JSON:</label><input type="file" onChange={this.onFileUploadStart.bind(this, "data")} /></p>

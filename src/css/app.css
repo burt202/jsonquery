@@ -29,6 +29,7 @@ body {
 
 .header h1 {
   width: 50%;
+  margin-bottom: 0;
 }
 
 .header span {
