@@ -1,6 +1,8 @@
 var React = require("react");
 
 function getStringInput (filter, onChange) {
+  var placeholder = (filter.operator === "eqo") ? "separate with comma" : "";
+
   return (
     <div className="filter-controls">
       <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
@@ -9,12 +11,14 @@ function getStringInput (filter, onChange) {
         <option value="nl">Is null</option>
         <option value="eqo">Equal to one of</option>
       </select>
-      <input type="text" name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "value")} />
+      <input type="text" name={filter.name} value={filter.value} placeholder={placeholder} onChange={onChange.bind(this, filter.name, "value")} />
     </div>
   )
 }
 
 function getIntInput (filter, onChange) {
+  var placeholder = (filter.operator === "eqo") ? "separate with comma" : "";
+
   return (
     <div className="filter-controls">
       <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
@@ -26,7 +30,7 @@ function getIntInput (filter, onChange) {
         <option value="lt">Less than</option>
         <option value="eqo">Equal to one of</option>
       </select>
-      <input type="number" name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "value")} />
+      <input type="number" name={filter.name} value={filter.value} placeholder={placeholder} onChange={onChange.bind(this, filter.name, "value")} />
     </div>
   );
 }

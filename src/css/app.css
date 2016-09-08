@@ -151,8 +151,9 @@ pre {
 
 .filter-controls select {
   margin-right: 10px;
+  width: 170px;
 }
 
-.filter-controls input[type=number] {
-  width: 100px;
+.filter-controls input {
+  width: 150px;
 }
