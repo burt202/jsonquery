@@ -4,6 +4,8 @@ var createStore = require("./helpers/store-base");
 var defaults = {
   filters: [],
   groupBy: null,
+  sortBy: null,
+  sortDirection: "asc",
   schema: null,
   data: null
 };
@@ -47,7 +49,21 @@ var handlers = {
 
   groupBy: function (contents, payload) {
     return R.merge(contents, {
-      groupBy: payload.name
+      groupBy: payload.name,
+      sortBy: null
+    });
+  },
+
+  sortBy: function (contents, payload) {
+    return R.merge(contents, {
+      groupBy: null,
+      sortBy: payload.name
+    });
+  },
+
+  sortDirection: function (contents, payload) {
+    return R.merge(contents, {
+      sortDirection: payload.direction
     });
   },
 

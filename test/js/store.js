@@ -10,6 +10,8 @@ describe("store", function () {
     expect(store.getState()).to.eql({
       filters: [],
       groupBy: null,
+      sortBy: null,
+      sortDirection: "asc",
       schema: null,
       data: null
     });
@@ -109,13 +111,51 @@ describe("store", function () {
   });
 
   describe("groupBy", function () {
-    it("should add groupBy", function () {
+    it("should add groupBy and nullify sortBy prop", function () {
+      dispatcher.dispatch({
+        name: "sortBy",
+        value: {name: "bar"}
+      });
+
+      expect(store.getState().sortBy).to.eql("bar");
+
       dispatcher.dispatch({
         name: "groupBy",
         value: {name: "foo"}
       });
 
       expect(store.getState().groupBy).to.eql("foo");
+      expect(store.getState().sortBy).to.eql(null);
+    });
+  });
+
+  describe("sortBy", function () {
+    it("should add sortBy and nullify groupBy prop", function () {
+      dispatcher.dispatch({
+        name: "groupBy",
+        value: {name: "bar"}
+      });
+
+      expect(store.getState().groupBy).to.eql("bar");
+
+      dispatcher.dispatch({
+        name: "sortBy",
+        value: {name: "foo"}
+      });
+
+      expect(store.getState().sortBy).to.eql("foo");
+      expect(store.getState().groupBy).to.eql(null);
+    });
+  });
+
+  describe("sortDirection", function () {
+    it("should add sortDirection", function () {
+      dispatcher.dispatch({
+        name: "sortDirection",
+        value: {direction: "foo"}
+      });
+
+      expect(store.getState().sortDirection).to.eql("foo");
     });
   });
 
@@ -156,6 +196,8 @@ describe("store", function () {
       expect(store.getState()).to.eql({
         filters: [],
         groupBy: null,
+        sortBy: null,
+        sortDirection: "asc",
         schema: null,
         data: null
       });

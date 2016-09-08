@@ -13,6 +13,8 @@ var Display = React.createClass({
     actionCreator: React.PropTypes.object.isRequired,
     filters: React.PropTypes.array.isRequired,
     groupBy: React.PropTypes.string,
+    sortBy: React.PropTypes.string,
+    sortDirection: React.PropTypes.string,
     schema: React.PropTypes.object.isRequired,
     data: React.PropTypes.array.isRequired
   },
@@ -23,6 +25,14 @@ var Display = React.createClass({
 
   onGroupByChange: function (e) {
     this.props.actionCreator.groupBy(e.target.value);
+  },
+
+  onSortByChange: function (e) {
+    this.props.actionCreator.sortBy(e.target.value);
+  },
+
+  onSortDirectionChange: function (e) {
+    this.props.actionCreator.sortDirection(e.target.value);
   },
 
   onReset: function () {
@@ -58,7 +68,7 @@ var Display = React.createClass({
     );
   },
 
-  getGroupByOptions: function () {
+  getGroupAndSortByOptions: function () {
     return Object.keys(this.props.schema).map(function (value) {
       return (
         <option value={value} key={value}>{value}</option>
@@ -72,7 +82,23 @@ var Display = React.createClass({
         <span>Group By:</span>
         <select onChange={this.onGroupByChange} value={this.props.groupBy || ""}>
           <option></option>
-          {this.getGroupByOptions()}
+          {this.getGroupAndSortByOptions()}
+        </select>
+      </div>
+    );
+  },
+
+  getSortByControl: function () {
+    return (
+      <div className="input-control">
+        <span>Sort By:</span>
+        <select onChange={this.onSortByChange} value={this.props.sortBy || ""}>
+          <option></option>
+          {this.getGroupAndSortByOptions()}
+        </select>
+        <select onChange={this.onSortDirectionChange} value={this.props.sortDirection}>
+          <option value="asc">ASC</option>
+          <option value="desc">DESC</option>
         </select>
       </div>
     );
@@ -171,6 +197,10 @@ var Display = React.createClass({
       grouped = formatter.group(filtered, this.props.groupBy);
     }
 
+    if (this.props.sortBy) {
+      filtered = formatter.sort(filtered, this.props.sortBy, this.props.sortDirection);
+    }
+
     return (
       <div>
         <p><a className="site-link" onClick={this.onBackClick}>Go back</a></p>
@@ -181,6 +211,7 @@ var Display = React.createClass({
         />
         {this.getFilterControl()}
         {this.getGroupByControl()}
+        {this.getSortByControl()}
         {this.getResetControl()}
         {this.showSummary(filtered, grouped)}
         {this.showResults(filtered, grouped)}

@@ -12,9 +12,15 @@ var mockDataForFiltering = [
 ];
 
 var mockDataForGrouping = [
-  {type: "cash", name: "foo"},
-  {type: "cash", name: "bar"},
-  {type: "loan", name: "baz"}
+  {name: "foo", type: "cash"},
+  {name: "bar", type: "cash"},
+  {name: "baz", type: "loan"}
+];
+
+var mockDataForSorting = [
+  {name: "foo", num: 2},
+  {name: "bar", num: 1},
+  {name: "baz", num: 3}
 ];
 
 var mockSchema = {
@@ -262,6 +268,24 @@ describe("formatter", function () {
           }
         ]
        });
+    });
+  });
+
+  describe("sort", function () {
+    it("should sort the data in ascending order", function () {
+      expect(formatter.sort(mockDataForSorting, "num", "asc")).to.eql([
+        {name: "bar", num: 1},
+        {name: "foo", num: 2},
+        {name: "baz", num: 3}
+      ]);
+    });
+
+    it("should sort the data in descending order", function () {
+      expect(formatter.sort(mockDataForSorting, "num", "desc")).to.eql([
+        {name: "baz", num: 3},
+        {name: "foo", num: 2},
+        {name: "bar", num: 1}
+      ]);
     });
   });
 

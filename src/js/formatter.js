@@ -85,6 +85,12 @@ module.exports = {
     return R.groupBy(R.prop(groupBy), filtered);
   },
 
+  sort: function (filtered, sortBy, sortDirection) {
+    var sorted = R.sortBy(R.prop(sortBy), filtered);
+    if (sortDirection == "desc") return R.reverse(sorted);
+    return sorted;
+  },
+
   getGroupStats: function (grouped) {
     var groupLengths = R.pipe(
       R.toPairs,

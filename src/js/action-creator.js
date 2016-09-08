@@ -43,6 +43,20 @@ module.exports = {
     });
   },
 
+  sortBy: function (name) {
+    dispatcher.dispatch({
+      name: "sortBy",
+      value: {name: name}
+    });
+  },
+
+  sortDirection: function (direction) {
+    dispatcher.dispatch({
+      name: "sortDirection",
+      value: {direction: direction}
+    });
+  },
+
   goBack: function () {
     dispatcher.dispatch({
       name: "goBack",
