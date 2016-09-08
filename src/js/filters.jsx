@@ -30,7 +30,7 @@ function getIntInput (filter, onChange) {
         <option value="lt">Less than</option>
         <option value="iof">Is one of</option>
       </select>
-      <input type="number" name={filter.name} value={filter.value} placeholder={placeholder} onChange={onChange.bind(this, filter.name, "value")} />
+      <input type="text" name={filter.name} value={filter.value} placeholder={placeholder} onChange={onChange.bind(this, filter.name, "value")} />
     </div>
   );
 }
