@@ -52,7 +52,7 @@ module.exports = {
         if (filter.operator === "eq") acc[filter.name] = R.equals(filter.value);
         if (filter.operator === "neq") acc[filter.name] = R.compose(R.not, R.equals(filter.value));
         if (filter.operator === "nl") acc[filter.name] = R.isNil;
-        if (filter.operator === "eqo") acc[filter.name] = isOneOf(filter.value);
+        if (filter.operator === "iof") acc[filter.name] = isOneOf(filter.value);
       }
 
       if (type === "int") {
@@ -63,7 +63,7 @@ module.exports = {
         if (filter.operator === "lt") acc[filter.name] = R.lt(R.__, parseInt(filter.value, 10));
         if (filter.operator === "gte") acc[filter.name] = R.gte(R.__, parseInt(filter.value, 10));
         if (filter.operator === "lte") acc[filter.name] = R.lte(R.__, parseInt(filter.value, 10));
-        if (filter.operator === "eqo") acc[filter.name] = isOneOf(filter.value);
+        if (filter.operator === "iof") acc[filter.name] = isOneOf(filter.value);
       }
 
       if (type === "bool") {

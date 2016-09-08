@@ -78,6 +78,7 @@ a.site-link {
 
 .input-control select {
   min-width: 100px;
+  margin-right: 10px;
 }
 
 table {

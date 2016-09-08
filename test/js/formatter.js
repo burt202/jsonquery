@@ -85,9 +85,9 @@ describe("formatter", function () {
         ]);
       });
 
-      it("should filter when operator is 'eqo'", function () {
+      it("should filter when operator is 'iof'", function () {
         var res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "type", value: "cash,loan", operator: "eqo"}
+          {name: "type", value: "cash,loan", operator: "iof"}
         ]);
 
         expect(res).to.eql([
@@ -179,9 +179,9 @@ describe("formatter", function () {
         ]);
       });
 
-      it("should filter when operator is 'eqo'", function () {
+      it("should filter when operator is 'iof'", function () {
         var res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "code", value: "101,103", operator: "eqo"}
+          {name: "code", value: "101,103", operator: "iof"}
         ]);
 
         expect(res).to.eql([
