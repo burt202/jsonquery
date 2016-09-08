@@ -84,6 +84,18 @@ describe("formatter", function () {
           {type: null, name: "abc", code: 103, deleted: true, dateCreated: null}
         ]);
       });
+
+      it("should filter when operator is 'eqo'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "type", value: "cash,loan", operator: "eqo"}
+        ]);
+
+        expect(res).to.eql([
+          {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
+          {name: "bar", type: "cash", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
+          {name: "baz", type: "loan", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"}
+        ]);
+      });
     });
 
     describe("int", function () {
@@ -164,6 +176,18 @@ describe("formatter", function () {
           {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
           {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
           {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"}
+        ]);
+      });
+
+      it("should filter when operator is 'eqo'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "code", value: "101,103", operator: "eqo"}
+        ]);
+
+        expect(res).to.eql([
+          {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
+          {name: "baz", type: "loan", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
+          {name: "abc", type: null, code: 103, deleted: true, dateCreated: null}
         ]);
       });
     });
