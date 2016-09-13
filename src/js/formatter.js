@@ -13,13 +13,19 @@ var isAfter = R.curry(function (filterValue, dataValue) {
   return moment(dataValue).isAfter(filterValue);
 });
 
-var round = R.curry(function (decimals, num) {
-  return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
-});
-
 var isOneOf = R.curry(function(filterValue, dataValue) {
   dataValue = (dataValue) ? dataValue.toString() : "";
   return R.compose(R.contains(dataValue), R.split(","), R.defaultTo(""))(filterValue);
+});
+
+var matches = R.curry(function(filterValue, dataValue) {
+  var regParts = filterValue.match(/^\/(.*?)\/([gim]*)$/);
+  var regex = (regParts) ? new RegExp(regParts[1], regParts[2]) : new RegExp(filterValue);
+  return R.test(regex, dataValue);
+});
+
+var round = R.curry(function (decimals, num) {
+  return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
 });
 
 function getMax (arr) {
@@ -53,6 +59,7 @@ module.exports = {
         if (filter.operator === "neq") acc[filter.name] = R.compose(R.not, R.equals(filter.value));
         if (filter.operator === "nl") acc[filter.name] = R.isNil;
         if (filter.operator === "iof") acc[filter.name] = isOneOf(filter.value);
+        if (filter.operator === "rgm") acc[filter.name] = matches(filter.value);
       }
 
       if (type === "int") {

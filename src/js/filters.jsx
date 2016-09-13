@@ -1,7 +1,12 @@
 var React = require("react");
 
+var placeholderMap = {
+  "iof": "separate with comma",
+  "rgm": "enter regex here"
+}
+
 function getStringInput (filter, onChange) {
-  var placeholder = (filter.operator === "iof") ? "separate with comma" : "";
+  var placeholder = placeholderMap[filter.operator] || "";
 
   return (
     <div className="filter-controls">
@@ -10,6 +15,7 @@ function getStringInput (filter, onChange) {
         <option value="neq">Not equal to</option>
         <option value="nl">Is null</option>
         <option value="iof">Is one of</option>
+        <option value="rgm">Matches</option>
       </select>
       <input type="text" name={filter.name} value={filter.value} placeholder={placeholder} onChange={onChange.bind(this, filter.name, "value")} />
     </div>
@@ -17,7 +23,7 @@ function getStringInput (filter, onChange) {
 }
 
 function getIntInput (filter, onChange) {
-  var placeholder = (filter.operator === "iof") ? "separate with comma" : "";
+  var placeholder = placeholderMap[filter.operator] || "";
 
   return (
     <div className="filter-controls">

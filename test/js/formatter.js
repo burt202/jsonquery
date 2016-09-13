@@ -96,6 +96,18 @@ describe("formatter", function () {
           {name: "baz", type: "loan", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"}
         ]);
       });
+
+      it("should filter when operator is 'rgm'", function () {
+        var res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "type", value: "ca", operator: "rgm"}
+        ]);
+
+        expect(res).to.eql([
+          {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
+          {name: "bar", type: "cash", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
+          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"}
+        ]);
+      });
     });
 
     describe("int", function () {
