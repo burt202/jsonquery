@@ -3,7 +3,8 @@
   "version": "0.5.2",
   "license": "ISC",
   "scripts": {
-    "add-hook": "cp hooks/pre-push .git/hooks/pre-push; chmod +x .git/hooks/pre-push"
+    "precommit": "mocha",
+    "prepush": "gulp deploy"
   },
   "dependencies": {
     "flux": "^2.1.1",
@@ -24,6 +25,7 @@
     "gulp-gh-pages": "^0.5.4",
     "gulp-swig": "^0.8.0",
     "gulp-webpack": "^1.5.0",
+    "husky": "^0.11.7",
     "jsx-loader": "^0.13.2",
     "mocha": "^2.5.3",
     "run-sequence": "^1.2.2",
