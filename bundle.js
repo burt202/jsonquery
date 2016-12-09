@@ -30232,8 +30232,8 @@
 	  },
 	
 	  showSummary: function(filtered, grouped) {
-	    const groupBreakdown = "None"
-	    const formattedGroups = null
+	    let groupBreakdown = "None"
+	    let formattedGroups = null
 	
 	    if (grouped) {
 	      formattedGroups = R.pipe(
