@@ -29,7 +29,7 @@
     "gulp-webpack": "^1.5.0",
     "husky": "^0.11.7",
     "jsx-loader": "^0.13.2",
-    "mocha": "^2.5.3",
+    "mocha": "^3.2.0",
     "run-sequence": "^1.2.2",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.1"
