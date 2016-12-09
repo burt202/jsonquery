@@ -20858,6 +20858,8 @@
 	    return R.merge(contents, {
 	      filters: [],
 	      groupBy: null,
+	      sortBy: null,
+	      sortDirection: "asc",
 	    })
 	  },
 	
