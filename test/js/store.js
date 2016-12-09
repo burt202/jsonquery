@@ -94,11 +94,17 @@ describe("store", function() {
         name: "groupBy",
         value: {name: "bar"},
       })
+
+      dispatcher.dispatch({
+        name: "sortDirection",
+        value: {direction: "desc"},
+      })
     })
 
-    it("should reset filters and groupBy values to their defaults", function() {
+    it("should reset filters, groupBy and sortBy values to their defaults", function() {
       expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}])
       expect(store.getState().groupBy).to.eql("bar")
+      expect(store.getState().sortDirection).to.eql("desc")
 
       dispatcher.dispatch({
         name: "reset",
@@ -107,6 +113,8 @@ describe("store", function() {
 
       expect(store.getState().filters).to.eql([])
       expect(store.getState().groupBy).to.eql(null)
+      expect(store.getState().sortBy).to.eql(null)
+      expect(store.getState().sortDirection).to.eql("asc")
     })
   })
 
