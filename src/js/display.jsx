@@ -168,8 +168,8 @@ const Display = React.createClass({
   },
 
   showResults: function(filtered, grouped) {
-    const dataToDisplay = grouped || filtered
-    const resultsText = (<p><a className="site-link" onClick={this.downloadResults.bind(this, dataToDisplay)}>Download as JSON</a></p>)
+    let dataToDisplay = grouped || filtered
+    let resultsText = (<p><a className="site-link" onClick={this.downloadResults.bind(this, dataToDisplay)}>Download as JSON</a></p>)
 
     if (filtered.length > FILTER_THRESHOLD) {
       dataToDisplay = R.take(FILTER_THRESHOLD, filtered)
@@ -190,8 +190,8 @@ const Display = React.createClass({
   render: function() {
     window.scrollTo(0, 0)
 
-    const filtered = formatter.filter(this.props.data, this.props.schema, this.props.filters)
-    const grouped = null
+    let filtered = formatter.filter(this.props.data, this.props.schema, this.props.filters)
+    let grouped = null
 
     if (this.props.groupBy) {
       grouped = formatter.group(filtered, this.props.groupBy)
