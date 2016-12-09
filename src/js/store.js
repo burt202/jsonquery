@@ -15,6 +15,12 @@ function updateWhere(find, update, data) {
   return R.adjust(R.merge(R.__, update), index, data);
 }
 
+var initialOperators = {
+  string: "eq",
+  int: "eq",
+  date: "eq"
+}
+
 var handlers = {
   saveJson: function (contents, payload) {
     var toUpdate = {};
@@ -23,8 +29,11 @@ var handlers = {
   },
 
   addFilter: function (contents, payload) {
+    var filterType = (contents.schema || {})[payload.name] || "string"
+    var operator = initialOperators[filterType] || "eq"
+
     return R.merge(contents, {
-      filters: R.append({name: payload.name, value: "", operator: "eq"}, contents.filters)
+      filters: R.append({name: payload.name, value: "", operator: operator}, contents.filters)
     });
   },
 

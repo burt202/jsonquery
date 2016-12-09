@@ -15,6 +15,11 @@ describe("store", function () {
       schema: null,
       data: null
     });
+
+    dispatcher.dispatch({
+      name: "saveJson",
+      value: {name: "schema", data: {foo: "string"}}
+    });
   });
 
   afterEach(function () {
@@ -23,12 +28,7 @@ describe("store", function () {
 
   describe("saveJson", function () {
     it("should save json under the passed prop name", function () {
-      dispatcher.dispatch({
-        name: "saveJson",
-        value: {name: "schema", data: "foo"}
-      });
-
-      expect(store.getState().schema).to.eql("foo");
+      expect(store.getState().schema).to.eql({foo: "string"});
     });
   });
 
