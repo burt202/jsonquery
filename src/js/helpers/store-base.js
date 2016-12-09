@@ -6,7 +6,7 @@ const CHANGE_EVENT = "change"
 
 module.exports = function(defaults, handlers) {
 
-  let contents = defaults
+  var contents = defaults
 
   const store = R.mergeAll([{}, EventEmitter.prototype, {
 

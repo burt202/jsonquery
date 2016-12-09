@@ -111,8 +111,8 @@ const Display = React.createClass({
   },
 
   showSummary: function(filtered, grouped) {
-    let groupBreakdown = "None"
-    let formattedGroups = null
+    var groupBreakdown = "None"
+    var formattedGroups = null
 
     if (grouped) {
       formattedGroups = R.pipe(
@@ -168,8 +168,8 @@ const Display = React.createClass({
   },
 
   showResults: function(filtered, grouped) {
-    let dataToDisplay = grouped || filtered
-    let resultsText = (<p><a className="site-link" onClick={this.downloadResults.bind(this, dataToDisplay)}>Download as JSON</a></p>)
+    var dataToDisplay = grouped || filtered
+    var resultsText = (<p><a className="site-link" onClick={this.downloadResults.bind(this, dataToDisplay)}>Download as JSON</a></p>)
 
     if (filtered.length > FILTER_THRESHOLD) {
       dataToDisplay = R.take(FILTER_THRESHOLD, filtered)
@@ -190,8 +190,8 @@ const Display = React.createClass({
   render: function() {
     window.scrollTo(0, 0)
 
-    let filtered = formatter.filter(this.props.data, this.props.schema, this.props.filters)
-    let grouped = null
+    var filtered = formatter.filter(this.props.data, this.props.schema, this.props.filters)
+    var grouped = null
 
     if (this.props.groupBy) {
       grouped = formatter.group(filtered, this.props.groupBy)
