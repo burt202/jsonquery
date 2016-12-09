@@ -30289,8 +30289,8 @@
 	  },
 	
 	  showResults: function(filtered, grouped) {
-	    const dataToDisplay = grouped || filtered
-	    const resultsText = (React.createElement("p", null, React.createElement("a", {className: "site-link", onClick: this.downloadResults.bind(this, dataToDisplay)}, "Download as JSON")))
+	    let dataToDisplay = grouped || filtered
+	    let resultsText = (React.createElement("p", null, React.createElement("a", {className: "site-link", onClick: this.downloadResults.bind(this, dataToDisplay)}, "Download as JSON")))
 	
 	    if (filtered.length > FILTER_THRESHOLD) {
 	      dataToDisplay = R.take(FILTER_THRESHOLD, filtered)
@@ -30311,8 +30311,8 @@
 	  render: function() {
 	    window.scrollTo(0, 0)
 	
-	    const filtered = formatter.filter(this.props.data, this.props.schema, this.props.filters)
-	    const grouped = null
+	    let filtered = formatter.filter(this.props.data, this.props.schema, this.props.filters)
+	    let grouped = null
 	
 	    if (this.props.groupBy) {
 	      grouped = formatter.group(filtered, this.props.groupBy)
