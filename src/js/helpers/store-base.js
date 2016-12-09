@@ -1,41 +1,41 @@
-var dispatcher = require("./dispatcher");
-var EventEmitter = require("events").EventEmitter;
-var R = require("ramda");
+const dispatcher = require("./dispatcher")
+const EventEmitter = require("events").EventEmitter
+const R = require("ramda")
 
-var CHANGE_EVENT = "change";
+const CHANGE_EVENT = "change"
 
-module.exports = function (defaults, handlers) {
+module.exports = function(defaults, handlers) {
 
-  var contents = defaults;
+  let contents = defaults
 
-  var store = R.mergeAll([{}, EventEmitter.prototype, {
+  const store = R.mergeAll([{}, EventEmitter.prototype, {
 
-    resetState: function () {
-      contents = defaults;
+    resetState: function() {
+      contents = defaults
     },
 
-    getState: function () {
-      return contents;
+    getState: function() {
+      return contents
     },
 
-    emitChange: function () {
-      this.emit(CHANGE_EVENT);
+    emitChange: function() {
+      this.emit(CHANGE_EVENT)
     },
 
-    addChangeListener: function (callback) {
-      this.on(CHANGE_EVENT, callback);
+    addChangeListener: function(callback) {
+      this.on(CHANGE_EVENT, callback)
     },
 
-    removeChangeListener: function (callback) {
-      this.removeListener(CHANGE_EVENT, callback);
-    }
-  }]);
+    removeChangeListener: function(callback) {
+      this.removeListener(CHANGE_EVENT, callback)
+    },
+  }])
 
-  dispatcher.register(function (action) {
-    if (!handlers[action.name]) return;
-    contents = handlers[action.name](contents, action.value);
-    store.emitChange();
-  });
+  dispatcher.register(function(action) {
+    if (!handlers[action.name]) return
+    contents = handlers[action.name](contents, action.value)
+    store.emitChange()
+  })
 
-  return store;
-};
+  return store
+}

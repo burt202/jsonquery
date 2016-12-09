@@ -1,59 +1,59 @@
-var React = require("react");
+const React = require("react")
 
-var testSchema = {
+const testSchema = {
   color: "string",
   automatic: "bool",
-  noOfDoors: "int"
-};
+  noOfDoors: "int",
+}
 
-var testData = [
+const testData = [
   {model: "Astra", color: "grey", automatic: false, noOfDoors: 3},
   {model: "Golf", color: "grey", automatic: false, noOfDoors: 5},
   {model: "Focus", color: "grey", automatic: false, noOfDoors: 3},
   {model: "Focus", color: "blue", automatic: true, noOfDoors: 5},
   {model: "Leon", color: "green", automatic: true, noOfDoors: 4},
-  {model: "Astra", color: "red", automatic: false, noOfDoors: 3}
+  {model: "Astra", color: "red", automatic: false, noOfDoors: 3},
 ]
 
-function isValidJSON (str) {
+function isValidJSON(str) {
   try {
-    JSON.parse(str);
+    JSON.parse(str)
   } catch (e) {
-    return false;
+    return false
   }
 
-  return true;
+  return true
 }
 
-var Upload = React.createClass({
+const Upload = React.createClass({
   displayName: "Upload",
 
   propTypes: {
-    actionCreator: React.PropTypes.object.isRequired
+    actionCreator: React.PropTypes.object.isRequired,
   },
 
-  onFileUploadStart: function (name, e) {
-    var reader = new FileReader();
-    reader.onload = this.onFileUploadEnd.bind(this, name);
-    reader.readAsText(e.target.files[0]);
+  onFileUploadStart: function(name, e) {
+    const reader = new FileReader()
+    reader.onload = this.onFileUploadEnd.bind(this, name)
+    reader.readAsText(e.target.files[0])
   },
 
-  onFileUploadEnd: function (name, e) {
-    var json = e.target.result;
+  onFileUploadEnd: function(name, e) {
+    const json = e.target.result
 
     if (isValidJSON(json)) {
-      this.props.actionCreator.saveJson(name, JSON.parse(json));
+      this.props.actionCreator.saveJson(name, JSON.parse(json))
     } else {
-      alert("Not valid JSON!");
+      alert("Not valid JSON!")
     }
   },
 
-  showDemo: function () {
-    this.props.actionCreator.saveJson("data", testData);
-    this.props.actionCreator.saveJson("schema", testSchema);
+  showDemo: function() {
+    this.props.actionCreator.saveJson("data", testData)
+    this.props.actionCreator.saveJson("schema", testSchema)
   },
 
-  render: function () {
+  render: function() {
     return (
       <div className="upload-cont">
         <p>Online JSON Querying Tool. Query your JSON with ease.</p>
@@ -68,8 +68,8 @@ var Upload = React.createClass({
         <p>...and the data should be a flat JSON array. That's it! <a className="site-link" onClick={this.showDemo}>See it in action</a></p>
         <pre>{JSON.stringify(testData, null, 2)}</pre>
       </div>
-    );
-  }
-});
+    )
+  },
+})
 
-module.exports = Upload;
+module.exports = Upload

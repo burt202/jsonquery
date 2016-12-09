@@ -1,47 +1,47 @@
-var React = require("react");
-var ReactDOM = require("react-dom");
+const React = require("react")
+const ReactDOM = require("react-dom")
 
-var actionCreator = require("./js/action-creator");
-var store = require("./js/store");
-var Upload = require("./js/upload");
-var Display = require("./js/display");
+const actionCreator = require("./js/action-creator")
+const store = require("./js/store")
+const Upload = require("./js/upload")
+const Display = require("./js/display")
 
-require("./css/app.css");
+require("./css/app.css")
 
-var Main = React.createClass({
-  getInitialState: function () {
-    return store.getState();
+const Main = React.createClass({
+  getInitialState: function() {
+    return store.getState()
   },
 
-  componentDidMount: function () {
-    store.addChangeListener(this.update);
+  componentDidMount: function() {
+    store.addChangeListener(this.update)
   },
 
-  componentWillUnmount: function () {
-    store.removeChangeListener(this.update);
+  componentWillUnmount: function() {
+    store.removeChangeListener(this.update)
   },
 
-  update: function () {
-    this.setState(store.getState());
+  update: function() {
+    this.setState(store.getState())
   },
 
-  render: function () {
+  render: function() {
     if (!this.state.schema || !this.state.data) {
       return <Upload
         actionCreator={actionCreator}
       />
-    } else {
-      return <Display
-        actionCreator={actionCreator}
-        filters={this.state.filters}
-        groupBy={this.state.groupBy}
-        sortBy={this.state.sortBy}
-        sortDirection={this.state.sortDirection}
-        schema={this.state.schema}
-        data={this.state.data}
-      />
     }
-  }
-});
 
-ReactDOM.render(<Main />, document.body.querySelector(".main"));
+    return <Display
+      actionCreator={actionCreator}
+      filters={this.state.filters}
+      groupBy={this.state.groupBy}
+      sortBy={this.state.sortBy}
+      sortDirection={this.state.sortDirection}
+      schema={this.state.schema}
+      data={this.state.data}
+    />
+  },
+})
+
+ReactDOM.render(<Main />, document.body.querySelector(".main"))

@@ -1,12 +1,12 @@
-var React = require("react");
+const React = require("react")
 
-var placeholderMap = {
+const placeholderMap = {
   "iof": "separate with comma",
-  "rgm": "enter regex here"
+  "rgm": "enter regex here",
 }
 
-function getStringInput (filter, onChange) {
-  var placeholder = placeholderMap[filter.operator] || "";
+function getStringInput(filter, onChange) {
+  const placeholder = placeholderMap[filter.operator] || ""
 
   return (
     <div className="filter-controls">
@@ -22,8 +22,8 @@ function getStringInput (filter, onChange) {
   )
 }
 
-function getIntInput (filter, onChange) {
-  var placeholder = placeholderMap[filter.operator] || "";
+function getIntInput(filter, onChange) {
+  const placeholder = placeholderMap[filter.operator] || ""
 
   return (
     <div className="filter-controls">
@@ -38,10 +38,10 @@ function getIntInput (filter, onChange) {
       </select>
       <input type="text" name={filter.name} value={filter.value} placeholder={placeholder} onChange={onChange.bind(this, filter.name, "value")} />
     </div>
-  );
+  )
 }
 
-function getBoolInput (filter, onChange) {
+function getBoolInput(filter, onChange) {
   return (
     <div className="filter-controls">
       <select name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "value")}>
@@ -50,10 +50,10 @@ function getBoolInput (filter, onChange) {
         <option value="false">FALSE</option>
       </select>
     </div>
-  );
+  )
 }
 
-function getDateInput (filter, onChange) {
+function getDateInput(filter, onChange) {
   return (
     <div className="filter-controls">
       <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
@@ -64,60 +64,57 @@ function getDateInput (filter, onChange) {
       </select>
       <input type="text" name={filter.name} value={filter.value} placeholder="YYYYMMDD" maxLength="8" onChange={onChange.bind(this, filter.name, "value")} />
     </div>
-  );
+  )
 }
 
-var typeMap = {
+const typeMap = {
   string: getStringInput,
   int: getIntInput,
   bool: getBoolInput,
-  date: getDateInput
-};
+  date: getDateInput,
+}
 
-var Filters = React.createClass({
+const Filters = React.createClass({
   displayName: "Filters",
 
   propTypes: {
     actionCreator: React.PropTypes.object.isRequired,
     filters: React.PropTypes.array.isRequired,
-    schema: React.PropTypes.object.isRequired
+    schema: React.PropTypes.object.isRequired,
   },
 
-  getInputControlByType: function (type, filter) {
-    if (typeMap[type]) {
-      return typeMap[type].bind(this)(filter, this.updateFilter);
-    } else {
-      return "Invalid Type"
-    }
+  getInputControlByType: function(type, filter) {
+    if (typeMap[type]) return typeMap[type].bind(this)(filter, this.updateFilter)
+    return "Invalid Type"
   },
 
-  getFilterRows: function () {
+  getFilterRows: function() {
     if (this.props.filters.length) {
-      return this.props.filters.map(function (filter) {
+      return this.props.filters.map(function(filter) {
         return (
           <tr key={filter.name}>
             <td>{filter.name}</td>
             <td>{this.getInputControlByType(this.props.schema[filter.name], filter)}</td>
             <td><a className="site-link" onClick={this.deleteFilter} data-name={filter.name}>Remove</a></td>
           </tr>
-        );
-      }.bind(this));
-    } else {
-      return (<tr><td>No filters</td></tr>);
+        )
+      }.bind(this))
     }
+
+    return (<tr><td>No filters</td></tr>)
   },
 
-  deleteFilter: function (e) {
-    this.props.actionCreator.deleteFilter(e.target.dataset.name);
+  deleteFilter: function(e) {
+    this.props.actionCreator.deleteFilter(e.target.dataset.name)
   },
 
-  updateFilter: function (name, prop, e) {
-    var toUpdate = {};
-    toUpdate[prop] = e.target.value;
-    this.props.actionCreator.updateFilter(name, toUpdate);
+  updateFilter: function(name, prop, e) {
+    const toUpdate = {}
+    toUpdate[prop] = e.target.value
+    this.props.actionCreator.updateFilter(name, toUpdate)
   },
 
-  render: function () {
+  render: function() {
     return (
       <div>
       <h3>Filters and Grouping</h3>
@@ -134,8 +131,8 @@ var Filters = React.createClass({
           </tbody>
         </table>
       </div>
-    );
-  }
-});
+    )
+  },
+})
 
-module.exports = Filters;
+module.exports = Filters

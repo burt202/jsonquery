@@ -1,197 +1,197 @@
-var chai = require("chai");
-var expect = chai.expect;
+const chai = require("chai")
+const expect = chai.expect
 
-var dispatcher = require("../../src/js/helpers/dispatcher");
-var store = require("../../src/js/store");
+const dispatcher = require("../../src/js/helpers/dispatcher")
+const store = require("../../src/js/store")
 
-describe("store", function () {
+describe("store", function() {
 
-  beforeEach(function () {
+  beforeEach(function() {
     expect(store.getState()).to.eql({
       filters: [],
       groupBy: null,
       sortBy: null,
       sortDirection: "asc",
       schema: null,
-      data: null
-    });
+      data: null,
+    })
 
     dispatcher.dispatch({
       name: "saveJson",
-      value: {name: "schema", data: {foo: "string"}}
-    });
-  });
+      value: {name: "schema", data: {foo: "string"}},
+    })
+  })
 
-  afterEach(function () {
-    store.resetState();
-  });
+  afterEach(function() {
+    store.resetState()
+  })
 
-  describe("saveJson", function () {
-    it("should save json under the passed prop name", function () {
-      expect(store.getState().schema).to.eql({foo: "string"});
-    });
-  });
+  describe("saveJson", function() {
+    it("should save json under the passed prop name", function() {
+      expect(store.getState().schema).to.eql({foo: "string"})
+    })
+  })
 
-  describe("addFilter", function () {
-    it("should add filter", function () {
+  describe("addFilter", function() {
+    it("should add filter", function() {
       dispatcher.dispatch({
         name: "addFilter",
-        value: {name: "foo"}
-      });
+        value: {name: "foo"},
+      })
 
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}]);
-    });
-  });
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}])
+    })
+  })
 
-  describe("deleteFilter", function () {
-    beforeEach(function () {
+  describe("deleteFilter", function() {
+    beforeEach(function() {
       dispatcher.dispatch({
         name: "addFilter",
-        value: {name: "foo"}
-      });
-    });
+        value: {name: "foo"},
+      })
+    })
 
-    it("should delete filter", function () {
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}]);
+    it("should delete filter", function() {
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}])
 
       dispatcher.dispatch({
         name: "deleteFilter",
-        value: {name: "foo"}
-      });
+        value: {name: "foo"},
+      })
 
-      expect(store.getState().filters).to.eql([]);
-    });
-  });
+      expect(store.getState().filters).to.eql([])
+    })
+  })
 
-  describe("updateFilter", function () {
-    beforeEach(function () {
+  describe("updateFilter", function() {
+    beforeEach(function() {
       dispatcher.dispatch({
         name: "addFilter",
-        value: {name: "foo"}
-      });
-    });
+        value: {name: "foo"},
+      })
+    })
 
-    it("should update filter", function () {
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}]);
+    it("should update filter", function() {
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}])
 
       dispatcher.dispatch({
         name: "updateFilter",
-        value: {name: "foo", value: {value: "bar"}}
-      });
+        value: {name: "foo", value: {value: "bar"}},
+      })
 
-      expect(store.getState().filters).to.eql([{name: "foo", value: "bar", operator: "eq"}]);
-    });
-  });
+      expect(store.getState().filters).to.eql([{name: "foo", value: "bar", operator: "eq"}])
+    })
+  })
 
-  describe("reset", function () {
-    beforeEach(function () {
+  describe("reset", function() {
+    beforeEach(function() {
       dispatcher.dispatch({
         name: "addFilter",
-        value: {name: "foo"}
-      });
+        value: {name: "foo"},
+      })
 
       dispatcher.dispatch({
         name: "groupBy",
-        value: {name: "bar"}
-      });
-    });
+        value: {name: "bar"},
+      })
+    })
 
-    it("should reset filters and groupBy values to their defaults", function () {
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}]);
-      expect(store.getState().groupBy).to.eql("bar");
+    it("should reset filters and groupBy values to their defaults", function() {
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}])
+      expect(store.getState().groupBy).to.eql("bar")
 
       dispatcher.dispatch({
         name: "reset",
-        value: {}
-      });
+        value: {},
+      })
 
-      expect(store.getState().filters).to.eql([]);
-      expect(store.getState().groupBy).to.eql(null);
-    });
-  });
+      expect(store.getState().filters).to.eql([])
+      expect(store.getState().groupBy).to.eql(null)
+    })
+  })
 
-  describe("groupBy", function () {
-    it("should add groupBy and nullify sortBy prop", function () {
+  describe("groupBy", function() {
+    it("should add groupBy and nullify sortBy prop", function() {
       dispatcher.dispatch({
         name: "sortBy",
-        value: {name: "bar"}
-      });
+        value: {name: "bar"},
+      })
 
-      expect(store.getState().sortBy).to.eql("bar");
+      expect(store.getState().sortBy).to.eql("bar")
 
       dispatcher.dispatch({
         name: "groupBy",
-        value: {name: "foo"}
-      });
+        value: {name: "foo"},
+      })
 
-      expect(store.getState().groupBy).to.eql("foo");
-      expect(store.getState().sortBy).to.eql(null);
-    });
-  });
+      expect(store.getState().groupBy).to.eql("foo")
+      expect(store.getState().sortBy).to.eql(null)
+    })
+  })
 
-  describe("sortBy", function () {
-    it("should add sortBy and nullify groupBy prop", function () {
+  describe("sortBy", function() {
+    it("should add sortBy and nullify groupBy prop", function() {
       dispatcher.dispatch({
         name: "groupBy",
-        value: {name: "bar"}
-      });
+        value: {name: "bar"},
+      })
 
-      expect(store.getState().groupBy).to.eql("bar");
+      expect(store.getState().groupBy).to.eql("bar")
 
       dispatcher.dispatch({
         name: "sortBy",
-        value: {name: "foo"}
-      });
+        value: {name: "foo"},
+      })
 
-      expect(store.getState().sortBy).to.eql("foo");
-      expect(store.getState().groupBy).to.eql(null);
-    });
-  });
+      expect(store.getState().sortBy).to.eql("foo")
+      expect(store.getState().groupBy).to.eql(null)
+    })
+  })
 
-  describe("sortDirection", function () {
-    it("should add sortDirection", function () {
+  describe("sortDirection", function() {
+    it("should add sortDirection", function() {
       dispatcher.dispatch({
         name: "sortDirection",
-        value: {direction: "foo"}
-      });
+        value: {direction: "foo"},
+      })
 
-      expect(store.getState().sortDirection).to.eql("foo");
-    });
-  });
+      expect(store.getState().sortDirection).to.eql("foo")
+    })
+  })
 
-  describe("goBack", function () {
-    beforeEach(function () {
+  describe("goBack", function() {
+    beforeEach(function() {
       dispatcher.dispatch({
         name: "addFilter",
-        value: {name: "foo"}
-      });
+        value: {name: "foo"},
+      })
 
       dispatcher.dispatch({
         name: "groupBy",
-        value: {name: "bar"}
-      });
+        value: {name: "bar"},
+      })
 
       dispatcher.dispatch({
         name: "saveJson",
-        value: {name: "schema", data: "baz"}
-      });
+        value: {name: "schema", data: "baz"},
+      })
 
       dispatcher.dispatch({
         name: "saveJson",
-        value: {name: "data", data: "abc"}
-      });
-    });
+        value: {name: "data", data: "abc"},
+      })
+    })
 
-    it("should reset filters and groupBy values to their defaults", function () {
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}]);
-      expect(store.getState().groupBy).to.eql("bar");
-      expect(store.getState().schema).to.eql("baz");
-      expect(store.getState().data).to.eql("abc");
+    it("should reset filters and groupBy values to their defaults", function() {
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}])
+      expect(store.getState().groupBy).to.eql("bar")
+      expect(store.getState().schema).to.eql("baz")
+      expect(store.getState().data).to.eql("abc")
 
       dispatcher.dispatch({
         name: "goBack",
-        value: {}
-      });
+        value: {},
+      })
 
       expect(store.getState()).to.eql({
         filters: [],
@@ -199,8 +199,8 @@ describe("store", function () {
         sortBy: null,
         sortDirection: "asc",
         schema: null,
-        data: null
-      });
-    });
-  });
-});
+        data: null,
+      })
+    })
+  })
+})

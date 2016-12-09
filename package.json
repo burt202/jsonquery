@@ -3,7 +3,7 @@
   "version": "0.6.0",
   "license": "ISC",
   "scripts": {
-    "lint": "eslint src/ test/",
+    "lint": "eslint src/ test/ --ext .js,.jsx",
     "test": "mocha",
     "precommit": "npm run lint && npm run test",
     "prepush": "gulp deploy"

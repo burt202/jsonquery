@@ -1,66 +1,66 @@
-var dispatcher = require("./helpers/dispatcher");
+const dispatcher = require("./helpers/dispatcher")
 
 module.exports = {
-  saveJson: function (name, data) {
+  saveJson: function(name, data) {
     dispatcher.dispatch({
       name: "saveJson",
-      value: {name: name, data: data}
-    });
+      value: {name: name, data: data},
+    })
   },
 
-  addFilter: function (name) {
+  addFilter: function(name) {
     dispatcher.dispatch({
       name: "addFilter",
-      value: {name: name}
-    });
+      value: {name: name},
+    })
   },
 
-  deleteFilter: function (name) {
+  deleteFilter: function(name) {
     dispatcher.dispatch({
       name: "deleteFilter",
-      value: {name: name}
-    });
+      value: {name: name},
+    })
   },
 
-  updateFilter: function (name, value) {
+  updateFilter: function(name, value) {
     dispatcher.dispatch({
       name: "updateFilter",
-      value: {name: name, value: value}
-    });
+      value: {name: name, value: value},
+    })
   },
 
-  reset: function () {
+  reset: function() {
     dispatcher.dispatch({
       name: "reset",
-      value: {}
-    });
+      value: {},
+    })
   },
 
-  groupBy: function (name) {
+  groupBy: function(name) {
     dispatcher.dispatch({
       name: "groupBy",
-      value: {name: name}
-    });
+      value: {name: name},
+    })
   },
 
-  sortBy: function (name) {
+  sortBy: function(name) {
     dispatcher.dispatch({
       name: "sortBy",
-      value: {name: name}
-    });
+      value: {name: name},
+    })
   },
 
-  sortDirection: function (direction) {
+  sortDirection: function(direction) {
     dispatcher.dispatch({
       name: "sortDirection",
-      value: {direction: direction}
-    });
+      value: {direction: direction},
+    })
   },
 
-  goBack: function () {
+  goBack: function() {
     dispatcher.dispatch({
       name: "goBack",
-      value: {}
-    });
-  }
-};
+      value: {},
+    })
+  },
+}
