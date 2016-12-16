@@ -72,29 +72,31 @@ const Display = React.createClass({
     downloadLink.setAttribute("href", "")
   },
 
-  getLimitText: function(filtered) {
-    return (
-      <div>
-        <p>NOTE: results display limited to {FILTER_THRESHOLD}</p>
-        <p>To download the whole lot <a className="site-link" onClick={this.downloadResults.bind(this, filtered)}>click here</a></p>
-      </div>
-    )
+  getLimitText: function() {
+    return (<p>NOTE: results display limited to {FILTER_THRESHOLD}</p>)
+  },
+
+  getDownloadText: function(text, data) {
+    return (<p>{text}: <a className="site-link" onClick={this.downloadResults.bind(this, data)}>JSON</a></p>)
   },
 
   showResults: function(filtered, grouped) {
     var dataToDisplay = grouped || filtered
-    var resultsText = (<p><a className="site-link" onClick={this.downloadResults.bind(this, dataToDisplay)}>Download as JSON</a></p>)
+    var limitText = null
+    var downloadText = this.getDownloadText("Download as", dataToDisplay)
 
     if (filtered.length > FILTER_THRESHOLD) {
       dataToDisplay = R.take(FILTER_THRESHOLD, filtered)
       if (grouped) dataToDisplay = formatter.group(dataToDisplay, this.props.groupBy)
-      resultsText = this.getLimitText(filtered)
+      limitText = this.getLimitText()
+      downloadText = this.getDownloadText("Download the whole lot as", filtered)
     }
 
     return (
       <div>
         <h3>Results</h3>
-        {resultsText}
+        {limitText}
+        {downloadText}
         <pre>{JSON.stringify(dataToDisplay, null, 2)}</pre>
         <a id="hidden-download-link" style={{display: "none"}}></a>
       </div>
