@@ -3,6 +3,7 @@ const R = require("ramda")
 
 const formatter = require("./formatter")
 const Filters = require("./filters")
+const Controls = require("./controls")
 
 const FILTER_THRESHOLD = 500
 
@@ -19,95 +20,8 @@ const Display = React.createClass({
     data: React.PropTypes.array.isRequired,
   },
 
-  onAddFilter: function(e) {
-    this.props.actionCreator.addFilter(e.target.value)
-  },
-
-  onGroupByChange: function(e) {
-    this.props.actionCreator.groupBy(e.target.value)
-  },
-
-  onSortByChange: function(e) {
-    this.props.actionCreator.sortBy(e.target.value)
-  },
-
-  onSortDirectionChange: function(e) {
-    this.props.actionCreator.sortDirection(e.target.value)
-  },
-
-  onReset: function() {
-    this.props.actionCreator.reset()
-  },
-
   onBackClick: function() {
     this.props.actionCreator.goBack()
-  },
-
-  getFilterOptions: function() {
-    const filterOptions = R.pipe(
-      R.keys,
-      R.without(R.pluck("name", this.props.filters))
-    )(this.props.schema)
-
-    return filterOptions.map(function(value) {
-      return (
-        <option value={value} key={value}>{value}</option>
-      )
-    })
-  },
-
-  getFilterControl: function() {
-    return (
-      <div className="input-control">
-        <span>Add Filter:</span>
-        <select onChange={this.onAddFilter}>
-          <option></option>
-          {this.getFilterOptions()}
-        </select>
-      </div>
-    )
-  },
-
-  getGroupAndSortByOptions: function() {
-    return Object.keys(this.props.schema).map(function(value) {
-      return (
-        <option value={value} key={value}>{value}</option>
-      )
-    })
-  },
-
-  getGroupByControl: function() {
-    return (
-      <div className="input-control">
-        <span>Group By:</span>
-        <select onChange={this.onGroupByChange} value={this.props.groupBy || ""}>
-          <option></option>
-          {this.getGroupAndSortByOptions()}
-        </select>
-      </div>
-    )
-  },
-
-  getSortByControl: function() {
-    return (
-      <div className="input-control">
-        <span>Sort By:</span>
-        <select onChange={this.onSortByChange} value={this.props.sortBy || ""}>
-          <option></option>
-          {this.getGroupAndSortByOptions()}
-        </select>
-        <select onChange={this.onSortDirectionChange} value={this.props.sortDirection}>
-          <option value="asc">ASC</option>
-          <option value="desc">DESC</option>
-        </select>
-      </div>
-    )
-  },
-
-  getResetControl: function() {
-    return (
-      <p><a className="site-link" onClick={this.onReset}>Reset</a></p>
-    )
   },
 
   showSummary: function(filtered, grouped) {
@@ -209,10 +123,14 @@ const Display = React.createClass({
           filters={this.props.filters}
           schema={this.props.schema}
         />
-        {this.getFilterControl()}
-        {this.getGroupByControl()}
-        {this.getSortByControl()}
-        {this.getResetControl()}
+        <Controls
+          actionCreator={this.props.actionCreator}
+          filters={this.props.filters}
+          schema={this.props.schema}
+          groupBy={this.props.groupBy}
+          sortBy={this.props.sortBy}
+          sortDirection={this.props.sortDirection}
+        />
         {this.showSummary(filtered, grouped)}
         {this.showResults(filtered, grouped)}
       </div>
