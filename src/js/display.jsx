@@ -7,6 +7,23 @@ const Controls = require("./controls")
 
 const FILTER_THRESHOLD = 500
 
+function prettify(json) {
+  return JSON.stringify(json, null, 2)
+}
+
+function convertToCsv(json) {
+  if (!json.length) return null
+  const header = R.keys(json[0]).join(",")
+
+  return R.pipe(
+    R.map(function(row) {
+      return R.values(row).join(",")
+    }),
+    R.prepend(header),
+    R.join("\r\n")
+  )(json)
+}
+
 const Display = React.createClass({
   displayName: "Display",
 
@@ -63,11 +80,11 @@ const Display = React.createClass({
     )
   },
 
-  downloadResults: function(data) {
-    const dataStr = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], {type: "application/json"}))
+  downloadResults: function(data, mimetype, extension) {
+    const dataStr = URL.createObjectURL(new Blob([data], {type: mimetype}))
     const downloadLink = document.getElementById("hidden-download-link")
     downloadLink.setAttribute("href", dataStr)
-    downloadLink.setAttribute("download", new Date().toISOString() + ".json")
+    downloadLink.setAttribute("download", new Date().toISOString() + "." + extension)
     downloadLink.click()
     downloadLink.setAttribute("href", "")
   },
@@ -76,8 +93,19 @@ const Display = React.createClass({
     return (<p>NOTE: results display limited to {FILTER_THRESHOLD}</p>)
   },
 
-  getDownloadText: function(text, data) {
-    return (<p>{text}: <a className="site-link" onClick={this.downloadResults.bind(this, data)}>JSON</a></p>)
+  getDownloadText: function(text, json) {
+    const types = [
+      {name: "JSON", mimetype: "application/json", extension: "json", transformer: prettify},
+      {name: "CSV", mimetype: "text/csv", extension: "csv", transformer: convertToCsv},
+    ]
+
+    const downloadLinks = types.map(function(type) {
+      const data = type.transformer(json)
+      const downloader = this.downloadResults.bind(this, data, type.mimetype, type.extension)
+      return (<a className="site-link" key={type.name} onClick={downloader}>{type.name}</a>)
+    }.bind(this))
+
+    return (<p className="download-links">{text}: {downloadLinks}</p>)
   },
 
   showResults: function(filtered, grouped) {

@@ -158,3 +158,9 @@ pre {
 .filter-controls input {
   width: 150px;
 }
+
+.download-links a:not(:last-child) {
+  padding-right: 10px;
+  margin-right: 10px;
+  border-right: 1px solid #000;
+}
