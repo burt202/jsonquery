@@ -4,6 +4,7 @@ const R = require("ramda")
 const formatter = require("./formatter")
 const Filters = require("./filters")
 const Controls = require("./controls")
+const Summary = require("./summary")
 
 const FILTER_THRESHOLD = 500
 
@@ -39,45 +40,6 @@ const Display = React.createClass({
 
   onBackClick: function() {
     this.props.actionCreator.goBack()
-  },
-
-  showSummary: function(filtered, grouped) {
-    var groupBreakdown = "None"
-    var formattedGroups = null
-
-    if (grouped) {
-      formattedGroups = R.pipe(
-        R.toPairs,
-        R.map(function(pair) {
-          return {name: pair[0], total: pair[1].length}
-        }),
-        R.sortBy(R.prop("total")),
-        R.reverse,
-        R.map(function(group) {
-          return group.name + " (" + group.total + ")"
-        }),
-        R.join(", ")
-      )(grouped)
-
-      groupBreakdown = R.pipe(
-        R.toPairs,
-        R.map(R.last),
-        R.map(function(obj) {
-          return obj.name + ": " + obj.value
-        }),
-        R.join(", ")
-      )(formatter.getGroupStats(grouped))
-    }
-
-    return (
-      <div>
-        <h3>Summary</h3>
-        <p>Total: {filtered.length}</p>
-        <p><u><strong>Groups</strong></u></p>
-        <p>{groupBreakdown}</p>
-        <p>{formattedGroups}</p>
-      </div>
-    )
   },
 
   downloadResults: function(data, mimetype, extension) {
@@ -161,7 +123,10 @@ const Display = React.createClass({
           sortBy={this.props.sortBy}
           sortDirection={this.props.sortDirection}
         />
-        {this.showSummary(filtered, grouped)}
+        <Summary
+          resultsTotal={filtered.length}
+          grouped={grouped}
+        />
         {this.showResults(filtered, grouped)}
       </div>
     )
