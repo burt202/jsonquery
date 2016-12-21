@@ -7,12 +7,12 @@ const Summary = React.createClass({
   displayName: "Summary",
 
   propTypes: {
-    resultsTotal: React.PropTypes.number.isRequired,
-    grouped: React.PropTypes.array,
+    results: React.PropTypes.array.isRequired,
+    groupBy: React.PropTypes.string,
   },
 
-  getGroupingBreakdown: function() {
-    if (!this.props.grouped) return "None"
+  getGroupingBreakdown: function(grouping) {
+    if (!grouping) return "None"
 
     return R.pipe(
       R.toPairs,
@@ -21,11 +21,11 @@ const Summary = React.createClass({
         return obj.name + ": " + obj.value
       }),
       R.join(", ")
-    )(formatter.getGroupStats(this.props.grouped))
+    )(formatter.getGroupStats(grouping))
   },
 
-  getFormattedGroups: function() {
-    if (!this.props.grouped) return null
+  getFormattedGroups: function(grouping) {
+    if (!grouping) return null
 
     return R.pipe(
       R.toPairs,
@@ -38,17 +38,23 @@ const Summary = React.createClass({
         return group.name + " (" + group.total + ")"
       }),
       R.join(", ")
-    )(this.props.grouped)
+    )(grouping)
+  },
+
+  getGrouping: function() {
+    return (this.props.groupBy) ? formatter.group(this.props.results, this.props.groupBy) : null
   },
 
   render: function() {
+    const grouping = this.getGrouping()
+
     return (
       <div>
         <h3>Summary</h3>
-        <p>Total: {this.props.resultsTotal}</p>
+        <p>Total: {this.props.results.length}</p>
         <p><u><strong>Groups</strong></u></p>
-        <p>{this.getGroupingBreakdown()}</p>
-        <p>{this.getFormattedGroups()}</p>
+        <p>{this.getGroupingBreakdown(grouping)}</p>
+        <p>{this.getFormattedGroups(grouping)}</p>
       </div>
     )
   },
