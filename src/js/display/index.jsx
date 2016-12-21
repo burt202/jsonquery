@@ -1,6 +1,6 @@
 const React = require("react")
 
-const formatter = require("./formatter")
+const formatter = require("../helpers/formatter")
 
 const Filters = require("./filters")
 const Controls = require("./controls")

@@ -1,7 +1,7 @@
 const chai = require("chai")
 const expect = chai.expect
 
-const formatter = require("../../src/js/formatter")
+const formatter = require("../../../src/js/helpers/formatter")
 
 const mockDataForFiltering = [
   {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},

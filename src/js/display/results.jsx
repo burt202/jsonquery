@@ -1,7 +1,7 @@
 const React = require("react")
 const R = require("ramda")
 
-const formatter = require("./formatter")
+const formatter = require("../helpers/formatter")
 
 const FILTER_THRESHOLD = 500
 

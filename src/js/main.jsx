@@ -1,12 +1,12 @@
 const React = require("react")
 const ReactDOM = require("react-dom")
 
-const actionCreator = require("./js/action-creator")
-const store = require("./js/store")
-const Upload = require("./js/upload")
-const Display = require("./js/display")
+const actionCreator = require("./action-creator")
+const store = require("./store")
+const Upload = require("./upload")
+const Display = require("./display")
 
-require("./css/app.css")
+require("../css/app.css")
 
 const Main = React.createClass({
   getInitialState: function() {

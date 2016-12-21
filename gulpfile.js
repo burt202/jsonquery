@@ -26,7 +26,7 @@ gulp.task("clean", function() {
 })
 
 gulp.task("webpack", function() {
-  return gulp.src("src/main.jsx")
+  return gulp.src("src/js/main.jsx")
     .pipe(gulpWebpack(webpackConfig))
     .pipe(gulp.dest("build"))
 })
@@ -45,7 +45,7 @@ gulp.task("webpack-prod", function() {
     }),
   ], webpackConfig.plugins), webpackConfig)
 
-  return gulp.src("src/main.jsx")
+  return gulp.src("src/js/main.jsx")
     .pipe(gulpWebpack(webpackConfigForProd))
     .pipe(gulp.dest("build"))
 })
