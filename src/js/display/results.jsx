@@ -2,25 +2,9 @@ const React = require("react")
 const R = require("ramda")
 
 const formatter = require("../helpers/formatter")
+const transformer = require("../helpers/transformer")
 
 const FILTER_THRESHOLD = 500
-
-function prettify(json) {
-  return JSON.stringify(json, null, 2)
-}
-
-function convertToCsv(json) {
-  if (!json.length) return null
-  const header = R.keys(json[0]).join(",")
-
-  return R.pipe(
-    R.map(function(row) {
-      return R.values(row).join(",")
-    }),
-    R.prepend(header),
-    R.join("\r\n")
-  )(json)
-}
 
 const Results = React.createClass({
   displayName: "Results",
@@ -52,8 +36,8 @@ const Results = React.createClass({
 
   getDownloadLinks: function(data) {
     const types = [
-      {name: "JSON", mimetype: "application/json", extension: "json", transformer: prettify},
-      {name: "CSV", mimetype: "text/csv", extension: "csv", transformer: convertToCsv},
+      {name: "JSON", mimetype: "application/json", extension: "json", transformer: transformer.prettify},
+      {name: "CSV", mimetype: "text/csv", extension: "csv", transformer: transformer.convertToCsv},
     ]
 
     return types.map(function(type) {
