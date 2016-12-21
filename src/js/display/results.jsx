@@ -68,22 +68,26 @@ const Results = React.createClass({
     return (<p className="download-links">{text}: {this.getDownloadLinks(data)}</p>)
   },
 
-  getDisplayData: function() {
-    var data = (this.isAboveResultsThreshold()) ? R.take(FILTER_THRESHOLD, this.props.results) : this.props.results
-
+  groupSortData: function(data) {
     if (this.props.groupBy) return formatter.group(data, this.props.groupBy)
     if (this.props.sortBy) return formatter.sort(data, this.props.sortBy, this.props.sortDirection)
     return data
   },
 
+  getDisplayData: function() {
+    const data = (this.isAboveResultsThreshold()) ? R.take(FILTER_THRESHOLD, this.props.results) : this.props.results
+    return this.groupSortData(data)
+  },
+
   render: function() {
     const dataToDisplay = this.getDisplayData()
+    const dataToDownload = this.groupSortData(this.props.results)
 
     return (
       <div>
         <h3>Results</h3>
         {this.getLimitText()}
-        {this.getDownloadText(dataToDisplay)}
+        {this.getDownloadText(dataToDownload)}
         <pre>{JSON.stringify(dataToDisplay, null, 2)}</pre>
         <a id="hidden-download-link" style={{display: "none"}}></a>
       </div>
