@@ -74,9 +74,9 @@ function addIntFilter(filter) {
 
 function addBoolFilter(filter) {
   const acc = {}
+  if (filter.value === "nl") acc[filter.name] = R.isNil
   if (filter.value === "true") acc[filter.name] = R.equals(true)
   if (filter.value === "false") acc[filter.name] = R.equals(false)
-  if (filter.value === "") acc[filter.name] = R.isNil
   return acc
 }
 
@@ -85,7 +85,7 @@ function addDateFilter(filter) {
   if (filter.value.length === 8 && moment(filter.value, "YYYYMMDD").isValid()) {
     if (filter.operator === "eq") acc[filter.name] = isSame(filter.value)
     if (filter.operator === "be") acc[filter.name] = isBefore(filter.value)
-    if (filter.operator === "at") acc[filter.name] = isAfter(filter.value)
+    if (filter.operator === "af") acc[filter.name] = isAfter(filter.value)
   }
 
   if (filter.operator === "nl") acc[filter.name] = R.isNil

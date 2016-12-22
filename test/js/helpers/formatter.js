@@ -3,36 +3,20 @@ const expect = chai.expect
 
 const formatter = require("../../../src/js/helpers/formatter")
 
-const mockDataForFiltering = [
-  {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
-  {name: "bar", type: "cash", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
-  {name: "baz", type: "loan", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
-  {name: "abc", type: null, code: 103, deleted: true, dateCreated: null},
-  {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"},
-]
-
-const mockDataForGrouping = [
-  {name: "foo", type: "cash"},
-  {name: "bar", type: "cash"},
-  {name: "baz", type: "loan"},
-]
-
-const mockDataForSorting = [
-  {name: "foo", num: 2},
-  {name: "bar", num: 1},
-  {name: "baz", num: 3},
-]
-
-const mockSchema = {
-  type: "string",
-  code: "int",
-  deleted: "bool",
-  dateCreated: "date",
-}
-
 describe("formatter", function() {
 
   describe("filter", function() {
+    const mockDataForFiltering = [
+      {name: "foo", type: "cash", deleted: true},
+      {name: "bar", type: "cash", deleted: false},
+      {name: "baz", type: "loan", deleted: true},
+    ]
+
+    const mockSchema = {
+      type: "string",
+      deleted: "bool",
+    }
+
     it("should not filter anything if no filters are defined", function() {
       const res = formatter.filter(mockDataForFiltering, mockSchema, [])
 
@@ -46,11 +30,23 @@ describe("formatter", function() {
       ])
 
       expect(res).to.eql([
-        {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
+        {name: "bar", type: "cash", deleted: false},
       ])
     })
 
     describe("string", function() {
+
+      const mockDataForFiltering = [
+        {name: "foo", type: "cash"},
+        {name: "bar", type: "cash"},
+        {name: "baz", type: "loan"},
+        {name: "abc", type: null},
+        {name: "123", type: "card"},
+      ]
+
+      const mockSchema = {
+        type: "string",
+      }
 
       it("should filter when operator is 'eq'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
@@ -58,8 +54,8 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {type: "cash", name: "foo", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
-          {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
+          {name: "foo", type: "cash"},
+          {name: "bar", type: "cash"},
         ])
       })
 
@@ -69,9 +65,9 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {type: "loan", name: "baz", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
-          {type: null, name: "abc", code: 103, deleted: true, dateCreated: null},
-          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"},
+          {name: "baz", type: "loan"},
+          {name: "abc", type: null},
+          {name: "123", type: "card"},
         ])
       })
 
@@ -81,7 +77,7 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {type: null, name: "abc", code: 103, deleted: true, dateCreated: null},
+          {name: "abc", type: null},
         ])
       })
 
@@ -91,9 +87,9 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
-          {name: "bar", type: "cash", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
-          {name: "baz", type: "loan", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
+          {name: "foo", type: "cash"},
+          {name: "bar", type: "cash"},
+          {name: "baz", type: "loan"},
         ])
       })
 
@@ -103,14 +99,26 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
-          {name: "bar", type: "cash", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
-          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"},
+          {name: "foo", type: "cash"},
+          {name: "bar", type: "cash"},
+          {name: "123", type: "card"},
         ])
       })
     })
 
     describe("int", function() {
+
+      const mockDataForFiltering = [
+        {name: "foo", code: 101},
+        {name: "bar", code: 102},
+        {name: "baz", code: 103},
+        {name: "abc", code: 103},
+        {name: "123", code: null},
+      ]
+
+      const mockSchema = {
+        code: "int",
+      }
 
       it("should filter when operator is 'eq'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
@@ -118,7 +126,7 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
+          {name: "bar", code: 102},
         ])
       })
 
@@ -128,10 +136,10 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {type: "cash", name: "foo", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
-          {type: "loan", name: "baz", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
-          {type: null, name: "abc", code: 103, deleted: true, dateCreated: null},
-          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"},
+          {name: "foo", code: 101},
+          {name: "baz", code: 103},
+          {name: "abc", code: 103},
+          {name: "123", code: null},
         ])
       })
 
@@ -141,7 +149,7 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"},
+          {name: "123", code: null},
         ])
       })
 
@@ -151,8 +159,8 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {name: "baz", type: "loan", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
-          {name: "abc", type: null, code: 103, deleted: true, dateCreated: null},
+          {name: "baz", code: 103},
+          {name: "abc", code: 103},
         ])
       })
 
@@ -162,8 +170,8 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
-          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"},
+          {name: "foo", code: 101},
+          {name: "123", code: null},
         ])
       })
 
@@ -173,9 +181,9 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
-          {name: "baz", type: "loan", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
-          {name: "abc", type: null, code: 103, deleted: true, dateCreated: null},
+          {name: "bar", code: 102},
+          {name: "baz", code: 103},
+          {name: "abc", code: 103},
         ])
       })
 
@@ -185,9 +193,9 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
-          {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
-          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"},
+          {name: "foo", code: 101},
+          {name: "bar", code: 102},
+          {name: "123", code: null},
         ])
       })
 
@@ -197,14 +205,26 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
-          {name: "baz", type: "loan", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
-          {name: "abc", type: null, code: 103, deleted: true, dateCreated: null},
+          {name: "foo", code: 101},
+          {name: "baz", code: 103},
+          {name: "abc", code: 103},
         ])
       })
     })
 
     describe("bool", function() {
+
+      const mockDataForFiltering = [
+        {name: "foo", deleted: true},
+        {name: "bar", deleted: false},
+        {name: "baz", deleted: null},
+        {name: "abc", deleted: true},
+        {name: "123", deleted: false},
+      ]
+
+      const mockSchema = {
+        deleted: "bool",
+      }
 
       it("should filter when true", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
@@ -212,8 +232,8 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {type: "cash", name: "foo", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
-          {type: null, name: "abc", code: 103, deleted: true, dateCreated: null},
+          {name: "foo", deleted: true},
+          {name: "abc", deleted: true},
         ])
       })
 
@@ -223,30 +243,42 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
-          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"},
+          {name: "bar", deleted: false},
+          {name: "123", deleted: false},
         ])
       })
 
       it("should filter when null", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "deleted", value: ""},
+          {name: "deleted", value: "nl"},
         ])
 
         expect(res).to.eql([
-          {type: "loan", name: "baz", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
+          {name: "baz", deleted: null},
         ])
       })
     })
 
     describe("date", function() {
+      const mockDataForFiltering = [
+        {name: "foo", dateCreated: "2016-07-11T17:16:27"},
+        {name: "bar", dateCreated: "2016-08-11T17:16:27"},
+        {name: "baz", dateCreated: "2016-06-11T17:16:27"},
+        {name: "abc", dateCreated: null},
+        {name: "123", dateCreated: "2016-07-11T17:16:27"},
+      ]
+
+      const mockSchema = {
+        dateCreated: "date",
+      }
+
       it("should filter when operator is 'nl'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "nl", value: ""},
         ])
 
         expect(res).to.eql([
-          {type: null, name: "abc", code: 103, deleted: true, dateCreated: null},
+          {name: "abc", dateCreated: null},
         ])
       })
 
@@ -256,7 +288,7 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {type: "loan", name: "baz", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
+          {name: "baz", dateCreated: "2016-06-11T17:16:27"},
         ])
       })
 
@@ -266,25 +298,31 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {name: "foo", type: "cash", code: 101, deleted: true, dateCreated: "2016-07-11T17:16:27"},
-          {name: "baz", type: "loan", code: 103, deleted: null, dateCreated: "2016-06-11T17:16:27"},
-          {name: "123", type: "card", code: null, deleted: false, dateCreated: "2016-07-11T17:16:27"},
+          {name: "foo", dateCreated: "2016-07-11T17:16:27"},
+          {name: "baz", dateCreated: "2016-06-11T17:16:27"},
+          {name: "123", dateCreated: "2016-07-11T17:16:27"},
         ])
       })
 
-      it("should filter when operator is 'at'", function() {
+      it("should filter when operator is 'af'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "dateCreated", operator: "at", value: "20160712"},
+          {name: "dateCreated", operator: "af", value: "20160712"},
         ])
 
         expect(res).to.eql([
-          {type: "cash", name: "bar", code: 102, deleted: false, dateCreated: "2016-08-11T17:16:27"},
+          {name: "bar", dateCreated: "2016-08-11T17:16:27"},
         ])
       })
     })
   })
 
   describe("group", function() {
+    const mockDataForGrouping = [
+      {name: "foo", type: "cash"},
+      {name: "bar", type: "cash"},
+      {name: "baz", type: "loan"},
+    ]
+
     it("should group data if groupBy argument is passed", function() {
       expect(formatter.group(mockDataForGrouping, "type")).to.eql({
         "cash": [
@@ -308,6 +346,12 @@ describe("formatter", function() {
   })
 
   describe("sort", function() {
+    const mockDataForSorting = [
+      {name: "foo", num: 2},
+      {name: "bar", num: 1},
+      {name: "baz", num: 3},
+    ]
+
     it("should sort the data in ascending order", function() {
       expect(formatter.sort(mockDataForSorting, "num", "asc")).to.eql([
         {name: "bar", num: 1},

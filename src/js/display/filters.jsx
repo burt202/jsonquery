@@ -45,9 +45,9 @@ function getBoolInput(filter, onChange) {
   return (
     <div className="filter-controls">
       <select name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "value")}>
-        <option value="">NULL</option>
-        <option value="true">TRUE</option>
-        <option value="false">FALSE</option>
+        <option value="nl">Is null</option>
+        <option value="true">Is true</option>
+        <option value="false">Is false</option>
       </select>
     </div>
   )
@@ -59,7 +59,7 @@ function getDateInput(filter, onChange) {
       <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
         <option value="eq">Is same day</option>
         <option value="be">Is before</option>
-        <option value="at">Is after</option>
+        <option value="af">Is after</option>
         <option value="nl">Is null</option>
       </select>
       <input type="text" name={filter.name} value={filter.value} placeholder="YYYYMMDD" maxLength="8" onChange={onChange.bind(this, filter.name, "value")} />

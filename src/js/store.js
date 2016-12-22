@@ -19,6 +19,7 @@ const initialOperators = {
   string: "eq",
   int: "eq",
   date: "eq",
+  bool: "nl",
 }
 
 const handlers = {
