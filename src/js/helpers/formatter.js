@@ -54,6 +54,7 @@ function addStringFilter(filter) {
   if (filter.operator === "eq") acc[filter.name] = R.equals(filter.value)
   if (filter.operator === "neq") acc[filter.name] = R.compose(R.not, R.equals(filter.value))
   if (filter.operator === "nl") acc[filter.name] = R.isNil
+  if (filter.operator === "nnl") acc[filter.name] = R.compose(R.not, R.isNil)
   if (filter.operator === "iof") acc[filter.name] = isOneOf(filter.value)
   if (filter.operator === "rgm") acc[filter.name] = matches(filter.value)
   return acc
@@ -64,6 +65,7 @@ function addIntFilter(filter) {
   if (filter.operator === "eq") acc[filter.name] = R.equals(parseInt(filter.value, 10))
   if (filter.operator === "neq") acc[filter.name] = R.compose(R.not, R.equals(parseInt(filter.value, 10)))
   if (filter.operator === "nl") acc[filter.name] = R.isNil
+  if (filter.operator === "nnl") acc[filter.name] = R.compose(R.not, R.isNil)
   if (filter.operator === "gt") acc[filter.name] = R.gt(R.__, parseInt(filter.value, 10))
   if (filter.operator === "lt") acc[filter.name] = R.lt(R.__, parseInt(filter.value, 10))
   if (filter.operator === "gte") acc[filter.name] = R.gte(R.__, parseInt(filter.value, 10))
@@ -74,9 +76,9 @@ function addIntFilter(filter) {
 
 function addBoolFilter(filter) {
   const acc = {}
-  if (filter.value === "nl") acc[filter.name] = R.isNil
-  if (filter.value === "true") acc[filter.name] = R.equals(true)
-  if (filter.value === "false") acc[filter.name] = R.equals(false)
+  if (filter.operator === "nl") acc[filter.name] = R.isNil
+  if (filter.operator === "true") acc[filter.name] = R.equals(true)
+  if (filter.operator === "false") acc[filter.name] = R.equals(false)
   return acc
 }
 
@@ -89,6 +91,7 @@ function addDateFilter(filter) {
   }
 
   if (filter.operator === "nl") acc[filter.name] = R.isNil
+  if (filter.operator === "nnl") acc[filter.name] = R.compose(R.not, R.isNil)
   return acc
 }
 

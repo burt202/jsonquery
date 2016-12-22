@@ -14,6 +14,7 @@ function getStringInput(filter, onChange) {
         <option value="eq">Equal to</option>
         <option value="neq">Not equal to</option>
         <option value="nl">Is null</option>
+        <option value="nnl">Is not null</option>
         <option value="iof">Is one of</option>
         <option value="rgm">Matches</option>
       </select>
@@ -31,6 +32,7 @@ function getIntInput(filter, onChange) {
         <option value="eq">Equal to</option>
         <option value="neq">Not equal to</option>
         <option value="nl">Is null</option>
+        <option value="nnl">Is not null</option>
         <option value="gt">Greater than</option>
         <option value="gte">Greater than or equal to</option>
         <option value="lt">Less than</option>
@@ -44,7 +46,7 @@ function getIntInput(filter, onChange) {
 function getBoolInput(filter, onChange) {
   return (
     <div className="filter-controls">
-      <select name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "value")}>
+      <select name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "operator")}>
         <option value="nl">Is null</option>
         <option value="true">Is true</option>
         <option value="false">Is false</option>
@@ -61,6 +63,7 @@ function getDateInput(filter, onChange) {
         <option value="be">Is before</option>
         <option value="af">Is after</option>
         <option value="nl">Is null</option>
+        <option value="nnl">Is not null</option>
       </select>
       <input type="text" name={filter.name} value={filter.value} placeholder="YYYYMMDD" maxLength="8" onChange={onChange.bind(this, filter.name, "value")} />
     </div>
