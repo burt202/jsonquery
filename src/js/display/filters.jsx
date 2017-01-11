@@ -46,7 +46,7 @@ function getIntInput(filter, onChange) {
 function getBoolInput(filter, onChange) {
   return (
     <div className="filter-controls">
-      <select name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "operator")}>
+      <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
         <option value="nl">Is null</option>
         <option value="true">Is true</option>
         <option value="false">Is false</option>
