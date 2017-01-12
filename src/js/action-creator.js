@@ -1,3 +1,4 @@
+const R = require("ramda")
 const dispatcher = require("./helpers/dispatcher")
 
 module.exports = {
@@ -6,6 +7,13 @@ module.exports = {
       name: "saveJson",
       value: {name: name, data: data},
     })
+
+    if (name === "schema") {
+      dispatcher.dispatch({
+        name: "updateResultFields",
+        value: {fields: R.keys(data)},
+      })
+    }
   },
 
   addFilter: function(name) {

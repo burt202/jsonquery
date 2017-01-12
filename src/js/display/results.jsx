@@ -14,7 +14,7 @@ const Results = React.createClass({
     groupBy: React.PropTypes.string,
     sortBy: React.PropTypes.string,
     sortDirection: React.PropTypes.string,
-    schema: React.PropTypes.object.isRequired,
+    resultFields: React.PropTypes.array.isRequired,
   },
 
   isAboveResultsThreshold: function() {
@@ -54,7 +54,7 @@ const Results = React.createClass({
   },
 
   groupSortData: function(data) {
-    data = R.map(R.pick(R.keys(this.props.schema)))(data)
+    data = R.map(R.pick(this.props.resultFields))(data)
     if (this.props.groupBy) return formatter.group(data, this.props.groupBy)
     if (this.props.sortBy) return formatter.sort(data, this.props.sortBy, this.props.sortDirection)
     return data

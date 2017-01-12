@@ -14,6 +14,7 @@ describe("store", function() {
       sortDirection: "asc",
       schema: null,
       data: null,
+      resultFields: null,
     })
 
     dispatcher.dispatch({
@@ -29,6 +30,17 @@ describe("store", function() {
   describe("saveJson", function() {
     it("should save json under the passed prop name", function() {
       expect(store.getState().schema).to.eql({foo: "string"})
+    })
+  })
+
+  describe("updateResultFields", function() {
+    it("should save field names", function() {
+      dispatcher.dispatch({
+        name: "updateResultFields",
+        value: {fields: ["foo"]},
+      })
+
+      expect(store.getState().resultFields).to.eql(["foo"])
     })
   })
 
@@ -208,6 +220,7 @@ describe("store", function() {
         sortDirection: "asc",
         schema: null,
         data: null,
+        resultFields: null,
       })
     })
   })

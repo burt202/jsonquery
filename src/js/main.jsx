@@ -40,6 +40,7 @@ const Main = React.createClass({
       sortDirection={this.state.sortDirection}
       schema={this.state.schema}
       data={this.state.data}
+      resultFields={this.state.resultFields}
     />
   },
 })

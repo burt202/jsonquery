@@ -8,6 +8,7 @@ const defaults = {
   sortDirection: "asc",
   schema: null,
   data: null,
+  resultFields: null,
 }
 
 function updateWhere(find, update, data) {
@@ -27,6 +28,12 @@ const handlers = {
     const toUpdate = {}
     toUpdate[payload.name] = payload.data
     return R.merge(contents, toUpdate)
+  },
+
+  updateResultFields: function(contents, payload) {
+    return R.merge(contents, {
+      resultFields: payload.fields,
+    })
   },
 
   addFilter: function(contents, payload) {

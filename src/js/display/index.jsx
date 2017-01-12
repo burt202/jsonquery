@@ -18,6 +18,7 @@ const Display = React.createClass({
     sortDirection: React.PropTypes.string,
     schema: React.PropTypes.object.isRequired,
     data: React.PropTypes.array.isRequired,
+    resultFields: React.PropTypes.array.isRequired,
   },
 
   onBackClick: function() {
@@ -54,7 +55,7 @@ const Display = React.createClass({
           groupBy={this.props.groupBy}
           sortBy={this.props.sortBy}
           sortDirection={this.props.sortDirection}
-          schema={this.props.schema}
+          resultFields={this.props.resultFields}
         />
       </div>
     )
