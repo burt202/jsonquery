@@ -56,6 +56,8 @@ const Display = React.createClass({
           sortBy={this.props.sortBy}
           sortDirection={this.props.sortDirection}
           resultFields={this.props.resultFields}
+          schema={this.props.schema}
+          actionCreator={this.props.actionCreator}
         />
       </div>
     )

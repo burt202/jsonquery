@@ -15,6 +15,8 @@ const Results = React.createClass({
     sortBy: React.PropTypes.string,
     sortDirection: React.PropTypes.string,
     resultFields: React.PropTypes.array.isRequired,
+    schema: React.PropTypes.object.isRequired,
+    actionCreator: React.PropTypes.object.isRequired,
   },
 
   isAboveResultsThreshold: function() {
@@ -65,6 +67,29 @@ const Results = React.createClass({
     return this.groupSortData(data)
   },
 
+  onChangeHandler: function(e) {
+    const field = e.target.name
+    const isPresent = R.contains(field, this.props.resultFields)
+    const updatedFields = (isPresent) ?
+      R.without([field], this.props.resultFields) :
+      R.append(field, this.props.resultFields)
+
+    this.props.actionCreator.updateResultFields(updatedFields)
+  },
+
+  getResultFieldOptions: function() {
+    return R.keys(this.props.schema).map(function(field) {
+      const checked = R.contains(field, this.props.resultFields)
+
+      return (
+        <label className="resultField" key={field}>
+          <input type="checkbox" name={field} checked={checked} onChange={this.onChangeHandler} />
+          {field}
+        </label>
+      )
+    }.bind(this))
+  },
+
   render: function() {
     const dataToDisplay = this.getDisplayData()
     const dataToDownload = this.groupSortData(this.props.results)
@@ -74,6 +99,7 @@ const Results = React.createClass({
         <h3>Results</h3>
         {this.getLimitText()}
         {this.getDownloadText(dataToDownload)}
+        <p>Include: {this.getResultFieldOptions()}</p>
         <pre>{JSON.stringify(dataToDisplay, null, 2)}</pre>
         <a id="hidden-download-link" style={{display: "none"}}></a>
       </div>

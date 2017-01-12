@@ -164,3 +164,8 @@ pre {
   margin-right: 10px;
   border-right: 1px solid #000;
 }
+
+.resultField {
+  margin-right: 10px;
+  cursor: pointer;
+}

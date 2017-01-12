@@ -71,4 +71,11 @@ module.exports = {
       value: {},
     })
   },
+
+  updateResultFields: function(fields) {
+    dispatcher.dispatch({
+      name: "updateResultFields",
+      value: {fields: fields},
+    })
+  },
 }
