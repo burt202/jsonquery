@@ -248,6 +248,21 @@ describe("formatter", function() {
           {name: "abc", code: 103},
         ])
       })
+
+      it.skip("should honour decimals in the filter value", function() {
+        const mockFilters = [
+          {name: "foo", code: 101.5},
+          {name: "bar", code: 102},
+        ]
+
+        const res = formatter.filter(mockFilters, mockSchema, [
+          {name: "code", operator: "gt", value: 101.9, active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "bar", code: 102},
+        ])
+      })
     })
 
     describe("bool", function() {
