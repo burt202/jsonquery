@@ -41,7 +41,7 @@ const handlers = {
     const operator = initialOperators[filterType] || "eq"
 
     return R.merge(contents, {
-      filters: R.append({name: payload.name, value: "", operator: operator}, contents.filters),
+      filters: R.append({name: payload.name, value: "", operator: operator, active: true}, contents.filters),
     })
   },
 

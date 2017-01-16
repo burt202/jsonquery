@@ -30,6 +30,13 @@ module.exports = {
     })
   },
 
+  toggleFilter: function(name, active) {
+    dispatcher.dispatch({
+      name: "updateFilter",
+      value: {name: name, value: {active: active}},
+    })
+  },
+
   updateFilter: function(name, value) {
     dispatcher.dispatch({
       name: "updateFilter",

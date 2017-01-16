@@ -98,6 +98,8 @@ function addDateFilter(filter) {
 module.exports = {
   filter: function(data, schema, filters) {
     const builtFilters = R.reduce(function(acc, filter) {
+      if (!filter.active) return acc
+
       const type = schema[filter.name]
 
       if (type === "string") acc = R.merge(acc, addStringFilter(filter))

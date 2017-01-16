@@ -67,6 +67,11 @@ a.site-link {
   margin: 10px 0 15px 0;
 }
 
+.filters tbody tr.inactive {
+  background: #cccccc;
+  opacity: 0.6;
+}
+
 .input-control {
   height: 25px;
 }

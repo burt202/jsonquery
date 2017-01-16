@@ -92,19 +92,29 @@ const Filters = React.createClass({
   },
 
   getFilterRows: function() {
-    if (this.props.filters.length) {
-      return this.props.filters.map(function(filter) {
-        return (
-          <tr key={filter.name}>
-            <td>{filter.name}</td>
-            <td>{this.getInputControlByType(this.props.schema[filter.name], filter)}</td>
-            <td><a className="site-link" onClick={this.deleteFilter} data-name={filter.name}>Remove</a></td>
-          </tr>
-        )
-      }.bind(this))
-    }
+    if (!this.props.filters.length)
+      return (
+        <tr><td>No filters</td></tr>
+      )
 
-    return (<tr><td>No filters</td></tr>)
+    return this.props.filters.map(function(filter) {
+      const toggleClass = (filter.active) ? "active" : "inactive"
+
+      return (
+        <tr key={filter.name} className={toggleClass}>
+          <td>{filter.name}</td>
+          <td>{this.getInputControlByType(this.props.schema[filter.name], filter)}</td>
+          <td><a className="site-link" onClick={this.toggleFilter} data-name={filter.name} data-active={filter.active}>Toggle</a></td>
+          <td><a className="site-link" onClick={this.deleteFilter} data-name={filter.name}>Remove</a></td>
+        </tr>
+      )
+    }.bind(this))
+  },
+
+  toggleFilter: function(e) {
+    const name = e.target.dataset.name
+    const active = e.target.dataset.active === "true"
+    this.props.actionCreator.toggleFilter(name, !active)
   },
 
   deleteFilter: function(e) {
@@ -126,6 +136,7 @@ const Filters = React.createClass({
             <tr>
               <th>Field</th>
               <th>Value</th>
+              <th></th>
               <th></th>
             </tr>
           </thead>

@@ -25,11 +25,23 @@ describe("formatter", function() {
 
     it("should filter on multiple fields", function() {
       const res = formatter.filter(mockDataForFiltering, mockSchema, [
-        {name: "type", value: "cash", operator: "eq"},
-        {name: "deleted", operator: "false"},
+        {name: "type", value: "cash", operator: "eq", active: true},
+        {name: "deleted", operator: "false", active: true},
       ])
 
       expect(res).to.eql([
+        {name: "bar", type: "cash", deleted: false},
+      ])
+    })
+
+    it("should ignore inactive filters", function() {
+      const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        {name: "type", value: "cash", operator: "eq", active: true},
+        {name: "deleted", operator: "false", active: false},
+      ])
+
+      expect(res).to.eql([
+        {name: "foo", type: "cash", deleted: true},
         {name: "bar", type: "cash", deleted: false},
       ])
     })
@@ -50,7 +62,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'eq'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "type", operator: "eq", value: "cash"},
+          {name: "type", operator: "eq", value: "cash", active: true},
         ])
 
         expect(res).to.eql([
@@ -61,7 +73,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'neq'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "type", operator: "neq", value: "cash"},
+          {name: "type", operator: "neq", value: "cash", active: true},
         ])
 
         expect(res).to.eql([
@@ -73,7 +85,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'nl'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "type", operator: "nl"},
+          {name: "type", operator: "nl", active: true},
         ])
 
         expect(res).to.eql([
@@ -83,7 +95,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'nnl'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "type", operator: "nnl"},
+          {name: "type", operator: "nnl", active: true},
         ])
 
         expect(res).to.eql([
@@ -96,7 +108,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'iof'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "type", operator: "iof", value: "cash,loan"},
+          {name: "type", operator: "iof", value: "cash,loan", active: true},
         ])
 
         expect(res).to.eql([
@@ -108,7 +120,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'rgm'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "type", operator: "rgm", value: "ca"},
+          {name: "type", operator: "rgm", value: "ca", active: true},
         ])
 
         expect(res).to.eql([
@@ -135,7 +147,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'eq'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "code", operator: "eq", value: 102},
+          {name: "code", operator: "eq", value: 102, active: true},
         ])
 
         expect(res).to.eql([
@@ -145,7 +157,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'neq'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "code", operator: "neq", value: 102},
+          {name: "code", operator: "neq", value: 102, active: true},
         ])
 
         expect(res).to.eql([
@@ -158,7 +170,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'nl'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "code", operator: "nl"},
+          {name: "code", operator: "nl", active: true},
         ])
 
         expect(res).to.eql([
@@ -168,7 +180,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'nnl'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "code", operator: "nnl"},
+          {name: "code", operator: "nnl", active: true},
         ])
 
         expect(res).to.eql([
@@ -181,7 +193,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'gt'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "code", operator: "gt", value: 102},
+          {name: "code", operator: "gt", value: 102, active: true},
         ])
 
         expect(res).to.eql([
@@ -192,7 +204,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'lt'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "code", operator: "lt", value: 102},
+          {name: "code", operator: "lt", value: 102, active: true},
         ])
 
         expect(res).to.eql([
@@ -203,7 +215,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'gte'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "code", operator: "gte", value: 102},
+          {name: "code", operator: "gte", value: 102, active: true},
         ])
 
         expect(res).to.eql([
@@ -215,7 +227,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'lte'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "code", operator: "lte", value: 102},
+          {name: "code", operator: "lte", value: 102, active: true},
         ])
 
         expect(res).to.eql([
@@ -227,7 +239,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'iof'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "code", operator: "iof", value: "101,103"},
+          {name: "code", operator: "iof", value: "101,103", active: true},
         ])
 
         expect(res).to.eql([
@@ -254,7 +266,7 @@ describe("formatter", function() {
 
       it("should filter when true", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "deleted", operator: "true"},
+          {name: "deleted", operator: "true", active: true},
         ])
 
         expect(res).to.eql([
@@ -265,7 +277,7 @@ describe("formatter", function() {
 
       it("should filter when false", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "deleted", operator: "false"},
+          {name: "deleted", operator: "false", active: true},
         ])
 
         expect(res).to.eql([
@@ -276,7 +288,7 @@ describe("formatter", function() {
 
       it("should filter when null", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "deleted", operator: "nl"},
+          {name: "deleted", operator: "nl", active: true},
         ])
 
         expect(res).to.eql([
@@ -300,7 +312,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'nl'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "dateCreated", operator: "nl", value: ""},
+          {name: "dateCreated", operator: "nl", value: "", active: true},
         ])
 
         expect(res).to.eql([
@@ -310,7 +322,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'nnl'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "dateCreated", operator: "nnl", value: ""},
+          {name: "dateCreated", operator: "nnl", value: "", active: true},
         ])
 
         expect(res).to.eql([
@@ -323,7 +335,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'eq'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "dateCreated", operator: "eq", value: "20160611"},
+          {name: "dateCreated", operator: "eq", value: "20160611", active: true},
         ])
 
         expect(res).to.eql([
@@ -333,7 +345,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'be'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "dateCreated", operator: "be", value: "20160811"},
+          {name: "dateCreated", operator: "be", value: "20160811", active: true},
         ])
 
         expect(res).to.eql([
@@ -345,7 +357,7 @@ describe("formatter", function() {
 
       it("should filter when operator is 'af'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "dateCreated", operator: "af", value: "20160712"},
+          {name: "dateCreated", operator: "af", value: "20160712", active: true},
         ])
 
         expect(res).to.eql([

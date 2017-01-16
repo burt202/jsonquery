@@ -51,7 +51,7 @@ describe("store", function() {
         value: {name: "foo"},
       })
 
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}])
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq", active: true}])
     })
   })
 
@@ -64,7 +64,7 @@ describe("store", function() {
     })
 
     it("should delete filter", function() {
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}])
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq", active: true}])
 
       dispatcher.dispatch({
         name: "deleteFilter",
@@ -84,14 +84,14 @@ describe("store", function() {
     })
 
     it("should update filter", function() {
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}])
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq", active: true}])
 
       dispatcher.dispatch({
         name: "updateFilter",
         value: {name: "foo", value: {value: "bar"}},
       })
 
-      expect(store.getState().filters).to.eql([{name: "foo", value: "bar", operator: "eq"}])
+      expect(store.getState().filters).to.eql([{name: "foo", value: "bar", operator: "eq", active: true}])
     })
   })
 
@@ -114,7 +114,7 @@ describe("store", function() {
     })
 
     it("should reset filters, groupBy and sortBy values to their defaults", function() {
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}])
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq", active: true}])
       expect(store.getState().groupBy).to.eql("bar")
       expect(store.getState().sortDirection).to.eql("desc")
 
@@ -203,7 +203,7 @@ describe("store", function() {
     })
 
     it("should reset filters and groupBy values to their defaults", function() {
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq"}])
+      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq", active: true}])
       expect(store.getState().groupBy).to.eql("bar")
       expect(store.getState().schema).to.eql("baz")
       expect(store.getState().data).to.eql("abc")
