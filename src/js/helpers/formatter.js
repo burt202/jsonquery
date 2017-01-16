@@ -62,14 +62,14 @@ function addStringFilter(filter) {
 
 function addIntFilter(filter) {
   const acc = {}
-  if (filter.operator === "eq") acc[filter.name] = R.equals(parseInt(filter.value, 10))
-  if (filter.operator === "neq") acc[filter.name] = R.compose(R.not, R.equals(parseInt(filter.value, 10)))
+  if (filter.operator === "eq") acc[filter.name] = R.equals(parseFloat(filter.value))
+  if (filter.operator === "neq") acc[filter.name] = R.compose(R.not, R.equals(parseFloat(filter.value)))
   if (filter.operator === "nl") acc[filter.name] = R.isNil
   if (filter.operator === "nnl") acc[filter.name] = R.compose(R.not, R.isNil)
-  if (filter.operator === "gt") acc[filter.name] = R.gt(R.__, parseInt(filter.value, 10))
-  if (filter.operator === "lt") acc[filter.name] = R.lt(R.__, parseInt(filter.value, 10))
-  if (filter.operator === "gte") acc[filter.name] = R.gte(R.__, parseInt(filter.value, 10))
-  if (filter.operator === "lte") acc[filter.name] = R.lte(R.__, parseInt(filter.value, 10))
+  if (filter.operator === "gt") acc[filter.name] = R.gt(R.__, parseFloat(filter.value))
+  if (filter.operator === "lt") acc[filter.name] = R.lt(R.__, parseFloat(filter.value))
+  if (filter.operator === "gte") acc[filter.name] = R.gte(R.__, parseFloat(filter.value))
+  if (filter.operator === "lte") acc[filter.name] = R.lte(R.__, parseFloat(filter.value))
   if (filter.operator === "iof") acc[filter.name] = isOneOf(filter.value)
   return acc
 }

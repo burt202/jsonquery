@@ -249,7 +249,7 @@ describe("formatter", function() {
         ])
       })
 
-      it.skip("should honour decimals in the filter value", function() {
+      it("should honour decimals in the filter value", function() {
         const mockFilters = [
           {name: "foo", code: 101.5},
           {name: "bar", code: 102},
