@@ -95,6 +95,13 @@ function addDateFilter(filter) {
   return acc
 }
 
+function addArrayFilter(filter) {
+  const acc = {}
+  if (filter.operator === "cos") acc[filter.name] = R.contains(filter.value)
+  if (filter.operator === "hl") acc[filter.name] = R.compose(R.equals(parseInt(filter.value, 10)), R.length)
+  return acc
+}
+
 module.exports = {
   filter: function(data, schema, filters) {
     const builtFilters = R.reduce(function(acc, filter) {
@@ -106,6 +113,7 @@ module.exports = {
       if (type === "int") acc = R.merge(acc, addIntFilter(filter))
       if (type === "bool") acc = R.merge(acc, addBoolFilter(filter))
       if (type === "date") acc = R.merge(acc, addDateFilter(filter))
+      if (type === "array") acc = R.merge(acc, addArrayFilter(filter))
 
       return acc
     }, {}, filters)

@@ -380,6 +380,42 @@ describe("formatter", function() {
         ])
       })
     })
+
+    describe("array", function() {
+
+      const mockDataForFiltering = [
+        {name: "foo", types: ["cash"]},
+        {name: "bar", types: ["cash", "card"]},
+        {name: "baz", types: []},
+        {name: "abc", types: ["card"]},
+        {name: "123", types: ["investment"]},
+      ]
+
+      const mockSchema = {
+        types: "array",
+      }
+
+      it("should filter when operator is 'cos'", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "types", operator: "cos", value: "card", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "bar", types: ["cash", "card"]},
+          {name: "abc", types: ["card"]},
+        ])
+      })
+
+      it("should filter when operator is 'hl'", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "types", operator: "hl", value: "2", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "bar", types: ["cash", "card"]},
+        ])
+      })
+    })
   })
 
   describe("group", function() {

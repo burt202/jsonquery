@@ -70,11 +70,24 @@ function getDateInput(filter, onChange) {
   )
 }
 
+function getArrayInput(filter, onChange) {
+  return (
+    <div className="filter-controls">
+      <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
+        <option value="cos">Contains String</option>
+        <option value="hl">Has length of</option>
+      </select>
+      <input type="text" name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "value")} />
+    </div>
+  )
+}
+
 const typeMap = {
   string: getStringInput,
   int: getIntInput,
   bool: getBoolInput,
   date: getDateInput,
+  array: getArrayInput,
 }
 
 const Filters = React.createClass({

@@ -21,6 +21,7 @@ const initialOperators = {
   int: "eq",
   date: "eq",
   bool: "nl",
+  array: "cos",
 }
 
 const handlers = {
