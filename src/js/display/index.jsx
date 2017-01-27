@@ -47,6 +47,7 @@ const Display = React.createClass({
           sortDirection={this.props.sortDirection}
         />
         <Summary
+          rawDataLength={this.props.data.length}
           results={results}
           groupBy={this.props.groupBy}
         />

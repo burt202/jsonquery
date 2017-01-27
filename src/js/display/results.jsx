@@ -98,8 +98,8 @@ const Results = React.createClass({
       <div>
         <h3>Results</h3>
         {this.getLimitText()}
-        {this.getDownloadText(dataToDownload)}
         <p>Include: {this.getResultFieldOptions()}</p>
+        {this.getDownloadText(dataToDownload)}
         <pre>{JSON.stringify(dataToDisplay, null, 2)}</pre>
         <a id="hidden-download-link" style={{display: "none"}}></a>
       </div>

@@ -3,10 +3,15 @@ const R = require("ramda")
 
 const formatter = require("../helpers/formatter")
 
+const round = R.curry(function(decimals, num) {
+  return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals)
+})
+
 const Summary = React.createClass({
   displayName: "Summary",
 
   propTypes: {
+    rawDataLength: React.PropTypes.number.isRequired,
     results: React.PropTypes.array.isRequired,
     groupBy: React.PropTypes.string,
   },
@@ -45,13 +50,19 @@ const Summary = React.createClass({
     return (this.props.groupBy) ? formatter.group(this.props.results, this.props.groupBy) : null
   },
 
+  showRawDataLength: function() {
+    if (this.props.results.length === this.props.rawDataLength) return ""
+    const percentage = (this.props.results.length / this.props.rawDataLength) * 100
+    return "/" + this.props.rawDataLength + " (" + round(2, percentage) + "%)"
+  },
+
   render: function() {
     const grouping = this.getGrouping()
 
     return (
       <div>
         <h3>Summary</h3>
-        <p>Total: {this.props.results.length}</p>
+        <p>Total: {this.props.results.length}{this.showRawDataLength()}</p>
         <p><u><strong>Groups</strong></u></p>
         <p>{this.getGroupingBreakdown(grouping)}</p>
         <p>{this.getFormattedGroups(grouping)}</p>
