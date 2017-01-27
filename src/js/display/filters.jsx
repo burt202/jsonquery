@@ -36,6 +36,7 @@ function getIntInput(filter, onChange) {
         <option value="gt">Greater than</option>
         <option value="gte">Greater than or equal to</option>
         <option value="lt">Less than</option>
+        <option value="lte">Less than or equal to</option>
         <option value="iof">Is one of</option>
       </select>
       <input type="text" name={filter.name} value={filter.value} placeholder={placeholder} onChange={onChange.bind(this, filter.name, "value")} />
@@ -75,7 +76,12 @@ function getArrayInput(filter, onChange) {
     <div className="filter-controls">
       <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
         <option value="cos">Contains String</option>
+        <option value="con">Contains Number</option>
         <option value="hl">Has length of</option>
+        <option value="hlgt">Has length greater than</option>
+        <option value="hlgte">Has length greater than or equal to</option>
+        <option value="hllt">Has length less than</option>
+        <option value="hllte">Has length less than or equal to</option>
       </select>
       <input type="text" name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "value")} />
     </div>

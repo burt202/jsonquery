@@ -67,8 +67,8 @@ function addIntFilter(filter) {
   if (filter.operator === "nl") acc[filter.name] = R.isNil
   if (filter.operator === "nnl") acc[filter.name] = R.compose(R.not, R.isNil)
   if (filter.operator === "gt") acc[filter.name] = R.gt(R.__, parseFloat(filter.value))
-  if (filter.operator === "lt") acc[filter.name] = R.lt(R.__, parseFloat(filter.value))
   if (filter.operator === "gte") acc[filter.name] = R.gte(R.__, parseFloat(filter.value))
+  if (filter.operator === "lt") acc[filter.name] = R.lt(R.__, parseFloat(filter.value))
   if (filter.operator === "lte") acc[filter.name] = R.lte(R.__, parseFloat(filter.value))
   if (filter.operator === "iof") acc[filter.name] = isOneOf(filter.value)
   return acc
@@ -98,7 +98,12 @@ function addDateFilter(filter) {
 function addArrayFilter(filter) {
   const acc = {}
   if (filter.operator === "cos") acc[filter.name] = R.contains(filter.value)
+  if (filter.operator === "con") acc[filter.name] = R.contains(parseFloat(filter.value))
   if (filter.operator === "hl") acc[filter.name] = R.compose(R.equals(parseInt(filter.value, 10)), R.length)
+  if (filter.operator === "hlgt") acc[filter.name] = R.compose(R.gt(R.__, parseInt(filter.value, 10)), R.length)
+  if (filter.operator === "hlgte") acc[filter.name] = R.compose(R.gte(R.__, parseInt(filter.value, 10)), R.length)
+  if (filter.operator === "hllt") acc[filter.name] = R.compose(R.lt(R.__, parseInt(filter.value, 10)), R.length)
+  if (filter.operator === "hllte") acc[filter.name] = R.compose(R.lte(R.__, parseInt(filter.value, 10)), R.length)
   return acc
 }
 

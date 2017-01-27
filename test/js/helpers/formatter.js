@@ -387,7 +387,7 @@ describe("formatter", function() {
         {name: "foo", types: ["cash"]},
         {name: "bar", types: ["cash", "card"]},
         {name: "baz", types: []},
-        {name: "abc", types: ["card"]},
+        {name: "abc", types: ["card", 101]},
         {name: "123", types: ["investment"]},
       ]
 
@@ -397,22 +397,82 @@ describe("formatter", function() {
 
       it("should filter when operator is 'cos'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "types", operator: "con", value: "101", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "abc", types: ["card", 101]},
+        ])
+      })
+
+      it("should filter when operator is 'cos'", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
           {name: "types", operator: "cos", value: "card", active: true},
         ])
 
         expect(res).to.eql([
           {name: "bar", types: ["cash", "card"]},
-          {name: "abc", types: ["card"]},
+          {name: "abc", types: ["card", 101]},
         ])
       })
 
       it("should filter when operator is 'hl'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "types", operator: "hl", value: "2", active: true},
+          {name: "types", operator: "hl", value: "0", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "baz", types: []},
+        ])
+      })
+
+      it("should filter when operator is 'hlgt'", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "types", operator: "hlgt", value: "1", active: true},
         ])
 
         expect(res).to.eql([
           {name: "bar", types: ["cash", "card"]},
+          {name: "abc", types: ["card", 101]},
+        ])
+      })
+
+      it("should filter when operator is 'hlgte'", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "types", operator: "hlgte", value: "1", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "foo", types: ["cash"]},
+          {name: "bar", types: ["cash", "card"]},
+          {name: "abc", types: ["card", 101]},
+          {name: "123", types: ["investment"]},
+        ])
+      })
+
+      it("should filter when operator is 'hllt'", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "types", operator: "hllt", value: "2", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "foo", types: ["cash"]},
+          {name: "baz", types: []},
+          {name: "123", types: ["investment"]},
+        ])
+      })
+
+      it("should filter when operator is 'hllte'", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "types", operator: "hllte", value: "2", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "foo", types: ["cash"]},
+          {name: "bar", types: ["cash", "card"]},
+          {name: "baz", types: []},
+          {name: "abc", types: ["card", 101]},
+          {name: "123", types: ["investment"]},
         ])
       })
     })
