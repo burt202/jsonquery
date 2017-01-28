@@ -17,37 +17,19 @@ const Summary = React.createClass({
   },
 
   getGroupingBreakdown: function(grouping) {
-    if (!grouping) return "None"
+    if (!grouping) return null
 
     return R.pipe(
       R.toPairs,
       R.map(R.last),
       R.map(function(obj) {
-        return obj.name + ": " + obj.value
-      }),
-      R.join(", ")
+        return (<p key={obj.name}>{obj.name + ": " + obj.value}</p>)
+      })
     )(formatter.getGroupStats(grouping))
   },
 
-  getFormattedGroups: function(grouping) {
-    if (!grouping) return null
-
-    return R.pipe(
-      R.toPairs,
-      R.map(function(pair) {
-        return {name: pair[0], total: pair[1].length}
-      }),
-      R.sortBy(R.prop("total")),
-      R.reverse,
-      R.map(function(group) {
-        return group.name + " (" + group.total + ")"
-      }),
-      R.join(", ")
-    )(grouping)
-  },
-
   getGrouping: function() {
-    return (this.props.groupBy) ? formatter.group(this.props.results, this.props.groupBy) : null
+    return (this.props.groupBy) ? formatter.group(this.props.results, this.props.groupBy, false) : null
   },
 
   showRawDataLength: function() {
@@ -61,11 +43,11 @@ const Summary = React.createClass({
 
     return (
       <div>
-        <h3>Summary</h3>
-        <p>Total: {this.props.results.length}{this.showRawDataLength()}</p>
-        <p><u><strong>Groups</strong></u></p>
-        <p>{this.getGroupingBreakdown(grouping)}</p>
-        <p>{this.getFormattedGroups(grouping)}</p>
+        <h3 className="summary">Summary</h3>
+        <div className="summary-stats">
+          <p>Total: {this.props.results.length}{this.showRawDataLength()}</p>
+          {this.getGroupingBreakdown(grouping)}
+        </div>
       </div>
     )
   },

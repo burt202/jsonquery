@@ -170,7 +170,25 @@ pre {
   border-right: 1px solid #000;
 }
 
-.resultField {
+.result-field {
   margin-right: 10px;
   cursor: pointer;
+}
+
+h3.summary {
+  margin-bottom: 0;
+}
+
+.summary-stats {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  flex-flow: row wrap;
+  align-content: flex-end;
+}
+
+.summary-stats p {
+  width: 200px;
+  margin-bottom: 0;
 }

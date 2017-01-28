@@ -41,6 +41,7 @@ const Main = React.createClass({
       schema={this.state.schema}
       data={this.state.data}
       resultFields={this.state.resultFields}
+      showCounts={this.state.showCounts}
     />
   },
 })

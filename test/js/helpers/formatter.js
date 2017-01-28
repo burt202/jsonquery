@@ -483,9 +483,12 @@ describe("formatter", function() {
       {name: "foo", type: "cash"},
       {name: "bar", type: "cash"},
       {name: "baz", type: "loan"},
+      {name: "abc", type: "card"},
+      {name: "123", type: "card"},
+      {name: "test", type: "card"},
     ]
 
-    it("should group data if groupBy argument is passed", function() {
+    it("should group data", function() {
       expect(formatter.group(mockDataForGrouping, "type")).to.eql({
         "cash": [
           {
@@ -503,6 +506,28 @@ describe("formatter", function() {
             "type": "loan",
           },
         ],
+        "card": [
+          {
+            "name": "abc",
+            "type": "card",
+          },
+          {
+            "name": "123",
+            "type": "card",
+          },
+          {
+            "name": "test",
+            "type": "card",
+          },
+        ],
+      })
+    })
+
+    it("should group data but only show group lengths when 'showCounts' option is passed", function() {
+      expect(formatter.group(mockDataForGrouping, "type", true)).to.eql({
+        cash: 2,
+        loan: 1,
+        card: 3,
       })
     })
   })
@@ -535,50 +560,32 @@ describe("formatter", function() {
     it("should return the total number of groups", function() {
       const res = formatter.getGroupStats({foo: [], bar: []})
 
-      expect(res.count).to.eql({name: "Count", value: 2})
+      expect(res.count).to.eql({name: "No. of Groups", value: 2})
     })
 
     it("should return the size of the biggest group", function() {
       const res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]})
 
-      expect(res.max).to.eql({name: "Max Size", value: 3})
+      expect(res.max).to.eql({name: "Max Group Size", value: 3})
     })
 
     it("should return the size of the smallest group", function() {
       const res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]})
 
-      expect(res.min).to.eql({name: "Min Size", value: 1})
+      expect(res.min).to.eql({name: "Min Group Size", value: 1})
     })
 
     it("should return the mean average group size", function() {
       const res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]})
 
-      expect(res.mean).to.eql({name: "Mean Size", value: 2})
-    })
-
-    it("should return the median average group size", function() {
-      const res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]})
-
-      expect(res.median).to.eql({name: "Median Size", value: 2})
-    })
-
-    it("should return the mode average group size", function() {
-      const res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1], baz: [2]})
-
-      expect(res.mode).to.eql({name: "Mode Size", value: "1"})
-    })
-
-    it("should return be able to return multiple modes", function() {
-      const res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1], baz: [2], abc: [5, 6], def: [5, 6]})
-
-      expect(res.mode).to.eql({name: "Mode Size", value: "1, 2"})
+      expect(res.mean).to.eql({name: "Average Group Size", value: 2})
     })
 
     it("should not return all properties when there are no group", function() {
       const res = formatter.getGroupStats({})
 
       expect(res).to.eql({
-        count: {name: "Count", value: 0},
+        count: {name: "No. of Groups", value: 0},
       })
     })
   })

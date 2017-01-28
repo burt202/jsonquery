@@ -9,6 +9,7 @@ const defaults = {
   schema: null,
   data: null,
   resultFields: null,
+  showCounts: false,
 }
 
 function updateWhere(find, update, data) {
@@ -64,6 +65,7 @@ const handlers = {
       groupBy: null,
       sortBy: null,
       sortDirection: "asc",
+      showCounts: false,
     })
   },
 
@@ -90,6 +92,13 @@ const handlers = {
   goBack: function(contents) {
     return R.merge(contents, defaults)
   },
+
+  showCounts: function(contents, payload) {
+    return R.merge(contents, {
+      showCounts: payload.showCounts,
+    })
+  },
+
 }
 
 module.exports = createStore(defaults, handlers)

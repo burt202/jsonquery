@@ -85,4 +85,11 @@ module.exports = {
       value: {fields: fields},
     })
   },
+
+  showCounts: function(showCounts) {
+    dispatcher.dispatch({
+      name: "showCounts",
+      value: {showCounts: showCounts},
+    })
+  },
 }

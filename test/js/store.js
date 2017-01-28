@@ -15,6 +15,7 @@ describe("store", function() {
       schema: null,
       data: null,
       resultFields: null,
+      showCounts: false,
     })
 
     dispatcher.dispatch({
@@ -221,7 +222,19 @@ describe("store", function() {
         schema: null,
         data: null,
         resultFields: null,
+        showCounts: false,
       })
+    })
+  })
+
+  describe("showCounts", function() {
+    it("should update showCounts", function() {
+      dispatcher.dispatch({
+        name: "showCounts",
+        value: {showCounts: true},
+      })
+
+      expect(store.getState().showCounts).to.eql(true)
     })
   })
 })

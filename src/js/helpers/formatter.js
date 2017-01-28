@@ -36,19 +36,6 @@ function getMin(arr) {
   return Math.min.apply(null, arr)
 }
 
-const getMode = R.compose(
-  R.map(parseInt),
-  R.map(R.head),
-  R.defaultTo([]),
-  R.converge(R.prop, [
-    R.compose(R.last, R.sortBy(parseInt), R.keys),
-    R.identity,
-  ]),
-  R.groupBy(R.last),
-  R.toPairs,
-  R.countBy(R.identity)
-)
-
 function addStringFilter(filter) {
   const acc = {}
   if (filter.operator === "eq") acc[filter.name] = R.equals(filter.value)
@@ -126,8 +113,17 @@ module.exports = {
     return R.filter(R.where(builtFilters), data)
   },
 
-  group: function(filtered, groupBy) {
-    return R.groupBy(R.prop(groupBy), filtered)
+  group: function(filtered, groupBy, showCounts) {
+    const grouped = R.groupBy(R.prop(groupBy), filtered)
+    if (!showCounts) return grouped
+
+    return R.pipe(
+      R.map(R.length),
+      R.toPairs,
+      R.sortBy(R.prop(1)),
+      R.reverse,
+      R.fromPairs
+    )(grouped)
   },
 
   sort: function(filtered, sortBy, sortDirection) {
@@ -144,12 +140,10 @@ module.exports = {
       })
     )(grouped)
 
-    const count = {name: "Count", value: Object.keys(grouped).length}
-    const max = {name: "Max Size", value: getMax(groupLengths)}
-    const min = {name: "Min Size", value: getMin(groupLengths)}
-    const mean = {name: "Mean Size", value: R.compose(round(2), R.mean)(groupLengths)}
-    const median = {name: "Median Size", value: R.compose(round(2), R.median)(groupLengths)}
-    const mode = {name: "Mode Size", value: getMode(groupLengths).join(", ")}
+    const count = {name: "No. of Groups", value: Object.keys(grouped).length}
+    const max = {name: "Max Group Size", value: getMax(groupLengths)}
+    const min = {name: "Min Group Size", value: getMin(groupLengths)}
+    const mean = {name: "Average Group Size", value: R.compose(round(2), R.mean)(groupLengths)}
 
     const stats = {count: count}
 
@@ -157,8 +151,6 @@ module.exports = {
       max: max,
       min: min,
       mean: mean,
-      median: median,
-      mode: mode,
     }) : stats
   },
 }

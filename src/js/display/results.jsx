@@ -17,10 +17,11 @@ const Results = React.createClass({
     resultFields: React.PropTypes.array.isRequired,
     schema: React.PropTypes.object.isRequired,
     actionCreator: React.PropTypes.object.isRequired,
+    showCounts: React.PropTypes.bool.isRequired,
   },
 
-  isAboveResultsThreshold: function() {
-    return this.props.results.length > FILTER_THRESHOLD
+  limitDisplayData: function() {
+    return (this.props.results.length > FILTER_THRESHOLD) && !this.props.showCounts
   },
 
   downloadResults: function(data, mimetype, extension) {
@@ -33,14 +34,14 @@ const Results = React.createClass({
   },
 
   getLimitText: function() {
-    if (!this.isAboveResultsThreshold()) return null
+    if (!this.limitDisplayData()) return null
     return (<p>NOTE: results display limited to {FILTER_THRESHOLD}</p>)
   },
 
   getDownloadLinks: function(data) {
     const types = [
-      {name: "JSON", mimetype: "application/json", extension: "json", transformer: transformer.prettify},
-      {name: "CSV", mimetype: "text/csv", extension: "csv", transformer: transformer.convertToCsv},
+      {name: "JSON", mimetype: "application/json", extension: "json", transformer: transformer.prettify(this.props.groupBy, this.props.showCounts)},
+      {name: "CSV", mimetype: "text/csv", extension: "csv", transformer: transformer.convertToCsv(this.props.groupBy, this.props.showCounts)},
     ]
 
     return types.map(function(type) {
@@ -51,19 +52,19 @@ const Results = React.createClass({
   },
 
   getDownloadText: function(data) {
-    var text = (this.isAboveResultsThreshold()) ? "Download the whole lot as" : "Download as"
+    var text = (this.limitDisplayData()) ? "Download the whole lot as" : "Download as"
     return (<p className="download-links">{text}: {this.getDownloadLinks(data)}</p>)
   },
 
   groupSortData: function(data) {
     data = R.map(R.pick(this.props.resultFields))(data)
-    if (this.props.groupBy) return formatter.group(data, this.props.groupBy)
+    if (this.props.groupBy) return formatter.group(data, this.props.groupBy, this.props.showCounts)
     if (this.props.sortBy) return formatter.sort(data, this.props.sortBy, this.props.sortDirection)
     return data
   },
 
   getDisplayData: function() {
-    const data = (this.isAboveResultsThreshold()) ? R.take(FILTER_THRESHOLD, this.props.results) : this.props.results
+    const data = this.limitDisplayData() ? R.take(FILTER_THRESHOLD, this.props.results) : this.props.results
     return this.groupSortData(data)
   },
 
@@ -82,7 +83,7 @@ const Results = React.createClass({
       const checked = R.contains(field, this.props.resultFields)
 
       return (
-        <label className="resultField" key={field}>
+        <label className="result-field" key={field}>
           <input type="checkbox" name={field} checked={checked} onChange={this.onChangeHandler} />
           {field}
         </label>
@@ -94,11 +95,13 @@ const Results = React.createClass({
     const dataToDisplay = this.getDisplayData()
     const dataToDownload = this.groupSortData(this.props.results)
 
+    const includeCheckboxes = (!this.props.showCounts) ? <p>Include: {this.getResultFieldOptions()}</p> : null
+
     return (
       <div>
         <h3>Results</h3>
         {this.getLimitText()}
-        <p>Include: {this.getResultFieldOptions()}</p>
+        {includeCheckboxes}
         {this.getDownloadText(dataToDownload)}
         <pre>{JSON.stringify(dataToDisplay, null, 2)}</pre>
         <a id="hidden-download-link" style={{display: "none"}}></a>

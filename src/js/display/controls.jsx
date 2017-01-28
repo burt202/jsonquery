@@ -11,6 +11,7 @@ const Controls = React.createClass({
     sortBy: React.PropTypes.string,
     sortDirection: React.PropTypes.string,
     schema: React.PropTypes.object.isRequired,
+    showCounts: React.PropTypes.bool.isRequired,
   },
 
   onAddFilter: function(e) {
@@ -66,6 +67,10 @@ const Controls = React.createClass({
     })
   },
 
+  onChangeHandler: function() {
+    this.props.actionCreator.showCounts(!this.props.showCounts)
+  },
+
   getGroupByControl: function() {
     return (
       <div className="input-control">
@@ -74,6 +79,10 @@ const Controls = React.createClass({
           <option></option>
           {this.getGroupAndSortByOptions()}
         </select>
+        <label className="result-field">
+          <input type="checkbox" name="showCounts" checked={this.props.showCounts} onChange={this.onChangeHandler} />
+          Show counts
+        </label>
       </div>
     )
   },
