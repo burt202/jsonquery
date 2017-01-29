@@ -94,6 +94,24 @@ function addArrayFilter(filter) {
   return acc
 }
 
+function sortAndCount(grouped) {
+  return R.pipe(
+    R.map(R.length),
+    R.toPairs,
+    R.sortBy(R.prop(1)),
+    R.reverse,
+    R.fromPairs
+  )(grouped)
+}
+
+const _group = R.curry(function(groupings, showCounts, data) {
+  data = R.groupBy(R.prop(groupings[0]), data)
+  groupings = R.tail(groupings)
+  if (!groupings.length) return (showCounts) ? sortAndCount(data) : data
+
+  return R.map(_group(groupings, showCounts), data)
+})
+
 module.exports = {
   filter: function(data, schema, filters) {
     const builtFilters = R.reduce(function(acc, filter) {
@@ -113,17 +131,8 @@ module.exports = {
     return R.filter(R.where(builtFilters), data)
   },
 
-  group: function(filtered, groupBy, showCounts) {
-    const grouped = R.groupBy(R.prop(groupBy), filtered)
-    if (!showCounts) return grouped
-
-    return R.pipe(
-      R.map(R.length),
-      R.toPairs,
-      R.sortBy(R.prop(1)),
-      R.reverse,
-      R.fromPairs
-    )(grouped)
+  group: function(groupings, showCounts, data) {
+    return _group(groupings, showCounts, data)
   },
 
   sort: function(filtered, sortBy, sortDirection) {
@@ -135,9 +144,7 @@ module.exports = {
   getGroupStats: function(grouped) {
     const groupLengths = R.pipe(
       R.toPairs,
-      R.map(function(pair) {
-        return pair[1].length
-      })
+      R.map(R.compose(R.length, R.prop(1)))
     )(grouped)
 
     const count = {name: "No. of Groups", value: Object.keys(grouped).length}

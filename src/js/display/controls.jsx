@@ -72,6 +72,8 @@ const Controls = React.createClass({
   },
 
   getGroupByControl: function() {
+    const disabled = !this.props.groupBy
+
     return (
       <div className="input-control">
         <span>Group By:</span>
@@ -80,7 +82,7 @@ const Controls = React.createClass({
           {this.getGroupAndSortByOptions()}
         </select>
         <label className="result-field">
-          <input type="checkbox" name="showCounts" checked={this.props.showCounts} onChange={this.onChangeHandler} />
+          <input type="checkbox" name="showCounts" disabled={disabled} checked={this.props.showCounts} onChange={this.onChangeHandler} />
           Show counts
         </label>
       </div>

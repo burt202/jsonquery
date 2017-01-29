@@ -29,7 +29,7 @@ const Summary = React.createClass({
   },
 
   getGrouping: function() {
-    return (this.props.groupBy) ? formatter.group(this.props.results, this.props.groupBy, false) : null
+    return (this.props.groupBy) ? formatter.group([this.props.groupBy], false, this.props.results) : null
   },
 
   showRawDataLength: function() {

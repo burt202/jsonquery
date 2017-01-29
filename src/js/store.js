@@ -70,10 +70,13 @@ const handlers = {
   },
 
   groupBy: function(contents, payload) {
-    return R.merge(contents, {
+    const toMerge = {
       groupBy: payload.name,
       sortBy: null,
-    })
+    }
+
+    if (payload.name === "") toMerge.showCounts = false
+    return R.merge(contents, toMerge)
   },
 
   sortBy: function(contents, payload) {

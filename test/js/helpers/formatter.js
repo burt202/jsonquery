@@ -480,54 +480,119 @@ describe("formatter", function() {
 
   describe("group", function() {
     const mockDataForGrouping = [
-      {name: "foo", type: "cash"},
-      {name: "bar", type: "cash"},
-      {name: "baz", type: "loan"},
-      {name: "abc", type: "card"},
-      {name: "123", type: "card"},
-      {name: "test", type: "card"},
+      {name: "foo", type: "cash", auto: true},
+      {name: "bar", type: "cash", auto: false},
+      {name: "baz", type: "loan", auto: true},
+      {name: "abc", type: "card", auto: true},
+      {name: "123", type: "card", auto: false},
+      {name: "test", type: "card", auto: true},
     ]
 
-    it("should group data", function() {
-      expect(formatter.group(mockDataForGrouping, "type")).to.eql({
-        "cash": [
+    it("should group data at 1 level", function() {
+      expect(formatter.group(["type"], false, mockDataForGrouping)).to.eql({
+        cash: [
           {
-            "name": "foo",
-            "type": "cash",
+            name: "foo",
+            type: "cash",
+            auto: true,
           },
           {
-            "name": "bar",
-            "type": "cash",
-          },
-        ],
-        "loan": [
-          {
-            "name": "baz",
-            "type": "loan",
+            name: "bar",
+            type: "cash",
+            auto: false,
           },
         ],
-        "card": [
+        loan: [
           {
-            "name": "abc",
-            "type": "card",
+            name: "baz",
+            type: "loan",
+            auto: true,
+          },
+        ],
+        card: [
+          {
+            name: "abc",
+            type: "card",
+            auto: true,
           },
           {
-            "name": "123",
-            "type": "card",
+            name: "123",
+            type: "card",
+            auto: false,
           },
           {
-            "name": "test",
-            "type": "card",
+            name: "test",
+            type: "card",
+            auto: true,
           },
         ],
       })
     })
 
-    it("should group data but only show group lengths when 'showCounts' option is passed", function() {
-      expect(formatter.group(mockDataForGrouping, "type", true)).to.eql({
+    it("should group data at 2 levels", function() {
+      expect(formatter.group(["type", "auto"], false, mockDataForGrouping)).to.eql({
+        cash: {
+          true: [
+            {
+              name: "foo",
+              type: "cash",
+              auto: true,
+            },
+          ],
+          false: [
+            {
+              name: "bar",
+              type: "cash",
+              auto: false,
+            },
+          ],
+        },
+        loan: {
+          true: [
+            {
+              name: "baz",
+              type: "loan",
+              auto: true,
+            },
+          ],
+        },
+        card: {
+          true: [
+            {
+              name: "abc",
+              type: "card",
+              auto: true,
+            },
+            {
+              name: "test",
+              type: "card",
+              auto: true,
+            },
+          ],
+          false: [
+            {
+              name: "123",
+              type: "card",
+              auto: false,
+            },
+          ],
+        },
+      })
+    })
+
+    it("should group data with counts when 'showCounts' is true", function() {
+      expect(formatter.group(["type"], true, mockDataForGrouping)).to.eql({
         cash: 2,
         loan: 1,
         card: 3,
+      })
+    })
+
+    it("should group data with counts when 'showCounts' is true", function() {
+      expect(formatter.group(["type", "auto"], true, mockDataForGrouping)).to.eql({
+        cash: {true: 1, false: 1},
+        loan: {true: 1},
+        card: {true: 2, false: 1},
       })
     })
   })

@@ -58,7 +58,7 @@ const Results = React.createClass({
 
   groupSortData: function(data) {
     data = R.map(R.pick(this.props.resultFields))(data)
-    if (this.props.groupBy) return formatter.group(data, this.props.groupBy, this.props.showCounts)
+    if (this.props.groupBy) return formatter.group([this.props.groupBy], this.props.showCounts, data)
     if (this.props.sortBy) return formatter.sort(data, this.props.sortBy, this.props.sortDirection)
     return data
   },

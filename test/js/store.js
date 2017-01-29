@@ -148,6 +148,23 @@ describe("store", function() {
       expect(store.getState().groupBy).to.eql("foo")
       expect(store.getState().sortBy).to.eql(null)
     })
+
+    it("should reset showCounts is groupBy is deselected", function() {
+      dispatcher.dispatch({
+        name: "showCounts",
+        value: {showCounts: true},
+      })
+
+      expect(store.getState().showCounts).to.eql(true)
+
+      dispatcher.dispatch({
+        name: "groupBy",
+        value: {name: ""},
+      })
+
+      expect(store.getState().groupBy).to.eql("")
+      expect(store.getState().showCounts).to.eql(false)
+    })
   })
 
   describe("sortBy", function() {
