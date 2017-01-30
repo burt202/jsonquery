@@ -75,7 +75,12 @@ const handlers = {
       sortBy: null,
     }
 
-    if (payload.name === "") toMerge.showCounts = false
+    if (payload.name === "") {
+      toMerge.showCounts = false
+    } else {
+      toMerge.resultFields = R.compose(R.uniq, R.append(payload.name))(contents.resultFields)
+    }
+
     return R.merge(contents, toMerge)
   },
 

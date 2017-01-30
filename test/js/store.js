@@ -165,6 +165,40 @@ describe("store", function() {
       expect(store.getState().groupBy).to.eql("")
       expect(store.getState().showCounts).to.eql(false)
     })
+
+    it("should ensure groupBy field is included in results", function() {
+      dispatcher.dispatch({
+        name: "updateResultFields",
+        value: {fields: []},
+      })
+
+      expect(store.getState().resultFields).to.eql([])
+
+      dispatcher.dispatch({
+        name: "groupBy",
+        value: {name: "baz"},
+      })
+
+      expect(store.getState().groupBy).to.eql("baz")
+      expect(store.getState().resultFields).to.eql(["baz"])
+    })
+
+    it("should make sure result fields array contains unique values", function() {
+      dispatcher.dispatch({
+        name: "updateResultFields",
+        value: {fields: ["foo", "bar"]},
+      })
+
+      expect(store.getState().resultFields).to.eql(["foo", "bar"])
+
+      dispatcher.dispatch({
+        name: "groupBy",
+        value: {name: "bar"},
+      })
+
+      expect(store.getState().groupBy).to.eql("bar")
+      expect(store.getState().resultFields).to.eql(["foo", "bar"])
+    })
   })
 
   describe("sortBy", function() {

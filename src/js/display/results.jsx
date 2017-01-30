@@ -81,10 +81,11 @@ const Results = React.createClass({
   getResultFieldOptions: function() {
     return R.keys(this.props.schema).map(function(field) {
       const checked = R.contains(field, this.props.resultFields)
+      const disabled = (field === this.props.groupBy)
 
       return (
         <label className="result-field" key={field}>
-          <input type="checkbox" name={field} checked={checked} onChange={this.onChangeHandler} />
+          <input type="checkbox" name={field} disabled={disabled} checked={checked} onChange={this.onChangeHandler} />
           {field}
         </label>
       )
