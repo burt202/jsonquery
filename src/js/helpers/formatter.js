@@ -152,12 +152,6 @@ module.exports = {
     const min = {name: "Min Group Size", value: getMin(groupLengths)}
     const mean = {name: "Average Group Size", value: R.compose(round(2), R.mean)(groupLengths)}
 
-    const stats = {count: count}
-
-    return (count.value) ? R.merge(stats, {
-      max: max,
-      min: min,
-      mean: mean,
-    }) : stats
+    return (count.value) ? [count, max, min, mean] : []
   },
 }

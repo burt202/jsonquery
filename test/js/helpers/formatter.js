@@ -625,33 +625,31 @@ describe("formatter", function() {
     it("should return the total number of groups", function() {
       const res = formatter.getGroupStats({foo: [], bar: []})
 
-      expect(res.count).to.eql({name: "No. of Groups", value: 2})
+      expect(res[0]).to.eql({name: "No. of Groups", value: 2})
     })
 
     it("should return the size of the biggest group", function() {
       const res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]})
 
-      expect(res.max).to.eql({name: "Max Group Size", value: 3})
+      expect(res[1]).to.eql({name: "Max Group Size", value: 3})
     })
 
     it("should return the size of the smallest group", function() {
       const res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]})
 
-      expect(res.min).to.eql({name: "Min Group Size", value: 1})
+      expect(res[2]).to.eql({name: "Min Group Size", value: 1})
     })
 
     it("should return the mean average group size", function() {
       const res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]})
 
-      expect(res.mean).to.eql({name: "Average Group Size", value: 2})
+      expect(res[3]).to.eql({name: "Average Group Size", value: 2})
     })
 
-    it("should not return all properties when there are no group", function() {
+    it("should return empty array when there are no groups", function() {
       const res = formatter.getGroupStats({})
 
-      expect(res).to.eql({
-        count: {name: "No. of Groups", value: 0},
-      })
+      expect(res).to.eql([])
     })
   })
 })

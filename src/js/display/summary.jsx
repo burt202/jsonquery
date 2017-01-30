@@ -19,13 +19,9 @@ const Summary = React.createClass({
   getGroupingBreakdown: function(grouping) {
     if (!grouping) return null
 
-    return R.pipe(
-      R.toPairs,
-      R.map(R.last),
-      R.map(function(obj) {
-        return (<p key={obj.name}>{obj.name + ": " + obj.value}</p>)
-      })
-    )(formatter.getGroupStats(grouping))
+    return R.map(function(obj) {
+      return (<p key={obj.name}>{obj.name + ": " + obj.value}</p>)
+    }, formatter.getGroupStats(grouping))
   },
 
   getGrouping: function() {
