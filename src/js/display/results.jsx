@@ -4,7 +4,7 @@ const R = require("ramda")
 const formatter = require("../helpers/formatter")
 const transformer = require("../helpers/transformer")
 
-const FILTER_THRESHOLD = 500
+const DISPLAY_THRESHOLD = 1000
 
 const Results = React.createClass({
   displayName: "Results",
@@ -21,7 +21,7 @@ const Results = React.createClass({
   },
 
   limitDisplayData: function() {
-    return (this.props.results.length > FILTER_THRESHOLD) && !this.props.showCounts
+    return (this.props.results.length > DISPLAY_THRESHOLD) && !this.props.showCounts
   },
 
   downloadResults: function(data, mimetype, extension) {
@@ -31,11 +31,6 @@ const Results = React.createClass({
     downloadLink.setAttribute("download", new Date().toISOString() + "." + extension)
     downloadLink.click()
     downloadLink.setAttribute("href", "")
-  },
-
-  getLimitText: function() {
-    if (!this.limitDisplayData()) return null
-    return (<p>NOTE: results display limited to {FILTER_THRESHOLD}</p>)
   },
 
   getDownloadLinks: function(data) {
@@ -51,11 +46,6 @@ const Results = React.createClass({
     }.bind(this))
   },
 
-  getDownloadText: function(data) {
-    var text = (this.limitDisplayData()) ? "Download the whole lot as" : "Download as"
-    return (<p className="download-links">{text}: {this.getDownloadLinks(data)}</p>)
-  },
-
   groupSortData: function(data) {
     data = R.map(R.pick(R.sortBy(R.identity, this.props.resultFields)))(data)
     if (this.props.groupBy) return formatter.group([this.props.groupBy], this.props.showCounts, data)
@@ -63,9 +53,9 @@ const Results = React.createClass({
     return data
   },
 
-  getDisplayData: function() {
-    const data = this.limitDisplayData() ? R.take(FILTER_THRESHOLD, this.props.results) : this.props.results
-    return this.groupSortData(data)
+  getDisplayData: function(data) {
+    if (this.limitDisplayData()) return "Results set too large to display, use download options instead"
+    return JSON.stringify(data, null, 2)
   },
 
   onChangeHandler: function(e) {
@@ -93,18 +83,16 @@ const Results = React.createClass({
   },
 
   render: function() {
-    const dataToDisplay = this.getDisplayData()
     const dataToDownload = this.groupSortData(this.props.results)
-
+    const dataToDisplay = this.getDisplayData(dataToDownload)
     const includeCheckboxes = (!this.props.showCounts) ? <p>Include: {this.getResultFieldOptions()}</p> : null
 
     return (
       <div>
         <h3>Results</h3>
-        {this.getLimitText()}
         {includeCheckboxes}
-        {this.getDownloadText(dataToDownload)}
-        <pre>{JSON.stringify(dataToDisplay, null, 2)}</pre>
+        <p className="download-links">Download results as: {this.getDownloadLinks(dataToDownload)}</p>
+        <pre>{dataToDisplay}</pre>
         <a id="hidden-download-link" style={{display: "none"}}></a>
       </div>
     )
