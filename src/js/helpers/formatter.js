@@ -94,20 +94,10 @@ function addArrayFilter(filter) {
   return acc
 }
 
-function sortAndCount(grouped) {
-  return R.pipe(
-    R.map(R.length),
-    R.toPairs,
-    R.sortBy(R.prop(1)),
-    R.reverse,
-    R.fromPairs
-  )(grouped)
-}
-
 const _group = R.curry(function(groupings, showCounts, data) {
   data = R.groupBy(R.prop(groupings[0]), data)
   groupings = R.tail(groupings)
-  if (!groupings.length) return (showCounts) ? sortAndCount(data) : data
+  if (!groupings.length) return (showCounts) ? R.map(R.length, data) : data
 
   return R.map(_group(groupings, showCounts), data)
 })
