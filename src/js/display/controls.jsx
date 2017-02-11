@@ -12,6 +12,7 @@ const Controls = React.createClass({
     sortDirection: React.PropTypes.string,
     schema: React.PropTypes.object.isRequired,
     showCounts: React.PropTypes.bool.isRequired,
+    limit: React.PropTypes.number,
   },
 
   onAddFilter: function(e) {
@@ -54,6 +55,34 @@ const Controls = React.createClass({
         <select onChange={this.onAddFilter}>
           <option></option>
           {this.getFilterOptions()}
+        </select>
+      </div>
+    )
+  },
+
+  onLimitChange: function(e) {
+    this.props.actionCreator.limit(parseInt(e.target.value, 10))
+  },
+
+  getLimitControl: function() {
+    return (
+      <div className="input-control">
+        <span>Limit:</span>
+        <select onChange={this.onLimitChange} value={this.props.limit || ""}>
+          <option>Show all</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="75">75</option>
+          <option value="100">100</option>
+          <option value="150">150</option>
+          <option value="200">200</option>
+          <option value="250">250</option>
+          <option value="500">500</option>
         </select>
       </div>
     )
@@ -117,6 +146,7 @@ const Controls = React.createClass({
         {this.getFilterControl()}
         {this.getGroupByControl()}
         {this.getSortByControl()}
+        {this.getLimitControl()}
         {this.getResetControl()}
       </div>
     )

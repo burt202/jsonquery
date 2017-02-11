@@ -42,6 +42,7 @@ const Main = React.createClass({
       data={this.state.data}
       resultFields={this.state.resultFields}
       showCounts={this.state.showCounts}
+      limit={this.state.limit}
     />
   },
 })

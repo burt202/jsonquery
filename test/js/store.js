@@ -16,6 +16,7 @@ describe("store", function() {
       data: null,
       resultFields: null,
       showCounts: false,
+      limit: null,
     })
 
     dispatcher.dispatch({
@@ -93,6 +94,17 @@ describe("store", function() {
       })
 
       expect(store.getState().filters).to.eql([{name: "foo", value: "bar", operator: "eq", active: true}])
+    })
+  })
+
+  describe("limit", function() {
+    it("limit", function() {
+      dispatcher.dispatch({
+        name: "limit",
+        value: {number: 2},
+      })
+
+      expect(store.getState().limit).to.eql(2)
     })
   })
 
@@ -274,6 +286,7 @@ describe("store", function() {
         data: null,
         resultFields: null,
         showCounts: false,
+        limit: null,
       })
     })
   })

@@ -18,10 +18,7 @@ const Results = React.createClass({
     schema: React.PropTypes.object.isRequired,
     actionCreator: React.PropTypes.object.isRequired,
     showCounts: React.PropTypes.bool.isRequired,
-  },
-
-  limitDisplayData: function() {
-    return (this.props.results.length > DISPLAY_THRESHOLD) && !this.props.showCounts
+    limit: React.PropTypes.number,
   },
 
   downloadResults: function(data, mimetype, extension) {
@@ -46,15 +43,27 @@ const Results = React.createClass({
     }.bind(this))
   },
 
-  groupSortData: function(data) {
-    data = R.map(R.pick(R.sortBy(R.identity, this.props.resultFields)))(data)
-    if (this.props.groupBy) return formatter.group([this.props.groupBy], this.props.showCounts, data)
-    if (this.props.sortBy) return formatter.sort(data, this.props.sortBy, this.props.sortDirection)
-    return data
+  limitResults: function(data) {
+    return (this.props.limit) ? R.take(this.props.limit, data) : data
+  },
+
+  pickIncludedFields: function(data) {
+    return R.map(R.pick(R.sortBy(R.identity, this.props.resultFields)))(data)
+  },
+
+  getDownloadData: function(data) {
+    const picked = this.pickIncludedFields(data)
+    if (this.props.groupBy) return formatter.group([this.props.groupBy], this.props.showCounts, picked)
+    if (this.props.sortBy) return this.limitResults(formatter.sort(picked, this.props.sortBy, this.props.sortDirection))
+    return this.limitResults(picked)
+  },
+
+  resultsTooLarge: function() {
+    return (this.limitResults(this.props.results).length > DISPLAY_THRESHOLD) && !this.props.showCounts
   },
 
   getDisplayData: function(data) {
-    if (this.limitDisplayData()) return "Results set too large to display, use download options instead"
+    if (this.resultsTooLarge()) return "Results set too large to display, use download options instead"
     return JSON.stringify(data, null, 2)
   },
 
@@ -83,7 +92,7 @@ const Results = React.createClass({
   },
 
   render: function() {
-    const dataToDownload = this.groupSortData(this.props.results)
+    const dataToDownload = this.getDownloadData(this.props.results)
     const dataToDisplay = this.getDisplayData(dataToDownload)
     const includeCheckboxes = (!this.props.showCounts) ? <p>Include: {this.getResultFieldOptions()}</p> : null
 

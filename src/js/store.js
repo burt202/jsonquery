@@ -10,6 +10,7 @@ const defaults = {
   data: null,
   resultFields: null,
   showCounts: false,
+  limit: null,
 }
 
 function updateWhere(find, update, data) {
@@ -56,6 +57,12 @@ const handlers = {
   updateFilter: function(contents, payload) {
     return R.merge(contents, {
       filters: updateWhere({name: payload.name}, payload.value, contents.filters),
+    })
+  },
+
+  limit: function(contents, payload) {
+    return R.merge(contents, {
+      limit: payload.number,
     })
   },
 

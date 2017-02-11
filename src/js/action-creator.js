@@ -44,6 +44,13 @@ module.exports = {
     })
   },
 
+  limit: function(number) {
+    dispatcher.dispatch({
+      name: "limit",
+      value: {number: number},
+    })
+  },
+
   reset: function() {
     dispatcher.dispatch({
       name: "reset",

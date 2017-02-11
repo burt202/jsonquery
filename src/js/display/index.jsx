@@ -20,6 +20,7 @@ const Display = React.createClass({
     data: React.PropTypes.array.isRequired,
     resultFields: React.PropTypes.array.isRequired,
     showCounts: React.PropTypes.bool.isRequired,
+    limit: React.PropTypes.number,
   },
 
   onBackClick: function() {
@@ -47,6 +48,7 @@ const Display = React.createClass({
           sortBy={this.props.sortBy}
           sortDirection={this.props.sortDirection}
           showCounts={this.props.showCounts}
+          limit={this.props.limit}
         />
         <Summary
           rawDataLength={this.props.data.length}
@@ -62,6 +64,7 @@ const Display = React.createClass({
           schema={this.props.schema}
           actionCreator={this.props.actionCreator}
           showCounts={this.props.showCounts}
+          limit={this.props.limit}
         />
       </div>
     )
