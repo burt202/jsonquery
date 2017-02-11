@@ -125,8 +125,8 @@ module.exports = {
     return _group(groupings, showCounts, data)
   },
 
-  sort: function(filtered, sortBy, sortDirection) {
-    const sorted = R.sortBy(R.prop(sortBy), filtered)
+  sort: function(sortBy, sortDirection, data) {
+    const sorted = R.sortBy(R.prop(sortBy), data)
     if (sortDirection === "desc") return R.reverse(sorted)
     return sorted
   },

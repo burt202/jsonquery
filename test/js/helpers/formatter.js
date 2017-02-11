@@ -605,7 +605,7 @@ describe("formatter", function() {
     ]
 
     it("should sort the data in ascending order", function() {
-      expect(formatter.sort(mockDataForSorting, "num", "asc")).to.eql([
+      expect(formatter.sort("num", "asc", mockDataForSorting)).to.eql([
         {name: "bar", num: 1},
         {name: "foo", num: 2},
         {name: "baz", num: 3},
@@ -613,7 +613,7 @@ describe("formatter", function() {
     })
 
     it("should sort the data in descending order", function() {
-      expect(formatter.sort(mockDataForSorting, "num", "desc")).to.eql([
+      expect(formatter.sort("num", "desc", mockDataForSorting)).to.eql([
         {name: "baz", num: 3},
         {name: "foo", num: 2},
         {name: "bar", num: 1},
