@@ -144,9 +144,9 @@ const Controls = React.createClass({
     return (
       <div>
         {this.getFilterControl()}
-        {this.getGroupByControl()}
         {this.getSortByControl()}
         {this.getLimitControl()}
+        {this.getGroupByControl()}
         {this.getResetControl()}
       </div>
     )
