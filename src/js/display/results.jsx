@@ -16,6 +16,8 @@ const Results = React.createClass({
     actionCreator: React.PropTypes.object.isRequired,
     showCounts: React.PropTypes.bool.isRequired,
     filteredLength: React.PropTypes.number.isRequired,
+    sum: React.PropTypes.string,
+    average: React.PropTypes.string,
   },
 
   downloadResults: function(data, mimetype, extension) {
@@ -41,7 +43,7 @@ const Results = React.createClass({
   },
 
   resultsTooLarge: function() {
-    return (this.props.filteredLength > DISPLAY_THRESHOLD) && !this.props.showCounts
+    return (this.props.filteredLength > DISPLAY_THRESHOLD) && !this.props.showCounts && !this.props.sum && !this.props.average
   },
 
   getDisplayData: function(data) {

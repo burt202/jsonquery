@@ -11,6 +11,8 @@ const defaults = {
   resultFields: null,
   showCounts: false,
   limit: null,
+  sum: null,
+  average: null,
 }
 
 function updateWhere(find, update, data) {
@@ -80,6 +82,8 @@ const handlers = {
   groupBy: function(contents, payload) {
     const toMerge = {
       groupBy: payload.name,
+      sum: null,
+      average: null,
     }
 
     if (payload.name === "") {
@@ -89,6 +93,22 @@ const handlers = {
     }
 
     return R.merge(contents, toMerge)
+  },
+
+  sum: function(contents, payload) {
+    return R.merge(contents, {
+      sum: payload.name,
+      average: null,
+      groupBy: null,
+    })
+  },
+
+  average: function(contents, payload) {
+    return R.merge(contents, {
+      average: payload.name,
+      sum: null,
+      groupBy: null,
+    })
   },
 
   sortBy: function(contents, payload) {

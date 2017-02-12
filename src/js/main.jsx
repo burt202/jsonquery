@@ -43,6 +43,8 @@ const Main = React.createClass({
       resultFields={this.state.resultFields}
       showCounts={this.state.showCounts}
       limit={this.state.limit}
+      sum={this.state.sum}
+      average={this.state.average}
     />
   },
 })

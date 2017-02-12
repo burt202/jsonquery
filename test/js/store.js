@@ -17,6 +17,8 @@ describe("store", function() {
       resultFields: null,
       showCounts: false,
       limit: null,
+      sum: null,
+      average: null,
     })
 
     dispatcher.dispatch({
@@ -145,13 +147,20 @@ describe("store", function() {
   })
 
   describe("groupBy", function() {
-    it("should add groupBy", function() {
+    it("should add groupBy and nullify sum and average", function() {
       dispatcher.dispatch({
-        name: "sortBy",
+        name: "sum",
         value: {name: "bar"},
       })
 
-      expect(store.getState().sortBy).to.eql("bar")
+      expect(store.getState().sum).to.eql("bar")
+
+      dispatcher.dispatch({
+        name: "average",
+        value: {name: "baz"},
+      })
+
+      expect(store.getState().average).to.eql("baz")
 
       dispatcher.dispatch({
         name: "groupBy",
@@ -159,6 +168,8 @@ describe("store", function() {
       })
 
       expect(store.getState().groupBy).to.eql("foo")
+      expect(store.getState().sum).to.eql(null)
+      expect(store.getState().average).to.eql(null)
     })
 
     it("should reset showCounts is groupBy is deselected", function() {
@@ -286,6 +297,8 @@ describe("store", function() {
         resultFields: null,
         showCounts: false,
         limit: null,
+        sum: null,
+        average: null,
       })
     })
   })
@@ -298,6 +311,60 @@ describe("store", function() {
       })
 
       expect(store.getState().showCounts).to.eql(true)
+    })
+  })
+
+  describe("sum", function() {
+    it("should add sum and nullify groupBy and average", function() {
+      dispatcher.dispatch({
+        name: "groupBy",
+        value: {name: "bar"},
+      })
+
+      expect(store.getState().groupBy).to.eql("bar")
+
+      dispatcher.dispatch({
+        name: "average",
+        value: {name: "baz"},
+      })
+
+      expect(store.getState().average).to.eql("baz")
+
+      dispatcher.dispatch({
+        name: "sum",
+        value: {name: "foo"},
+      })
+
+      expect(store.getState().sum).to.eql("foo")
+      expect(store.getState().groupBy).to.eql(null)
+      expect(store.getState().average).to.eql(null)
+    })
+  })
+
+  describe("average", function() {
+    it("should add sum and nullify groupBy and sum", function() {
+      dispatcher.dispatch({
+        name: "groupBy",
+        value: {name: "bar"},
+      })
+
+      expect(store.getState().groupBy).to.eql("bar")
+
+      dispatcher.dispatch({
+        name: "sum",
+        value: {name: "baz"},
+      })
+
+      expect(store.getState().sum).to.eql("baz")
+
+      dispatcher.dispatch({
+        name: "average",
+        value: {name: "foo"},
+      })
+
+      expect(store.getState().average).to.eql("foo")
+      expect(store.getState().groupBy).to.eql(null)
+      expect(store.getState().sum).to.eql(null)
     })
   })
 })

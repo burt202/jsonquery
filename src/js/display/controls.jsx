@@ -13,6 +13,8 @@ const Controls = React.createClass({
     schema: React.PropTypes.object.isRequired,
     showCounts: React.PropTypes.bool.isRequired,
     limit: React.PropTypes.number,
+    sum: React.PropTypes.string,
+    average: React.PropTypes.string,
   },
 
   onAddFilter: function(e) {
@@ -29,6 +31,14 @@ const Controls = React.createClass({
 
   onSortDirectionChange: function(e) {
     this.props.actionCreator.sortDirection(e.target.value)
+  },
+
+  onSumChange: function(e) {
+    this.props.actionCreator.sum(e.target.value)
+  },
+
+  onAverageChange: function(e) {
+    this.props.actionCreator.average(e.target.value)
   },
 
   onReset: function() {
@@ -83,6 +93,44 @@ const Controls = React.createClass({
           <option value="200">200</option>
           <option value="250">250</option>
           <option value="500">500</option>
+        </select>
+      </div>
+    )
+  },
+
+  getNumberOptions: function() {
+    const numberOptions = R.pipe(
+      R.toPairs,
+      R.filter(R.compose(R.equals("int"), R.prop(1))),
+      R.map(R.prop(0))
+    )(this.props.schema)
+
+    return numberOptions.map(function(value) {
+      return (
+        <option value={value} key={value}>{value}</option>
+      )
+    })
+  },
+
+  getAverageControl: function() {
+    return (
+      <div className="input-control">
+        <span>Average:</span>
+        <select onChange={this.onAverageChange} value={this.props.average || ""}>
+          <option></option>
+          {this.getNumberOptions()}
+        </select>
+      </div>
+    )
+  },
+
+  getSumControl: function() {
+    return (
+      <div className="input-control">
+        <span>Sum:</span>
+        <select onChange={this.onSumChange} value={this.props.sum || ""}>
+          <option></option>
+          {this.getNumberOptions()}
         </select>
       </div>
     )
@@ -146,7 +194,10 @@ const Controls = React.createClass({
         {this.getFilterControl()}
         {this.getSortByControl()}
         {this.getLimitControl()}
+        <br />
         {this.getGroupByControl()}
+        {this.getAverageControl()}
+        {this.getSumControl()}
         {this.getResetControl()}
       </div>
     )

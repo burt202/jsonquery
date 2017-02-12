@@ -79,6 +79,20 @@ module.exports = {
     })
   },
 
+  sum: function(name) {
+    dispatcher.dispatch({
+      name: "sum",
+      value: {name: name},
+    })
+  },
+
+  average: function(name) {
+    dispatcher.dispatch({
+      name: "average",
+      value: {name: name},
+    })
+  },
+
   goBack: function() {
     dispatcher.dispatch({
       name: "goBack",

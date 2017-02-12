@@ -22,6 +22,8 @@ const Display = React.createClass({
     resultFields: React.PropTypes.array.isRequired,
     showCounts: React.PropTypes.bool.isRequired,
     limit: React.PropTypes.number,
+    sum: React.PropTypes.string,
+    average: React.PropTypes.string,
   },
 
   onBackClick: function() {
@@ -55,6 +57,8 @@ const Display = React.createClass({
 
   formatData: function(data) {
     if (this.props.groupBy) return formatter.group([this.props.groupBy], this.props.showCounts, data)
+    if (this.props.sum) return {total: parseInt(R.sum(R.pluck(this.props.sum, data)), 10)}
+    if (this.props.average) return {average: parseInt(R.mean(R.pluck(this.props.average, data)), 10)}
     return data
   },
 
@@ -81,6 +85,8 @@ const Display = React.createClass({
           sortDirection={this.props.sortDirection}
           showCounts={this.props.showCounts}
           limit={this.props.limit}
+          sum={this.props.sum}
+          average={this.props.average}
         />
         <Summary
           rawDataLength={this.props.data.length}
@@ -95,6 +101,8 @@ const Display = React.createClass({
           actionCreator={this.props.actionCreator}
           showCounts={this.props.showCounts}
           filteredLength={filtered.length}
+          sum={this.props.sum}
+          average={this.props.average}
         />
       </div>
     )
