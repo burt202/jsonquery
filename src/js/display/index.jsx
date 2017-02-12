@@ -1,4 +1,5 @@
 const React = require("react")
+const R = require("ramda")
 
 const formatter = require("../helpers/formatter")
 
@@ -27,10 +28,41 @@ const Display = React.createClass({
     this.props.actionCreator.goBack()
   },
 
+  filterResults: function(data) {
+    return formatter.filter(data, this.props.schema, this.props.filters)
+  },
+
+  sortResults: function(data) {
+    return (this.props.sortBy) ? formatter.sort(this.props.sortBy, this.props.sortDirection, data) : data
+  },
+
+  limitResults: function(data) {
+    return (this.props.limit) ? R.take(this.props.limit, data) : data
+  },
+
+  pickIncludedFields: function(data) {
+    return R.map(R.pick(R.sortBy(R.identity, this.props.resultFields)))(data)
+  },
+
+  filterSortAndLimit: function(data) {
+    return R.pipe(
+      this.filterResults,
+      this.sortResults,
+      this.limitResults,
+      this.pickIncludedFields
+    )(data)
+  },
+
+  formatData: function(data) {
+    if (this.props.groupBy) return formatter.group([this.props.groupBy], this.props.showCounts, data)
+    return data
+  },
+
   render: function() {
     window.scrollTo(0, 0)
 
-    var results = formatter.filter(this.props.data, this.props.schema, this.props.filters)
+    var filtered = this.filterSortAndLimit(this.props.data)
+    var results = this.formatData(filtered)
 
     return (
       <div>
@@ -52,19 +84,17 @@ const Display = React.createClass({
         />
         <Summary
           rawDataLength={this.props.data.length}
-          results={results}
+          results={filtered}
           groupBy={this.props.groupBy}
         />
         <Results
           results={results}
           groupBy={this.props.groupBy}
-          sortBy={this.props.sortBy}
-          sortDirection={this.props.sortDirection}
           resultFields={this.props.resultFields}
           schema={this.props.schema}
           actionCreator={this.props.actionCreator}
           showCounts={this.props.showCounts}
-          limit={this.props.limit}
+          filteredLength={filtered.length}
         />
       </div>
     )

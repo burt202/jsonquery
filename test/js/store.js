@@ -139,12 +139,13 @@ describe("store", function() {
       expect(store.getState().filters).to.eql([])
       expect(store.getState().groupBy).to.eql(null)
       expect(store.getState().sortBy).to.eql(null)
+      expect(store.getState().limit).to.eql(null)
       expect(store.getState().sortDirection).to.eql("asc")
     })
   })
 
   describe("groupBy", function() {
-    it("should add groupBy and nullify sortBy prop", function() {
+    it("should add groupBy", function() {
       dispatcher.dispatch({
         name: "sortBy",
         value: {name: "bar"},
@@ -158,7 +159,6 @@ describe("store", function() {
       })
 
       expect(store.getState().groupBy).to.eql("foo")
-      expect(store.getState().sortBy).to.eql(null)
     })
 
     it("should reset showCounts is groupBy is deselected", function() {
@@ -214,7 +214,7 @@ describe("store", function() {
   })
 
   describe("sortBy", function() {
-    it("should add sortBy and nullify groupBy prop", function() {
+    it("should add sortBy prop", function() {
       dispatcher.dispatch({
         name: "groupBy",
         value: {name: "bar"},
@@ -228,7 +228,6 @@ describe("store", function() {
       })
 
       expect(store.getState().sortBy).to.eql("foo")
-      expect(store.getState().groupBy).to.eql(null)
     })
   })
 

@@ -73,13 +73,13 @@ const handlers = {
       sortBy: null,
       sortDirection: "asc",
       showCounts: false,
+      limit: null,
     })
   },
 
   groupBy: function(contents, payload) {
     const toMerge = {
       groupBy: payload.name,
-      sortBy: null,
     }
 
     if (payload.name === "") {
@@ -93,7 +93,6 @@ const handlers = {
 
   sortBy: function(contents, payload) {
     return R.merge(contents, {
-      groupBy: null,
       sortBy: payload.name,
     })
   },
