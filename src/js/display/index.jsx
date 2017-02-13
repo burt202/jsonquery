@@ -8,6 +8,10 @@ const Controls = require("./controls")
 const Summary = require("./summary")
 const Results = require("./results")
 
+const round = R.curry(function(decimals, num) {
+  return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals)
+})
+
 const Display = React.createClass({
   displayName: "Display",
 
@@ -57,8 +61,8 @@ const Display = React.createClass({
 
   formatData: function(data) {
     if (this.props.groupBy) return formatter.group([this.props.groupBy], this.props.showCounts, data)
-    if (this.props.sum) return {total: parseInt(R.sum(R.pluck(this.props.sum, data)), 10)}
-    if (this.props.average) return {average: parseInt(R.mean(R.pluck(this.props.average, data)), 10)}
+    if (this.props.sum) return {total: round(2, R.sum(R.pluck(this.props.sum, data)))}
+    if (this.props.average) return {average: round(2, R.mean(R.pluck(this.props.average, data)))}
     return data
   },
 
