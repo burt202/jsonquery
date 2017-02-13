@@ -142,6 +142,8 @@ describe("store", function() {
       expect(store.getState().groupBy).to.eql(null)
       expect(store.getState().sortBy).to.eql(null)
       expect(store.getState().limit).to.eql(null)
+      expect(store.getState().average).to.eql(null)
+      expect(store.getState().sum).to.eql(null)
       expect(store.getState().sortDirection).to.eql("asc")
     })
   })

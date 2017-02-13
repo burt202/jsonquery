@@ -76,6 +76,8 @@ const handlers = {
       sortDirection: "asc",
       showCounts: false,
       limit: null,
+      sum: null,
+      average: null,
     })
   },
 
