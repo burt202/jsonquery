@@ -29,7 +29,7 @@ const Results = React.createClass({
     downloadLink.setAttribute("href", "")
   },
 
-  getDownloadLinks: function(data) {
+  getDownloadLinks: function() {
     const sumedOrAveraged = !!(this.props.sum || this.props.average)
     const jsonTransformer = transformer.prettify(this.props.groupBy, this.props.showCounts, sumedOrAveraged)
     const csvTransformer = transformer.convertToCsv(this.props.groupBy, this.props.showCounts, sumedOrAveraged)
@@ -40,19 +40,24 @@ const Results = React.createClass({
     ]
 
     return types.map(function(type) {
-      const transformed = type.transformer(data)
+      const transformed = type.transformer(this.props.results)
       const downloader = this.downloadResults.bind(this, transformed, type.mimetype, type.extension)
       return (<a className="site-link" key={type.name} onClick={downloader}>{type.name}</a>)
     }.bind(this))
   },
 
-  resultsTooLarge: function() {
-    return (this.props.filteredLength > DISPLAY_THRESHOLD) && !this.props.showCounts && !this.props.sum && !this.props.average
+  isAggregateResult: function() {
+    return this.props.showCounts || this.props.sum || this.props.average
   },
 
-  getDisplayData: function(data) {
-    if (this.resultsTooLarge()) return "Results set too large to display, use download options instead"
-    return JSON.stringify(data, null, 2)
+  tooManyResultToShow: function() {
+    return this.props.filteredLength > DISPLAY_THRESHOLD
+  },
+
+  getDisplayData: function() {
+    if (!this.isAggregateResult() && this.tooManyResultToShow())
+      return "Results set too large to display, use download options instead"
+    return JSON.stringify(this.props.results, null, 2)
   },
 
   onChangeHandler: function(e) {
@@ -79,17 +84,17 @@ const Results = React.createClass({
     }.bind(this))
   },
 
-  render: function() {
-    const dataToDownload = this.props.results
-    const dataToDisplay = this.getDisplayData(dataToDownload)
-    const includeCheckboxes = (!this.props.showCounts) ? <p>Include: {this.getResultFieldOptions()}</p> : null
+  getCheckboxes: function() {
+    return (!this.isAggregateResult()) ? <p>Include: {this.getResultFieldOptions()}</p> : null
+  },
 
+  render: function() {
     return (
       <div>
         <h3>Results</h3>
-        {includeCheckboxes}
-        <p className="download-links">Download results as: {this.getDownloadLinks(dataToDownload)}</p>
-        <pre>{dataToDisplay}</pre>
+        {this.getCheckboxes()}
+        <p className="download-links">Download results as: {this.getDownloadLinks()}</p>
+        <pre>{this.getDisplayData()}</pre>
         <a id="hidden-download-link" style={{display: "none"}}></a>
       </div>
     )
