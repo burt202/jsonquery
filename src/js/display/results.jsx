@@ -30,9 +30,13 @@ const Results = React.createClass({
   },
 
   getDownloadLinks: function(data) {
+    const sumedOrAveraged = !!(this.props.sum || this.props.average)
+    const jsonTransformer = transformer.prettify(this.props.groupBy, this.props.showCounts, sumedOrAveraged)
+    const csvTransformer = transformer.convertToCsv(this.props.groupBy, this.props.showCounts, sumedOrAveraged)
+
     const types = [
-      {name: "JSON", mimetype: "application/json", extension: "json", transformer: transformer.prettify(this.props.groupBy, this.props.showCounts)},
-      {name: "CSV", mimetype: "text/csv", extension: "csv", transformer: transformer.convertToCsv(this.props.groupBy, this.props.showCounts)},
+      {name: "JSON", mimetype: "application/json", extension: "json", transformer: jsonTransformer},
+      {name: "CSV", mimetype: "text/csv", extension: "csv", transformer: csvTransformer},
     ]
 
     return types.map(function(type) {
