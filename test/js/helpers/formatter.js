@@ -581,18 +581,18 @@ describe("formatter", function() {
     })
 
     it("should group data with counts when 'showCounts' is true", function() {
-      expect(formatter.group(["type"], true, mockDataForGrouping)).to.eql({
-        cash: 2,
-        loan: 1,
-        card: 3,
-      })
+      expect(formatter.group(["type"], true, mockDataForGrouping)).to.eql([
+        "card: 3",
+        "cash: 2",
+        "loan: 1",
+      ])
     })
 
-    it("should group data with counts when 'showCounts' is true", function() {
+    it("should group data with counts at 2 levels when 'showCounts' is true", function() {
       expect(formatter.group(["type", "auto"], true, mockDataForGrouping)).to.eql({
-        cash: {true: 1, false: 1},
-        loan: {true: 1},
-        card: {true: 2, false: 1},
+        cash: ["false: 1", "true: 1"],
+        loan: ["true: 1"],
+        card: ["true: 2", "false: 1"],
       })
     })
   })
