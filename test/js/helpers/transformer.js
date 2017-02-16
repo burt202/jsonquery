@@ -33,11 +33,11 @@ describe("transformer", function() {
       )
     })
 
-    it("should format correctly when grouped count object is passed in", function() {
-      const mockData = {
-        red: 2,
-        blue: 1,
-      }
+    it("should format correctly when a group counts array is passed in", function() {
+      const mockData = [
+        "red: 2",
+        "blue: 1",
+      ]
 
       expect(transformer.convertToCsv("color", true, false, mockData)).to.eql(
         "red,2\r\nblue,1"

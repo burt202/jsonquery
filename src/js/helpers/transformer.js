@@ -34,6 +34,13 @@ function csvFromObject(json) {
   )(json)
 }
 
+function csvFromCounts(json) {
+  return R.pipe(
+    R.map(R.split(": ")),
+    R.join("\r\n")
+  )(json)
+}
+
 module.exports = {
   prettify: R.curry(function(groupBy, showCounts, sumedOrAveraged, json) {
     return JSON.stringify(json, null, 2)
@@ -41,7 +48,8 @@ module.exports = {
 
   convertToCsv: R.curry(function(groupBy, showCounts, sumedOrAveraged, json) {
     if (R.isEmpty(json)) return null
-    if ((groupBy && showCounts) || sumedOrAveraged) return csvFromObject(json)
+    if (sumedOrAveraged) return csvFromObject(json)
+    if (showCounts) return csvFromCounts(json)
     if (groupBy && !showCounts) return csvFromGroupedData(json)
     return csvFromArray(json)
   }),
