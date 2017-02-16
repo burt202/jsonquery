@@ -25,6 +25,12 @@ function isValidJSON(str) {
   return true
 }
 
+function isValidType(data, name) {
+  if (name === "schema" && !Array.isArray(data)) return true
+  if (name === "data" && Array.isArray(data)) return true
+  return false
+}
+
 const Upload = React.createClass({
   displayName: "Upload",
 
@@ -45,6 +51,11 @@ const Upload = React.createClass({
     this.setState(newState)
   },
 
+  showError: function(name, message) {
+    this.updateState(name + "InputKey", Date.now()) // to clear the input, resetting key of components forces re-render
+    alert(message)
+  },
+
   onFileUploadStart: function(name, e) {
     const reader = new FileReader()
     reader.onload = this.onFileUploadEnd.bind(this, name)
@@ -54,12 +65,19 @@ const Upload = React.createClass({
   onFileUploadEnd: function(name, e) {
     const json = e.target.result
 
-    if (isValidJSON(json)) {
-      this.props.actionCreator.saveJson(name, JSON.parse(json))
-    } else {
-      this.updateState(name + "InputKey", Date.now()) // to clear the input, resetting key of components forces re-render
-      alert("Not valid JSON!")
+    if (!isValidJSON(json)) {
+      this.showError(name, "Not valid JSON!")
+      return
     }
+
+    const parsed = JSON.parse(json)
+
+    if (!isValidType(parsed, name)) {
+      this.showError(name, "The schema must be an object and data must be an array!")
+      return
+    }
+
+    this.props.actionCreator.saveJson(name, JSON.parse(json))
   },
 
   showDemo: function() {
