@@ -2,6 +2,7 @@ const React = require("react")
 
 const placeholderMap = {
   "iof": "separate with comma",
+  "inof": "separate with comma",
   "rgm": "enter regex here",
 }
 
@@ -16,6 +17,7 @@ function getStringInput(filter, onChange) {
         <option value="nl">Is null</option>
         <option value="nnl">Is not null</option>
         <option value="iof">Is one of</option>
+        <option value="inof">Is not one of</option>
         <option value="rgm">Matches</option>
       </select>
       <input type="text" name={filter.name} value={filter.value} placeholder={placeholder} onChange={onChange.bind(this, filter.name, "value")} />
@@ -38,6 +40,7 @@ function getIntInput(filter, onChange) {
         <option value="lt">Less than</option>
         <option value="lte">Less than or equal to</option>
         <option value="iof">Is one of</option>
+        <option value="inof">Is not one of</option>
       </select>
       <input type="text" name={filter.name} value={filter.value} placeholder={placeholder} onChange={onChange.bind(this, filter.name, "value")} />
     </div>
