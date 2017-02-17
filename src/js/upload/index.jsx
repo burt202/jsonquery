@@ -81,6 +81,8 @@ const Upload = React.createClass({
   },
 
   showDemo: function() {
+    window.scrollTo(0, 0)
+
     this.props.actionCreator.saveJson("data", testData)
     this.props.actionCreator.saveJson("schema", testSchema)
   },

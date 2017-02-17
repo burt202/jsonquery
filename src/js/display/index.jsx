@@ -67,8 +67,6 @@ const Display = React.createClass({
   },
 
   render: function() {
-    window.scrollTo(0, 0)
-
     var filtered = this.filterSortAndLimit(this.props.data)
     var results = this.formatData(filtered)
 
