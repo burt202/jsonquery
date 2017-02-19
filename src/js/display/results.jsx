@@ -71,7 +71,9 @@ const Results = React.createClass({
   },
 
   getResultFieldOptions: function() {
-    return R.keys(this.props.schema).map(function(field) {
+    const schemaKeys = R.sortBy(R.identity, R.keys(this.props.schema))
+
+    return schemaKeys.map(function(field) {
       const checked = R.contains(field, this.props.resultFields)
       const disabled = (field === this.props.groupBy)
 
