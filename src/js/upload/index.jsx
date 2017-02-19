@@ -1,19 +1,17 @@
 const React = require("react")
 
 const testSchema = {
-  color: "string",
-  automatic: "bool",
-  noOfDoors: "int",
+  Title: "string",
+  Artist: "string",
+  Album: "string",
+  Track: "int",
+  Year: "int",
+  Length: "int",
+  Size: "string",
+  Genre: "string",
 }
 
-const testData = [
-  {model: "Astra", color: "grey", automatic: false, noOfDoors: 3},
-  {model: "Golf", color: "grey", automatic: false, noOfDoors: 5},
-  {model: "Focus", color: "grey", automatic: false, noOfDoors: 3},
-  {model: "Focus", color: "blue", automatic: true, noOfDoors: 5},
-  {model: "Leon", color: "green", automatic: true, noOfDoors: 4},
-  {model: "Astra", color: "red", automatic: false, noOfDoors: 3},
-]
+const testData = require("../../test-data.json")
 
 function isValidJSON(str) {
   try {
