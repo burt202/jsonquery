@@ -1,0 +1,52 @@
+[
+  {
+    "Album": "Favourite Worst Nightmare",
+    "Artist": "Arctic Monkeys",
+    "Genre": "Alternative Rock",
+    "Length": 172,
+    "Size": "22.05 MB",
+    "Title": "Brianstorm",
+    "Track": 1,
+    "Year": 2007
+  },
+  {
+    "Album": "Humbug",
+    "Artist": "Arctic Monkeys",
+    "Genre": "Alternative Rock",
+    "Length": 283,
+    "Size": "31.24 MB",
+    "Title": "Dance Little Liar",
+    "Track": 8,
+    "Year": 2009
+  },
+  {
+    "Album": "The Resistance",
+    "Artist": "Muse",
+    "Genre": "Rock",
+    "Length": 236,
+    "Size": "24.09 MB",
+    "Title": "Undisclosed Desires",
+    "Track": 3,
+    "Year": 2009
+  },
+  {
+    "Album": "Presence",
+    "Artist": "Led Zeppelin",
+    "Genre": "Rock",
+    "Length": 628,
+    "Size": "68.25 MB",
+    "Title": "Achilles Last Stand",
+    "Track": 1,
+    "Year": 1976
+  },
+  {
+    "Album": "<I°_°I>",
+    "Artist": "Caravan Palace",
+    "Genre": "Jazz",
+    "Length": 229,
+    "Size": "24.39 MB",
+    "Title": "Lone Digger",
+    "Track": 1,
+    "Year": 2015
+  }
+]
