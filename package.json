@@ -9,6 +9,7 @@
     "prepush": "gulp deploy"
   },
   "dependencies": {
+    "clipboard": "^1.6.0",
     "flux": "^2.1.1",
     "moment": "^2.14.1",
     "ramda": "^0.21.0",

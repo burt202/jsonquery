@@ -1,5 +1,6 @@
 const React = require("react")
 const R = require("ramda")
+const Clipboard = require("clipboard")
 
 const transformer = require("../helpers/transformer")
 
@@ -90,13 +91,24 @@ const Results = React.createClass({
     return (!this.isAggregateResult()) ? <p>Include: {this.getResultFieldOptions()}</p> : null
   },
 
+  getCopyLink: function() {
+    return (!this.tooManyResultToShow()) ? <a className="site-link" data-clipboard-action="copy" data-clipboard-target="#copy-cont">Copy to clipboard</a> : null
+  },
+
   render: function() {
+    new Clipboard("pre a")
+
     return (
       <div>
         <h3>Results</h3>
         {this.getCheckboxes()}
         <p className="download-links">Download results as: {this.getDownloadLinks()}</p>
-        <pre>{this.getDisplayData()}</pre>
+        <pre>
+          {this.getCopyLink()}
+          <div id="copy-cont">
+            {this.getDisplayData()}
+          </div>
+        </pre>
         <a id="hidden-download-link" style={{display: "none"}}></a>
       </div>
     )

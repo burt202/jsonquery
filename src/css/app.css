@@ -148,6 +148,18 @@ pre {
   background-color: #f5f5f5;
   border: 1px solid #ccc;
   border-radius: 4px;
+  position: relative;
+}
+
+pre a {
+  display: none;
+  position: absolute;
+  right: 10px;
+  padding: 5px;
+}
+
+pre:hover a {
+  display: inline-block;
 }
 
 .upload-cont label {
