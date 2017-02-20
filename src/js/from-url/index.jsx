@@ -46,7 +46,10 @@ const FromUrl = React.createClass({
     }
 
     return (
-      <div className="from-url-cont">Loading</div>
+      <div className="from-url-cont">
+        <img src="./gears.svg" />
+        <p>Working, please wait...</p>
+      </div>
     )
   },
 })

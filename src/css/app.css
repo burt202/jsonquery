@@ -204,3 +204,14 @@ h3.summary {
   width: 200px;
   margin-bottom: 0;
 }
+
+.from-url-cont {
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.from-url-cont p {
+  text-align: center;
+}

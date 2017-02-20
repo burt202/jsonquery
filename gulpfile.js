@@ -53,6 +53,7 @@ gulp.task("webpack-prod", function() {
 gulp.task("copy-files", function() {
   return gulp.src([
     "src/favicon.ico",
+    "src/gears.svg",
     "src/test-data.json",
     "CNAME",
   ])
