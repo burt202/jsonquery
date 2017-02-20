@@ -1,9 +1,11 @@
 const React = require("react")
 const ReactDOM = require("react-dom")
+const queryString = require("query-string")
 
 const actionCreator = require("./action-creator")
 const store = require("./store")
 const Upload = require("./upload")
+const FromUrl = require("./from-url")
 const Display = require("./display")
 
 require("../css/app.css")
@@ -27,6 +29,15 @@ const Main = React.createClass({
 
   render: function() {
     if (!this.state.schema || !this.state.data || !this.state.resultFields) {
+      const parsed = queryString.parse(location.search)
+
+      if (parsed.dataUrl && parsed.schema) {
+        return <FromUrl
+          actionCreator={actionCreator}
+          params={parsed}
+        />
+      }
+
       return <Upload
         actionCreator={actionCreator}
       />
