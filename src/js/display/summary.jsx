@@ -3,10 +3,6 @@ const R = require("ramda")
 
 const formatter = require("../helpers/formatter")
 
-const round = R.curry(function(decimals, num) {
-  return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals)
-})
-
 const Summary = React.createClass({
   displayName: "Summary",
 
@@ -31,7 +27,7 @@ const Summary = React.createClass({
   showRawDataLength: function() {
     if (this.props.results.length === this.props.rawDataLength) return ""
     const percentage = (this.props.results.length / this.props.rawDataLength) * 100
-    return "/" + this.props.rawDataLength + " (" + round(2, percentage) + "%)"
+    return "/" + this.props.rawDataLength + " (" + formatter.round(2, percentage) + "%)"
   },
 
   render: function() {

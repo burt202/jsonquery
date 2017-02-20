@@ -174,4 +174,8 @@ module.exports = {
 
     return (count.value) ? [count, max, min, mean] : []
   },
+
+  round: R.curry(function(decimals, num) {
+    return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals)
+  }),
 }
