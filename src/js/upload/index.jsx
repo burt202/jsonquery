@@ -13,21 +13,7 @@ const testSchema = {
 
 const testData = require("../../test-data.json")
 
-function isValidJSON(str) {
-  try {
-    JSON.parse(str)
-  } catch (e) {
-    return false
-  }
-
-  return true
-}
-
-function isValidType(data, name) {
-  if (name === "schema" && !Array.isArray(data)) return true
-  if (name === "data" && Array.isArray(data)) return true
-  return false
-}
+const validator = require("../helpers/validator")
 
 const Upload = React.createClass({
   displayName: "Upload",
@@ -63,14 +49,15 @@ const Upload = React.createClass({
   onFileUploadEnd: function(name, e) {
     const json = e.target.result
 
-    if (!isValidJSON(json)) {
+    if (!validator.isValidJSON(json)) {
       this.showError(name, "Not valid JSON!")
       return
     }
 
     const parsed = JSON.parse(json)
+    const type = (name === "schema") ? "object" : "array"
 
-    if (!isValidType(parsed, name)) {
+    if (!validator.isValidType(type, parsed)) {
       this.showError(name, "The schema must be an object and data must be an array!")
       return
     }
