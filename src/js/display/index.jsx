@@ -67,8 +67,8 @@ const Display = React.createClass({
   },
 
   render: function() {
-    var filtered = this.filterSortAndLimit(this.props.data)
-    var results = this.formatData(filtered)
+    const filtered = this.filterSortAndLimit(this.props.data)
+    const results = this.formatData(filtered)
 
     return (
       <div>

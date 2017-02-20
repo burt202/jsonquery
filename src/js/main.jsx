@@ -26,7 +26,7 @@ const Main = React.createClass({
   },
 
   render: function() {
-    if (!this.state.schema || !this.state.data) {
+    if (!this.state.schema || !this.state.data || !this.state.resultFields) {
       return <Upload
         actionCreator={actionCreator}
       />
