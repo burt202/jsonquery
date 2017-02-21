@@ -43,7 +43,7 @@ const Display = React.createClass({
   },
 
   pickIncludedFields: function(data) {
-    return R.map(R.pick(R.sortBy(R.identity, this.props.resultFields)))(data)
+    return R.map(R.pickAll(R.sortBy(R.identity, this.props.resultFields)))(data)
   },
 
   filterSortAndLimit: function(data) {
