@@ -91,8 +91,12 @@ const Results = React.createClass({
     return (!this.isAggregateResult()) ? <p>Include: {this.getResultFieldOptions()}</p> : null
   },
 
+  canCopyResults: function() {
+    return this.props.showCounts || !this.tooManyResultToShow()
+  },
+
   getCopyLink: function() {
-    return (!this.tooManyResultToShow()) ? <a className="site-link" data-clipboard-action="copy" data-clipboard-target="#copy-cont">Copy to clipboard</a> : null
+    return (this.canCopyResults()) ? <a className="site-link" data-clipboard-action="copy" data-clipboard-target="#copy-cont">Copy to clipboard</a> : null
   },
 
   render: function() {

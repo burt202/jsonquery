@@ -102,6 +102,7 @@ const handlers = {
       sum: payload.name,
       average: null,
       groupBy: null,
+      showCounts: false,
     })
   },
 
@@ -110,6 +111,7 @@ const handlers = {
       average: payload.name,
       sum: null,
       groupBy: null,
+      showCounts: false,
     })
   },
 
