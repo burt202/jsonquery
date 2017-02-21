@@ -34,15 +34,15 @@ const FromUrl = React.createClass({
 
     const errors = []
 
-    if (validator.isValidType("array", data)) {
+    if (!validator.isValidType("array", data)) {
       errors.push("Data must be an array")
     }
 
-    if (validator.isValidJSON(schema)) {
+    if (!validator.isValidJSON(schema)) {
       errors.push("Schema must be valid JSON")
     }
 
-    if (validator.isValidType("object", schema)) {
+    if (!validator.isValidType("object", schema)) {
       errors.push("Schema must be an object")
     }
 
@@ -61,7 +61,7 @@ const FromUrl = React.createClass({
 
   render: function() {
     if (this.state.errors) {
-      return <pre>{JSON.stringify(this.state.errors, null, 2)}</pre>
+      return (<div><br /><pre>{JSON.stringify(this.state.errors, null, 2)}</pre></div>)
     }
 
     return (
