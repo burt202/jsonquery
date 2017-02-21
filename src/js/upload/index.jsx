@@ -55,9 +55,9 @@ const Upload = React.createClass({
     }
 
     const parsed = JSON.parse(json)
-    const type = (name === "schema") ? "object" : "array"
+    const fn = (name === "schema") ? validator.isObject : validator.isArray
 
-    if (!validator.isValidType(type, parsed)) {
+    if (!fn(parsed)) {
       this.showError(name, "The schema must be an object and data must be an array!")
       return
     }

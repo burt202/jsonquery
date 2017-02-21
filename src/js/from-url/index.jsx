@@ -34,7 +34,7 @@ const FromUrl = React.createClass({
 
     const errors = []
 
-    if (!validator.isValidType("array", data)) {
+    if (!validator.isArray(data)) {
       errors.push("Data must be an array")
     }
 
@@ -42,7 +42,7 @@ const FromUrl = React.createClass({
       errors.push("Schema must be valid JSON")
     }
 
-    if (!validator.isValidType("object", schema)) {
+    if (!validator.isObject("object", schema)) {
       errors.push("Schema must be an object")
     }
 
