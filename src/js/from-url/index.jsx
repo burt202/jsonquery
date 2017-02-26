@@ -5,6 +5,10 @@ const validator = require("../helpers/validator")
 function fetchData(url) {
   return fetch(url, {method: "get"})
   .then(function(response) {
+    if (!response.ok) {
+      throw Error(response.statusText)
+    }
+
     return response.json()
   })
 }
@@ -56,7 +60,7 @@ const FromUrl = React.createClass({
   },
 
   onFetchError: function(err) {
-    this.setState({errors: err})
+    this.setState({errors: [err.message]})
   },
 
   render: function() {
