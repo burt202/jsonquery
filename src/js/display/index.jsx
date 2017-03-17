@@ -1,5 +1,6 @@
 const React = require("react")
 const R = require("ramda")
+const queryString = require("query-string")
 
 const formatter = require("../helpers/formatter")
 
@@ -62,13 +63,20 @@ const Display = React.createClass({
     return data
   },
 
+  getGoBackLink: function() {
+    const parsed = queryString.parse(location.search)
+
+    if (parsed.dataUrl && parsed.schema) return null
+    return <p><a className="site-link" onClick={this.onBackClick}>Go back</a></p>
+  },
+
   render: function() {
     const filtered = this.filterSortAndLimit(this.props.data)
     const results = this.formatData(filtered)
 
     return (
       <div>
-        <p><a className="site-link" onClick={this.onBackClick}>Go back</a></p>
+        {this.getGoBackLink()}
         <Filters
           actionCreator={this.props.actionCreator}
           filters={this.props.filters}
