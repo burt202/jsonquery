@@ -32,6 +32,12 @@ body {
   margin-bottom: 0;
 }
 
+.header h1 a {
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+}
+
 .header span {
   text-align: right;
   width: 50%;
