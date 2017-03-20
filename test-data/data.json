@@ -1,8 +1,0 @@
-[
-  {"auto": true, "errorCode": 0, "type": "cash"},
-  {"auto": true, "errorCode": 402, "type": "cash"},
-  {"auto": false, "errorCode": 403, "type": "cash"},
-  {"auto": true, "errorCode": 403, "type": "card"},
-  {"auto": false, "errorCode": 0, "type": "loan"},
-  {"auto": null, "errorCode": 0, "type": "card"}
-]
