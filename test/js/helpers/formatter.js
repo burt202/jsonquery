@@ -360,6 +360,19 @@ describe("formatter", function() {
           {name: "baz", deleted: null},
         ])
       })
+
+      it("should filter when not null", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "deleted", operator: "nnl", active: true},
+        ])
+
+        expect(res).to.eql([
+        {name: "foo", deleted: true},
+        {name: "bar", deleted: false},
+        {name: "abc", deleted: true},
+        {name: "123", deleted: false},
+        ])
+      })
     })
 
     describe("date", function() {
@@ -473,6 +486,19 @@ describe("formatter", function() {
 
         expect(res).to.eql([
           {name: "baz", types: []},
+        ])
+      })
+
+      it("should filter when operator is 'dhl'", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "types", operator: "dhl", value: "0", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "foo", types: ["cash"]},
+          {name: "bar", types: ["cash", "card"]},
+          {name: "abc", types: ["card", 101]},
+          {name: "123", types: ["investment"]},
         ])
       })
 

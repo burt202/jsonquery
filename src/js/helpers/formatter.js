@@ -77,6 +77,7 @@ function addBoolFilter(filter) {
   const acc = {}
 
   if (filter.operator === "nl") acc[filter.name] = R.isNil
+  if (filter.operator === "nnl") acc[filter.name] = R.compose(R.not, R.isNil)
   if (filter.operator === "true") acc[filter.name] = R.equals(true)
   if (filter.operator === "false") acc[filter.name] = R.equals(false)
 
@@ -105,6 +106,7 @@ function addArrayFilter(filter) {
     if (filter.operator === "cos") acc[filter.name] = R.contains(filter.value)
     if (filter.operator === "con") acc[filter.name] = R.contains(parseFloat(filter.value))
     if (filter.operator === "hl") acc[filter.name] = R.compose(R.equals(parseInt(filter.value, 10)), R.length)
+    if (filter.operator === "dhl") acc[filter.name] = R.compose(R.not, R.equals(parseInt(filter.value, 10)), R.length)
     if (filter.operator === "hlgt") acc[filter.name] = R.compose(R.gt(R.__, parseInt(filter.value, 10)), R.length)
     if (filter.operator === "hlgte") acc[filter.name] = R.compose(R.gte(R.__, parseInt(filter.value, 10)), R.length)
     if (filter.operator === "hllt") acc[filter.name] = R.compose(R.lt(R.__, parseInt(filter.value, 10)), R.length)

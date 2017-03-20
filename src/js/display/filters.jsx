@@ -30,6 +30,7 @@ const filterConfig = {
   ],
   bool: [
     {text: "Is null", value: "nl"},
+    {text: "Is not null", value: "nnl"},
     {text: "Is true", value: "true"},
     {text: "Is false", value: "false"},
   ],
@@ -44,6 +45,7 @@ const filterConfig = {
     {text: "Contains String", value: "cos", inputs: [defaultInput]},
     {text: "Contains Number", value: "con", inputs: [defaultInput]},
     {text: "Has length of", value: "hl", inputs: [defaultInput]},
+    {text: "Doesnt Have length of", value: "dhl", inputs: [defaultInput]},
     {text: "Has length greater than", value: "hlgt", inputs: [defaultInput]},
     {text: "Has length greater than or equal to", value: "hlgte", inputs: [defaultInput]},
     {text: "Has length less than", value: "hllt", inputs: [defaultInput]},
@@ -67,7 +69,7 @@ const Filters = React.createClass({
       return <option key={option.value} value={option.value}>{option.text}</option>
     })
 
-    let inputs = []
+    var inputs = []
     const selectedOperator = R.find(R.propEq("value", filter.operator), filterConfig[type])
 
     if (selectedOperator && selectedOperator.inputs) {
