@@ -299,6 +299,16 @@ describe("formatter", function() {
         ])
       })
 
+      it("should filter when operator is 'btw'", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "code", operator: "btw", value: "101", value1: "103", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "bar", code: 102},
+        ])
+      })
+
       it("should honour decimals in the filter value", function() {
         const mockFilters = [
           {name: "foo", code: 101.5},
@@ -377,7 +387,7 @@ describe("formatter", function() {
 
     describe("date", function() {
       const mockDataForFiltering = [
-        {name: "foo", dateCreated: "2016-07-11T17:16:27"},
+        {name: "foo", dateCreated: "2016-09-11T17:16:27"},
         {name: "bar", dateCreated: "2016-08-11T17:16:27"},
         {name: "baz", dateCreated: "2016-06-11T17:16:27"},
         {name: "abc", dateCreated: null},
@@ -404,7 +414,7 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {name: "foo", dateCreated: "2016-07-11T17:16:27"},
+          {name: "foo", dateCreated: "2016-09-11T17:16:27"},
           {name: "bar", dateCreated: "2016-08-11T17:16:27"},
           {name: "baz", dateCreated: "2016-06-11T17:16:27"},
           {name: "123", dateCreated: "2016-07-11T17:16:27"},
@@ -427,7 +437,6 @@ describe("formatter", function() {
         ])
 
         expect(res).to.eql([
-          {name: "foo", dateCreated: "2016-07-11T17:16:27"},
           {name: "baz", dateCreated: "2016-06-11T17:16:27"},
           {name: "123", dateCreated: "2016-07-11T17:16:27"},
         ])
@@ -436,6 +445,17 @@ describe("formatter", function() {
       it("should filter when operator is 'af'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "af", value: "20160712", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "foo", dateCreated: "2016-09-11T17:16:27"},
+          {name: "bar", dateCreated: "2016-08-11T17:16:27"},
+        ])
+      })
+
+      it("should filter when operator is 'btw'", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "dateCreated", operator: "btw", value: "20160712", value1: "20160910", active: true},
         ])
 
         expect(res).to.eql([

@@ -1,7 +1,7 @@
 const R = require("ramda")
 const moment = require("moment")
 
-const isSame = R.curry(function(filterValue, dataValue) {
+const isSameDayAs = R.curry(function(filterValue, dataValue) {
   return moment(dataValue).isSame(filterValue, "day")
 })
 
@@ -13,9 +13,17 @@ const isAfter = R.curry(function(filterValue, dataValue) {
   return moment(dataValue).isAfter(filterValue)
 })
 
+const isBetweenDates = R.curry(function(start, end, dataValue) {
+  return moment(dataValue).isBetween(start, end)
+})
+
 const isOneOf = R.curry(function(filterValue, dataValue) {
   dataValue = (!R.isNil(dataValue)) ? dataValue.toString() : ""
   return R.compose(R.contains(dataValue), R.split(","), R.defaultTo(""))(filterValue)
+})
+
+const isBetween = R.curry(function(start, end, dataValue) {
+  return R.allPass([R.gt(R.__, start), R.lt(R.__, end)])(dataValue)
 })
 
 const matches = R.curry(function(filterValue, dataValue) {
@@ -65,6 +73,10 @@ function addIntFilter(filter) {
     if (filter.operator === "lte") acc[filter.name] = R.lte(R.__, parseFloat(filter.value))
     if (filter.operator === "iof") acc[filter.name] = isOneOf(filter.value)
     if (filter.operator === "inof") acc[filter.name] = R.compose(R.not, isOneOf(filter.value))
+
+    if (filter.value1 && filter.value1.length) {
+      if (filter.operator === "btw") acc[filter.name] = isBetween(parseFloat(filter.value), parseFloat(filter.value1))
+    }
   }
 
   if (filter.operator === "nl") acc[filter.name] = R.isNil
@@ -88,9 +100,13 @@ function addDateFilter(filter) {
   const acc = {}
 
   if (filter.value && filter.value.length === 8 && moment(filter.value, "YYYYMMDD").isValid()) {
-    if (filter.operator === "eq") acc[filter.name] = isSame(filter.value)
+    if (filter.operator === "eq") acc[filter.name] = isSameDayAs(filter.value)
     if (filter.operator === "be") acc[filter.name] = isBefore(filter.value)
     if (filter.operator === "af") acc[filter.name] = isAfter(filter.value)
+
+    if (filter.value1 && filter.value1.length === 8 && moment(filter.value1, "YYYYMMDD").isValid()) {
+      if (filter.operator === "btw") acc[filter.name] = isBetweenDates(filter.value, filter.value1)
+    }
   }
 
   if (filter.operator === "nl") acc[filter.name] = R.isNil

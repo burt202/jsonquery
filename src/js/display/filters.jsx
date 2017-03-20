@@ -1,5 +1,6 @@
 const React = require("react")
 const R = require("ramda")
+var classNames = require("classnames")
 
 const defaultInput = {}
 const dateInput = {placeholder: "YYYYMMDD", maxLength: 8}
@@ -27,6 +28,7 @@ const filterConfig = {
     {text: "Less than or equal to", value: "lte", inputs: [defaultInput]},
     {text: "Is one of", value: "iof", inputs: [separateWithCommaInput]},
     {text: "Is not one of", value: "inof", inputs: [separateWithCommaInput]},
+    {text: "Is between", value: "btw", inputs: [defaultInput, defaultInput]},
   ],
   bool: [
     {text: "Is null", value: "nl"},
@@ -38,6 +40,7 @@ const filterConfig = {
     {text: "Is same day as", value: "eq", inputs: [dateInput]},
     {text: "Is before", value: "be", inputs: [dateInput]},
     {text: "Is after", value: "af", inputs: [dateInput]},
+    {text: "Is between", value: "btw", inputs: [dateInput, dateInput]},
     {text: "Is null", value: "nl"},
     {text: "Is not null", value: "nnl"},
   ],
@@ -73,19 +76,23 @@ const Filters = React.createClass({
     const selectedOperator = R.find(R.propEq("value", filter.operator), filterConfig[type])
 
     if (selectedOperator && selectedOperator.inputs) {
-      inputs = selectedOperator.inputs.map(function(inputConfig) {
+      inputs = selectedOperator.inputs.map(function(inputConfig, index) {
+        const inc = (index) ? index : ""
+
         return React.createElement("input", R.merge({
-          key: filter.name,
+          key: filter.name + inc,
           type: "text",
-          name: filter.name,
-          value: filter.value,
-          onChange: this.updateFilter.bind(this, filter.name, "value"),
+          name: filter.name + inc,
+          value: filter["value" + inc] || "",
+          onChange: this.updateFilter.bind(this, filter.name, "value" + inc),
         }, inputConfig))
       }.bind(this))
     }
 
+    const classnames = classNames("filter-controls", type)
+
     return (
-      <div className="filter-controls">
+      <div className={classnames}>
         <select name={filter.name} value={filter.operator} onChange={this.updateFilter.bind(this, filter.name, "operator")}>
           {options}
         </select>

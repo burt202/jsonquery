@@ -20,7 +20,7 @@ body {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
-  width: 700px;
+  width: 760px;
 }
 
 .header {
@@ -180,6 +180,15 @@ pre:hover a {
 
 .filter-controls input {
   width: 150px;
+  margin-right: 10px;
+}
+
+.filter-controls.int input, .filter-controls.date input {
+  width: 100px;
+}
+
+.filter-controls input:last-of-type {
+  margin-right: 0;
 }
 
 .download-links a:not(:last-child) {
