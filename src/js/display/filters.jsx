@@ -1,102 +1,54 @@
 const React = require("react")
+const R = require("ramda")
 
-const placeholderMap = {
-  "iof": "separate with comma",
-  "inof": "separate with comma",
-  "rgm": "enter regex here",
-}
+const defaultInput = {}
+const dateInput = {placeholder: "YYYYMMDD", maxLength: 8}
+const separateWithCommaInput = {placeholder: "separate with comma"}
+const regexInput = {placeholder: "enter regex here"}
 
-function getStringInput(filter, onChange) {
-  const placeholder = placeholderMap[filter.operator] || ""
-
-  return (
-    <div className="filter-controls">
-      <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
-        <option value="eq">Equal to</option>
-        <option value="neq">Not equal to</option>
-        <option value="nl">Is null</option>
-        <option value="nnl">Is not null</option>
-        <option value="iof">Is one of</option>
-        <option value="inof">Is not one of</option>
-        <option value="rgm">Matches</option>
-      </select>
-      <input type="text" name={filter.name} value={filter.value} placeholder={placeholder} onChange={onChange.bind(this, filter.name, "value")} />
-    </div>
-  )
-}
-
-function getIntInput(filter, onChange) {
-  const placeholder = placeholderMap[filter.operator] || ""
-
-  return (
-    <div className="filter-controls">
-      <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
-        <option value="eq">Equal to</option>
-        <option value="neq">Not equal to</option>
-        <option value="nl">Is null</option>
-        <option value="nnl">Is not null</option>
-        <option value="gt">Greater than</option>
-        <option value="gte">Greater than or equal to</option>
-        <option value="lt">Less than</option>
-        <option value="lte">Less than or equal to</option>
-        <option value="iof">Is one of</option>
-        <option value="inof">Is not one of</option>
-      </select>
-      <input type="text" name={filter.name} value={filter.value} placeholder={placeholder} onChange={onChange.bind(this, filter.name, "value")} />
-    </div>
-  )
-}
-
-function getBoolInput(filter, onChange) {
-  return (
-    <div className="filter-controls">
-      <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
-        <option value="nl">Is null</option>
-        <option value="true">Is true</option>
-        <option value="false">Is false</option>
-      </select>
-    </div>
-  )
-}
-
-function getDateInput(filter, onChange) {
-  return (
-    <div className="filter-controls">
-      <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
-        <option value="eq">Is same day</option>
-        <option value="be">Is before</option>
-        <option value="af">Is after</option>
-        <option value="nl">Is null</option>
-        <option value="nnl">Is not null</option>
-      </select>
-      <input type="text" name={filter.name} value={filter.value} placeholder="YYYYMMDD" maxLength="8" onChange={onChange.bind(this, filter.name, "value")} />
-    </div>
-  )
-}
-
-function getArrayInput(filter, onChange) {
-  return (
-    <div className="filter-controls">
-      <select name={filter.name} value={filter.operator} onChange={onChange.bind(this, filter.name, "operator")}>
-        <option value="cos">Contains String</option>
-        <option value="con">Contains Number</option>
-        <option value="hl">Has length of</option>
-        <option value="hlgt">Has length greater than</option>
-        <option value="hlgte">Has length greater than or equal to</option>
-        <option value="hllt">Has length less than</option>
-        <option value="hllte">Has length less than or equal to</option>
-      </select>
-      <input type="text" name={filter.name} value={filter.value} onChange={onChange.bind(this, filter.name, "value")} />
-    </div>
-  )
-}
-
-const typeMap = {
-  string: getStringInput,
-  int: getIntInput,
-  bool: getBoolInput,
-  date: getDateInput,
-  array: getArrayInput,
+const filterConfig = {
+  string: [
+    {text: "Equal to", value: "eq", inputs: [defaultInput]},
+    {text: "Not equal to", value: "neq", inputs: [defaultInput]},
+    {text: "Is null", value: "nl"},
+    {text: "Is not null", value: "nnl"},
+    {text: "Is one of", value: "iof", inputs: [separateWithCommaInput]},
+    {text: "Is not one of", value: "inof", inputs: [separateWithCommaInput]},
+    {text: "Matches", value: "rgm", inputs: [regexInput]},
+  ],
+  int: [
+    {text: "Equal to", value: "eq", inputs: [defaultInput]},
+    {text: "Not equal to", value: "neq", inputs: [defaultInput]},
+    {text: "Is null", value: "nl"},
+    {text: "Is not null", value: "nnl"},
+    {text: "Greater than", value: "gt", inputs: [defaultInput]},
+    {text: "Greater than or equal to", value: "gte", inputs: [defaultInput]},
+    {text: "Less than", value: "lt", inputs: [defaultInput]},
+    {text: "Less than or equal to", value: "lte", inputs: [defaultInput]},
+    {text: "Is one of", value: "iof", inputs: [separateWithCommaInput]},
+    {text: "Is not one of", value: "inof", inputs: [separateWithCommaInput]},
+  ],
+  bool: [
+    {text: "Is null", value: "nl"},
+    {text: "Is true", value: "true"},
+    {text: "Is false", value: "false"},
+  ],
+  date: [
+    {text: "Is same day as", value: "eq", inputs: [dateInput]},
+    {text: "Is before", value: "be", inputs: [dateInput]},
+    {text: "Is after", value: "af", inputs: [dateInput]},
+    {text: "Is null", value: "nl"},
+    {text: "Is not null", value: "nnl"},
+  ],
+  array: [
+    {text: "Contains String", value: "cos", inputs: [defaultInput]},
+    {text: "Contains Number", value: "con", inputs: [defaultInput]},
+    {text: "Has length of", value: "hl", inputs: [defaultInput]},
+    {text: "Has length greater than", value: "hlgt", inputs: [defaultInput]},
+    {text: "Has length greater than or equal to", value: "hlgte", inputs: [defaultInput]},
+    {text: "Has length less than", value: "hllt", inputs: [defaultInput]},
+    {text: "Has length less than or equal to", value: "hllte", inputs: [defaultInput]},
+  ],
 }
 
 const Filters = React.createClass({
@@ -109,8 +61,35 @@ const Filters = React.createClass({
   },
 
   getInputControlByType: function(type, filter) {
-    if (typeMap[type]) return typeMap[type].bind(this)(filter, this.updateFilter)
-    return "Invalid Type"
+    if (!filterConfig[type]) return "Invalid Type"
+
+    const options = filterConfig[type].map(function(option) {
+      return <option key={option.value} value={option.value}>{option.text}</option>
+    })
+
+    let inputs = []
+    const selectedOperator = R.find(R.propEq("value", filter.operator), filterConfig[type])
+
+    if (selectedOperator && selectedOperator.inputs) {
+      inputs = selectedOperator.inputs.map(function(inputConfig) {
+        return React.createElement("input", R.merge({
+          key: filter.name,
+          type: "text",
+          name: filter.name,
+          value: filter.value,
+          onChange: this.updateFilter.bind(this, filter.name, "value"),
+        }, inputConfig))
+      }.bind(this))
+    }
+
+    return (
+      <div className="filter-controls">
+        <select name={filter.name} value={filter.operator} onChange={this.updateFilter.bind(this, filter.name, "operator")}>
+          {options}
+        </select>
+        {inputs}
+      </div>
+    )
   },
 
   getFilterRows: function() {
