@@ -60,7 +60,7 @@ module.exports = {
 
   groupBy: function(name) {
     dispatcher.dispatch({
-      name: "groupBy",
+      name: "groupings",
       value: {name: name},
     })
   },

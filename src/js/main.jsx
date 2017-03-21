@@ -46,7 +46,7 @@ const Main = React.createClass({
     return <Display
       actionCreator={actionCreator}
       filters={this.state.filters}
-      groupBy={this.state.groupBy}
+      groupings={this.state.groupings}
       sortBy={this.state.sortBy}
       sortDirection={this.state.sortDirection}
       schema={this.state.schema}

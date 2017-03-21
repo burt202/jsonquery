@@ -15,7 +15,7 @@ const Display = React.createClass({
   propTypes: {
     actionCreator: React.PropTypes.object.isRequired,
     filters: React.PropTypes.array.isRequired,
-    groupBy: React.PropTypes.string,
+    groupings: React.PropTypes.array,
     sortBy: React.PropTypes.string,
     sortDirection: React.PropTypes.string,
     schema: React.PropTypes.object.isRequired,
@@ -57,7 +57,7 @@ const Display = React.createClass({
   },
 
   formatData: function(data) {
-    if (this.props.groupBy) return formatter.group([this.props.groupBy], this.props.showCounts, data)
+    if (this.props.groupings.length) return formatter.group(this.props.groupings, this.props.showCounts, data)
     if (this.props.sum) return {total: formatter.round(2, R.sum(R.pluck(this.props.sum, data)))}
     if (this.props.average) return {average: formatter.round(2, R.mean(R.pluck(this.props.average, data)))}
     return data
@@ -86,7 +86,7 @@ const Display = React.createClass({
           actionCreator={this.props.actionCreator}
           filters={this.props.filters}
           schema={this.props.schema}
-          groupBy={this.props.groupBy}
+          groupings={this.props.groupings}
           sortBy={this.props.sortBy}
           sortDirection={this.props.sortDirection}
           showCounts={this.props.showCounts}
@@ -97,11 +97,11 @@ const Display = React.createClass({
         <Summary
           rawDataLength={this.props.data.length}
           results={filtered}
-          groupBy={this.props.groupBy}
+          groupings={this.props.groupings}
         />
         <Results
           results={results}
-          groupBy={this.props.groupBy}
+          groupings={this.props.groupings}
           resultFields={this.props.resultFields}
           schema={this.props.schema}
           actionCreator={this.props.actionCreator}

@@ -11,7 +11,7 @@ const Results = React.createClass({
 
   propTypes: {
     results: React.PropTypes.any.isRequired,
-    groupBy: React.PropTypes.string,
+    groupings: React.PropTypes.array,
     resultFields: React.PropTypes.array.isRequired,
     schema: React.PropTypes.object.isRequired,
     actionCreator: React.PropTypes.object.isRequired,
@@ -32,8 +32,8 @@ const Results = React.createClass({
 
   getDownloadLinks: function() {
     const sumedOrAveraged = !!(this.props.sum || this.props.average)
-    const jsonTransformer = transformer.prettify(this.props.groupBy, this.props.showCounts, sumedOrAveraged)
-    const csvTransformer = transformer.convertToCsv(this.props.groupBy, this.props.showCounts, sumedOrAveraged)
+    const jsonTransformer = transformer.prettify(this.props.groupings, this.props.showCounts, sumedOrAveraged)
+    const csvTransformer = transformer.convertToCsv(this.props.groupings, this.props.showCounts, sumedOrAveraged)
 
     const types = [
       {name: "JSON", mimetype: "application/json", extension: "json", transformer: jsonTransformer},
@@ -76,7 +76,7 @@ const Results = React.createClass({
 
     return schemaKeys.map(function(field) {
       const checked = R.contains(field, this.props.resultFields)
-      const disabled = (field === this.props.groupBy)
+      const disabled = R.contains(field, this.props.groupings)
 
       return (
         <label className="result-field" key={field}>

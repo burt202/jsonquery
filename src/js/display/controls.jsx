@@ -7,7 +7,7 @@ const Controls = React.createClass({
   propTypes: {
     actionCreator: React.PropTypes.object.isRequired,
     filters: React.PropTypes.array.isRequired,
-    groupBy: React.PropTypes.string,
+    groupings: React.PropTypes.array,
     sortBy: React.PropTypes.string,
     sortDirection: React.PropTypes.string,
     schema: React.PropTypes.object.isRequired,
@@ -149,12 +149,13 @@ const Controls = React.createClass({
   },
 
   getGroupByControl: function() {
-    const disabled = !this.props.groupBy
+    const disabled = !(this.props.groupings && this.props.groupings.length)
+    const groupBy = this.props.groupings ? this.props.groupings[0] : ""
 
     return (
       <div className="input-control">
         <span>Group By:</span>
-        <select onChange={this.onGroupByChange} value={this.props.groupBy || ""}>
+        <select onChange={this.onGroupByChange} value={groupBy}>
           <option></option>
           {this.getGroupAndSortByOptions()}
         </select>

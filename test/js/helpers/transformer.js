@@ -7,8 +7,8 @@ describe("transformer", function() {
 
   describe("convertToCsv", function() {
     it("should return null if data set is empty", function() {
-      expect(transformer.convertToCsv(null, false, false, [])).to.eql(null)
-      expect(transformer.convertToCsv(null, false, false, {})).to.eql(null)
+      expect(transformer.convertToCsv([], false, false, [])).to.eql(null)
+      expect(transformer.convertToCsv([], false, false, {})).to.eql(null)
     })
 
     it("should format correctly when array is passed in", function() {
@@ -17,7 +17,7 @@ describe("transformer", function() {
         {color: "blue", size: 5},
       ]
 
-      expect(transformer.convertToCsv(null, false, false, mockData)).to.eql(
+      expect(transformer.convertToCsv([], false, false, mockData)).to.eql(
         "color,size\r\nred,6\r\nblue,5"
       )
     })
@@ -28,7 +28,7 @@ describe("transformer", function() {
         blue: [{color: "blue", size: 5}],
       }
 
-      expect(transformer.convertToCsv("color", false, false, mockData)).to.eql(
+      expect(transformer.convertToCsv(["color"], false, false, mockData)).to.eql(
         "color,size\r\nred\r\nred,6\r\nred,4\r\nblue\r\nblue,5"
       )
     })
@@ -39,7 +39,7 @@ describe("transformer", function() {
         "blue: 1",
       ]
 
-      expect(transformer.convertToCsv("color", true, false, mockData)).to.eql(
+      expect(transformer.convertToCsv(["color"], true, false, mockData)).to.eql(
         "red,2\r\nblue,1"
       )
     })
@@ -49,7 +49,7 @@ describe("transformer", function() {
         total: 20,
       }
 
-      expect(transformer.convertToCsv(null, false, true, mockData)).to.eql(
+      expect(transformer.convertToCsv([], false, true, mockData)).to.eql(
         "total,20"
       )
     })

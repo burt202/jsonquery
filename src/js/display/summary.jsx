@@ -9,7 +9,7 @@ const Summary = React.createClass({
   propTypes: {
     rawDataLength: React.PropTypes.number.isRequired,
     results: React.PropTypes.array.isRequired,
-    groupBy: React.PropTypes.string,
+    groupings: React.PropTypes.array,
   },
 
   getGroupingBreakdown: function(grouping) {
@@ -21,7 +21,7 @@ const Summary = React.createClass({
   },
 
   getGrouping: function() {
-    return (this.props.groupBy) ? formatter.group([this.props.groupBy], false, this.props.results) : null
+    return (this.props.groupings.length) ? formatter.group(this.props.groupings, false, this.props.results) : null
   },
 
   showRawDataLength: function() {

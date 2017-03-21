@@ -3,7 +3,7 @@ const createStore = require("./helpers/store-base")
 
 const defaults = {
   filters: [],
-  groupBy: null,
+  groupings: [],
   sortBy: null,
   sortDirection: "asc",
   schema: null,
@@ -71,7 +71,7 @@ const handlers = {
   reset: function(contents) {
     return R.merge(contents, {
       filters: [],
-      groupBy: null,
+      groupings: [],
       sortBy: null,
       sortDirection: "asc",
       showCounts: false,
@@ -81,16 +81,17 @@ const handlers = {
     })
   },
 
-  groupBy: function(contents, payload) {
+  groupings: function(contents, payload) {
     const toMerge = {
-      groupBy: payload.name,
       sum: null,
       average: null,
     }
 
     if (payload.name === "") {
       toMerge.showCounts = false
+      toMerge.groupings = []
     } else {
+      toMerge.groupings = [payload.name]
       toMerge.resultFields = R.compose(R.uniq, R.append(payload.name))(contents.resultFields)
     }
 
@@ -101,7 +102,7 @@ const handlers = {
     return R.merge(contents, {
       sum: payload.name,
       average: null,
-      groupBy: null,
+      groupings: [],
       showCounts: false,
     })
   },
@@ -110,7 +111,7 @@ const handlers = {
     return R.merge(contents, {
       average: payload.name,
       sum: null,
-      groupBy: null,
+      groupings: [],
       showCounts: false,
     })
   },
