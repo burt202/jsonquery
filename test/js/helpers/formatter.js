@@ -718,34 +718,60 @@ describe("formatter", function() {
   })
 
   describe("getGroupStats", function() {
-    it("should return the total number of groups", function() {
-      const res = formatter.getGroupStats({foo: [], bar: []})
+    describe("when there are no groups", function() {
+      it("should return empty array", function() {
+        const res = formatter.getGroupStats({})
 
-      expect(res[0]).to.eql({name: "No. of Groups", value: 2})
+        expect(res).to.eql([])
+      })
     })
 
-    it("should return the size of the biggest group", function() {
-      const res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]})
+    describe("for 1 level of grouping", function() {
+      var res
 
-      expect(res[1]).to.eql({name: "Max Group Size", value: 3})
+      beforeEach(function() {
+        res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]})
+      })
+
+      it("should return the total number of groups", function() {
+        expect(res[0]).to.eql({name: "No. of Groups", value: 2})
+      })
+
+      it("should return the size of the biggest group", function() {
+        expect(res[1]).to.eql({name: "Max Group Size", value: 3})
+      })
+
+      it("should return the size of the smallest group", function() {
+        expect(res[2]).to.eql({name: "Min Group Size", value: 1})
+      })
+
+      it("should return the mean average group size", function() {
+        expect(res[3]).to.eql({name: "Average Group Size", value: 2})
+      })
     })
 
-    it("should return the size of the smallest group", function() {
-      const res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]})
+    describe("for 2 levels of grouping", function() {
+      var res
 
-      expect(res[2]).to.eql({name: "Min Group Size", value: 1})
-    })
+      beforeEach(function() {
+        res = formatter.getGroupStats({foo: {a: [1]}, bar: {b: [1, 2], c: [1]}})
+      })
 
-    it("should return the mean average group size", function() {
-      const res = formatter.getGroupStats({foo: [1, 2, 3], bar: [1]})
+      it("should return the total number of groups", function() {
+        expect(res[0]).to.eql({name: "No. of Groups", value: 3})
+      })
 
-      expect(res[3]).to.eql({name: "Average Group Size", value: 2})
-    })
+      it("should return the size of the biggest group", function() {
+        expect(res[1]).to.eql({name: "Max Group Size", value: 2})
+      })
 
-    it("should return empty array when there are no groups", function() {
-      const res = formatter.getGroupStats({})
+      it("should return the size of the smallest group", function() {
+        expect(res[2]).to.eql({name: "Min Group Size", value: 1})
+      })
 
-      expect(res).to.eql([])
+      it("should return the mean average group size", function() {
+        expect(res[3]).to.eql({name: "Average Group Size", value: 1.33})
+      })
     })
   })
 

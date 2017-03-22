@@ -132,23 +132,30 @@ function addArrayFilter(filter) {
   return acc
 }
 
-function sortAndCount(grouped) {
-  return R.pipe(
-    R.map(R.length),
-    R.toPairs,
-    R.sortBy(R.prop(1)),
-    R.reverse,
-    R.map(R.join(": "))
-  )(grouped)
-}
+const _sortAndCount = R.pipe(
+  R.map(R.length),
+  R.toPairs,
+  R.sortBy(R.prop(1)),
+  R.reverse,
+  R.map(R.join(": "))
+)
 
 const _group = R.curry(function(groupings, showCounts, data) {
   data = R.groupBy(R.prop(groupings[0]), data)
   groupings = R.tail(groupings)
-  if (!groupings.length) return (showCounts) ? sortAndCount(data) : data
+  if (!groupings.length) return (showCounts) ? _sortAndCount(data) : data
 
   return R.map(_group(groupings, showCounts), data)
 })
+
+const _getGroupLengths = R.pipe(
+  R.toPairs,
+  R.map(function(pair) {
+    if (Array.isArray(pair[1])) return R.length(pair[1])
+    return _getGroupLengths(pair[1])
+  }),
+  R.flatten
+)
 
 module.exports = {
   filter: function(data, schema, filters) {
@@ -180,12 +187,9 @@ module.exports = {
   },
 
   getGroupStats: function(grouped) {
-    const groupLengths = R.pipe(
-      R.toPairs,
-      R.map(R.compose(R.length, R.prop(1)))
-    )(grouped)
+    const groupLengths = _getGroupLengths(grouped)
 
-    const count = {name: "No. of Groups", value: Object.keys(grouped).length}
+    const count = {name: "No. of Groups", value: groupLengths.length}
     const max = {name: "Max Group Size", value: getMax(groupLengths)}
     const min = {name: "Min Group Size", value: getMin(groupLengths)}
     const mean = {name: "Average Group Size", value: R.compose(round(2), R.mean)(groupLengths)}
