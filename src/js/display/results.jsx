@@ -21,17 +21,20 @@ const Results = React.createClass({
     average: React.PropTypes.string,
   },
 
-  downloadResults: function(data, mimetype, extension) {
-    const dataStr = URL.createObjectURL(new Blob([data], {type: mimetype}))
+  downloadResults: function(type) {
+    const transformed = type.transformer(this.props.results)
+
+    const dataStr = URL.createObjectURL(new Blob([transformed], {type: type.mimetype}))
     const downloadLink = document.getElementById("hidden-download-link")
     downloadLink.setAttribute("href", dataStr)
-    downloadLink.setAttribute("download", new Date().toISOString() + "." + extension)
+    downloadLink.setAttribute("download", new Date().toISOString() + "." + type.extension)
     downloadLink.click()
     downloadLink.setAttribute("href", "")
   },
 
   getDownloadLinks: function() {
     const sumedOrAveraged = !!(this.props.sum || this.props.average)
+
     const jsonTransformer = transformer.prettify(this.props.groupings, this.props.showCounts, sumedOrAveraged)
     const csvTransformer = transformer.convertToCsv(this.props.groupings, this.props.showCounts, sumedOrAveraged)
 
@@ -41,8 +44,7 @@ const Results = React.createClass({
     ]
 
     return types.map(function(type) {
-      const transformed = type.transformer(this.props.results)
-      const downloader = this.downloadResults.bind(this, transformed, type.mimetype, type.extension)
+      const downloader = this.downloadResults.bind(this, type)
       return (<a className="site-link" key={type.name} onClick={downloader}>{type.name}</a>)
     }.bind(this))
   },
