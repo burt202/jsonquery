@@ -79,12 +79,27 @@ a.site-link {
 }
 
 .input-control {
-  height: 25px;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 5px;
 }
 
-.input-control span {
+.input-control label {
   width: 100px;
-  display: inline-block;
+}
+
+.input-control .body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-control .body .grouping {
+  line-height: 22px;
+}
+
+.input-control .body .grouping a {
+  margin-left: 30px;
 }
 
 .input-control select {

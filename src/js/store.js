@@ -81,19 +81,21 @@ const handlers = {
     })
   },
 
-  groupings: function(contents, payload) {
-    const toMerge = {
+  addGrouping: function(contents, payload) {
+    return R.merge(contents, {
       sum: null,
       average: null,
+      groupings: R.append(payload.name, contents.groupings),
+      resultFields: R.compose(R.uniq, R.append(payload.name))(contents.resultFields),
+    })
+  },
+
+  removeGrouping: function(contents, payload) {
+    const toMerge = {
+      groupings: R.without([payload.name], contents.groupings),
     }
 
-    if (payload.name === "") {
-      toMerge.showCounts = false
-      toMerge.groupings = []
-    } else {
-      toMerge.groupings = [payload.name]
-      toMerge.resultFields = R.compose(R.uniq, R.append(payload.name))(contents.resultFields)
-    }
+    if (!toMerge.groupings.length) toMerge.showCounts = false
 
     return R.merge(contents, toMerge)
   },

@@ -118,7 +118,7 @@ describe("store", function() {
       })
 
       dispatcher.dispatch({
-        name: "groupings",
+        name: "addGrouping",
         value: {name: "bar"},
       })
 
@@ -148,7 +148,7 @@ describe("store", function() {
     })
   })
 
-  describe("groupings", function() {
+  describe("addGrouping", function() {
     it("should add groupings and nullify sum and average", function() {
       dispatcher.dispatch({
         name: "sum",
@@ -165,30 +165,13 @@ describe("store", function() {
       expect(store.getState().average).to.eql("baz")
 
       dispatcher.dispatch({
-        name: "groupings",
+        name: "addGrouping",
         value: {name: "foo"},
       })
 
       expect(store.getState().groupings).to.eql(["foo"])
       expect(store.getState().sum).to.eql(null)
       expect(store.getState().average).to.eql(null)
-    })
-
-    it("should reset showCounts is groupings is deselected", function() {
-      dispatcher.dispatch({
-        name: "showCounts",
-        value: {showCounts: true},
-      })
-
-      expect(store.getState().showCounts).to.eql(true)
-
-      dispatcher.dispatch({
-        name: "groupings",
-        value: {name: ""},
-      })
-
-      expect(store.getState().groupings).to.eql([])
-      expect(store.getState().showCounts).to.eql(false)
     })
 
     it("should ensure groupings field is included in results", function() {
@@ -200,7 +183,7 @@ describe("store", function() {
       expect(store.getState().resultFields).to.eql([])
 
       dispatcher.dispatch({
-        name: "groupings",
+        name: "addGrouping",
         value: {name: "baz"},
       })
 
@@ -217,7 +200,7 @@ describe("store", function() {
       expect(store.getState().resultFields).to.eql(["foo", "bar"])
 
       dispatcher.dispatch({
-        name: "groupings",
+        name: "addGrouping",
         value: {name: "bar"},
       })
 
@@ -226,10 +209,44 @@ describe("store", function() {
     })
   })
 
+  describe("removeGrouping", function() {
+    it("should remove field from grouping", function() {
+      dispatcher.dispatch({
+        name: "addGrouping",
+        value: {name: "baz"},
+      })
+
+      expect(store.getState().groupings).to.eql(["baz"])
+
+      dispatcher.dispatch({
+        name: "removeGrouping",
+        value: {name: "baz"},
+      })
+
+      expect(store.getState().groupings).to.eql([])
+    })
+
+    it("should reset showCounts if groupings is deselected", function() {
+      dispatcher.dispatch({
+        name: "showCounts",
+        value: {showCounts: true},
+      })
+
+      expect(store.getState().showCounts).to.eql(true)
+
+      dispatcher.dispatch({
+        name: "removeGrouping",
+        value: {name: "baz"},
+      })
+
+      expect(store.getState().showCounts).to.eql(false)
+    })
+  })
+
   describe("sortBy", function() {
     it("should add sortBy prop", function() {
       dispatcher.dispatch({
-        name: "groupings",
+        name: "addGrouping",
         value: {name: "bar"},
       })
 
@@ -263,7 +280,7 @@ describe("store", function() {
       })
 
       dispatcher.dispatch({
-        name: "groupings",
+        name: "addGrouping",
         value: {name: "bar"},
       })
 
@@ -319,7 +336,7 @@ describe("store", function() {
   describe("sum", function() {
     it("should add sum and nullify groupings and average", function() {
       dispatcher.dispatch({
-        name: "groupings",
+        name: "addGrouping",
         value: {name: "bar"},
       })
 
@@ -346,7 +363,7 @@ describe("store", function() {
   describe("average", function() {
     it("should add sum and nullify groupings and sum", function() {
       dispatcher.dispatch({
-        name: "groupings",
+        name: "addGrouping",
         value: {name: "bar"},
       })
 

@@ -58,9 +58,16 @@ module.exports = {
     })
   },
 
-  groupBy: function(name) {
+  addGrouping: function(name) {
     dispatcher.dispatch({
-      name: "groupings",
+      name: "addGrouping",
+      value: {name: name},
+    })
+  },
+
+  removeGrouping: function(name) {
+    dispatcher.dispatch({
+      name: "removeGrouping",
       value: {name: name},
     })
   },

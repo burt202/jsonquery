@@ -22,7 +22,11 @@ const Controls = React.createClass({
   },
 
   onGroupByChange: function(e) {
-    this.props.actionCreator.groupBy(e.target.value)
+    this.props.actionCreator.addGrouping(e.target.value)
+  },
+
+  onGroupByRemove: function(e) {
+    this.props.actionCreator.removeGrouping(e.target.dataset.field)
   },
 
   onSortByChange: function(e) {
@@ -61,11 +65,15 @@ const Controls = React.createClass({
   getFilterControl: function() {
     return (
       <div className="input-control">
-        <span>Add Filter:</span>
-        <select onChange={this.onAddFilter}>
-          <option></option>
-          {this.getFilterOptions()}
-        </select>
+        <label>Add Filter:</label>
+        <div className="body">
+          <div className="row">
+            <select onChange={this.onAddFilter}>
+              <option></option>
+              {this.getFilterOptions()}
+            </select>
+          </div>
+        </div>
       </div>
     )
   },
@@ -77,23 +85,27 @@ const Controls = React.createClass({
   getLimitControl: function() {
     return (
       <div className="input-control">
-        <span>Limit:</span>
-        <select onChange={this.onLimitChange} value={this.props.limit || ""}>
-          <option>Show all</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-          <option value="75">75</option>
-          <option value="100">100</option>
-          <option value="150">150</option>
-          <option value="200">200</option>
-          <option value="250">250</option>
-          <option value="500">500</option>
-        </select>
+        <label>Limit:</label>
+        <div className="body">
+          <div className="row">
+            <select onChange={this.onLimitChange} value={this.props.limit || ""}>
+              <option>Show all</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="75">75</option>
+              <option value="100">100</option>
+              <option value="150">150</option>
+              <option value="200">200</option>
+              <option value="250">250</option>
+              <option value="500">500</option>
+            </select>
+          </div>
+        </div>
       </div>
     )
   },
@@ -115,11 +127,15 @@ const Controls = React.createClass({
   getAverageControl: function() {
     return (
       <div className="input-control">
-        <span>Average:</span>
-        <select onChange={this.onAverageChange} value={this.props.average || ""}>
-          <option></option>
-          {this.getNumberOptions()}
-        </select>
+        <label>Average:</label>
+        <div className="body">
+          <div className="row">
+            <select onChange={this.onAverageChange} value={this.props.average || ""}>
+              <option></option>
+              {this.getNumberOptions()}
+            </select>
+          </div>
+        </div>
       </div>
     )
   },
@@ -127,17 +143,31 @@ const Controls = React.createClass({
   getSumControl: function() {
     return (
       <div className="input-control">
-        <span>Sum:</span>
-        <select onChange={this.onSumChange} value={this.props.sum || ""}>
-          <option></option>
-          {this.getNumberOptions()}
-        </select>
+        <label>Sum:</label>
+        <div className="body">
+          <div className="row">
+            <select onChange={this.onSumChange} value={this.props.sum || ""}>
+              <option></option>
+              {this.getNumberOptions()}
+            </select>
+          </div>
+        </div>
       </div>
     )
   },
 
-  getGroupAndSortByOptions: function() {
+  getSortByOptions: function() {
     return Object.keys(this.props.schema).map(function(value) {
+      return (
+        <option value={value} key={value}>{value}</option>
+      )
+    })
+  },
+
+  getGroupByOptions: function() {
+    const options = R.without(this.props.groupings, Object.keys(this.props.schema))
+
+    return options.map(function(value) {
       return (
         <option value={value} key={value}>{value}</option>
       )
@@ -152,17 +182,33 @@ const Controls = React.createClass({
     const disabled = !(this.props.groupings && this.props.groupings.length)
     const groupBy = this.props.groupings ? this.props.groupings[0] : ""
 
+    const controls = this.props.groupings.map(function(grouping) {
+      return (
+        <div className="row" key={grouping}>
+          <div className="grouping">
+            {grouping}
+            <a className="site-link" data-field={grouping} onClick={this.onGroupByRemove}>remove</a>
+          </div>
+        </div>
+      )
+    }.bind(this))
+
     return (
       <div className="input-control">
-        <span>Group By:</span>
-        <select onChange={this.onGroupByChange} value={groupBy}>
-          <option></option>
-          {this.getGroupAndSortByOptions()}
-        </select>
-        <label className="result-field">
-          <input type="checkbox" name="showCounts" disabled={disabled} checked={this.props.showCounts} onChange={this.onChangeHandler} />
-          Show counts
-        </label>
+        <label>Group By:</label>
+        <div className="body">
+          {controls}
+          <div className="row">
+            <select onChange={this.onGroupByChange} value={groupBy}>
+              <option></option>
+              {this.getGroupByOptions()}
+            </select>
+            <label className="result-field">
+              <input type="checkbox" name="showCounts" disabled={disabled} checked={this.props.showCounts} onChange={this.onChangeHandler} />
+              Show counts
+            </label>
+          </div>
+        </div>
       </div>
     )
   },
@@ -170,15 +216,19 @@ const Controls = React.createClass({
   getSortByControl: function() {
     return (
       <div className="input-control">
-        <span>Sort By:</span>
-        <select onChange={this.onSortByChange} value={this.props.sortBy || ""}>
-          <option></option>
-          {this.getGroupAndSortByOptions()}
-        </select>
-        <select onChange={this.onSortDirectionChange} value={this.props.sortDirection}>
-          <option value="asc">ASC</option>
-          <option value="desc">DESC</option>
-        </select>
+        <label>Sort By:</label>
+        <div className="body">
+          <div className="row">
+            <select onChange={this.onSortByChange} value={this.props.sortBy || ""}>
+              <option></option>
+              {this.getSortByOptions()}
+            </select>
+            <select onChange={this.onSortDirectionChange} value={this.props.sortDirection}>
+              <option value="asc">ASC</option>
+              <option value="desc">DESC</option>
+            </select>
+          </div>
+        </div>
       </div>
     )
   },
