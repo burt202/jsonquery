@@ -12,12 +12,10 @@ function _turnObjIntoCountArray(obj) {
   return R.pipe(
     R.toPairs,
     R.map(function(pair) {
-      if (Array.isArray(pair[1])) return R.pipe(
-        R.map(function(count) {
-          const split = R.split(": ", count)
-          return pair[0] + " - " + split[0] + ": " + split[1]
-        })
-      )(pair[1])
+      if (Array.isArray(pair[1])) return R.map(function(count) {
+        const split = R.split(": ", count)
+        return pair[0] + " - " + split[0] + ": " + split[1]
+      }, pair[1])
 
       return _turnObjIntoCountArray(pair[1])
     }),
@@ -34,15 +32,39 @@ function csvFromCounts(json) {
   )(json)
 }
 
-function csvFromGroupedData(json) {
-  const header = R.compose(R.join(","), R.keys, R.head, R.flatten, R.values)(json)
-
+function _getHeader(obj) {
   return R.pipe(
     R.toPairs,
-    R.map(function(row) {
-      return [row[0]].concat(R.map(R.compose(R.join(","), R.values), row[1]))
+    R.map(function(pair) {
+      if (Array.isArray(pair[1])) return R.compose(R.keys, R.head)(pair[1])
+      return _getHeader(pair[1])
     }),
     R.flatten,
+    R.uniq,
+    R.join(",")
+  )(obj)
+}
+
+function _getGroupedData(obj) {
+  return R.pipe(
+    R.toPairs,
+    R.map(function(pair) {
+      if (Array.isArray(pair[1])) return [pair[0]].concat(R.map(R.compose(R.join(","), R.values), pair[1]))
+      return _getGroupedData(R.reduce(function(acc, val) {
+        const key = pair[0] + " - " + val[0]
+        acc[key] = val[1]
+        return acc
+      }, {}, R.toPairs(pair[1])))
+    }),
+    R.flatten
+  )(obj)
+}
+
+function csvFromGroupedData(json) {
+  const header = _getHeader(json)
+
+  return R.pipe(
+    _getGroupedData,
     R.prepend(header),
     R.join("\r\n")
   )(json)

@@ -66,7 +66,7 @@ describe("transformer", function() {
       )
     })
 
-    xit("should format correctly when mutiple grouped data object is passed in", function() {
+    it("should format correctly when mutiple grouped data object is passed in", function() {
       const mockData = {
         Coldplay: {
           Parachutes: [{artist: "Coldplay", album: "Parachutes", title: "Shiver"}],
@@ -78,7 +78,7 @@ describe("transformer", function() {
       }
 
       expect(transformer.convertToCsv(["artist", "album"], false, false, mockData)).to.eql(
-        "artist,album,year\r\nColdplay - Parachutes\r\nColdplay,Parachutes,Shiver\r\nColdplay - X&Y\r\nColdplay,X&Y,Square One\r\nMuse - Showbiz\r\nMuse,Showbiz,Sunburn"
+        "artist,album,title\r\nColdplay - Parachutes\r\nColdplay,Parachutes,Shiver\r\nColdplay - X&Y\r\nColdplay,X&Y,Square One\r\nMuse - Showbiz\r\nMuse,Showbiz,Sunburn"
       )
     })
   })
