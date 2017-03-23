@@ -1,13 +1,35 @@
 const R = require("ramda")
 
-function csvFromArray(json) {
-  const header = R.keys(json[0]).join(",")
+function csvFromObject(json) {
+  return R.pipe(
+    R.toPairs,
+    R.map(R.join(",")),
+    R.join("\r\n")
+  )(json)
+}
+
+function _turnObjIntoCountArray(obj) {
+  return R.pipe(
+    R.toPairs,
+    R.map(function(pair) {
+      if (Array.isArray(pair[1])) return R.pipe(
+        R.map(function(count) {
+          const split = R.split(": ", count)
+          return pair[0] + " - " + split[0] + ": " + split[1]
+        })
+      )(pair[1])
+
+      return _turnObjIntoCountArray(pair[1])
+    }),
+    R.flatten
+  )(obj)
+}
+
+function csvFromCounts(json) {
+  if (!Array.isArray(json)) json = _turnObjIntoCountArray(json)
 
   return R.pipe(
-    R.map(function(row) {
-      return R.values(row).join(",")
-    }),
-    R.prepend(header),
+    R.map(R.compose(R.join(","), R.split(": "))),
     R.join("\r\n")
   )(json)
 }
@@ -26,17 +48,14 @@ function csvFromGroupedData(json) {
   )(json)
 }
 
-function csvFromObject(json) {
-  return R.pipe(
-    R.toPairs,
-    R.map(R.join(",")),
-    R.join("\r\n")
-  )(json)
-}
+function csvFromArray(json) {
+  const header = R.keys(json[0]).join(",")
 
-function csvFromCounts(json) {
   return R.pipe(
-    R.map(R.split(": ")),
+    R.map(function(row) {
+      return R.values(row).join(",")
+    }),
+    R.prepend(header),
     R.join("\r\n")
   )(json)
 }
