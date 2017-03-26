@@ -398,6 +398,29 @@ describe("formatter", function() {
         dateCreated: "date",
       }
 
+      it("should filter when operator is 'eq'", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "dateCreated", operator: "eq", value: "2016-07-11T17:16:27", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "123", dateCreated: "2016-07-11T17:16:27"},
+        ])
+      })
+
+      it("should filter when operator is 'neq'", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "dateCreated", operator: "neq", value: "2016-07-11T17:16:27", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "foo", dateCreated: "2016-09-11T17:16:27"},
+          {name: "bar", dateCreated: "2016-08-11T17:16:27"},
+          {name: "baz", dateCreated: "2016-06-11T17:16:27"},
+          {name: "abc", dateCreated: null},
+        ])
+      })
+
       it("should filter when operator is 'nl'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "nl", value: "", active: true},
@@ -421,9 +444,9 @@ describe("formatter", function() {
         ])
       })
 
-      it("should filter when operator is 'eq'", function() {
+      it("should filter when operator is 'sd'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
-          {name: "dateCreated", operator: "eq", value: "20160611", active: true},
+          {name: "dateCreated", operator: "sd", value: "20160611", active: true},
         ])
 
         expect(res).to.eql([

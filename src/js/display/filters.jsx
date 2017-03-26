@@ -37,7 +37,9 @@ const filterConfig = {
     {text: "Is false", value: "false"},
   ],
   date: [
-    {text: "Is same day as", value: "eq", inputs: [dateInput]},
+    {text: "Equal to", value: "eq", inputs: [defaultInput]},
+    {text: "Not equal to", value: "neq", inputs: [defaultInput]},
+    {text: "Is same day as", value: "sd", inputs: [dateInput]},
     {text: "Is before", value: "be", inputs: [dateInput]},
     {text: "Is after", value: "af", inputs: [dateInput]},
     {text: "Is between", value: "btw", inputs: [dateInput, dateInput]},
