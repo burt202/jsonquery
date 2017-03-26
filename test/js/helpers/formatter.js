@@ -466,6 +466,19 @@ describe("formatter", function() {
         ])
       })
 
+      it("should filter when operator is 'be' for datetime string", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "dateCreated", operator: "be", value: "20160811 1800", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "bar", dateCreated: "2016-08-11T17:16:27"},
+          {name: "baz", dateCreated: "2016-06-11T17:16:27"},
+          {name: "abc", dateCreated: null},
+          {name: "123", dateCreated: "2016-07-11T17:16:27"},
+        ])
+      })
+
       it("should filter when operator is 'af'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "af", value: "20160712", active: true},
@@ -477,6 +490,18 @@ describe("formatter", function() {
         ])
       })
 
+      it("should filter when operator is 'af' for datetime string", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "dateCreated", operator: "af", value: "20160711 0345", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "foo", dateCreated: "2016-09-11T17:16:27"},
+          {name: "bar", dateCreated: "2016-08-11T17:16:27"},
+          {name: "123", dateCreated: "2016-07-11T17:16:27"},
+        ])
+      })
+
       it("should filter when operator is 'btw'", function() {
         const res = formatter.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "btw", value: "20160712", value1: "20160910", active: true},
@@ -484,6 +509,18 @@ describe("formatter", function() {
 
         expect(res).to.eql([
           {name: "bar", dateCreated: "2016-08-11T17:16:27"},
+        ])
+      })
+
+      it("should filter when operator is 'btw' for datetime strings", function() {
+        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+          {name: "dateCreated", operator: "btw", value: "20160711 0345", value1: "20160911 1854", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "foo", dateCreated: "2016-09-11T17:16:27"},
+          {name: "bar", dateCreated: "2016-08-11T17:16:27"},
+          {name: "123", dateCreated: "2016-07-11T17:16:27"},
         ])
       })
     })

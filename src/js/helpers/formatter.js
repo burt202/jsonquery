@@ -113,13 +113,13 @@ function addDateFilter(filter) {
     if (filter.operator === "eq") acc[filter.name] = R.equals(filter.value)
     if (filter.operator === "neq") acc[filter.name] = R.compose(R.not, R.equals(filter.value))
 
-    if (filter.value.length === 8 && isValidDate(filter.value)) {
+    if (filter.value.length >= 8 && isValidDate(filter.value)) {
       if (filter.operator === "sd") acc[filter.name] = isSameDayAs(filter.value)
       if (filter.operator === "be") acc[filter.name] = isBefore(filter.value)
       if (filter.operator === "af") acc[filter.name] = isAfter(filter.value)
     }
 
-    if (filter.value1 && filter.value1.length === 8 && isValidDate(filter.value1)) {
+    if (filter.value1 && filter.value1.length >= 8 && isValidDate(filter.value1)) {
       if (filter.operator === "btw") acc[filter.name] = isBetweenDates(filter.value, filter.value1)
     }
   }

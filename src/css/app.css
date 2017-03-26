@@ -188,22 +188,33 @@ pre:hover a {
   display: inline-block;
 }
 
+.filter-controls {
+  display: flex;
+  align-items: flex-start;
+}
+
 .filter-controls select {
-  margin-right: 10px;
   width: 170px;
+  margin-right: 10px;
+}
+
+.filter-controls .inputs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .filter-controls input {
   width: 150px;
-  margin-right: 10px;
+  margin-bottom: 5px;
 }
 
-.filter-controls.int input, .filter-controls.date input {
+.filter-controls.int input {
   width: 100px;
 }
 
 .filter-controls input:last-of-type {
-  margin-right: 0;
+  margin-bottom: 0;
 }
 
 .download-links a:not(:last-child) {

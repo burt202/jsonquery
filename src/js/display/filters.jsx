@@ -4,6 +4,7 @@ var classNames = require("classnames")
 
 const defaultInput = {}
 const dateInput = {placeholder: "YYYYMMDD", maxLength: 8}
+const dateTimeInput = {placeholder: "YYYYMMDD (hhmm)", maxLength: 13}
 const separateWithCommaInput = {placeholder: "separate with comma"}
 const regexInput = {placeholder: "enter regex here"}
 
@@ -40,9 +41,9 @@ const filterConfig = {
     {text: "Equal to", value: "eq", inputs: [defaultInput]},
     {text: "Not equal to", value: "neq", inputs: [defaultInput]},
     {text: "Is same day as", value: "sd", inputs: [dateInput]},
-    {text: "Is before", value: "be", inputs: [dateInput]},
-    {text: "Is after", value: "af", inputs: [dateInput]},
-    {text: "Is between", value: "btw", inputs: [dateInput, dateInput]},
+    {text: "Is before", value: "be", inputs: [dateTimeInput]},
+    {text: "Is after", value: "af", inputs: [dateTimeInput]},
+    {text: "Is between", value: "btw", inputs: [dateTimeInput, dateTimeInput]},
     {text: "Is null", value: "nl"},
     {text: "Is not null", value: "nnl"},
   ],
@@ -98,7 +99,9 @@ const Filters = React.createClass({
         <select name={filter.name} value={filter.operator} onChange={this.updateFilter.bind(this, filter.name, "operator")}>
           {options}
         </select>
-        {inputs}
+        <div className="inputs">
+          {inputs}
+        </div>
       </div>
     )
   },
