@@ -11,8 +11,8 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "clipboard": "^1.6.0",
+    "date-fns": "^1.28.1",
     "flux": "^2.1.1",
-    "moment": "^2.14.1",
     "query-string": "^4.3.2",
     "ramda": "^0.23.0",
     "react": "^15.0.1",

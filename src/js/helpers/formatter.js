@@ -1,25 +1,31 @@
 const R = require("ramda")
-const moment = require("moment")
+
+const parse = require("date-fns/parse")
+const isValid = require("date-fns/is_valid")
+const isDateBefore = require("date-fns/is_before")
+const isDateAfter = require("date-fns/is_after")
+const isWithinRange = require("date-fns/is_within_range")
+const isSameDay = require("date-fns/is_same_day")
+
+function isValidDate(date) {
+  return isValid(parse(date))
+}
 
 const isSameDayAs = R.curry(function(filterValue, dataValue) {
-  return moment(dataValue).isSame(filterValue, "day")
+  return isSameDay(filterValue, dataValue)
 })
 
 const isBefore = R.curry(function(filterValue, dataValue) {
-  return moment(dataValue).isBefore(filterValue)
+  return isDateBefore(dataValue, filterValue)
 })
 
 const isAfter = R.curry(function(filterValue, dataValue) {
-  return moment(dataValue).isAfter(filterValue)
+  return isDateAfter(dataValue, filterValue)
 })
 
 const isBetweenDates = R.curry(function(start, end, dataValue) {
-  return moment(dataValue).isBetween(start, end)
+  return isWithinRange(dataValue, start, end)
 })
-
-function isValidDate(date) {
-  return moment(date, "YYYYMMDD").isValid()
-}
 
 const isOneOf = R.curry(function(filterValue, dataValue) {
   dataValue = (!R.isNil(dataValue)) ? dataValue.toString() : ""

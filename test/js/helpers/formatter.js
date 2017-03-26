@@ -461,6 +461,7 @@ describe("formatter", function() {
 
         expect(res).to.eql([
           {name: "baz", dateCreated: "2016-06-11T17:16:27"},
+          {name: "abc", dateCreated: null},
           {name: "123", dateCreated: "2016-07-11T17:16:27"},
         ])
       })
