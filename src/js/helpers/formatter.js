@@ -195,10 +195,11 @@ module.exports = {
     return _group(groupings, showCounts, data)
   },
 
-  sort: function(sortBy, sortDirection, data) {
-    const sorted = R.sortBy(R.prop(sortBy), data)
-    if (sortDirection === "desc") return R.reverse(sorted)
-    return sorted
+  sort: function(sorters, data) {
+    return R.sortWith(R.map(function(sorter) {
+      const direction = (sorter.direction === "asc") ? "ascend" : "descend"
+      return R[direction](R.prop(sorter.by))
+    }, sorters), data)
   },
 
   getGroupStats: function(grouped) {

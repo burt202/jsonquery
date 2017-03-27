@@ -7,9 +7,9 @@ describe("formatter", function() {
 
   describe("filter", function() {
     const mockDataForFiltering = [
-      {name: "foo", type: "cash", deleted: true},
-      {name: "bar", type: "cash", deleted: false},
-      {name: "baz", type: "loan", deleted: true},
+      {name: "foo", type: "cash", num: 1, deleted: true},
+      {name: "bar", type: "cash", num: 2, deleted: false},
+      {name: "baz", type: "loan", num: 3, deleted: true},
     ]
 
     const mockSchema = {
@@ -30,7 +30,7 @@ describe("formatter", function() {
       ])
 
       expect(res).to.eql([
-        {name: "bar", type: "cash", deleted: false},
+        {name: "bar", type: "cash", num: 2, deleted: false},
       ])
     })
 
@@ -41,8 +41,8 @@ describe("formatter", function() {
       ])
 
       expect(res).to.eql([
-        {name: "foo", type: "cash", deleted: true},
-        {name: "bar", type: "cash", deleted: false},
+        {name: "foo", type: "cash", num: 1, deleted: true},
+        {name: "bar", type: "cash", num: 2, deleted: false},
       ])
     })
 
@@ -756,24 +756,49 @@ describe("formatter", function() {
 
   describe("sort", function() {
     const mockDataForSorting = [
-      {name: "foo", num: 2},
-      {name: "bar", num: 1},
-      {name: "baz", num: 3},
+      {artist: "Coldplay", album: "Parachutes", trackNo: 2},
+      {artist: "Coldplay", album: "A Rush Of Blood", trackNo: 3},
+      {artist: "Coldplay", album: "A Rush Of Blood", trackNo: 1},
+      {artist: "Coldplay", album: "Parachutes", trackNo: 5},
+      {artist: "Coldplay", album: "Parachutes", trackNo: 1},
     ]
 
     it("should sort the data in ascending order", function() {
-      expect(formatter.sort("num", "asc", mockDataForSorting)).to.eql([
-        {name: "bar", num: 1},
-        {name: "foo", num: 2},
-        {name: "baz", num: 3},
+      const sorters = [{by: "trackNo", direction: "asc"}]
+
+      expect(formatter.sort(sorters, mockDataForSorting)).to.eql([
+        {artist: "Coldplay", album: "A Rush Of Blood", trackNo: 1},
+        {artist: "Coldplay", album: "Parachutes", trackNo: 1},
+        {artist: "Coldplay", album: "Parachutes", trackNo: 2},
+        {artist: "Coldplay", album: "A Rush Of Blood", trackNo: 3},
+        {artist: "Coldplay", album: "Parachutes", trackNo: 5},
       ])
     })
 
     it("should sort the data in descending order", function() {
-      expect(formatter.sort("num", "desc", mockDataForSorting)).to.eql([
-        {name: "baz", num: 3},
-        {name: "foo", num: 2},
-        {name: "bar", num: 1},
+      const sorters = [{by: "trackNo", direction: "desc"}]
+
+      expect(formatter.sort(sorters, mockDataForSorting)).to.eql([
+        {artist: "Coldplay", album: "Parachutes", trackNo: 5},
+        {artist: "Coldplay", album: "A Rush Of Blood", trackNo: 3},
+        {artist: "Coldplay", album: "Parachutes", trackNo: 2},
+        {artist: "Coldplay", album: "A Rush Of Blood", trackNo: 1},
+        {artist: "Coldplay", album: "Parachutes", trackNo: 1},
+      ])
+    })
+
+    it("should sort the data using multiple sorts", function() {
+      const sorters = [
+        {by: "album", direction: "asc"},
+        {by: "trackNo", direction: "asc"},
+      ]
+
+      expect(formatter.sort(sorters, mockDataForSorting)).to.eql([
+        {artist: "Coldplay", album: "A Rush Of Blood", trackNo: 1},
+        {artist: "Coldplay", album: "A Rush Of Blood", trackNo: 3},
+        {artist: "Coldplay", album: "Parachutes", trackNo: 1},
+        {artist: "Coldplay", album: "Parachutes", trackNo: 2},
+        {artist: "Coldplay", album: "Parachutes", trackNo: 5},
       ])
     })
   })

@@ -36,7 +36,8 @@ const Display = React.createClass({
   },
 
   sortResults: function(data) {
-    return (this.props.sortBy) ? formatter.sort(this.props.sortBy, this.props.sortDirection, data) : data
+    const sorters = [{by: this.props.sortBy, direction: this.props.sortDirection}]
+    return (this.props.sortBy) ? formatter.sort(sorters, data) : data
   },
 
   limitResults: function(data) {
