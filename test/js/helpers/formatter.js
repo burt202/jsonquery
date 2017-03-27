@@ -34,6 +34,17 @@ describe("formatter", function() {
       ])
     })
 
+    xit("should filter on the same field multiple times", function() {
+      const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        {name: "num", value: "1,2", operator: "iof", active: true},
+        {name: "num", value: "3", operator: "lt", active: true},
+      ])
+
+      expect(res).to.eql([
+        {name: "bar", type: "cash", num: 2, deleted: false},
+      ])
+    })
+
     it("should ignore inactive filters", function() {
       const res = formatter.filter(mockDataForFiltering, mockSchema, [
         {name: "type", value: "cash", operator: "eq", active: true},
