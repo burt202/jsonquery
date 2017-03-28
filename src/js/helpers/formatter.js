@@ -54,97 +54,87 @@ function getMin(arr) {
   return Math.min.apply(null, arr)
 }
 
-function addStringFilter(filter) {
-  const acc = {}
-
+function getStringFilter(filter) {
   if (filter.value && filter.value.length) {
-    if (filter.operator === "eq") acc[filter.name] = R.equals(filter.value)
-    if (filter.operator === "neq") acc[filter.name] = R.compose(R.not, R.equals(filter.value))
-    if (filter.operator === "iof") acc[filter.name] = isOneOf(filter.value)
-    if (filter.operator === "inof") acc[filter.name] = R.compose(R.not, isOneOf(filter.value))
-    if (filter.operator === "rgm") acc[filter.name] = matches(filter.value)
+    if (filter.operator === "eq") return R.equals(filter.value)
+    if (filter.operator === "neq") return R.compose(R.not, R.equals(filter.value))
+    if (filter.operator === "iof") return isOneOf(filter.value)
+    if (filter.operator === "inof") return R.compose(R.not, isOneOf(filter.value))
+    if (filter.operator === "rgm") return matches(filter.value)
   }
 
-  if (filter.operator === "nl") acc[filter.name] = R.isNil
-  if (filter.operator === "nnl") acc[filter.name] = R.compose(R.not, R.isNil)
+  if (filter.operator === "nl") return R.isNil
+  if (filter.operator === "nnl") return R.compose(R.not, R.isNil)
 
-  return acc
+  return null
 }
 
-function addIntFilter(filter) {
-  const acc = {}
-
+function getIntFilter(filter) {
   if (filter.value && filter.value.length) {
-    if (filter.operator === "eq") acc[filter.name] = R.equals(parseFloat(filter.value))
-    if (filter.operator === "neq") acc[filter.name] = R.compose(R.not, R.equals(parseFloat(filter.value)))
-    if (filter.operator === "gt") acc[filter.name] = R.gt(R.__, parseFloat(filter.value))
-    if (filter.operator === "gte") acc[filter.name] = R.gte(R.__, parseFloat(filter.value))
-    if (filter.operator === "lt") acc[filter.name] = R.lt(R.__, parseFloat(filter.value))
-    if (filter.operator === "lte") acc[filter.name] = R.lte(R.__, parseFloat(filter.value))
-    if (filter.operator === "iof") acc[filter.name] = isOneOf(filter.value)
-    if (filter.operator === "inof") acc[filter.name] = R.compose(R.not, isOneOf(filter.value))
+    if (filter.operator === "eq") return R.equals(parseFloat(filter.value))
+    if (filter.operator === "neq") return R.compose(R.not, R.equals(parseFloat(filter.value)))
+    if (filter.operator === "gt") return R.gt(R.__, parseFloat(filter.value))
+    if (filter.operator === "gte") return R.gte(R.__, parseFloat(filter.value))
+    if (filter.operator === "lt") return R.lt(R.__, parseFloat(filter.value))
+    if (filter.operator === "lte") return R.lte(R.__, parseFloat(filter.value))
+    if (filter.operator === "iof") return isOneOf(filter.value)
+    if (filter.operator === "inof") return R.compose(R.not, isOneOf(filter.value))
 
     if (filter.value1 && filter.value1.length) {
-      if (filter.operator === "btw") acc[filter.name] = isBetween(parseFloat(filter.value), parseFloat(filter.value1))
+      if (filter.operator === "btw") return isBetween(parseFloat(filter.value), parseFloat(filter.value1))
     }
   }
 
-  if (filter.operator === "nl") acc[filter.name] = R.isNil
-  if (filter.operator === "nnl") acc[filter.name] = R.compose(R.not, R.isNil)
+  if (filter.operator === "nl") return R.isNil
+  if (filter.operator === "nnl") return R.compose(R.not, R.isNil)
 
-  return acc
+  return null
 }
 
-function addBoolFilter(filter) {
-  const acc = {}
+function getBoolFilter(filter) {
+  if (filter.operator === "nl") return R.isNil
+  if (filter.operator === "nnl") return R.compose(R.not, R.isNil)
+  if (filter.operator === "true") return R.equals(true)
+  if (filter.operator === "false") return R.equals(false)
 
-  if (filter.operator === "nl") acc[filter.name] = R.isNil
-  if (filter.operator === "nnl") acc[filter.name] = R.compose(R.not, R.isNil)
-  if (filter.operator === "true") acc[filter.name] = R.equals(true)
-  if (filter.operator === "false") acc[filter.name] = R.equals(false)
-
-  return acc
+  return null
 }
 
-function addDateFilter(filter) {
-  const acc = {}
-
+function getDateFilter(filter) {
   if (filter.value && filter.value.length) {
-    if (filter.operator === "eq") acc[filter.name] = R.equals(filter.value)
-    if (filter.operator === "neq") acc[filter.name] = R.compose(R.not, R.equals(filter.value))
+    if (filter.operator === "eq") return R.equals(filter.value)
+    if (filter.operator === "neq") return R.compose(R.not, R.equals(filter.value))
 
     if (filter.value.length >= 8 && isValidDate(filter.value)) {
-      if (filter.operator === "sd") acc[filter.name] = isSameDayAs(filter.value)
-      if (filter.operator === "be") acc[filter.name] = isBefore(filter.value)
-      if (filter.operator === "af") acc[filter.name] = isAfter(filter.value)
+      if (filter.operator === "sd") return isSameDayAs(filter.value)
+      if (filter.operator === "be") return isBefore(filter.value)
+      if (filter.operator === "af") return isAfter(filter.value)
     }
 
     if (filter.value1 && filter.value1.length >= 8 && isValidDate(filter.value1)) {
-      if (filter.operator === "btw") acc[filter.name] = isBetweenDates(filter.value, filter.value1)
+      if (filter.operator === "btw") return isBetweenDates(filter.value, filter.value1)
     }
   }
 
-  if (filter.operator === "nl") acc[filter.name] = R.isNil
-  if (filter.operator === "nnl") acc[filter.name] = R.compose(R.not, R.isNil)
+  if (filter.operator === "nl") return R.isNil
+  if (filter.operator === "nnl") return R.compose(R.not, R.isNil)
 
-  return acc
+  return null
 }
 
-function addArrayFilter(filter) {
-  const acc = {}
-
+function getArrayFilter(filter) {
   if (filter.value && filter.value.length) {
-    if (filter.operator === "cos") acc[filter.name] = R.contains(filter.value)
-    if (filter.operator === "con") acc[filter.name] = R.contains(parseFloat(filter.value))
-    if (filter.operator === "hl") acc[filter.name] = R.compose(R.equals(parseInt(filter.value, 10)), R.length)
-    if (filter.operator === "dhl") acc[filter.name] = R.compose(R.not, R.equals(parseInt(filter.value, 10)), R.length)
-    if (filter.operator === "hlgt") acc[filter.name] = R.compose(R.gt(R.__, parseInt(filter.value, 10)), R.length)
-    if (filter.operator === "hlgte") acc[filter.name] = R.compose(R.gte(R.__, parseInt(filter.value, 10)), R.length)
-    if (filter.operator === "hllt") acc[filter.name] = R.compose(R.lt(R.__, parseInt(filter.value, 10)), R.length)
-    if (filter.operator === "hllte") acc[filter.name] = R.compose(R.lte(R.__, parseInt(filter.value, 10)), R.length)
+    if (filter.operator === "cos") return R.contains(filter.value)
+    if (filter.operator === "con") return R.contains(parseFloat(filter.value))
+    if (filter.operator === "hl") return R.compose(R.equals(parseInt(filter.value, 10)), R.length)
+    if (filter.operator === "dhl") return R.compose(R.not, R.equals(parseInt(filter.value, 10)), R.length)
+    if (filter.operator === "hlgt") return R.compose(R.gt(R.__, parseInt(filter.value, 10)), R.length)
+    if (filter.operator === "hlgte") return R.compose(R.gte(R.__, parseInt(filter.value, 10)), R.length)
+    if (filter.operator === "hllt") return R.compose(R.lt(R.__, parseInt(filter.value, 10)), R.length)
+    if (filter.operator === "hllte") return R.compose(R.lte(R.__, parseInt(filter.value, 10)), R.length)
   }
 
-  return acc
+  return null
 }
 
 const _sortAndCount = R.pipe(
@@ -172,23 +162,39 @@ const _getGroupLengths = R.pipe(
   R.flatten
 )
 
+function formatFilters(filters) {
+  return R.pipe(
+    R.toPairs,
+    R.reduce(function(acc, pair) {
+      acc[pair[0]] = R.allPass(pair[1])
+      return acc
+    }, {})
+  )(filters)
+}
+
 module.exports = {
   filter: function(data, schema, filters) {
     const builtFilters = R.reduce(function(acc, filter) {
       if (!filter.active) return acc
 
       const type = schema[filter.name]
+      let filterMethod
 
-      if (type === "string") acc = R.merge(acc, addStringFilter(filter))
-      if (type === "int") acc = R.merge(acc, addIntFilter(filter))
-      if (type === "bool") acc = R.merge(acc, addBoolFilter(filter))
-      if (type === "date") acc = R.merge(acc, addDateFilter(filter))
-      if (type === "array") acc = R.merge(acc, addArrayFilter(filter))
+      if (type === "string") filterMethod = getStringFilter(filter)
+      if (type === "int") filterMethod = getIntFilter(filter)
+      if (type === "bool") filterMethod = getBoolFilter(filter)
+      if (type === "date") filterMethod = getDateFilter(filter)
+      if (type === "array") filterMethod = getArrayFilter(filter)
+
+      if (filterMethod) {
+        if (!acc[filter.name]) acc[filter.name] = []
+        acc[filter.name].push(filterMethod)
+      }
 
       return acc
     }, {}, filters)
 
-    return R.filter(R.where(builtFilters), data)
+    return R.filter(R.where(formatFilters(builtFilters)), data)
   },
 
   group: function(groupings, showCounts, data) {

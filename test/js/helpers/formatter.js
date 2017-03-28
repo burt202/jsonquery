@@ -15,6 +15,7 @@ describe("formatter", function() {
     const mockSchema = {
       type: "string",
       deleted: "bool",
+      num: "int",
     }
 
     it("should not filter anything if no filters are defined", function() {
@@ -34,14 +35,14 @@ describe("formatter", function() {
       ])
     })
 
-    xit("should filter on the same field multiple times", function() {
+    it("should filter on the same field multiple times", function() {
       const res = formatter.filter(mockDataForFiltering, mockSchema, [
         {name: "num", value: "1,2", operator: "iof", active: true},
-        {name: "num", value: "3", operator: "lt", active: true},
+        {name: "num", value: "2", operator: "lt", active: true},
       ])
 
       expect(res).to.eql([
-        {name: "bar", type: "cash", num: 2, deleted: false},
+        {name: "foo", type: "cash", num: 1, deleted: true},
       ])
     })
 
@@ -55,6 +56,14 @@ describe("formatter", function() {
         {name: "foo", type: "cash", num: 1, deleted: true},
         {name: "bar", type: "cash", num: 2, deleted: false},
       ])
+    })
+
+    it("should ignore invalid operators", function() {
+      const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        {name: "type", value: "cash", operator: "xxx", active: true},
+      ])
+
+      expect(res).to.eql(mockDataForFiltering)
     })
 
     describe("string", function() {
