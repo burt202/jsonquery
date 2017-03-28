@@ -17,7 +17,14 @@ const Controls = React.createClass({
     average: React.PropTypes.string,
   },
 
+  getInitialState: function() {
+    return {
+      lastFilteredAddedAt: null,
+    }
+  },
+
   onAddFilter: function(e) {
+    this.setState({lastFilteredAddedAt: Date.now()})
     this.props.actionCreator.addFilter(e.target.value)
   },
 
@@ -50,12 +57,7 @@ const Controls = React.createClass({
   },
 
   getFilterOptions: function() {
-    const filterOptions = R.pipe(
-      R.keys,
-      R.without(R.pluck("name", this.props.filters))
-    )(this.props.schema)
-
-    return filterOptions.map(function(value) {
+    return Object.keys(this.props.schema).map(function(value) {
       return (
         <option value={value} key={value}>{value}</option>
       )
@@ -68,7 +70,7 @@ const Controls = React.createClass({
         <label>Add Filter:</label>
         <div className="body">
           <div className="row">
-            <select onChange={this.onAddFilter}>
+            <select onChange={this.onAddFilter} key={this.state.lastFilteredAddedAt}>
               <option></option>
               {this.getFilterOptions()}
             </select>
