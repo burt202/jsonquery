@@ -178,7 +178,7 @@ module.exports = {
       if (!filter.active) return acc
 
       const type = schema[filter.name]
-      let filterMethod
+      var filterMethod = null
 
       if (type === "string") filterMethod = getStringFilter(filter)
       if (type === "int") filterMethod = getIntFilter(filter)
