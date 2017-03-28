@@ -1,4 +1,5 @@
 const R = require("ramda")
+const uuid = require("uuid")
 const createStore = require("./helpers/store-base")
 
 const defaults = {
@@ -46,19 +47,19 @@ const handlers = {
     const operator = initialOperators[filterType] || "eq"
 
     return R.merge(contents, {
-      filters: R.append({name: payload.name, value: "", operator: operator, active: true}, contents.filters),
+      filters: R.append({id: uuid.v4(), name: payload.name, value: "", operator: operator, active: true}, contents.filters),
     })
   },
 
   deleteFilter: function(contents, payload) {
     return R.merge(contents, {
-      filters: R.reject(R.propEq("name", payload.name), contents.filters),
+      filters: R.reject(R.propEq("id", payload.id), contents.filters),
     })
   },
 
   updateFilter: function(contents, payload) {
     return R.merge(contents, {
-      filters: updateWhere({name: payload.name}, payload.value, contents.filters),
+      filters: updateWhere({id: payload.id}, payload.value, contents.filters),
     })
   },
 
@@ -92,7 +93,7 @@ const handlers = {
 
   removeGrouping: function(contents, payload) {
     const toMerge = {
-      groupings: R.without([payload.name], contents.groupings),
+      groupings: R.without([payload.name], contents.groupings || []),
     }
 
     if (!toMerge.groupings.length) toMerge.showCounts = false
@@ -130,8 +131,8 @@ const handlers = {
     })
   },
 
-  goBack: function(contents) {
-    return R.merge(contents, defaults)
+  goBack: function() {
+    return defaults
   },
 
   showCounts: function(contents, payload) {

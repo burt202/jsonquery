@@ -23,24 +23,24 @@ module.exports = {
     })
   },
 
-  deleteFilter: function(name) {
+  deleteFilter: function(id) {
     dispatcher.dispatch({
       name: "deleteFilter",
-      value: {name: name},
+      value: {id: id},
     })
   },
 
-  toggleFilter: function(name, active) {
+  toggleFilter: function(id, active) {
     dispatcher.dispatch({
       name: "updateFilter",
-      value: {name: name, value: {active: active}},
+      value: {id: id, value: {active: active}},
     })
   },
 
-  updateFilter: function(name, value) {
+  updateFilter: function(id, value) {
     dispatcher.dispatch({
       name: "updateFilter",
-      value: {name: name, value: value},
+      value: {id: id, value: value},
     })
   },
 

@@ -14,6 +14,10 @@ module.exports = function(defaults, handlers) {
       contents = defaults
     },
 
+    setState: function(state) {
+      contents = state
+    },
+
     getState: function() {
       return contents
     },

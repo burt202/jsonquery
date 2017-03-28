@@ -83,11 +83,11 @@ const Filters = React.createClass({
         const inc = (index) ? index : ""
 
         return React.createElement("input", R.merge({
-          key: filter.name + inc,
+          key: filter.id + inc,
           type: "text",
-          name: filter.name + inc,
+          name: filter.id + inc,
           value: filter["value" + inc] || "",
-          onChange: this.updateFilter.bind(this, filter.name, "value" + inc),
+          onChange: this.updateFilter.bind(this, filter.id, "value" + inc),
         }, inputConfig))
       }.bind(this))
     }
@@ -96,7 +96,7 @@ const Filters = React.createClass({
 
     return (
       <div className={classnames}>
-        <select name={filter.name} value={filter.operator} onChange={this.updateFilter.bind(this, filter.name, "operator")}>
+        <select name={filter.id} value={filter.operator} onChange={this.updateFilter.bind(this, filter.id, "operator")}>
           {options}
         </select>
         <div className="inputs">
@@ -116,30 +116,30 @@ const Filters = React.createClass({
       const toggleClass = (filter.active) ? "active" : "inactive"
 
       return (
-        <tr key={filter.name} className={toggleClass}>
+        <tr key={filter.id} className={toggleClass}>
           <td>{filter.name}</td>
           <td>{this.getInputControlByType(this.props.schema[filter.name], filter)}</td>
-          <td><a className="site-link" onClick={this.toggleFilter} data-name={filter.name} data-active={filter.active}>Toggle</a></td>
-          <td><a className="site-link" onClick={this.deleteFilter} data-name={filter.name}>Remove</a></td>
+          <td><a className="site-link" onClick={this.toggleFilter} data-id={filter.id} data-active={filter.active}>Toggle</a></td>
+          <td><a className="site-link" onClick={this.deleteFilter} data-id={filter.id}>Remove</a></td>
         </tr>
       )
     }.bind(this))
   },
 
   toggleFilter: function(e) {
-    const name = e.target.dataset.name
+    const id = e.target.dataset.id
     const active = e.target.dataset.active === "true"
-    this.props.actionCreator.toggleFilter(name, !active)
+    this.props.actionCreator.toggleFilter(id, !active)
   },
 
   deleteFilter: function(e) {
-    this.props.actionCreator.deleteFilter(e.target.dataset.name)
+    this.props.actionCreator.deleteFilter(e.target.dataset.id)
   },
 
-  updateFilter: function(name, prop, e) {
+  updateFilter: function(id, prop, e) {
     const toUpdate = {}
     toUpdate[prop] = e.target.value
-    this.props.actionCreator.updateFilter(name, toUpdate)
+    this.props.actionCreator.updateFilter(id, toUpdate)
   },
 
   render: function() {

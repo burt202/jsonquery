@@ -20,11 +20,6 @@ describe("store", function() {
       sum: null,
       average: null,
     })
-
-    dispatcher.dispatch({
-      name: "saveJson",
-      value: {name: "schema", data: {foo: "string"}},
-    })
   })
 
   afterEach(function() {
@@ -33,6 +28,11 @@ describe("store", function() {
 
   describe("saveJson", function() {
     it("should save json under the passed prop name", function() {
+      dispatcher.dispatch({
+        name: "saveJson",
+        value: {name: "schema", data: {foo: "string"}},
+      })
+
       expect(store.getState().schema).to.eql({foo: "string"})
     })
   })
@@ -55,24 +55,30 @@ describe("store", function() {
         value: {name: "foo"},
       })
 
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq", active: true}])
+      const filters = store.getState().filters
+      expect(filters.length).to.eql(1)
+
+      const filterJustAdded = filters[0]
+
+      expect(filterJustAdded.id).to.be.a("string")
+      delete filterJustAdded.id
+
+      expect(filterJustAdded).to.eql({name: "foo", value: "", operator: "eq", active: true})
     })
   })
 
   describe("deleteFilter", function() {
     beforeEach(function() {
-      dispatcher.dispatch({
-        name: "addFilter",
-        value: {name: "foo"},
-      })
+      store.setState({filters: [{id: 1, name: "foo", value: "", operator: "eq", active: true}]})
     })
 
     it("should delete filter", function() {
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq", active: true}])
+      expect(store.getState().filters.length).to.eql(1)
+      expect(store.getState().filters[0].name).to.eql("foo")
 
       dispatcher.dispatch({
         name: "deleteFilter",
-        value: {name: "foo"},
+        value: {id: 1},
       })
 
       expect(store.getState().filters).to.eql([])
@@ -81,21 +87,20 @@ describe("store", function() {
 
   describe("updateFilter", function() {
     beforeEach(function() {
-      dispatcher.dispatch({
-        name: "addFilter",
-        value: {name: "foo"},
-      })
+      store.setState({filters: [{id: 1, name: "foo", value: "", operator: "eq", active: true}]})
     })
 
     it("should update filter", function() {
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq", active: true}])
+      expect(store.getState().filters.length).to.eql(1)
+      expect(store.getState().filters[0].value).to.eql("")
 
       dispatcher.dispatch({
         name: "updateFilter",
-        value: {name: "foo", value: {value: "bar"}},
+        value: {id: 1, value: {value: "bar"}},
       })
 
-      expect(store.getState().filters).to.eql([{name: "foo", value: "bar", operator: "eq", active: true}])
+      expect(store.getState().filters.length).to.eql(1)
+      expect(store.getState().filters[0].value).to.eql("bar")
     })
   })
 
@@ -112,26 +117,28 @@ describe("store", function() {
 
   describe("reset", function() {
     beforeEach(function() {
-      dispatcher.dispatch({
-        name: "addFilter",
-        value: {name: "foo"},
-      })
-
-      dispatcher.dispatch({
-        name: "addGrouping",
-        value: {name: "bar"},
-      })
-
-      dispatcher.dispatch({
-        name: "sortDirection",
-        value: {direction: "desc"},
+      store.setState({
+        filters: [{id: 1, name: "foo", value: "", operator: "eq", active: true}],
+        groupings: ["bar"],
+        sortBy: "baz",
+        sortDirection: "desc",
+        limit: "aaa",
+        average: "bbb",
+        sum: "ccc",
+        showCounts: true,
       })
     })
 
     it("should reset filters, groupings and sortBy values to their defaults", function() {
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq", active: true}])
+      expect(store.getState().filters.length).to.eql(1)
+      expect(store.getState().filters[0].name).to.eql("foo")
       expect(store.getState().groupings).to.eql(["bar"])
+      expect(store.getState().sortBy).to.eql("baz")
       expect(store.getState().sortDirection).to.eql("desc")
+      expect(store.getState().limit).to.eql("aaa")
+      expect(store.getState().average).to.eql("bbb")
+      expect(store.getState().sum).to.eql("ccc")
+      expect(store.getState().showCounts).to.eql(true)
 
       dispatcher.dispatch({
         name: "reset",
@@ -140,28 +147,20 @@ describe("store", function() {
 
       expect(store.getState().filters).to.eql([])
       expect(store.getState().groupings).to.eql([])
-      expect(store.getState().groupings).to.eql([])
+      expect(store.getState().sortBy).to.eql(null)
+      expect(store.getState().sortDirection).to.eql("asc")
       expect(store.getState().limit).to.eql(null)
       expect(store.getState().average).to.eql(null)
       expect(store.getState().sum).to.eql(null)
-      expect(store.getState().sortDirection).to.eql("asc")
+      expect(store.getState().showCounts).to.eql(false)
     })
   })
 
   describe("addGrouping", function() {
     it("should add groupings and nullify sum and average", function() {
-      dispatcher.dispatch({
-        name: "sum",
-        value: {name: "bar"},
-      })
+      store.setState({sum: "bar", average: "baz"})
 
       expect(store.getState().sum).to.eql("bar")
-
-      dispatcher.dispatch({
-        name: "average",
-        value: {name: "baz"},
-      })
-
       expect(store.getState().average).to.eql("baz")
 
       dispatcher.dispatch({
@@ -175,10 +174,7 @@ describe("store", function() {
     })
 
     it("should ensure groupings field is included in results", function() {
-      dispatcher.dispatch({
-        name: "updateResultFields",
-        value: {fields: []},
-      })
+      store.setState({resultFields: []})
 
       expect(store.getState().resultFields).to.eql([])
 
@@ -192,10 +188,7 @@ describe("store", function() {
     })
 
     it("should make sure result fields array contains unique values", function() {
-      dispatcher.dispatch({
-        name: "updateResultFields",
-        value: {fields: ["foo", "bar"]},
-      })
+      store.setState({resultFields: ["foo", "bar"]})
 
       expect(store.getState().resultFields).to.eql(["foo", "bar"])
 
@@ -211,10 +204,7 @@ describe("store", function() {
 
   describe("removeGrouping", function() {
     it("should remove field from grouping", function() {
-      dispatcher.dispatch({
-        name: "addGrouping",
-        value: {name: "baz"},
-      })
+      store.setState({groupings: ["baz"]})
 
       expect(store.getState().groupings).to.eql(["baz"])
 
@@ -227,10 +217,7 @@ describe("store", function() {
     })
 
     it("should reset showCounts if groupings is deselected", function() {
-      dispatcher.dispatch({
-        name: "showCounts",
-        value: {showCounts: true},
-      })
+      store.setState({showCounts: true})
 
       expect(store.getState().showCounts).to.eql(true)
 
@@ -244,14 +231,7 @@ describe("store", function() {
   })
 
   describe("sortBy", function() {
-    it("should add sortBy prop", function() {
-      dispatcher.dispatch({
-        name: "addGrouping",
-        value: {name: "bar"},
-      })
-
-      expect(store.getState().groupings).to.eql(["bar"])
-
+    it("should add sortBy", function() {
       dispatcher.dispatch({
         name: "sortBy",
         value: {name: "foo"},
@@ -273,33 +253,8 @@ describe("store", function() {
   })
 
   describe("goBack", function() {
-    beforeEach(function() {
-      dispatcher.dispatch({
-        name: "addFilter",
-        value: {name: "foo"},
-      })
-
-      dispatcher.dispatch({
-        name: "addGrouping",
-        value: {name: "bar"},
-      })
-
-      dispatcher.dispatch({
-        name: "saveJson",
-        value: {name: "schema", data: "baz"},
-      })
-
-      dispatcher.dispatch({
-        name: "saveJson",
-        value: {name: "data", data: "abc"},
-      })
-    })
-
-    it("should reset filters and groupings values to their defaults", function() {
-      expect(store.getState().filters).to.eql([{name: "foo", value: "", operator: "eq", active: true}])
-      expect(store.getState().groupings).to.eql(["bar"])
-      expect(store.getState().schema).to.eql("baz")
-      expect(store.getState().data).to.eql("abc")
+    it("should reset everything to their defaults", function() {
+      store.setState({foo: "bar"})
 
       dispatcher.dispatch({
         name: "goBack",
@@ -335,18 +290,9 @@ describe("store", function() {
 
   describe("sum", function() {
     it("should add sum and nullify groupings and average", function() {
-      dispatcher.dispatch({
-        name: "addGrouping",
-        value: {name: "bar"},
-      })
+      store.setState({groupings: ["bar"], average: "baz"})
 
       expect(store.getState().groupings).to.eql(["bar"])
-
-      dispatcher.dispatch({
-        name: "average",
-        value: {name: "baz"},
-      })
-
       expect(store.getState().average).to.eql("baz")
 
       dispatcher.dispatch({
@@ -362,18 +308,9 @@ describe("store", function() {
 
   describe("average", function() {
     it("should add sum and nullify groupings and sum", function() {
-      dispatcher.dispatch({
-        name: "addGrouping",
-        value: {name: "bar"},
-      })
+      store.setState({groupings: ["bar"], sum: "baz"})
 
       expect(store.getState().groupings).to.eql(["bar"])
-
-      dispatcher.dispatch({
-        name: "sum",
-        value: {name: "baz"},
-      })
-
       expect(store.getState().sum).to.eql("baz")
 
       dispatcher.dispatch({
