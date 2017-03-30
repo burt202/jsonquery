@@ -11,85 +11,145 @@ describe("transformer", function() {
       expect(transformer.convertToCsv([], false, false, {})).to.eql(null)
     })
 
-    it("should format correctly when array is passed in", function() {
-      const mockData = [
-        {artist: "Coldplay", album: "Parachutes", title: "Shiver"},
-        {artist: "Coldplay", album: "X&Y", title: "Square One"},
-        {artist: "Muse", album: "Showbiz", title: "Sunburn"},
-      ]
+    describe("when sumed or averaged", function() {
+      it("should format correctly", function() {
+        const mockData = {
+          total: 20,
+        }
 
-      expect(transformer.convertToCsv([], false, false, mockData)).to.eql(
-        "artist,album,title\r\nColdplay,Parachutes,Shiver\r\nColdplay,X&Y,Square One\r\nMuse,Showbiz,Sunburn"
-      )
+        expect(transformer.convertToCsv([], false, true, mockData)).to.eql(
+          "total,20"
+        )
+      })
     })
 
-    it("should cope when there is array and a value with a comma", function() {
-      const mockData = [
-        {artist: "Tool", album: "10,000 Days", title: "Schism", genres: ["Rock", "Metal"]},
-      ]
+    describe("when grouped counts", function() {
+      it("should format correctly", function() {
+        const mockData = [
+          "Coldplay: 2",
+          "Muse: 1",
+        ]
 
-      expect(transformer.convertToCsv([], false, false, mockData)).to.eql(
-        "artist,album,title,genres\r\nTool,\"10,000 Days\",Schism,\"Rock,Metal\""
-      )
+        expect(transformer.convertToCsv(["artist"], true, false, mockData)).to.eql(
+          "Coldplay,2\r\nMuse,1"
+        )
+      })
+
+      it("should format correctly for mutiple", function() {
+        const mockData = {
+          Coldplay: ["Parachutes: 1", "X&Y: 1"],
+          Muse: ["Showbiz: 1"],
+        }
+
+        expect(transformer.convertToCsv(["artist", "album"], true, false, mockData)).to.eql(
+          "Coldplay - Parachutes,1\r\nColdplay - X&Y,1\r\nMuse - Showbiz,1"
+        )
+      })
+
+      it("should cope when the count field has a comma", function() {
+        const mockData = [
+          "10,000 Days: 2",
+          "Muse: 1",
+        ]
+
+        expect(transformer.convertToCsv(["artist"], true, false, mockData)).to.eql(
+          "\"10,000 Days\",2\r\nMuse,1"
+        )
+      })
     })
 
-    it("should format correctly when sumed or averaged", function() {
-      const mockData = {
-        total: 20,
-      }
+    describe("when grouped", function() {
 
-      expect(transformer.convertToCsv([], false, true, mockData)).to.eql(
-        "total,20"
-      )
+      it("should format correctly", function() {
+        const mockData = {
+          Coldplay: [{artist: "Coldplay", album: "Parachutes", title: "Shiver"}, {artist: "Coldplay", album: "X&Y", title: "Square One"}],
+          Muse: [{artist: "Muse", album: "Showbiz", title: "Sunburn"}],
+        }
+
+        expect(transformer.convertToCsv(["artist"], false, false, mockData)).to.eql(
+          "artist,album,title\r\nColdplay\r\nColdplay,Parachutes,Shiver\r\nColdplay,X&Y,Square One\r\nMuse\r\nMuse,Showbiz,Sunburn"
+        )
+      })
+
+      it("should format correctly for mutiple", function() {
+        const mockData = {
+          Coldplay: {
+            Parachutes: [{artist: "Coldplay", album: "Parachutes", title: "Shiver"}],
+            "X&Y": [{artist: "Coldplay", album: "X&Y", title: "Square One"}],
+          },
+          Muse: {
+            Showbiz: [{artist: "Muse", album: "Showbiz", title: "Sunburn"}],
+          },
+        }
+
+        expect(transformer.convertToCsv(["artist", "album"], false, false, mockData)).to.eql(
+          "artist,album,title\r\nColdplay - Parachutes\r\nColdplay,Parachutes,Shiver\r\nColdplay - X&Y\r\nColdplay,X&Y,Square One\r\nMuse - Showbiz\r\nMuse,Showbiz,Sunburn"
+        )
+      })
+
+      it("should cope when there is a string value with a comma", function() {
+        const mockData = {
+          Tool: [{artist: "Tool", album: "10,000 Days", title: "Schism"}],
+        }
+
+        expect(transformer.convertToCsv(["artist"], false, false, mockData)).to.eql(
+          "artist,album,title\r\nTool\r\nTool,\"10,000 Days\",Schism"
+        )
+      })
+
+      it("should cope when there is an array value", function() {
+        const mockData = {
+          Coldplay: [{artist: "Coldplay", album: "Parachutes", title: "Shiver", genres: ["Rock", "Indie"]}],
+        }
+
+        expect(transformer.convertToCsv(["artist"], false, false, mockData)).to.eql(
+          "artist,album,title,genres\r\nColdplay\r\nColdplay,Parachutes,Shiver,\"Rock,Indie\""
+        )
+      })
+
+      it("should cope when there is a group heading value with a comma", function() {
+        const mockData = {
+          "10,000 Days": [{artist: "Tool", album: "10,000 Days", title: "Schism"}],
+        }
+
+        expect(transformer.convertToCsv(["artist"], false, false, mockData)).to.eql(
+          "artist,album,title\r\n\"10,000 Days\"\r\nTool,\"10,000 Days\",Schism"
+        )
+      })
     })
 
-    it("should format correctly when grouped data counts is passed in", function() {
-      const mockData = [
-        "Coldplay: 2",
-        "Muse: 1",
-      ]
+    describe("when array", function() {
+      it("should format correctly", function() {
+        const mockData = [
+          {artist: "Coldplay", album: "Parachutes", title: "Shiver"},
+          {artist: "Coldplay", album: "X&Y", title: "Square One"},
+          {artist: "Muse", album: "Showbiz", title: "Sunburn"},
+        ]
 
-      expect(transformer.convertToCsv(["artist"], true, false, mockData)).to.eql(
-        "Coldplay,2\r\nMuse,1"
-      )
-    })
+        expect(transformer.convertToCsv([], false, false, mockData)).to.eql(
+          "artist,album,title\r\nColdplay,Parachutes,Shiver\r\nColdplay,X&Y,Square One\r\nMuse,Showbiz,Sunburn"
+        )
+      })
 
-    it("should format correctly when mutiple grouped data counts is passed in", function() {
-      const mockData = {
-        Coldplay: ["Parachutes: 1", "X&Y: 1"],
-        Muse: ["Showbiz: 1"],
-      }
+      it("should cope when there is a string value with a comma", function() {
+        const mockData = [
+          {artist: "Tool", album: "10,000 Days", title: "Schism"},
+        ]
 
-      expect(transformer.convertToCsv(["artist", "album"], true, false, mockData)).to.eql(
-        "Coldplay - Parachutes,1\r\nColdplay - X&Y,1\r\nMuse - Showbiz,1"
-      )
-    })
+        expect(transformer.convertToCsv([], false, false, mockData)).to.eql(
+          "artist,album,title\r\nTool,\"10,000 Days\",Schism"
+        )
+      })
 
-    it("should format correctly when grouped data object is passed in", function() {
-      const mockData = {
-        Coldplay: [{artist: "Coldplay", album: "Parachutes", title: "Shiver"}, {artist: "Coldplay", album: "X&Y", title: "Square One"}],
-        Muse: [{artist: "Muse", album: "Showbiz", title: "Sunburn"}],
-      }
+      it("should cope when there is an array value", function() {
+        const mockData = [
+          {artist: "Coldplay", album: "Parachutes", title: "Shiver", genres: ["Rock", "Indie"]},
+        ]
 
-      expect(transformer.convertToCsv(["artist"], false, false, mockData)).to.eql(
-        "artist,album,title\r\nColdplay\r\nColdplay,Parachutes,Shiver\r\nColdplay,X&Y,Square One\r\nMuse\r\nMuse,Showbiz,Sunburn"
-      )
-    })
-
-    it("should format correctly when mutiple grouped data object is passed in", function() {
-      const mockData = {
-        Coldplay: {
-          Parachutes: [{artist: "Coldplay", album: "Parachutes", title: "Shiver"}],
-          "X&Y": [{artist: "Coldplay", album: "X&Y", title: "Square One"}],
-        },
-        Muse: {
-          Showbiz: [{artist: "Muse", album: "Showbiz", title: "Sunburn"}],
-        },
-      }
-
-      expect(transformer.convertToCsv(["artist", "album"], false, false, mockData)).to.eql(
-        "artist,album,title\r\nColdplay - Parachutes\r\nColdplay,Parachutes,Shiver\r\nColdplay - X&Y\r\nColdplay,X&Y,Square One\r\nMuse - Showbiz\r\nMuse,Showbiz,Sunburn"
-      )
+        expect(transformer.convertToCsv([], false, false, mockData)).to.eql(
+          "artist,album,title,genres\r\nColdplay,Parachutes,Shiver,\"Rock,Indie\""
+        )
+      })
     })
   })
 })

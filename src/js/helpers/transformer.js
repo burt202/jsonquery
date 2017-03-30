@@ -1,5 +1,15 @@
 const R = require("ramda")
 
+function _makeCountRowCsvSafe(pair) {
+  return [_makeCsvSafe(pair[0]), pair[1]]
+}
+
+function _makeCsvSafe(value) {
+  if (Array.isArray(value)) return "\"" + value.join(",") + "\""
+  if (R.is(String, value) && value.indexOf(",") >= 0) return "\"" + value + "\""
+  return value
+}
+
 function csvFromObject(json) {
   return R.pipe(
     R.toPairs,
@@ -27,7 +37,7 @@ function csvFromCounts(json) {
   if (!Array.isArray(json)) json = _turnObjIntoCountArray(json)
 
   return R.pipe(
-    R.map(R.compose(R.join(","), R.split(": "))),
+    R.map(R.compose(R.join(","), _makeCountRowCsvSafe, R.split(": "))),
     R.join("\r\n")
   )(json)
 }
@@ -49,7 +59,9 @@ function _getGroupedData(obj) {
   return R.pipe(
     R.toPairs,
     R.map(function(pair) {
-      if (Array.isArray(pair[1])) return [pair[0]].concat(R.map(R.compose(R.join(","), R.map(_makeCsvSafe), R.values), pair[1]))
+      if (Array.isArray(pair[1])) return [_makeCsvSafe(pair[0])]
+        .concat(R.map(R.compose(R.join(","), R.map(_makeCsvSafe), R.values), pair[1]))
+
       return _getGroupedData(R.reduce(function(acc, val) {
         const key = pair[0] + " - " + val[0]
         acc[key] = val[1]
@@ -58,12 +70,6 @@ function _getGroupedData(obj) {
     }),
     R.flatten
   )(obj)
-}
-
-function _makeCsvSafe(value) {
-  if (Array.isArray(value)) return "\"" + value.join(",") + "\""
-  if (R.is(String, value) && value.indexOf(",") >= 0) return "\"" + value + "\""
-  return value
 }
 
 function csvFromGroupedData(json) {
