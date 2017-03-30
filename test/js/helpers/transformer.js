@@ -23,6 +23,16 @@ describe("transformer", function() {
       )
     })
 
+    it("should cope when there is array and a value with a comma", function() {
+      const mockData = [
+        {artist: "Tool", album: "10,000 Days", title: "Schism", genres: ["Rock", "Metal"]},
+      ]
+
+      expect(transformer.convertToCsv([], false, false, mockData)).to.eql(
+        "artist,album,title,genres\r\nTool,\"10,000 Days\",Schism,\"Rock,Metal\""
+      )
+    })
+
     it("should format correctly when sumed or averaged", function() {
       const mockData = {
         total: 20,
