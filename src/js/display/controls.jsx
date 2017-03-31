@@ -1,6 +1,8 @@
 const React = require("react")
 const R = require("ramda")
 
+const GroupingControl = require("./grouping-control")
+
 const Controls = React.createClass({
   displayName: "Controls",
 
@@ -28,14 +30,6 @@ const Controls = React.createClass({
     this.props.actionCreator.addFilter(e.target.value)
   },
 
-  onGroupByChange: function(e) {
-    this.props.actionCreator.addGrouping(e.target.value)
-  },
-
-  onGroupByRemove: function(e) {
-    this.props.actionCreator.removeGrouping(e.target.dataset.field)
-  },
-
   onSortByChange: function(e) {
     this.props.actionCreator.sortBy(e.target.value)
   },
@@ -52,19 +46,21 @@ const Controls = React.createClass({
     this.props.actionCreator.average(e.target.value)
   },
 
+  onLimitChange: function(e) {
+    this.props.actionCreator.limit(parseInt(e.target.value, 10))
+  },
+
   onReset: function() {
     this.props.actionCreator.reset()
   },
 
-  getFilterOptions: function() {
-    return Object.keys(this.props.schema).map(function(value) {
+  getFilterControl: function() {
+    const options = Object.keys(this.props.schema).map(function(value) {
       return (
         <option value={value} key={value}>{value}</option>
       )
     })
-  },
 
-  getFilterControl: function() {
     return (
       <div className="input-control">
         <label>Add Filter:</label>
@@ -72,16 +68,12 @@ const Controls = React.createClass({
           <div className="row">
             <select onChange={this.onAddFilter} key={this.state.lastFilteredAddedAt}>
               <option></option>
-              {this.getFilterOptions()}
+              {options}
             </select>
           </div>
         </div>
       </div>
     )
-  },
-
-  onLimitChange: function(e) {
-    this.props.actionCreator.limit(parseInt(e.target.value, 10))
   },
 
   getLimitControl: function() {
@@ -158,64 +150,24 @@ const Controls = React.createClass({
     )
   },
 
-  getSortByOptions: function() {
-    return Object.keys(this.props.schema).map(function(value) {
-      return (
-        <option value={value} key={value}>{value}</option>
-      )
-    })
-  },
-
-  getGroupByOptions: function() {
-    const options = R.without(this.props.groupings, Object.keys(this.props.schema))
-
-    return options.map(function(value) {
-      return (
-        <option value={value} key={value}>{value}</option>
-      )
-    })
-  },
-
-  onChangeHandler: function() {
-    this.props.actionCreator.showCounts(!this.props.showCounts)
-  },
-
   getGroupByControl: function() {
-    const disabled = !(this.props.groupings && this.props.groupings.length)
-    const groupBy = this.props.groupings ? this.props.groupings[0] : ""
-
-    const controls = this.props.groupings.map(function(grouping) {
-      return (
-        <div className="row" key={grouping}>
-          <div className="grouping">
-            {grouping}
-            <a className="site-link" data-field={grouping} onClick={this.onGroupByRemove}>remove</a>
-          </div>
-        </div>
-      )
-    }.bind(this))
-
     return (
-      <div className="input-control">
-        <label>Group By:</label>
-        <div className="body">
-          {controls}
-          <div className="row">
-            <select onChange={this.onGroupByChange} value={groupBy}>
-              <option></option>
-              {this.getGroupByOptions()}
-            </select>
-            <label className="result-field">
-              <input type="checkbox" name="showCounts" disabled={disabled} checked={this.props.showCounts} onChange={this.onChangeHandler} />
-              Show counts
-            </label>
-          </div>
-        </div>
-      </div>
+      <GroupingControl
+        actionCreator={this.props.actionCreator}
+        groupings={this.props.groupings}
+        schema={this.props.schema}
+        showCounts={this.props.showCounts}
+      />
     )
   },
 
   getSortByControl: function() {
+    const options = Object.keys(this.props.schema).map(function(value) {
+      return (
+        <option value={value} key={value}>{value}</option>
+      )
+    })
+
     return (
       <div className="input-control">
         <label>Sort By:</label>
@@ -223,7 +175,7 @@ const Controls = React.createClass({
           <div className="row">
             <select onChange={this.onSortByChange} value={this.props.sortBy || ""}>
               <option></option>
-              {this.getSortByOptions()}
+              {options}
             </select>
             <select onChange={this.onSortDirectionChange} value={this.props.sortDirection}>
               <option value="asc">ASC</option>
