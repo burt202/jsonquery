@@ -119,8 +119,7 @@ describe("store", function() {
       store.setState({
         filters: [{id: 1, name: "foo", value: "", operator: "eq", active: true}],
         groupings: ["bar"],
-        sortBy: "baz",
-        sortDirection: "desc",
+        sorters: ["baz"],
         limit: "aaa",
         average: "bbb",
         sum: "ccc",
@@ -132,8 +131,7 @@ describe("store", function() {
       expect(store.getState().filters.length).to.eql(1)
       expect(store.getState().filters[0].name).to.eql("foo")
       expect(store.getState().groupings).to.eql(["bar"])
-      expect(store.getState().sortBy).to.eql("baz")
-      expect(store.getState().sortDirection).to.eql("desc")
+      expect(store.getState().sorters).to.eql(["baz"])
       expect(store.getState().limit).to.eql("aaa")
       expect(store.getState().average).to.eql("bbb")
       expect(store.getState().sum).to.eql("ccc")
@@ -146,8 +144,7 @@ describe("store", function() {
 
       expect(store.getState().filters).to.eql([])
       expect(store.getState().groupings).to.eql([])
-      expect(store.getState().sortBy).to.eql(null)
-      expect(store.getState().sortDirection).to.eql("asc")
+      expect(store.getState().sorters).to.eql([])
       expect(store.getState().limit).to.eql(null)
       expect(store.getState().average).to.eql(null)
       expect(store.getState().sum).to.eql(null)

@@ -72,8 +72,7 @@ const handlers = {
     return R.merge(contents, {
       filters: [],
       groupings: [],
-      sortBy: null,
-      sortDirection: "asc",
+      sorters: [],
       showCounts: false,
       limit: null,
       sum: null,
