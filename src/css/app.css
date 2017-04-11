@@ -94,11 +94,13 @@ a.site-link {
   flex-direction: column;
 }
 
-.input-control .body .grouping {
+.input-control .body .grouping,
+.input-control .body .sorter {
   line-height: 22px;
 }
 
-.input-control .body .grouping a {
+.input-control .body .grouping a,
+.input-control .body .sorter a {
   margin-left: 30px;
 }
 

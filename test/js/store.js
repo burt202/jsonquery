@@ -10,8 +10,7 @@ describe("store", function() {
     expect(store.getState()).to.eql({
       filters: [],
       groupings: [],
-      sortBy: null,
-      sortDirection: "asc",
+      sorters: [],
       schema: null,
       data: null,
       resultFields: null,
@@ -230,25 +229,27 @@ describe("store", function() {
     })
   })
 
-  describe("sortBy", function() {
-    it("should add sortBy", function() {
+  describe("addSorter", function() {
+    it("should add sorter", function() {
       dispatcher.dispatch({
-        name: "sortBy",
-        value: {name: "foo"},
+        name: "addSorter",
+        value: {sorter: {field: "foo", direction: "desc"}},
       })
 
-      expect(store.getState().sortBy).to.eql("foo")
+      expect(store.getState().sorters).to.eql([{field: "foo", direction: "desc"}])
     })
   })
 
-  describe("sortDirection", function() {
-    it("should add sortDirection", function() {
+  describe("removeSorter", function() {
+    it("should remove sorter", function() {
+      store.setState({sorters: [{field: "foo", direction: "desc"}]})
+
       dispatcher.dispatch({
-        name: "sortDirection",
-        value: {direction: "foo"},
+        name: "removeSorter",
+        value: {name: "foo"},
       })
 
-      expect(store.getState().sortDirection).to.eql("foo")
+      expect(store.getState().sorters).to.eql([])
     })
   })
 
@@ -264,8 +265,7 @@ describe("store", function() {
       expect(store.getState()).to.eql({
         filters: [],
         groupings: [],
-        sortBy: null,
-        sortDirection: "asc",
+        sorters: [],
         schema: null,
         data: null,
         resultFields: null,

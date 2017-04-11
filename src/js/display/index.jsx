@@ -16,8 +16,7 @@ const Display = React.createClass({
     actionCreator: React.PropTypes.object.isRequired,
     filters: React.PropTypes.array.isRequired,
     groupings: React.PropTypes.array,
-    sortBy: React.PropTypes.string,
-    sortDirection: React.PropTypes.string,
+    sorters: React.PropTypes.array,
     schema: React.PropTypes.object.isRequired,
     data: React.PropTypes.array.isRequired,
     resultFields: React.PropTypes.array.isRequired,
@@ -36,8 +35,7 @@ const Display = React.createClass({
   },
 
   sortResults: function(data) {
-    const sorters = [{by: this.props.sortBy, direction: this.props.sortDirection}]
-    return (this.props.sortBy) ? formatter.sort(sorters, data) : data
+    return (this.props.sorters.length) ? formatter.sort(this.props.sorters, data) : data
   },
 
   limitResults: function(data) {
@@ -88,8 +86,7 @@ const Display = React.createClass({
           filters={this.props.filters}
           schema={this.props.schema}
           groupings={this.props.groupings}
-          sortBy={this.props.sortBy}
-          sortDirection={this.props.sortDirection}
+          sorters={this.props.sorters}
           showCounts={this.props.showCounts}
           limit={this.props.limit}
           sum={this.props.sum}

@@ -5,8 +5,7 @@ const createStore = require("./helpers/store-base")
 const defaults = {
   filters: [],
   groupings: [],
-  sortBy: null,
-  sortDirection: "asc",
+  sorters: [],
   schema: null,
   data: null,
   resultFields: null,
@@ -119,15 +118,15 @@ const handlers = {
     })
   },
 
-  sortBy: function(contents, payload) {
+  addSorter: function(contents, payload) {
     return R.merge(contents, {
-      sortBy: payload.name,
+      sorters: R.append(payload.sorter, contents.sorters),
     })
   },
 
-  sortDirection: function(contents, payload) {
+  removeSorter: function(contents, payload) {
     return R.merge(contents, {
-      sortDirection: payload.direction,
+      sorters: R.reject(R.propEq("field", payload.name), contents.sorters),
     })
   },
 

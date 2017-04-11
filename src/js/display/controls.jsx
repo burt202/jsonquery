@@ -2,6 +2,7 @@ const React = require("react")
 const R = require("ramda")
 
 const GroupingControl = require("./grouping-control")
+const SortingControl = require("./sorting-control")
 
 const Controls = React.createClass({
   displayName: "Controls",
@@ -10,8 +11,7 @@ const Controls = React.createClass({
     actionCreator: React.PropTypes.object.isRequired,
     filters: React.PropTypes.array.isRequired,
     groupings: React.PropTypes.array,
-    sortBy: React.PropTypes.string,
-    sortDirection: React.PropTypes.string,
+    sorters: React.PropTypes.array,
     schema: React.PropTypes.object.isRequired,
     showCounts: React.PropTypes.bool.isRequired,
     limit: React.PropTypes.number,
@@ -28,14 +28,6 @@ const Controls = React.createClass({
   onAddFilter: function(e) {
     this.setState({lastFilteredAddedAt: Date.now()})
     this.props.actionCreator.addFilter(e.target.value)
-  },
-
-  onSortByChange: function(e) {
-    this.props.actionCreator.sortBy(e.target.value)
-  },
-
-  onSortDirectionChange: function(e) {
-    this.props.actionCreator.sortDirection(e.target.value)
   },
 
   onSumChange: function(e) {
@@ -162,28 +154,15 @@ const Controls = React.createClass({
   },
 
   getSortByControl: function() {
-    const options = Object.keys(this.props.schema).map(function(value) {
-      return (
-        <option value={value} key={value}>{value}</option>
-      )
-    })
+    const options = R.without(R.pluck("field", this.props.sorters), Object.keys(this.props.schema))
 
     return (
-      <div className="input-control">
-        <label>Sort By:</label>
-        <div className="body">
-          <div className="row">
-            <select onChange={this.onSortByChange} value={this.props.sortBy || ""}>
-              <option></option>
-              {options}
-            </select>
-            <select onChange={this.onSortDirectionChange} value={this.props.sortDirection}>
-              <option value="asc">ASC</option>
-              <option value="desc">DESC</option>
-            </select>
-          </div>
-        </div>
-      </div>
+      <SortingControl
+        sorters={this.props.sorters}
+        options={options}
+        onAdd={this.props.actionCreator.addSorter}
+        onRemove={this.props.actionCreator.removeSorter}
+      />
     )
   },
 

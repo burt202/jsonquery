@@ -72,17 +72,17 @@ module.exports = {
     })
   },
 
-  sortBy: function(name) {
+  addSorter: function(sorter) {
     dispatcher.dispatch({
-      name: "sortBy",
-      value: {name: name},
+      name: "addSorter",
+      value: {sorter: sorter},
     })
   },
 
-  sortDirection: function(direction) {
+  removeSorter: function(name) {
     dispatcher.dispatch({
-      name: "sortDirection",
-      value: {direction: direction},
+      name: "removeSorter",
+      value: {name: name},
     })
   },
 

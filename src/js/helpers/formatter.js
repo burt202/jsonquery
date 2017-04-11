@@ -204,7 +204,7 @@ module.exports = {
   sort: function(sorters, data) {
     return R.sortWith(R.map(function(sorter) {
       const direction = (sorter.direction === "asc") ? "ascend" : "descend"
-      return R[direction](R.prop(sorter.by))
+      return R[direction](R.prop(sorter.field))
     }, sorters), data)
   },
 

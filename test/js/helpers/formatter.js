@@ -784,7 +784,7 @@ describe("formatter", function() {
     ]
 
     it("should sort the data in ascending order", function() {
-      const sorters = [{by: "trackNo", direction: "asc"}]
+      const sorters = [{field: "trackNo", direction: "asc"}]
 
       expect(formatter.sort(sorters, mockDataForSorting)).to.eql([
         {artist: "Coldplay", album: "A Rush Of Blood", trackNo: 1},
@@ -796,7 +796,7 @@ describe("formatter", function() {
     })
 
     it("should sort the data in descending order", function() {
-      const sorters = [{by: "trackNo", direction: "desc"}]
+      const sorters = [{field: "trackNo", direction: "desc"}]
 
       expect(formatter.sort(sorters, mockDataForSorting)).to.eql([
         {artist: "Coldplay", album: "Parachutes", trackNo: 5},
@@ -809,8 +809,8 @@ describe("formatter", function() {
 
     it("should sort the data using multiple sorts", function() {
       const sorters = [
-        {by: "album", direction: "asc"},
-        {by: "trackNo", direction: "asc"},
+        {field: "album", direction: "asc"},
+        {field: "trackNo", direction: "asc"},
       ]
 
       expect(formatter.sort(sorters, mockDataForSorting)).to.eql([
