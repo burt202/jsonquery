@@ -60,7 +60,13 @@ const GroupingControl = React.createClass({
               {this.getGroupByOptions()}
             </select>
             <label className="result-field">
-              <input type="checkbox" name="showCounts" disabled={disabled} checked={this.props.showCounts} onChange={this.onShowCountsChange} />
+              <input
+                type="checkbox"
+                name="showCounts"
+                disabled={disabled}
+                checked={this.props.showCounts}
+                onChange={this.onShowCountsChange}
+              />
               Show counts
             </label>
           </div>

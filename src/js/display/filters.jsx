@@ -21,7 +21,9 @@ const Filters = React.createClass({
         key={filter.id}
         filter={filter}
         type={this.props.schema[filter.name]}
-        actionCreator={this.props.actionCreator}
+        onToggle={this.props.actionCreator.toggleFilter}
+        onUpdate={this.props.actionCreator.updateFilter}
+        onDelete={this.props.actionCreator.deleteFilter}
       />
     }.bind(this))
   },
