@@ -143,12 +143,16 @@ const Controls = React.createClass({
   },
 
   getGroupByControl: function() {
+    const options = R.without(this.props.groupings, Object.keys(this.props.schema))
+
     return (
       <GroupingControl
-        actionCreator={this.props.actionCreator}
         groupings={this.props.groupings}
-        schema={this.props.schema}
+        options={options}
         showCounts={this.props.showCounts}
+        onAdd={this.props.actionCreator.addGrouping}
+        onRemove={this.props.actionCreator.removeGrouping}
+        onShowCountsChange={this.props.actionCreator.showCounts}
       />
     )
   },

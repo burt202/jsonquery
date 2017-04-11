@@ -1,45 +1,32 @@
 const React = require("react")
-const R = require("ramda")
 
 const GroupingControl = React.createClass({
   displayName: "GroupingControl",
 
   propTypes: {
-    actionCreator: React.PropTypes.object.isRequired,
     groupings: React.PropTypes.array,
-    schema: React.PropTypes.object.isRequired,
+    options: React.PropTypes.array.isRequired,
     showCounts: React.PropTypes.bool.isRequired,
+    onAdd: React.PropTypes.func.isRequired,
+    onRemove: React.PropTypes.func.isRequired,
+    onShowCountsChange: React.PropTypes.func.isRequired,
   },
 
-  onGroupByChange: function(e) {
-    this.props.actionCreator.addGrouping(e.target.value)
-  },
-
-  onGroupByRemove: function(field) {
-    this.props.actionCreator.removeGrouping(field)
+  onAdd: function(e) {
+    this.props.onAdd(e.target.value)
   },
 
   onShowCountsChange: function() {
-    this.props.actionCreator.showCounts(!this.props.showCounts)
+    this.props.onShowCountsChange(!this.props.showCounts)
   },
 
-  getGroupByOptions: function() {
-    const options = R.without(this.props.groupings, Object.keys(this.props.schema))
-
-    return options.map(function(value) {
-      return (
-        <option value={value} key={value}>{value}</option>
-      )
-    })
-  },
-
-  getGroupByRows: function() {
+  getRows: function() {
     return this.props.groupings.map(function(grouping) {
       return (
         <div className="row" key={grouping}>
           <div className="grouping">
             {grouping}
-            <a className="site-link" onClick={this.onGroupByRemove.bind(this, grouping)}>remove</a>
+            <a className="site-link" onClick={this.props.onRemove.bind(this, grouping)}>remove</a>
           </div>
         </div>
       )
@@ -49,15 +36,21 @@ const GroupingControl = React.createClass({
   render: function() {
     const disabled = !(this.props.groupings && this.props.groupings.length)
 
+    const options = this.props.options.map(function(value) {
+      return (
+        <option value={value} key={value}>{value}</option>
+      )
+    })
+
     return (
       <div className="input-control">
         <label>Group By:</label>
         <div className="body">
-          {this.getGroupByRows()}
+          {this.getRows()}
           <div className="row">
-            <select onChange={this.onGroupByChange} value="">
+            <select onChange={this.onAdd} value="">
               <option></option>
-              {this.getGroupByOptions()}
+              {options}
             </select>
             <label className="result-field">
               <input
