@@ -9,8 +9,8 @@ const Controls = require("./controls")
 const Summary = require("./summary")
 const Results = require("./results")
 
-const Display = React.createClass({
-  displayName: "Display",
+const Query = React.createClass({
+  displayName: "Query",
 
   propTypes: {
     actionCreator: React.PropTypes.object.isRequired,
@@ -113,4 +113,4 @@ const Display = React.createClass({
   },
 })
 
-module.exports = Display
+module.exports = Query

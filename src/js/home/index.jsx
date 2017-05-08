@@ -15,8 +15,8 @@ const testData = require("../../test-data.json")
 
 const validator = require("../helpers/validator")
 
-const Upload = React.createClass({
-  displayName: "Upload",
+const Home = React.createClass({
+  displayName: "Home",
 
   propTypes: {
     actionCreator: React.PropTypes.object.isRequired,
@@ -74,7 +74,7 @@ const Upload = React.createClass({
 
   render: function() {
     return (
-      <div className="upload-cont">
+      <div className="home-cont">
         <p>Online JSON Querying Tool. Query your JSON with ease.</p>
         <p>Takes a JSON array, with a schema, and allows you to add multiple filters and a grouping to enable you to find results you want. Use the inputs below to supply your files. We do not do anything with your data!</p>
         <p><label>Schema:</label><input type="file" key={this.state.schemaInputKey} onChange={this.onFileUploadStart.bind(this, "schema")} /></p>
@@ -91,4 +91,4 @@ const Upload = React.createClass({
   },
 })
 
-module.exports = Upload
+module.exports = Home

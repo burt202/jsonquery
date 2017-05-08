@@ -4,9 +4,9 @@ const queryString = require("query-string")
 
 const actionCreator = require("./action-creator")
 const store = require("./store")
-const Upload = require("./upload")
+const Home = require("./home")
 const FromUrl = require("./from-url")
-const Display = require("./display")
+const Query = require("./query")
 
 require("../css/app.css")
 
@@ -38,12 +38,12 @@ const Main = React.createClass({
         />
       }
 
-      return <Upload
+      return <Home
         actionCreator={actionCreator}
       />
     }
 
-    return <Display
+    return <Query
       actionCreator={actionCreator}
       filters={this.state.filters}
       groupings={this.state.groupings}
