@@ -10,6 +10,39 @@ const Filters = React.createClass({
     schema: React.PropTypes.object.isRequired,
   },
 
+  getInitialState: function() {
+    return {
+      lastFilteredAddedAt: null,
+    }
+  },
+
+  onAddFilter: function(e) {
+    this.setState({lastFilteredAddedAt: Date.now()})
+    this.props.actionCreator.addFilter(e.target.value)
+  },
+
+  getFilterControl: function() {
+    const options = Object.keys(this.props.schema).map(function(value) {
+      return (
+        <option value={value} key={value}>{value}</option>
+      )
+    })
+
+    return (
+      <div className="input-control">
+        <label>Add Filter:</label>
+        <div className="body">
+          <div className="row">
+            <select onChange={this.onAddFilter} key={this.state.lastFilteredAddedAt}>
+              <option></option>
+              {options}
+            </select>
+          </div>
+        </div>
+      </div>
+    )
+  },
+
   getFilterRows: function() {
     if (!this.props.filters.length)
       return (
@@ -31,7 +64,7 @@ const Filters = React.createClass({
   render: function() {
     return (
       <div>
-        <h3>Filters and Grouping</h3>
+        <h3>Filters</h3>
         <table className="table filters">
           <thead>
             <tr>
@@ -45,6 +78,7 @@ const Filters = React.createClass({
             {this.getFilterRows()}
           </tbody>
         </table>
+        {this.getFilterControl()}
       </div>
     )
   },

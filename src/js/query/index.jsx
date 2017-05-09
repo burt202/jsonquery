@@ -83,7 +83,6 @@ const Query = React.createClass({
         />
         <Controls
           actionCreator={this.props.actionCreator}
-          filters={this.props.filters}
           schema={this.props.schema}
           groupings={this.props.groupings}
           sorters={this.props.sorters}

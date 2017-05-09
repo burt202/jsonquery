@@ -9,7 +9,6 @@ const Controls = React.createClass({
 
   propTypes: {
     actionCreator: React.PropTypes.object.isRequired,
-    filters: React.PropTypes.array.isRequired,
     groupings: React.PropTypes.array,
     sorters: React.PropTypes.array,
     schema: React.PropTypes.object.isRequired,
@@ -17,17 +16,6 @@ const Controls = React.createClass({
     limit: React.PropTypes.number,
     sum: React.PropTypes.string,
     average: React.PropTypes.string,
-  },
-
-  getInitialState: function() {
-    return {
-      lastFilteredAddedAt: null,
-    }
-  },
-
-  onAddFilter: function(e) {
-    this.setState({lastFilteredAddedAt: Date.now()})
-    this.props.actionCreator.addFilter(e.target.value)
   },
 
   onSumChange: function(e) {
@@ -44,28 +32,6 @@ const Controls = React.createClass({
 
   onReset: function() {
     this.props.actionCreator.reset()
-  },
-
-  getFilterControl: function() {
-    const options = Object.keys(this.props.schema).map(function(value) {
-      return (
-        <option value={value} key={value}>{value}</option>
-      )
-    })
-
-    return (
-      <div className="input-control">
-        <label>Add Filter:</label>
-        <div className="body">
-          <div className="row">
-            <select onChange={this.onAddFilter} key={this.state.lastFilteredAddedAt}>
-              <option></option>
-              {options}
-            </select>
-          </div>
-        </div>
-      </div>
-    )
   },
 
   getLimitControl: function() {
@@ -179,7 +145,7 @@ const Controls = React.createClass({
   render: function() {
     return (
       <div>
-        {this.getFilterControl()}
+        <h3>Controls</h3>
         {this.getSortByControl()}
         {this.getLimitControl()}
         <br />
