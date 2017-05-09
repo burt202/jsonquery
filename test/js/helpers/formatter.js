@@ -15,7 +15,7 @@ describe("formatter", function() {
     const mockSchema = {
       type: "string",
       deleted: "bool",
-      num: "int",
+      num: "number",
     }
 
     it("should not filter anything if no filters are defined", function() {
@@ -162,7 +162,7 @@ describe("formatter", function() {
       })
     })
 
-    describe("int", function() {
+    describe("number", function() {
 
       const mockDataForFiltering = [
         {name: "foo", code: 101},
@@ -174,7 +174,7 @@ describe("formatter", function() {
       ]
 
       const mockSchema = {
-        code: "int",
+        code: "number",
       }
 
       it("should filter when operator is 'eq'", function() {

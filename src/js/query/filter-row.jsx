@@ -18,7 +18,7 @@ const filterConfig = {
     {text: "Is not one of", value: "inof", inputs: [separateWithCommaInput]},
     {text: "Matches", value: "rgm", inputs: [regexInput]},
   ],
-  int: [
+  number: [
     {text: "Equal to", value: "eq", inputs: [defaultInput]},
     {text: "Not equal to", value: "neq", inputs: [defaultInput]},
     {text: "Is null", value: "nl"},

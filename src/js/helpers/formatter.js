@@ -69,7 +69,7 @@ function getStringFilter(filter) {
   return null
 }
 
-function getIntFilter(filter) {
+function getNumberFilter(filter) {
   if (filter.value && filter.value.length) {
     if (filter.operator === "eq") return R.equals(parseFloat(filter.value))
     if (filter.operator === "neq") return R.compose(R.not, R.equals(parseFloat(filter.value)))
@@ -181,7 +181,7 @@ module.exports = {
       var filterMethod = null
 
       if (type === "string") filterMethod = getStringFilter(filter)
-      if (type === "int") filterMethod = getIntFilter(filter)
+      if (type === "number") filterMethod = getNumberFilter(filter)
       if (type === "bool") filterMethod = getBoolFilter(filter)
       if (type === "date") filterMethod = getDateFilter(filter)
       if (type === "array") filterMethod = getArrayFilter(filter)

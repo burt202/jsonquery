@@ -180,7 +180,7 @@ pre:hover a {
   margin-bottom: 5px;
 }
 
-.filter-controls.int input {
+.filter-controls.number input {
   width: 100px;
 }
 

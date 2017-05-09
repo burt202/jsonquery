@@ -99,7 +99,7 @@ const Controls = React.createClass({
   getNumberOptions: function() {
     const numberOptions = R.pipe(
       R.toPairs,
-      R.filter(R.compose(R.equals("int"), R.prop(1))),
+      R.filter(R.compose(R.equals("number"), R.prop(1))),
       R.map(R.prop(0))
     )(this.props.schema)
 

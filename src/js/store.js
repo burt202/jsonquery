@@ -22,7 +22,7 @@ function updateWhere(find, update, data) {
 
 const initialOperators = {
   string: "eq",
-  int: "eq",
+  number: "eq",
   date: "eq",
   bool: "nl",
   array: "cos",
