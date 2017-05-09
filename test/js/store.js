@@ -34,6 +34,40 @@ describe("store", function() {
 
       expect(store.getState().schema).to.eql({foo: "string"})
     })
+
+    it("should reset filters, groupings and sortBy values to their defaults", function() {
+      store.setState({
+        filters: [{id: 1, name: "foo", value: "", operator: "eq", active: true}],
+        groupings: ["bar"],
+        sorters: ["baz"],
+        limit: "aaa",
+        average: "bbb",
+        sum: "ccc",
+        showCounts: true,
+      })
+
+      expect(store.getState().filters.length).to.eql(1)
+      expect(store.getState().filters[0].name).to.eql("foo")
+      expect(store.getState().groupings).to.eql(["bar"])
+      expect(store.getState().sorters).to.eql(["baz"])
+      expect(store.getState().limit).to.eql("aaa")
+      expect(store.getState().average).to.eql("bbb")
+      expect(store.getState().sum).to.eql("ccc")
+      expect(store.getState().showCounts).to.eql(true)
+
+      dispatcher.dispatch({
+        name: "saveJson",
+        value: {name: "schema", data: {foo: "string"}},
+      })
+
+      expect(store.getState().filters).to.eql([])
+      expect(store.getState().groupings).to.eql([])
+      expect(store.getState().sorters).to.eql([])
+      expect(store.getState().limit).to.eql(null)
+      expect(store.getState().average).to.eql(null)
+      expect(store.getState().sum).to.eql(null)
+      expect(store.getState().showCounts).to.eql(false)
+    })
   })
 
   describe("updateResultFields", function() {

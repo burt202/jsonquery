@@ -141,6 +141,21 @@ pre:hover a {
   display: inline-block;
 }
 
+ul.side-options {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  list-style-type: none;
+}
+
+ul.side-options li {
+  margin-right: 15px;
+}
+
+ul.side-options li:last-of-type {
+  margin-right: 0;
+}
+
 /* Home */
 
 .home-cont label {

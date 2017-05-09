@@ -7,6 +7,7 @@ const Filters = require("./filters")
 const Controls = require("./controls")
 const Summary = require("./summary")
 const Results = require("./results")
+const SchemaEdit = require("./schema-edit")
 
 const Query = React.createClass({
   displayName: "Query",
@@ -25,8 +26,18 @@ const Query = React.createClass({
     average: React.PropTypes.string,
   },
 
+  getInitialState: function() {
+    return {
+      showSchemaControls: false,
+    }
+  },
+
   onReset: function() {
     this.props.actionCreator.reset()
+  },
+
+  onSchemaEdit: function() {
+    this.setState({showSchemaControls: true})
   },
 
   filterResults: function(data) {
@@ -61,19 +72,43 @@ const Query = React.createClass({
     return data
   },
 
-  getResetControl: function() {
+  getSideOptions: function() {
     return (
-      <p><a className="site-link" onClick={this.onReset}>Reset</a></p>
+      <ul className="side-options">
+        <li><a className="site-link" onClick={this.onSchemaEdit}>Edit Schema</a></li>
+        <li><a className="site-link" onClick={this.onReset}>Reset</a></li>
+      </ul>
+    )
+  },
+
+  onCancel: function() {
+    this.setState({showSchemaControls: false})
+  },
+
+  onSave: function(schema) {
+    this.setState({showSchemaControls: false})
+    this.props.actionCreator.saveJson("schema", schema)
+  },
+
+  getSchemaControls: function() {
+    return (
+      <SchemaEdit
+        schema={this.props.schema}
+        onSave={this.onSave}
+        onCancel={this.onCancel}
+      />
     )
   },
 
   render: function() {
+    if (this.state.showSchemaControls) return this.getSchemaControls()
+
     const filtered = this.filterSortAndLimit(this.props.data)
     const results = this.formatData(filtered)
 
     return (
-      <div>
-        {this.getResetControl()}
+      <div className="query-cont">
+        {this.getSideOptions()}
         <Filters
           actionCreator={this.props.actionCreator}
           filters={this.props.filters}

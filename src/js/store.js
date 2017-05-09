@@ -30,7 +30,16 @@ const initialOperators = {
 
 const handlers = {
   saveJson: function(contents, payload) {
-    const toUpdate = {}
+    const toUpdate = {
+      filters: [],
+      groupings: [],
+      sorters: [],
+      showCounts: false,
+      limit: null,
+      sum: null,
+      average: null,
+    }
+
     toUpdate[payload.name] = payload.data
     return R.merge(contents, toUpdate)
   },
