@@ -1,6 +1,6 @@
 # JSONQuery
 
-Here is the code behind [jsonquery.co.uk/](http://jsonquery.co.uk/)
+Here is the code behind [jsonquery.co.uk](http://jsonquery.co.uk/)
 
 ### To Run:
 
