@@ -25,6 +25,10 @@ const Query = React.createClass({
     average: React.PropTypes.string,
   },
 
+  onReset: function() {
+    this.props.actionCreator.reset()
+  },
+
   filterResults: function(data) {
     return formatter.filter(data, this.props.schema, this.props.filters)
   },
@@ -57,12 +61,19 @@ const Query = React.createClass({
     return data
   },
 
+  getResetControl: function() {
+    return (
+      <p><a className="site-link" onClick={this.onReset}>Reset</a></p>
+    )
+  },
+
   render: function() {
     const filtered = this.filterSortAndLimit(this.props.data)
     const results = this.formatData(filtered)
 
     return (
       <div>
+        {this.getResetControl()}
         <Filters
           actionCreator={this.props.actionCreator}
           filters={this.props.filters}

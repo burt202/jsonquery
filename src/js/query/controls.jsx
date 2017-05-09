@@ -30,10 +30,6 @@ const Controls = React.createClass({
     this.props.actionCreator.limit(parseInt(e.target.value, 10))
   },
 
-  onReset: function() {
-    this.props.actionCreator.reset()
-  },
-
   getLimitControl: function() {
     return (
       <div className="input-control">
@@ -136,12 +132,6 @@ const Controls = React.createClass({
     )
   },
 
-  getResetControl: function() {
-    return (
-      <p><a className="site-link" onClick={this.onReset}>Reset</a></p>
-    )
-  },
-
   render: function() {
     return (
       <div>
@@ -152,7 +142,6 @@ const Controls = React.createClass({
         {this.getGroupByControl()}
         {this.getAverageControl()}
         {this.getSumControl()}
-        {this.getResetControl()}
       </div>
     )
   },
