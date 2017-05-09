@@ -129,10 +129,6 @@ const handlers = {
     })
   },
 
-  goBack: function() {
-    return defaults
-  },
-
   showCounts: function(contents, payload) {
     return R.merge(contents, {
       showCounts: payload.showCounts,

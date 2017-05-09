@@ -100,13 +100,6 @@ module.exports = {
     })
   },
 
-  goBack: function() {
-    dispatcher.dispatch({
-      name: "goBack",
-      value: {},
-    })
-  },
-
   updateResultFields: function(fields) {
     dispatcher.dispatch({
       name: "updateResultFields",

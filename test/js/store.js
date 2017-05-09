@@ -250,30 +250,6 @@ describe("store", function() {
     })
   })
 
-  describe("goBack", function() {
-    it("should reset everything to their defaults", function() {
-      store.setState({foo: "bar"})
-
-      dispatcher.dispatch({
-        name: "goBack",
-        value: {},
-      })
-
-      expect(store.getState()).to.eql({
-        filters: [],
-        groupings: [],
-        sorters: [],
-        schema: null,
-        data: null,
-        resultFields: null,
-        showCounts: false,
-        limit: null,
-        sum: null,
-        average: null,
-      })
-    })
-  })
-
   describe("showCounts", function() {
     it("should update showCounts", function() {
       dispatcher.dispatch({
