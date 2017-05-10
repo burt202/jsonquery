@@ -281,3 +281,16 @@ h3.summary {
 .from-url-cont p {
   text-align: center;
 }
+
+/* From Url */
+
+.schema-edit-cont .rows {
+  display: flex;
+  align-items: flex-start;
+}
+
+.schema-edit-cont .rows pre {
+  flex-basis: 20%;
+  flex-grow: 1;
+  margin-left: 15px;
+}

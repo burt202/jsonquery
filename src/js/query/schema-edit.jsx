@@ -43,13 +43,18 @@ const SchemaEdit = React.createClass({
 
   render: function() {
     return (
-      <div>
+      <div className="schema-edit-cont">
         <h3>Edit Schema</h3>
-        <table className="table">
-          <tbody>
-            {this.getSchemaRows()}
-          </tbody>
-        </table>
+        <div className="rows">
+          <table className="table" style={{width: "60%"}}>
+            <tbody>
+              {this.getSchemaRows()}
+            </tbody>
+          </table>
+          <pre>
+            {JSON.stringify(this.state.schema, null, 2)}
+          </pre>
+        </div>
         <ul className="side-options">
           <li><a className="site-link" onClick={this.props.onCancel}>Cancel</a></li>
           <li><a className="site-link" onClick={this.onSave}>Save</a></li>
