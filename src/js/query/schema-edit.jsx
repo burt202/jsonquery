@@ -1,6 +1,8 @@
 const React = require("react")
 const R = require("ramda")
 
+const validator = require("../helpers/validator")
+
 const SchemaEditRow = require("./schema-edit-row")
 
 const SchemaEdit = React.createClass({
@@ -15,7 +17,39 @@ const SchemaEdit = React.createClass({
   getInitialState: function() {
     return {
       schema: this.props.schema,
+      inputKey: null,
     }
+  },
+
+  showError: function(message) {
+    this.setState({"inputKey": Date.now()}) // to clear the input, resetting key of components forces re-render
+    alert(message)
+  },
+
+  onFileUploadStart: function(e) {
+    const reader = new FileReader()
+    reader.onload = this.onFileUploadEnd
+    reader.readAsText(e.target.files[0])
+  },
+
+  onFileUploadEnd: function(e) {
+    const json = e.target.result
+
+    if (!validator.isValidJSON(json)) {
+      this.showError("Not valid JSON!")
+      return
+    }
+
+    const parsed = JSON.parse(json)
+
+    if (!validator.isObject(parsed)) {
+      this.showError("The schema must be an object!")
+      return
+    }
+
+    this.setState({"schema": parsed}, function() {
+      this.props.onSave(this.state.schema)
+    }.bind(this))
   },
 
   onChange: function(field, type) {
@@ -55,6 +89,7 @@ const SchemaEdit = React.createClass({
             {JSON.stringify(this.state.schema, null, 2)}
           </pre>
         </div>
+        <p><label>Upload: </label><input type="file" key={this.state.inputKey} onChange={this.onFileUploadStart} /></p>
         <ul className="side-options">
           <li><a className="site-link" onClick={this.props.onCancel}>Cancel</a></li>
           <li><a className="site-link" onClick={this.onSave}>Save</a></li>
