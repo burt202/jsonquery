@@ -47,9 +47,7 @@ const SchemaEdit = React.createClass({
       return
     }
 
-    this.setState({"schema": parsed}, function() {
-      this.props.onSave(this.state.schema)
-    }.bind(this))
+    this.props.onSave(parsed)
   },
 
   onChange: function(field, type) {
