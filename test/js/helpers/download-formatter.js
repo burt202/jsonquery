@@ -1,14 +1,14 @@
 const chai = require("chai")
 const expect = chai.expect
 
-const transformer = require("../../../src/js/helpers/transformer")
+const downloadFormatter = require("../../../src/js/helpers/download-formatter")
 
-describe("transformer", function() {
+describe("downloadFormatter", function() {
 
-  describe("convertToCsv", function() {
+  describe("csv", function() {
     it("should return null if data set is empty", function() {
-      expect(transformer.convertToCsv([], false, false, [])).to.eql(null)
-      expect(transformer.convertToCsv([], false, false, {})).to.eql(null)
+      expect(downloadFormatter.csv([], false, false, [])).to.eql(null)
+      expect(downloadFormatter.csv([], false, false, {})).to.eql(null)
     })
 
     describe("when sumed or averaged", function() {
@@ -17,7 +17,7 @@ describe("transformer", function() {
           total: 20,
         }
 
-        expect(transformer.convertToCsv([], false, true, mockData)).to.eql(
+        expect(downloadFormatter.csv([], false, true, mockData)).to.eql(
           "total,20"
         )
       })
@@ -30,7 +30,7 @@ describe("transformer", function() {
           "Muse: 1",
         ]
 
-        expect(transformer.convertToCsv(["artist"], true, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], true, false, mockData)).to.eql(
           "Coldplay,2\r\nMuse,1"
         )
       })
@@ -41,7 +41,7 @@ describe("transformer", function() {
           Muse: ["Showbiz: 1"],
         }
 
-        expect(transformer.convertToCsv(["artist", "album"], true, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist", "album"], true, false, mockData)).to.eql(
           "Coldplay - Parachutes,1\r\nColdplay - X&Y,1\r\nMuse - Showbiz,1"
         )
       })
@@ -52,7 +52,7 @@ describe("transformer", function() {
           "Muse: 1",
         ]
 
-        expect(transformer.convertToCsv(["artist"], true, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], true, false, mockData)).to.eql(
           "\"10,000 Days\",2\r\nMuse,1"
         )
       })
@@ -66,7 +66,7 @@ describe("transformer", function() {
           Muse: [{artist: "Muse", album: "Showbiz", title: "Sunburn"}],
         }
 
-        expect(transformer.convertToCsv(["artist"], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], false, false, mockData)).to.eql(
           "artist,album,title\r\nColdplay\r\nColdplay,Parachutes,Shiver\r\nColdplay,X&Y,Square One\r\nMuse\r\nMuse,Showbiz,Sunburn"
         )
       })
@@ -82,7 +82,7 @@ describe("transformer", function() {
           },
         }
 
-        expect(transformer.convertToCsv(["artist", "album"], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist", "album"], false, false, mockData)).to.eql(
           "artist,album,title\r\nColdplay - Parachutes\r\nColdplay,Parachutes,Shiver\r\nColdplay - X&Y\r\nColdplay,X&Y,Square One\r\nMuse - Showbiz\r\nMuse,Showbiz,Sunburn"
         )
       })
@@ -92,7 +92,7 @@ describe("transformer", function() {
           Tool: [{artist: "Tool", album: "10,000 Days", title: "Schism"}],
         }
 
-        expect(transformer.convertToCsv(["artist"], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], false, false, mockData)).to.eql(
           "artist,album,title\r\nTool\r\nTool,\"10,000 Days\",Schism"
         )
       })
@@ -102,7 +102,7 @@ describe("transformer", function() {
           Coldplay: [{artist: "Coldplay", album: "Parachutes", title: "Shiver", genres: ["Rock", "Indie"]}],
         }
 
-        expect(transformer.convertToCsv(["artist"], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], false, false, mockData)).to.eql(
           "artist,album,title,genres\r\nColdplay\r\nColdplay,Parachutes,Shiver,\"Rock,Indie\""
         )
       })
@@ -112,7 +112,7 @@ describe("transformer", function() {
           "10,000 Days": [{artist: "Tool", album: "10,000 Days", title: "Schism"}],
         }
 
-        expect(transformer.convertToCsv(["artist"], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], false, false, mockData)).to.eql(
           "artist,album,title\r\n\"10,000 Days\"\r\nTool,\"10,000 Days\",Schism"
         )
       })
@@ -126,7 +126,7 @@ describe("transformer", function() {
           {artist: "Muse", album: "Showbiz", title: "Sunburn"},
         ]
 
-        expect(transformer.convertToCsv([], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv([], false, false, mockData)).to.eql(
           "artist,album,title\r\nColdplay,Parachutes,Shiver\r\nColdplay,X&Y,Square One\r\nMuse,Showbiz,Sunburn"
         )
       })
@@ -136,7 +136,7 @@ describe("transformer", function() {
           {artist: "Tool", album: "10,000 Days", title: "Schism"},
         ]
 
-        expect(transformer.convertToCsv([], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv([], false, false, mockData)).to.eql(
           "artist,album,title\r\nTool,\"10,000 Days\",Schism"
         )
       })
@@ -146,7 +146,7 @@ describe("transformer", function() {
           {artist: "Coldplay", album: "Parachutes", title: "Shiver", genres: ["Rock", "Indie"]},
         ]
 
-        expect(transformer.convertToCsv([], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv([], false, false, mockData)).to.eql(
           "artist,album,title,genres\r\nColdplay,Parachutes,Shiver,\"Rock,Indie\""
         )
       })

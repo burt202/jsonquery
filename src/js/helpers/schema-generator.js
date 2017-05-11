@@ -2,7 +2,7 @@ const R = require("ramda")
 const validator = require("./validator")
 
 module.exports = {
-  translateToSchema: function(data) {
+  generate: function(data) {
     return R.pipe(
       R.toPairs,
       R.reduce(function(acc, pair) {

@@ -1,7 +1,7 @@
 const chai = require("chai")
 const expect = chai.expect
 
-const translator = require("../../../src/js/helpers/translator")
+const schemaGenerator = require("../../../src/js/helpers/schema-generator")
 
 const tests = [
   {
@@ -108,18 +108,18 @@ const tests = [
   },
 ]
 
-describe("translator", function() {
+describe("schemaGenerator", function() {
 
-  describe("translateToSchema", function() {
+  describe("generate", function() {
 
     tests.forEach(function(test) {
       it("should translate " + test.name + " data into a schema correctly", function() {
-        expect(translator.translateToSchema(test.data)).to.eql(test.expected)
+        expect(schemaGenerator.generate(test.data)).to.eql(test.expected)
       })
     })
 
     it("should default to 'string' if value is null", function() {
-      expect(translator.translateToSchema({foo: null})).to.eql({foo: "string"})
+      expect(schemaGenerator.generate({foo: null})).to.eql({foo: "string"})
     })
   })
 })

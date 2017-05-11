@@ -2,7 +2,7 @@ const React = require("react")
 const R = require("ramda")
 const Clipboard = require("clipboard")
 
-const transformer = require("../helpers/transformer")
+const downloadFormatter = require("../helpers/download-formatter")
 
 const DISPLAY_THRESHOLD = 1000
 
@@ -22,9 +22,9 @@ const Results = React.createClass({
   },
 
   downloadResults: function(type) {
-    const transformed = type.transformer(this.props.results)
+    const formatted = type.formatter(this.props.results)
 
-    const dataStr = URL.createObjectURL(new Blob([transformed], {type: type.mimetype}))
+    const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
     const downloadLink = document.getElementById("hidden-download-link")
     downloadLink.setAttribute("href", dataStr)
     downloadLink.setAttribute("download", new Date().toISOString() + "." + type.extension)
@@ -35,12 +35,12 @@ const Results = React.createClass({
   getDownloadLinks: function() {
     const sumedOrAveraged = !!(this.props.sum || this.props.average)
 
-    const jsonTransformer = transformer.prettify(this.props.groupings, this.props.showCounts, sumedOrAveraged)
-    const csvTransformer = transformer.convertToCsv(this.props.groupings, this.props.showCounts, sumedOrAveraged)
+    const jsonFormatter = downloadFormatter.json(this.props.groupings, this.props.showCounts, sumedOrAveraged)
+    const csvFormatter = downloadFormatter.csv(this.props.groupings, this.props.showCounts, sumedOrAveraged)
 
     const types = [
-      {name: "JSON", mimetype: "application/json", extension: "json", transformer: jsonTransformer},
-      {name: "CSV", mimetype: "text/csv", extension: "csv", transformer: csvTransformer},
+      {name: "JSON", mimetype: "application/json", extension: "json", formatter: jsonFormatter},
+      {name: "CSV", mimetype: "text/csv", extension: "csv", formatter: csvFormatter},
     ]
 
     return types.map(function(type) {

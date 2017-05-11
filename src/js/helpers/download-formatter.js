@@ -95,11 +95,11 @@ function csvFromArray(json) {
 }
 
 module.exports = {
-  prettify: R.curry(function(groupings, showCounts, sumedOrAveraged, json) {
+  json: R.curry(function(groupings, showCounts, sumedOrAveraged, json) {
     return JSON.stringify(json, null, 2)
   }),
 
-  convertToCsv: R.curry(function(groupings, showCounts, sumedOrAveraged, json) {
+  csv: R.curry(function(groupings, showCounts, sumedOrAveraged, json) {
     if (R.isEmpty(json)) return null
     if (sumedOrAveraged) return csvFromObject(json)
     if (showCounts) return csvFromCounts(json)
