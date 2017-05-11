@@ -13,7 +13,7 @@ const testSchema = {
 
 const testData = require("../../test-data.json")
 
-const validator = require("../helpers/validator")
+const validator = require("../services/validator")
 
 const Home = React.createClass({
   displayName: "Home",

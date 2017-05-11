@@ -1,7 +1,7 @@
 const chai = require("chai")
 const expect = chai.expect
 
-const validator = require("../../../src/js/helpers/validator")
+const validator = require("../../../src/js/services/validator")
 
 describe("validator", function() {
 

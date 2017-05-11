@@ -1,6 +1,6 @@
 const React = require("react")
 
-const validator = require("../helpers/validator")
+const validator = require("../services/validator")
 
 function fetchData(url) {
   return fetch(url, {method: "get"})

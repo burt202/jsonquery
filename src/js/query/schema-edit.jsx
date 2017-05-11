@@ -1,7 +1,7 @@
 const React = require("react")
 const R = require("ramda")
 
-const validator = require("../helpers/validator")
+const validator = require("../services/validator")
 
 const SchemaEditRow = require("./schema-edit-row")
 

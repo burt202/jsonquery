@@ -1,7 +1,7 @@
 const React = require("react")
 const R = require("ramda")
 
-const formatter = require("../helpers/formatter")
+const formatter = require("../services/formatter")
 
 const Filters = require("./filters")
 const Controls = require("./controls")

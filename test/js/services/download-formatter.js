@@ -1,7 +1,7 @@
 const chai = require("chai")
 const expect = chai.expect
 
-const downloadFormatter = require("../../../src/js/helpers/download-formatter")
+const downloadFormatter = require("../../../src/js/services/download-formatter")
 
 describe("downloadFormatter", function() {
 

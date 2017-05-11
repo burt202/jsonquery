@@ -1,7 +1,7 @@
 const chai = require("chai")
 const expect = chai.expect
 
-const formatter = require("../../../src/js/helpers/formatter")
+const formatter = require("../../../src/js/services/formatter")
 
 describe("formatter", function() {
 

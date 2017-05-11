@@ -2,7 +2,7 @@ const React = require("react")
 const R = require("ramda")
 const Clipboard = require("clipboard")
 
-const downloadFormatter = require("../helpers/download-formatter")
+const downloadFormatter = require("../services/download-formatter")
 
 const DISPLAY_THRESHOLD = 1000
 
