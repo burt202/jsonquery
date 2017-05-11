@@ -2,6 +2,7 @@ const React = require("react")
 const R = require("ramda")
 
 const formatter = require("../services/formatter")
+const utils = require("../utils")
 
 const Filters = require("./filters")
 const Controls = require("./controls")
@@ -67,8 +68,8 @@ const Query = React.createClass({
 
   formatData: function(data) {
     if (this.props.groupings.length) return formatter.group(this.props.groupings, this.props.showCounts, data)
-    if (this.props.sum) return {total: formatter.round(2, R.sum(R.pluck(this.props.sum, data)))}
-    if (this.props.average) return {average: formatter.round(2, R.mean(R.pluck(this.props.average, data)))}
+    if (this.props.sum) return {total: utils.round(2, R.sum(R.pluck(this.props.sum, data)))}
+    if (this.props.average) return {average: utils.round(2, R.mean(R.pluck(this.props.average, data)))}
     return data
   },
 

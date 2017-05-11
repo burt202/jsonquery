@@ -1,6 +1,8 @@
 const R = require("ramda")
 const uuid = require("uuid")
+
 const createStore = require("./base")
+const utils = require("../utils")
 
 const defaults = {
   filters: [],
@@ -13,11 +15,6 @@ const defaults = {
   limit: null,
   sum: null,
   average: null,
-}
-
-function updateWhere(find, update, data) {
-  const index = R.findIndex(R.whereEq(find), data)
-  return R.adjust(R.merge(R.__, update), index, data)
 }
 
 const initialOperators = {
@@ -67,7 +64,7 @@ const handlers = {
 
   updateFilter: function(contents, payload) {
     return R.merge(contents, {
-      filters: updateWhere({id: payload.id}, payload.value, contents.filters),
+      filters: utils.updateWhere({id: payload.id}, payload.value, contents.filters),
     })
   },
 

@@ -2,6 +2,7 @@ const React = require("react")
 const R = require("ramda")
 
 const formatter = require("../services/formatter")
+const utils = require("../utils")
 
 const Summary = React.createClass({
   displayName: "Summary",
@@ -27,7 +28,7 @@ const Summary = React.createClass({
   showRawDataLength: function() {
     if (this.props.results.length === this.props.rawDataLength) return ""
     const percentage = (this.props.results.length / this.props.rawDataLength) * 100
-    return "/" + this.props.rawDataLength + " (" + formatter.round(2, percentage) + "%)"
+    return "/" + this.props.rawDataLength + " (" + utils.round(2, percentage) + "%)"
   },
 
   render: function() {
