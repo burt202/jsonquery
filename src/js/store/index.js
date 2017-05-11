@@ -1,6 +1,6 @@
 const R = require("ramda")
 const uuid = require("uuid")
-const createStore = require("./helpers/store-base")
+const createStore = require("./base")
 
 const defaults = {
   filters: [],

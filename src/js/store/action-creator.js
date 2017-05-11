@@ -1,5 +1,5 @@
 const R = require("ramda")
-const dispatcher = require("./helpers/dispatcher")
+const dispatcher = require("./dispatcher")
 
 module.exports = {
   saveJson: function(name, data) {

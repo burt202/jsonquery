@@ -2,8 +2,9 @@ const React = require("react")
 const ReactDOM = require("react-dom")
 const queryString = require("query-string")
 
-const actionCreator = require("./action-creator")
-const store = require("./store")
+const actionCreator = require("./store/action-creator")
+const store = require("./store/index")
+
 const Home = require("./home")
 const FromUrl = require("./from-url")
 const Query = require("./query")
