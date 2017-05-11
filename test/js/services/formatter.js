@@ -880,12 +880,4 @@ describe("formatter", function() {
       })
     })
   })
-
-  describe("round", function() {
-    it("should round a number to a certain number of decimals", function() {
-      const res = formatter.round(2, 1.3456)
-
-      expect(res).to.eql(1.35)
-    })
-  })
 })
