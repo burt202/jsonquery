@@ -1,7 +1,7 @@
 const React = require("react")
 const R = require("ramda")
 
-const formatter = require("../services/formatter")
+const dataProcessor = require("../services/data-processor")
 const utils = require("../utils")
 
 const Filters = require("./filters")
@@ -42,11 +42,11 @@ const Query = React.createClass({
   },
 
   filterResults: function(data) {
-    return formatter.filter(data, this.props.schema, this.props.filters)
+    return dataProcessor.filter(data, this.props.schema, this.props.filters)
   },
 
   sortResults: function(data) {
-    return (this.props.sorters.length) ? formatter.sort(this.props.sorters, data) : data
+    return (this.props.sorters.length) ? dataProcessor.sort(this.props.sorters, data) : data
   },
 
   limitResults: function(data) {
@@ -67,7 +67,7 @@ const Query = React.createClass({
   },
 
   formatData: function(data) {
-    if (this.props.groupings.length) return formatter.group(this.props.groupings, this.props.showCounts, data)
+    if (this.props.groupings.length) return dataProcessor.group(this.props.groupings, this.props.showCounts, data)
     if (this.props.sum) return {total: utils.round(2, R.sum(R.pluck(this.props.sum, data)))}
     if (this.props.average) return {average: utils.round(2, R.mean(R.pluck(this.props.average, data)))}
     return data

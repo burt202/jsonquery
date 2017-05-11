@@ -1,9 +1,9 @@
 const chai = require("chai")
 const expect = chai.expect
 
-const formatter = require("../../../src/js/services/formatter")
+const dateProcessor = require("../../../src/js/services/data-processor")
 
-describe("formatter", function() {
+describe("dateProcessor", function() {
 
   describe("filter", function() {
     const mockDataForFiltering = [
@@ -19,13 +19,13 @@ describe("formatter", function() {
     }
 
     it("should not filter anything if no filters are defined", function() {
-      const res = formatter.filter(mockDataForFiltering, mockSchema, [])
+      const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [])
 
       expect(res).to.eql(mockDataForFiltering)
     })
 
     it("should filter on multiple fields", function() {
-      const res = formatter.filter(mockDataForFiltering, mockSchema, [
+      const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
         {name: "type", value: "cash", operator: "eq", active: true},
         {name: "deleted", operator: "false", active: true},
       ])
@@ -36,7 +36,7 @@ describe("formatter", function() {
     })
 
     it("should filter on the same field multiple times", function() {
-      const res = formatter.filter(mockDataForFiltering, mockSchema, [
+      const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
         {name: "num", value: "1,2", operator: "iof", active: true},
         {name: "num", value: "2", operator: "lt", active: true},
       ])
@@ -47,7 +47,7 @@ describe("formatter", function() {
     })
 
     it("should ignore inactive filters", function() {
-      const res = formatter.filter(mockDataForFiltering, mockSchema, [
+      const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
         {name: "type", value: "cash", operator: "eq", active: true},
         {name: "deleted", operator: "false", active: false},
       ])
@@ -59,7 +59,7 @@ describe("formatter", function() {
     })
 
     it("should ignore invalid operators", function() {
-      const res = formatter.filter(mockDataForFiltering, mockSchema, [
+      const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
         {name: "type", value: "cash", operator: "xxx", active: true},
       ])
 
@@ -81,7 +81,7 @@ describe("formatter", function() {
       }
 
       it("should filter when operator is 'eq'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "type", operator: "eq", value: "cash", active: true},
         ])
 
@@ -92,7 +92,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'neq'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "type", operator: "neq", value: "cash", active: true},
         ])
 
@@ -104,7 +104,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'nl'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "type", operator: "nl", active: true},
         ])
 
@@ -114,7 +114,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'nnl'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "type", operator: "nnl", active: true},
         ])
 
@@ -127,7 +127,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'iof'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "type", operator: "iof", value: "cash,loan", active: true},
         ])
 
@@ -139,7 +139,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'inof'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "type", operator: "inof", value: "cash,loan", active: true},
         ])
 
@@ -150,7 +150,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'rgm'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "type", operator: "rgm", value: "ca", active: true},
         ])
 
@@ -178,7 +178,7 @@ describe("formatter", function() {
       }
 
       it("should filter when operator is 'eq'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "code", operator: "eq", value: "102", active: true},
         ])
 
@@ -188,7 +188,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'neq'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "code", operator: "neq", value: "102", active: true},
         ])
 
@@ -202,7 +202,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'nl'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "code", operator: "nl", active: true},
         ])
 
@@ -212,7 +212,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'nnl'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "code", operator: "nnl", active: true},
         ])
 
@@ -226,7 +226,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'gt'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "code", operator: "gt", value: "102", active: true},
         ])
 
@@ -237,7 +237,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'lt'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "code", operator: "lt", value: "102", active: true},
         ])
 
@@ -249,7 +249,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'gte'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "code", operator: "gte", value: "102", active: true},
         ])
 
@@ -261,7 +261,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'lte'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "code", operator: "lte", value: "102", active: true},
         ])
 
@@ -274,7 +274,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'iof'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "code", operator: "iof", value: "101,103", active: true},
         ])
 
@@ -286,7 +286,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'iof' and one of the values is null", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "code", operator: "iof", value: "101,", active: true},
         ])
 
@@ -297,7 +297,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'iof' and one of the values is 0", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "code", operator: "iof", value: "101,0", active: true},
         ])
 
@@ -308,7 +308,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'inof'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "code", operator: "inof", value: "101,103", active: true},
         ])
 
@@ -320,7 +320,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'btw'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "code", operator: "btw", value: "101", value1: "103", active: true},
         ])
 
@@ -335,7 +335,7 @@ describe("formatter", function() {
           {name: "bar", code: 102},
         ]
 
-        const res = formatter.filter(mockFilters, mockSchema, [
+        const res = dateProcessor.filter(mockFilters, mockSchema, [
           {name: "code", operator: "gt", value: "101.9", active: true},
         ])
 
@@ -360,7 +360,7 @@ describe("formatter", function() {
       }
 
       it("should filter when true", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "deleted", operator: "true", active: true},
         ])
 
@@ -371,7 +371,7 @@ describe("formatter", function() {
       })
 
       it("should filter when false", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "deleted", operator: "false", active: true},
         ])
 
@@ -382,7 +382,7 @@ describe("formatter", function() {
       })
 
       it("should filter when null", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "deleted", operator: "nl", active: true},
         ])
 
@@ -392,7 +392,7 @@ describe("formatter", function() {
       })
 
       it("should filter when not null", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "deleted", operator: "nnl", active: true},
         ])
 
@@ -419,7 +419,7 @@ describe("formatter", function() {
       }
 
       it("should filter when operator is 'eq'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "eq", value: "2016-07-11T17:16:27", active: true},
         ])
 
@@ -429,7 +429,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'neq'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "neq", value: "2016-07-11T17:16:27", active: true},
         ])
 
@@ -442,7 +442,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'nl'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "nl", value: "", active: true},
         ])
 
@@ -452,7 +452,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'nnl'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "nnl", value: "", active: true},
         ])
 
@@ -465,7 +465,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'sd'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "sd", value: "20160611", active: true},
         ])
 
@@ -475,7 +475,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'be'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "be", value: "20160811", active: true},
         ])
 
@@ -487,7 +487,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'be' for datetime string", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "be", value: "20160811 1800", active: true},
         ])
 
@@ -500,7 +500,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'af'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "af", value: "20160712", active: true},
         ])
 
@@ -511,7 +511,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'af' for datetime string", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "af", value: "20160711 0345", active: true},
         ])
 
@@ -523,7 +523,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'btw'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "btw", value: "20160712", value1: "20160910", active: true},
         ])
 
@@ -533,7 +533,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'btw' for datetime strings", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "btw", value: "20160711 0345", value1: "20160911 1854", active: true},
         ])
 
@@ -560,7 +560,7 @@ describe("formatter", function() {
       }
 
       it("should filter when operator is 'cos'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "types", operator: "con", value: "101", active: true},
         ])
 
@@ -570,7 +570,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'cos'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "types", operator: "cos", value: "card", active: true},
         ])
 
@@ -581,7 +581,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'hl'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "types", operator: "hl", value: "0", active: true},
         ])
 
@@ -591,7 +591,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'dhl'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "types", operator: "dhl", value: "0", active: true},
         ])
 
@@ -604,7 +604,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'hlgt'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "types", operator: "hlgt", value: "1", active: true},
         ])
 
@@ -615,7 +615,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'hlgte'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "types", operator: "hlgte", value: "1", active: true},
         ])
 
@@ -628,7 +628,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'hllt'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "types", operator: "hllt", value: "2", active: true},
         ])
 
@@ -640,7 +640,7 @@ describe("formatter", function() {
       })
 
       it("should filter when operator is 'hllte'", function() {
-        const res = formatter.filter(mockDataForFiltering, mockSchema, [
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "types", operator: "hllte", value: "2", active: true},
         ])
 
@@ -666,7 +666,7 @@ describe("formatter", function() {
     ]
 
     it("should group data at 1 level", function() {
-      expect(formatter.group(["type"], false, mockDataForGrouping)).to.eql({
+      expect(dateProcessor.group(["type"], false, mockDataForGrouping)).to.eql({
         cash: [
           {
             name: "foo",
@@ -707,7 +707,7 @@ describe("formatter", function() {
     })
 
     it("should group data at 2 levels", function() {
-      expect(formatter.group(["type", "auto"], false, mockDataForGrouping)).to.eql({
+      expect(dateProcessor.group(["type", "auto"], false, mockDataForGrouping)).to.eql({
         cash: {
           true: [
             {
@@ -758,7 +758,7 @@ describe("formatter", function() {
     })
 
     it("should group data with counts when 'showCounts' is true", function() {
-      expect(formatter.group(["type"], true, mockDataForGrouping)).to.eql([
+      expect(dateProcessor.group(["type"], true, mockDataForGrouping)).to.eql([
         "card: 3",
         "cash: 2",
         "loan: 1",
@@ -766,7 +766,7 @@ describe("formatter", function() {
     })
 
     it("should group data with counts at 2 levels when 'showCounts' is true", function() {
-      expect(formatter.group(["type", "auto"], true, mockDataForGrouping)).to.eql({
+      expect(dateProcessor.group(["type", "auto"], true, mockDataForGrouping)).to.eql({
         cash: ["false: 1", "true: 1"],
         loan: ["true: 1"],
         card: ["true: 2", "false: 1"],
@@ -786,7 +786,7 @@ describe("formatter", function() {
     it("should sort the data in ascending order", function() {
       const sorters = [{field: "trackNo", direction: "asc"}]
 
-      expect(formatter.sort(sorters, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sort(sorters, mockDataForSorting)).to.eql([
         {artist: "Coldplay", album: "A Rush Of Blood", trackNo: 1},
         {artist: "Coldplay", album: "Parachutes", trackNo: 1},
         {artist: "Coldplay", album: "Parachutes", trackNo: 2},
@@ -798,7 +798,7 @@ describe("formatter", function() {
     it("should sort the data in descending order", function() {
       const sorters = [{field: "trackNo", direction: "desc"}]
 
-      expect(formatter.sort(sorters, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sort(sorters, mockDataForSorting)).to.eql([
         {artist: "Coldplay", album: "Parachutes", trackNo: 5},
         {artist: "Coldplay", album: "A Rush Of Blood", trackNo: 3},
         {artist: "Coldplay", album: "Parachutes", trackNo: 2},
@@ -813,7 +813,7 @@ describe("formatter", function() {
         {field: "trackNo", direction: "asc"},
       ]
 
-      expect(formatter.sort(sorters, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sort(sorters, mockDataForSorting)).to.eql([
         {artist: "Coldplay", album: "A Rush Of Blood", trackNo: 1},
         {artist: "Coldplay", album: "A Rush Of Blood", trackNo: 3},
         {artist: "Coldplay", album: "Parachutes", trackNo: 1},

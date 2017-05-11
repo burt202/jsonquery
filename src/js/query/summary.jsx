@@ -1,7 +1,7 @@
 const React = require("react")
 const R = require("ramda")
 
-const formatter = require("../services/formatter")
+const dataProcessor = require("../services/data-processor")
 const groupingAnalyser = require("../services/grouping-analyser")
 const utils = require("../utils")
 
@@ -23,7 +23,7 @@ const Summary = React.createClass({
   },
 
   getGrouping: function() {
-    return (this.props.groupings.length) ? formatter.group(this.props.groupings, false, this.props.results) : null
+    return (this.props.groupings.length) ? dataProcessor.group(this.props.groupings, false, this.props.results) : null
   },
 
   showRawDataLength: function() {
