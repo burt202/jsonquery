@@ -2,6 +2,7 @@ const React = require("react")
 const R = require("ramda")
 
 const formatter = require("../services/formatter")
+const groupingAnalyser = require("../services/grouping-analyser")
 const utils = require("../utils")
 
 const Summary = React.createClass({
@@ -18,7 +19,7 @@ const Summary = React.createClass({
 
     return R.map(function(obj) {
       return (<p key={obj.name}>{obj.name + ": " + obj.value}</p>)
-    }, formatter.getGroupStats(grouping))
+    }, groupingAnalyser.getAnalysis(grouping))
   },
 
   getGrouping: function() {

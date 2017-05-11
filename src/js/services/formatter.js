@@ -42,18 +42,6 @@ const matches = R.curry(function(filterValue, dataValue) {
   return R.test(regex, dataValue)
 })
 
-const round = R.curry(function(decimals, num) {
-  return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals)
-})
-
-function getMax(arr) {
-  return Math.max.apply(null, arr)
-}
-
-function getMin(arr) {
-  return Math.min.apply(null, arr)
-}
-
 function getStringFilter(filter) {
   if (filter.value && filter.value.length) {
     if (filter.operator === "eq") return R.equals(filter.value)
@@ -153,15 +141,6 @@ const _group = R.curry(function(groupings, showCounts, data) {
   return R.map(_group(groupings, showCounts), data)
 })
 
-const _getGroupLengths = R.pipe(
-  R.toPairs,
-  R.map(function(pair) {
-    if (Array.isArray(pair[1])) return R.length(pair[1])
-    return _getGroupLengths(pair[1])
-  }),
-  R.flatten
-)
-
 function formatFilters(filters) {
   return R.pipe(
     R.toPairs,
@@ -206,16 +185,5 @@ module.exports = {
       const direction = (sorter.direction === "asc") ? "ascend" : "descend"
       return R[direction](R.prop(sorter.field))
     }, sorters), data)
-  },
-
-  getGroupStats: function(grouped) {
-    const groupLengths = _getGroupLengths(grouped)
-
-    const count = {name: "No. of Groups", value: groupLengths.length}
-    const max = {name: "Max Group Size", value: getMax(groupLengths)}
-    const min = {name: "Min Group Size", value: getMin(groupLengths)}
-    const mean = {name: "Average Group Size", value: R.compose(round(2), R.mean)(groupLengths)}
-
-    return (count.value) ? [count, max, min, mean] : []
   },
 }
