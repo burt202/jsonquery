@@ -36,14 +36,14 @@ const SchemaEdit = React.createClass({
     const json = e.target.result
 
     if (!validator.isValidJSON(json)) {
-      this.showError("Not valid JSON!")
+      this.showError("Schema must be valid JSON")
       return
     }
 
     const parsed = JSON.parse(json)
 
     if (!validator.isObject(parsed)) {
-      this.showError("The schema must be an object!")
+      this.showError("Schema must be an object")
       return
     }
 

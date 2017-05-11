@@ -32,7 +32,7 @@ const Main = React.createClass({
     if (!this.state.schema || !this.state.data || !this.state.resultFields) {
       const parsed = queryString.parse(location.search)
 
-      if (parsed.dataUrl && parsed.schema) {
+      if (parsed.dataUrl) {
         return <FromUrl
           actionCreator={actionCreator}
           params={parsed}

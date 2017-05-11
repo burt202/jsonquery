@@ -1,6 +1,7 @@
 const React = require("react")
 
 const validator = require("../services/validator")
+const schemaGenerator = require("../services/schema-generator")
 
 function fetchData(url) {
   return fetch(url, {method: "get"})
@@ -34,21 +35,33 @@ const FromUrl = React.createClass({
   },
 
   onFetchComplete: function(data) {
-    const schema = decodeURIComponent(this.props.params.schema)
-
     const errors = []
 
     if (!validator.isArray(data)) {
       errors.push("Data must be an array")
     }
 
-    if (!validator.isValidJSON(schema)) {
-      errors.push("Schema must be valid JSON")
+    if (!data.length) {
+      errors.push("Data must have at least 1 item")
     }
 
-    if (!validator.isObject("object", schema)) {
-      errors.push("Schema must be an object")
+    var schema = null
+
+    if (this.props.params.schema) {
+      const fromUrl = decodeURIComponent(this.props.params.schema)
+
+      if (!validator.isValidJSON(fromUrl)) {
+        errors.push("Schema must be valid JSON")
+      }
+
+      if (!validator.isObject(fromUrl)) {
+        errors.push("Schema must be an object")
+      }
+
+      schema = JSON.parse(fromUrl)
     }
+
+    if (!schema) schema = schemaGenerator.generate(data[0])
 
     if (errors.length) {
       this.setState({errors: errors})
@@ -56,7 +69,7 @@ const FromUrl = React.createClass({
     }
 
     this.props.actionCreator.saveJson("data", data)
-    this.props.actionCreator.saveJson("schema", JSON.parse(schema))
+    this.props.actionCreator.saveJson("schema", schema)
   },
 
   onFetchError: function(err) {
