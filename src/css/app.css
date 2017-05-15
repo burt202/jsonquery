@@ -110,6 +110,11 @@ th {
   background-color: #f9f9f9;
 }
 
+textarea {
+  width: 730px;
+  height: 350px;
+}
+
 pre {
   overflow: auto;
   font-family: monospace, monospace;
@@ -144,12 +149,21 @@ pre:hover a {
 ul.side-options {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
   list-style-type: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+ul.side-options.right {
+  justify-content: flex-end;
 }
 
 ul.side-options li {
   margin-right: 15px;
+}
+
+ul.side-options li.active {
+  font-weight: bold;
 }
 
 ul.side-options li:last-of-type {

@@ -75,7 +75,7 @@ const Query = React.createClass({
 
   getSideOptions: function() {
     return (
-      <ul className="side-options">
+      <ul className="side-options right">
         <li><a className="site-link" onClick={this.onSchemaEdit}>Edit Schema</a></li>
         <li><a className="site-link" onClick={this.onReset}>Reset</a></li>
       </ul>

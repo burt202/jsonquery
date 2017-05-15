@@ -88,7 +88,7 @@ const SchemaEdit = React.createClass({
           </pre>
         </div>
         <p><label>Upload: </label><input type="file" key={this.state.inputKey} onChange={this.onFileUploadStart} /></p>
-        <ul className="side-options">
+        <ul className="side-options right">
           <li><a className="site-link" onClick={this.props.onCancel}>Cancel</a></li>
           <li><a className="site-link" onClick={this.onSave}>Save</a></li>
         </ul>
