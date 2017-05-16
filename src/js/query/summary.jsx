@@ -1,4 +1,5 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 const R = require("ramda")
 
 const dataProcessor = require("../services/data-processor")
@@ -9,9 +10,9 @@ const Summary = React.createClass({
   displayName: "Summary",
 
   propTypes: {
-    rawDataLength: React.PropTypes.number.isRequired,
-    results: React.PropTypes.array.isRequired,
-    groupings: React.PropTypes.array,
+    rawDataLength: PropTypes.number.isRequired,
+    results: PropTypes.array.isRequired,
+    groupings: PropTypes.array,
   },
 
   getGroupingBreakdown: function(grouping) {

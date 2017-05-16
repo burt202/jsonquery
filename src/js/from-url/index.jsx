@@ -1,4 +1,5 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 
 const validator = require("../services/validator")
 const schemaGenerator = require("../services/schema-generator")
@@ -18,8 +19,8 @@ const FromUrl = React.createClass({
   displayName: "FromUrl",
 
   propTypes: {
-    actionCreator: React.PropTypes.object.isRequired,
-    params: React.PropTypes.object.isRequired,
+    actionCreator: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
   },
 
   getInitialState: function() {

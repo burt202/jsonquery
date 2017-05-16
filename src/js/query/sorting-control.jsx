@@ -1,13 +1,14 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 
 const SortingControl = React.createClass({
   displayName: "SortingControl",
 
   propTypes: {
-    sorters: React.PropTypes.array,
-    options: React.PropTypes.array.isRequired,
-    onAdd: React.PropTypes.func.isRequired,
-    onRemove: React.PropTypes.func.isRequired,
+    sorters: PropTypes.array,
+    options: PropTypes.array.isRequired,
+    onAdd: PropTypes.func.isRequired,
+    onRemove: PropTypes.func.isRequired,
   },
 
   getInitialState: function() {

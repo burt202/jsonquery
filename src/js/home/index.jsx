@@ -1,4 +1,5 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 const classNames = require("classnames")
 
 const validator = require("../services/validator")
@@ -12,7 +13,7 @@ const Home = React.createClass({
   displayName: "Home",
 
   propTypes: {
-    actionCreator: React.PropTypes.object.isRequired,
+    actionCreator: PropTypes.object.isRequired,
   },
 
   getInitialState: function() {

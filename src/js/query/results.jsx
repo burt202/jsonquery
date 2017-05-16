@@ -1,4 +1,5 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 const R = require("ramda")
 const Clipboard = require("clipboard")
 
@@ -10,15 +11,15 @@ const Results = React.createClass({
   displayName: "Results",
 
   propTypes: {
-    results: React.PropTypes.any.isRequired,
-    groupings: React.PropTypes.array,
-    resultFields: React.PropTypes.array.isRequired,
-    schema: React.PropTypes.object.isRequired,
-    actionCreator: React.PropTypes.object.isRequired,
-    showCounts: React.PropTypes.bool.isRequired,
-    filteredLength: React.PropTypes.number.isRequired,
-    sum: React.PropTypes.string,
-    average: React.PropTypes.string,
+    results: PropTypes.any.isRequired,
+    groupings: PropTypes.array,
+    resultFields: PropTypes.array.isRequired,
+    schema: PropTypes.object.isRequired,
+    actionCreator: PropTypes.object.isRequired,
+    showCounts: PropTypes.bool.isRequired,
+    filteredLength: PropTypes.number.isRequired,
+    sum: PropTypes.string,
+    average: PropTypes.string,
   },
 
   downloadResults: function(type) {

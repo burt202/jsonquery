@@ -1,12 +1,13 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 
 const SchemaEditRow = React.createClass({
   displayName: "SchemaEditRow",
 
   propTypes: {
-    field: React.PropTypes.string.isRequired,
-    type: React.PropTypes.string.isRequired,
-    onChange: React.PropTypes.func.isRequired,
+    field: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
   },
 
   onChange: function(e) {

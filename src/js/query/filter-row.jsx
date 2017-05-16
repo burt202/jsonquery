@@ -1,4 +1,5 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 const R = require("ramda")
 const classNames = require("classnames")
 
@@ -63,11 +64,11 @@ const FilterRow = React.createClass({
   displayName: "FilterRow",
 
   propTypes: {
-    type: React.PropTypes.string.isRequired,
-    filter: React.PropTypes.object.isRequired,
-    onToggle: React.PropTypes.func.isRequired,
-    onDelete: React.PropTypes.func.isRequired,
-    onUpdate: React.PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
+    filter: PropTypes.object.isRequired,
+    onToggle: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
+    onUpdate: PropTypes.func.isRequired,
   },
 
   getInputControlByType: function() {

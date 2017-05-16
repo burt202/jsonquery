@@ -1,4 +1,5 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 const R = require("ramda")
 
 const GroupingControl = require("./grouping-control")
@@ -8,14 +9,14 @@ const Controls = React.createClass({
   displayName: "Controls",
 
   propTypes: {
-    actionCreator: React.PropTypes.object.isRequired,
-    groupings: React.PropTypes.array,
-    sorters: React.PropTypes.array,
-    schema: React.PropTypes.object.isRequired,
-    showCounts: React.PropTypes.bool.isRequired,
-    limit: React.PropTypes.number,
-    sum: React.PropTypes.string,
-    average: React.PropTypes.string,
+    actionCreator: PropTypes.object.isRequired,
+    groupings: PropTypes.array,
+    sorters: PropTypes.array,
+    schema: PropTypes.object.isRequired,
+    showCounts: PropTypes.bool.isRequired,
+    limit: PropTypes.number,
+    sum: PropTypes.string,
+    average: PropTypes.string,
   },
 
   onSumChange: function(e) {

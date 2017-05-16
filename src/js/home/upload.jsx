@@ -1,11 +1,12 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 
 const Upload = React.createClass({
   displayName: "Upload",
 
   propTypes: {
-    onAction: React.PropTypes.func.isRequired,
-    errorDate: React.PropTypes.number,
+    onAction: PropTypes.func.isRequired,
+    errorDate: PropTypes.number,
   },
 
   getInitialState: function() {

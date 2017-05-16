@@ -1,4 +1,5 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 const R = require("ramda")
 
 const validator = require("../services/validator")
@@ -9,9 +10,9 @@ const SchemaEdit = React.createClass({
   displayName: "SchemaEdit",
 
   propTypes: {
-    schema: React.PropTypes.object.isRequired,
-    onSave: React.PropTypes.func.isRequired,
-    onCancel: React.PropTypes.func.isRequired,
+    schema: PropTypes.object.isRequired,
+    onSave: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
   },
 
   getInitialState: function() {

@@ -1,4 +1,5 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 const R = require("ramda")
 
 const dataProcessor = require("../services/data-processor")
@@ -14,17 +15,17 @@ const Query = React.createClass({
   displayName: "Query",
 
   propTypes: {
-    actionCreator: React.PropTypes.object.isRequired,
-    filters: React.PropTypes.array.isRequired,
-    groupings: React.PropTypes.array,
-    sorters: React.PropTypes.array,
-    schema: React.PropTypes.object.isRequired,
-    data: React.PropTypes.array.isRequired,
-    resultFields: React.PropTypes.array.isRequired,
-    showCounts: React.PropTypes.bool.isRequired,
-    limit: React.PropTypes.number,
-    sum: React.PropTypes.string,
-    average: React.PropTypes.string,
+    actionCreator: PropTypes.object.isRequired,
+    filters: PropTypes.array.isRequired,
+    groupings: PropTypes.array,
+    sorters: PropTypes.array,
+    schema: PropTypes.object.isRequired,
+    data: PropTypes.array.isRequired,
+    resultFields: PropTypes.array.isRequired,
+    showCounts: PropTypes.bool.isRequired,
+    limit: PropTypes.number,
+    sum: PropTypes.string,
+    average: PropTypes.string,
   },
 
   getInitialState: function() {

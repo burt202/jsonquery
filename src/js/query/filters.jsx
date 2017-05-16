@@ -1,13 +1,14 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 const FilterRow = require("./filter-row")
 
 const Filters = React.createClass({
   displayName: "Filters",
 
   propTypes: {
-    actionCreator: React.PropTypes.object.isRequired,
-    filters: React.PropTypes.array.isRequired,
-    schema: React.PropTypes.object.isRequired,
+    actionCreator: PropTypes.object.isRequired,
+    filters: PropTypes.array.isRequired,
+    schema: PropTypes.object.isRequired,
   },
 
   getInitialState: function() {

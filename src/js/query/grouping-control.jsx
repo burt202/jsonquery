@@ -1,15 +1,16 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 
 const GroupingControl = React.createClass({
   displayName: "GroupingControl",
 
   propTypes: {
-    groupings: React.PropTypes.array,
-    options: React.PropTypes.array.isRequired,
-    showCounts: React.PropTypes.bool.isRequired,
-    onAdd: React.PropTypes.func.isRequired,
-    onRemove: React.PropTypes.func.isRequired,
-    onShowCountsChange: React.PropTypes.func.isRequired,
+    groupings: PropTypes.array,
+    options: PropTypes.array.isRequired,
+    showCounts: PropTypes.bool.isRequired,
+    onAdd: PropTypes.func.isRequired,
+    onRemove: PropTypes.func.isRequired,
+    onShowCountsChange: PropTypes.func.isRequired,
   },
 
   onAdd: function(e) {

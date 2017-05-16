@@ -1,4 +1,5 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 
 const testData = require("../../test-data.json")
 
@@ -6,7 +7,7 @@ const Paste = React.createClass({
   displayName: "Paste",
 
   propTypes: {
-    onAction: React.PropTypes.func.isRequired,
+    onAction: PropTypes.func.isRequired,
   },
 
   getInitialState: function() {
