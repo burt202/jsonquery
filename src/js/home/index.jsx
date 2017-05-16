@@ -6,6 +6,7 @@ const schemaGenerator = require("../services/schema-generator")
 
 const Paste = require("./paste")
 const Upload = require("./upload")
+const Url = require("./url")
 
 const Home = React.createClass({
   displayName: "Home",
@@ -54,19 +55,25 @@ const Home = React.createClass({
     this.props.actionCreator.saveJson("schema", schemaGenerator.generate(json[0]))
   },
 
-  getPasteInput: function() {
+  getPasteComponent: function() {
     if (this.state.selectedTab !== "paste") return null
     return <Paste onAction={this.onAction} />
   },
 
-  getUploadInput: function() {
+  getUploadComponent: function() {
     if (this.state.selectedTab !== "upload") return null
     return <Upload onAction={this.onAction} errorDate={this.state.errorDate} />
+  },
+
+  getUrlComponent: function() {
+    if (this.state.selectedTab !== "url") return null
+    return <Url />
   },
 
   render: function() {
     const pasteActive = classNames({active: this.state.selectedTab === "paste"})
     const uploadActive = classNames({active: this.state.selectedTab === "upload"})
+    const urlActive = classNames({active: this.state.selectedTab === "url"})
 
     return (
       <div className="home-cont">
@@ -76,9 +83,11 @@ const Home = React.createClass({
         <ul className="side-options">
           <li className={pasteActive}><a className="site-link" onClick={this.selectTab.bind(this, "paste")}>By Pasting</a></li>
           <li className={uploadActive}><a className="site-link" onClick={this.selectTab.bind(this, "upload")}>By Upload</a></li>
+          <li className={urlActive}><a className="site-link" onClick={this.selectTab.bind(this, "url")}>By Url</a></li>
         </ul>
-        {this.getPasteInput()}
-        {this.getUploadInput()}
+        {this.getPasteComponent()}
+        {this.getUploadComponent()}
+        {this.getUrlComponent()}
       </div>
     )
   },
