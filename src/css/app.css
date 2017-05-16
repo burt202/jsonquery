@@ -172,9 +172,13 @@ ul.side-options li:last-of-type {
 
 /* Home */
 
-.home-cont label {
-  width: 100px;
-  display: inline-block;
+.home-cont .drag-drop-area {
+  width: 730px;
+  height: 200px;
+  border: 3px dashed #AAA;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Filters */
