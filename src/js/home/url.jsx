@@ -1,4 +1,5 @@
 const React = require("react")
+const Code = require("../components/code")
 
 const testSchema = {
   Album: "string",
@@ -25,10 +26,10 @@ const Url = React.createClass({
     return (
       <div>
         <p>You can also load in data via the url. Use the <code>dataUrl</code> parameter and point it to the url where your data is located. The data must be in JSON format and depending on the size of the data set, it may take a long time to load in.</p>
-        <pre>{testUrl}</pre>
+        <Code>{testUrl}</Code>
         <p><button onClick={this.goTo.bind(this, testUrl)}>Try it out</button></p>
         <p>If you wanted to override the automatic schema generation you can also supply a schema using the <code>schema</code> parameter. This parameter must be URL encoded.</p>
-        <pre>{testUrlWithSchema}</pre>
+        <Code>{testUrlWithSchema}</Code>
         <p><button onClick={this.goTo.bind(this, testUrlWithSchema)}>Try it out</button></p>
       </div>
     )

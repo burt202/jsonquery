@@ -15,6 +15,20 @@ body {
   background-color: #fff;
 }
 
+p > code {
+  background: #eee;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 0 4px;
+  color: darkred;
+}
+
+pre {
+  margin: 0 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
 .container {
   padding-right: 15px;
   padding-left: 15px;
@@ -113,43 +127,6 @@ th {
 textarea {
   width: 730px;
   height: 350px;
-}
-
-code {
-  font-family: monospace, monospace;
-  color: #333;
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-pre {
-  overflow: auto;
-  font-family: monospace, monospace;
-  page-break-inside: avoid;
-  display: block;
-  padding: 9.5px;
-  margin: 0 0 10px;
-  font-size: 13px;
-  line-height: 1.42857143;
-  color: #333;
-  word-break: break-all;
-  word-wrap: break-word;
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  position: relative;
-}
-
-pre a {
-  display: none;
-  position: absolute;
-  right: 10px;
-  padding: 5px;
-}
-
-pre:hover a {
-  display: inline-block;
 }
 
 ul.side-options {

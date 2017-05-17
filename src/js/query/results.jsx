@@ -4,6 +4,7 @@ const R = require("ramda")
 const Clipboard = require("clipboard")
 
 const downloadFormatter = require("../services/download-formatter")
+const Code = require("../components/code")
 
 const DISPLAY_THRESHOLD = 1000
 
@@ -103,19 +104,21 @@ const Results = React.createClass({
   },
 
   render: function() {
-    new Clipboard("pre a")
+    new Clipboard("a.site-link[data-clipboard-action='copy']")
 
     return (
       <div>
         <h3>Results</h3>
         {this.getCheckboxes()}
-        <p className="download-links">Download results as: {this.getDownloadLinks()}</p>
-        <pre>
+        <p className="download-links">
+          Download results as: {this.getDownloadLinks()}
           {this.getCopyLink()}
-          <div id="copy-cont">
+        </p>
+        <div id="copy-cont">
+          <Code language="json">
             {this.getDisplayData()}
-          </div>
-        </pre>
+          </Code>
+        </div>
         <a id="hidden-download-link" style={{display: "none"}}></a>
       </div>
     )
