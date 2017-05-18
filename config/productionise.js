@@ -26,6 +26,7 @@ const prodPlugins = [
     data: {
       version: packageJson.version,
       production: true,
+      lastModified: Date.now(),
     },
   }),
 ]
