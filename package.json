@@ -5,11 +5,11 @@
   "scripts": {
     "lint": "eslint src/ test/ --ext .js,.jsx",
     "test": "mocha",
-    "precommit": "npm run lint && npm run test",
+    "start": "webpack-dev-server --progress --colors",
     "build": "rm -rf build; webpack --config ./config/webpack.config.prod.js --progress",
-    "deploy": "gulp deploy",
-    "prepush": "npm run build; npm run deploy",
-    "start": "webpack-dev-server --progress --colors"
+    "deploy": "gh-pages -d build",
+    "precommit": "npm run lint && npm run test",
+    "prepush": "npm run build; npm run deploy"
   },
   "dependencies": {
     "classnames": "^2.2.5",
@@ -30,8 +30,7 @@
     "eslint": "^3.11.1",
     "eslint-plugin-react": "^6.8.0",
     "extract-text-webpack-plugin": "^2.1.0",
-    "gulp": "^3.9.1",
-    "gulp-gh-pages": "^0.5.4",
+    "gh-pages": "^1.0.0",
     "husky": "^0.11.7",
     "json-loader": "^0.5.4",
     "jsx-loader": "^0.13.2",
