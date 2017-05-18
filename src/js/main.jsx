@@ -1,5 +1,4 @@
 const React = require("react")
-const ReactDOM = require("react-dom")
 const queryString = require("query-string")
 
 const actionCreator = require("./store/action-creator")
@@ -60,4 +59,4 @@ const Main = React.createClass({
   },
 })
 
-ReactDOM.render(<Main />, document.body.querySelector(".main"))
+module.exports = Main

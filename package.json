@@ -6,7 +6,10 @@
     "lint": "eslint src/ test/ --ext .js,.jsx",
     "test": "mocha",
     "precommit": "npm run lint && npm run test",
-    "prepush": "gulp deploy"
+    "build": "rm -rf build; webpack --config ./config/webpack.config.prod.js --progress",
+    "deploy": "gulp deploy",
+    "prepush": "npm run build; npm run deploy",
+    "start": "webpack-dev-server --progress --colors"
   },
   "dependencies": {
     "classnames": "^2.2.5",
@@ -22,22 +25,21 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.23.1",
     "eslint": "^3.11.1",
     "eslint-plugin-react": "^6.8.0",
-    "extract-text-webpack-plugin": "^1.0.1",
+    "extract-text-webpack-plugin": "^2.1.0",
     "gulp": "^3.9.1",
-    "gulp-clean": "^0.3.2",
-    "gulp-data": "^1.2.1",
     "gulp-gh-pages": "^0.5.4",
-    "gulp-swig": "^0.8.0",
-    "gulp-webpack": "^1.5.0",
     "husky": "^0.11.7",
     "json-loader": "^0.5.4",
     "jsx-loader": "^0.13.2",
     "mocha": "^3.2.0",
-    "run-sequence": "^1.2.2",
+    "react-hot-loader": "^3.0.0-beta.7",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.1"
+    "swig-webpack-plugin": "^0.5.1",
+    "webpack": "^2.0.0",
+    "webpack-dev-server": "^2.4.5"
   }
 }
