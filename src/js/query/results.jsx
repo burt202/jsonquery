@@ -5,6 +5,8 @@ const Clipboard = require("clipboard")
 
 const downloadFormatter = require("../services/download-formatter")
 
+const Donut = require("./charts/donut")
+
 const DISPLAY_THRESHOLD = 1000
 
 const Results = React.createClass({
@@ -20,6 +22,12 @@ const Results = React.createClass({
     filteredLength: PropTypes.number.isRequired,
     sum: PropTypes.string,
     average: PropTypes.string,
+  },
+
+  getInitialState: function() {
+    return {
+      displayMode: "chart",
+    }
   },
 
   downloadResults: function(type) {
@@ -102,24 +110,58 @@ const Results = React.createClass({
     return (this.canCopyResults()) ? <a className="site-link" data-clipboard-action="copy" data-clipboard-target="#copy-cont">Copy to clipboard</a> : null
   },
 
+  onChangeDisplayMode: function(mode) {
+    this.setState({displayMode: mode})
+  },
+
+  resultsText: function() {
+    return (<div>
+      {this.getCheckboxes()}
+      <p className="download-links">Download results as: {this.getDownloadLinks()}</p>
+      <pre>
+        {this.getCopyLink()}
+        <div id="copy-cont">
+          {this.getDisplayData()}
+        </div>
+      </pre>
+      <a id="hidden-download-link" style={{display: "none"}}></a>
+    </div>)
+  },
+
+  getResults: function() {
+    const canShowChart = this.props.groupings.length === 1 && !this.props.showCounts
+
+    return (<div>
+      {canShowChart ? <ModeSelector mode={this.state.displayMode} onChange={this.onChangeDisplayMode}/> : undefined}
+      {canShowChart && this.state.displayMode === "chart" ? <Donut data={this.props.results}/> : undefined}
+      {!canShowChart || this.state.displayMode === "data" ? this.resultsText() : undefined}
+    </div>)
+  },
+
   render: function() {
     new Clipboard("pre a")
 
-    return (
-      <div>
-        <h3>Results</h3>
-        {this.getCheckboxes()}
-        <p className="download-links">Download results as: {this.getDownloadLinks()}</p>
-        <pre>
-          {this.getCopyLink()}
-          <div id="copy-cont">
-            {this.getDisplayData()}
-          </div>
-        </pre>
-        <a id="hidden-download-link" style={{display: "none"}}></a>
-      </div>
-    )
+    return <div>
+      <h3>Results</h3>
+      {this.getResults()}
+    </div>
   },
 })
+
+function ModeSelector(props) {
+  return (<div>
+    {props.mode !== "chart" && <a onClick={function() {
+      props.onChange("chart")
+    }}>Chart</a>}
+    {props.mode !== "data" && <a onClick={function() {
+      props.onChange("data")
+    }}>Data</a>}
+  </div>)
+}
+
+ModeSelector.propTypes = {
+  mode: React.PropTypes.string.isRequired,
+  onChange: React.PropTypes.func.isRequired,
+}
 
 module.exports = Results

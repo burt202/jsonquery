@@ -1,24 +1,62 @@
+
+"use strict"
+const webpack = require("webpack")
+const path = require("path")
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const SwigWebpackPlugin = require("swig-webpack-plugin")
+const CopyWebpackPlugin = require("copy-webpack-plugin")
+const packageJson = require("./package.json")
 
 module.exports = {
   entry: [
-    "./src/js/main.jsx",
+    "react-hot-loader/patch",
+    "webpack-dev-server/client?http://localhost:8080",
+    "webpack/hot/only-dev-server",
+    "./src/js/index",
   ],
+  devtool: "inline-source-map",
   output: {
+    publicPath: "/",
+    path: path.join(__dirname, "build"),
     filename: "bundle.js",
-    path: __dirname + "/build",
+  },
+  resolve: {
+    extensions: [".jsx", ".js"],
   },
   module: {
     loaders: [
       { test: /\.jsx$/, loader: "jsx-loader" },
-      { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") },
+      { test: /\.css$/, loader: ExtractTextPlugin.extract({ fallback: "style-loader", use: "css-loader" })},
       { test: /\.json$/, loader: "json-loader" },
     ],
   },
-  plugins: [
-    new ExtractTextPlugin("bundle.css"),
-  ],
-  resolve: {
-    extensions: ["", ".js", ".jsx"],
+  devServer: {
+    contentBase: "./build",
+    noInfo: true,
+    hot: true,
+    inline: true,
+    historyApiFallback: true,
   },
+  plugins: [
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.NamedModulesPlugin(),
+    new CopyWebpackPlugin([
+      {from: "src/favicon.ico", to: "favicon.ico"},
+      {from: "src/gears.svg", to: "gears.svg"},
+      {from: "src/test-data.json", to: "test-data.json"},
+      {from: "CNAME", to: "CNAME", toType: "file"},
+    ]),
+    new ExtractTextPlugin("bundle.css"),
+
+    new webpack.HotModuleReplacementPlugin(),
+    new SwigWebpackPlugin({
+      filename: "index.html",
+      template: "./src/index.html",
+      watch: "./src/index.html",
+      data: {
+        version: packageJson.version,
+        production: false,
+      },
+    }),
+  ],
 }
