@@ -16,25 +16,25 @@ const Home = React.createClass({
     actionCreator: PropTypes.object.isRequired,
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       selectedTab: "paste",
       errorDate: null,
     }
   },
 
-  showError: function(message) {
+  showError(message) {
     this.setState({"errorDate": Date.now()})
     alert(message)
   },
 
-  selectTab: function(tab) {
+  selectTab(tab) {
     this.setState({
       selectedTab: tab,
     })
   },
 
-  onAction: function(json) {
+  onAction(json) {
     if (!validator.isValidJSON(json)) {
       this.showError("Not valid JSON!")
       return
@@ -56,22 +56,22 @@ const Home = React.createClass({
     this.props.actionCreator.saveJson("schema", schemaGenerator.generate(json[0]))
   },
 
-  getPasteComponent: function() {
+  getPasteComponent() {
     if (this.state.selectedTab !== "paste") return null
     return <Paste onAction={this.onAction} />
   },
 
-  getUploadComponent: function() {
+  getUploadComponent() {
     if (this.state.selectedTab !== "upload") return null
     return <Upload onAction={this.onAction} errorDate={this.state.errorDate} />
   },
 
-  getUrlComponent: function() {
+  getUrlComponent() {
     if (this.state.selectedTab !== "url") return null
     return <Url />
   },
 
-  render: function() {
+  render() {
     const pasteActive = classNames({active: this.state.selectedTab === "paste"})
     const uploadActive = classNames({active: this.state.selectedTab === "upload"})
     const urlActive = classNames({active: this.state.selectedTab === "url"})

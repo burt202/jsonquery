@@ -11,18 +11,18 @@ const Filters = React.createClass({
     schema: PropTypes.object.isRequired,
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       lastFilteredAddedAt: null,
     }
   },
 
-  onAddFilter: function(e) {
+  onAddFilter(e) {
     this.setState({lastFilteredAddedAt: Date.now()})
     this.props.actionCreator.addFilter(e.target.value)
   },
 
-  getFilterControl: function() {
+  getFilterControl() {
     const options = Object.keys(this.props.schema).map(function(value) {
       return (
         <option value={value} key={value}>{value}</option>
@@ -44,7 +44,7 @@ const Filters = React.createClass({
     )
   },
 
-  getFilterRows: function() {
+  getFilterRows() {
     if (!this.props.filters.length)
       return (
         <tr><td>No filters</td></tr>
@@ -62,7 +62,7 @@ const Filters = React.createClass({
     }.bind(this))
   },
 
-  render: function() {
+  render() {
     return (
       <div>
         <h3>Filters</h3>

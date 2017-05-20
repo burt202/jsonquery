@@ -13,15 +13,15 @@ const GroupingControl = React.createClass({
     onShowCountsChange: PropTypes.func.isRequired,
   },
 
-  onAdd: function(e) {
+  onAdd(e) {
     this.props.onAdd(e.target.value)
   },
 
-  onShowCountsChange: function() {
+  onShowCountsChange() {
     this.props.onShowCountsChange(!this.props.showCounts)
   },
 
-  getRows: function() {
+  getRows() {
     return this.props.groupings.map(function(grouping) {
       return (
         <div className="row" key={grouping}>
@@ -34,7 +34,7 @@ const GroupingControl = React.createClass({
     }.bind(this))
   },
 
-  render: function() {
+  render() {
     const disabled = !(this.props.groupings && this.props.groupings.length)
 
     const options = this.props.options.map(function(value) {

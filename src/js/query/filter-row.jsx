@@ -71,14 +71,14 @@ const FilterRow = React.createClass({
     onUpdate: PropTypes.func.isRequired,
   },
 
-  getInputControlByType: function() {
+  getInputControlByType() {
     if (!filterConfig[this.props.type]) return "Invalid Type"
 
     const options = filterConfig[this.props.type].map(function(option) {
       return <option key={option.value} value={option.value}>{option.text}</option>
     })
 
-    var inputs = []
+    let inputs = []
     const selectedOperator = R.find(R.propEq("value", this.props.filter.operator), filterConfig[this.props.type])
 
     if (selectedOperator && selectedOperator.inputs) {
@@ -89,8 +89,8 @@ const FilterRow = React.createClass({
           key: this.props.filter.id + inc,
           type: "text",
           name: this.props.filter.id + inc,
-          value: this.props.filter["value" + inc] || "",
-          onChange: this.updateFilter.bind(this, "value" + inc),
+          value: this.props.filter[`value${inc}`] || "",
+          onChange: this.updateFilter.bind(this, `value${inc}`),
         }, inputConfig))
       }.bind(this))
     }
@@ -113,21 +113,21 @@ const FilterRow = React.createClass({
     )
   },
 
-  toggleFilter: function() {
+  toggleFilter() {
     this.props.onToggle(this.props.filter.id, !this.props.filter.active)
   },
 
-  deleteFilter: function() {
+  deleteFilter() {
     this.props.onDelete(this.props.filter.id)
   },
 
-  updateFilter: function(prop, e) {
+  updateFilter(prop, e) {
     const toUpdate = {}
     toUpdate[prop] = e.target.value
     this.props.onUpdate(this.props.filter.id, toUpdate)
   },
 
-  render: function() {
+  render() {
     const toggleClass = (this.props.filter.active) ? "active" : "inactive"
 
     return (

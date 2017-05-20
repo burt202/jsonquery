@@ -11,14 +11,14 @@ const SortingControl = React.createClass({
     onRemove: PropTypes.func.isRequired,
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       field: null,
       direction: null,
     }
   },
 
-  onChange: function(prop, e) {
+  onChange(prop, e) {
     const toSet = {}
     toSet[prop] = e.target.value
 
@@ -30,7 +30,7 @@ const SortingControl = React.createClass({
     }.bind(this))
   },
 
-  getRows: function() {
+  getRows() {
     return this.props.sorters.map(function(sorter) {
       return (
         <div className="row" key={sorter.field}>
@@ -43,7 +43,7 @@ const SortingControl = React.createClass({
     }.bind(this))
   },
 
-  render: function() {
+  render() {
     const options = this.props.options.map(function(value) {
       return (
         <option value={value} key={value}>{value}</option>

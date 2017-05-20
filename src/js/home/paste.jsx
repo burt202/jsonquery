@@ -10,23 +10,23 @@ const Paste = React.createClass({
     onAction: PropTypes.func.isRequired,
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       data: JSON.stringify(testData, null, 2),
     }
   },
 
-  onChange: function(e) {
+  onChange(e) {
     this.setState({
       data: e.target.value,
     })
   },
 
-  onGo: function() {
+  onGo() {
     this.props.onAction(this.state.data)
   },
 
-  render: function() {
+  render() {
     return (
       <div>
         <textarea value={this.state.data} onChange={this.onChange} />

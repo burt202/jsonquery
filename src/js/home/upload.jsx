@@ -9,13 +9,13 @@ const Upload = React.createClass({
     errorDate: PropTypes.number,
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       isDragActive: false,
     }
   },
 
-  onDragOver: function(e) {
+  onDragOver(e) {
     e.preventDefault()
 
     this.setState({
@@ -23,18 +23,18 @@ const Upload = React.createClass({
     })
   },
 
-  onDragEnter: function(e) {
+  onDragEnter(e) {
     e.preventDefault()
   },
 
 
-  onDragLeave: function() {
+  onDragLeave() {
     this.setState({
       isDragActive: false,
     })
   },
 
-  onDrop: function(e) {
+  onDrop(e) {
     e.preventDefault()
 
     this.setState({
@@ -46,17 +46,17 @@ const Upload = React.createClass({
     reader.readAsText(e.dataTransfer.files[0])
   },
 
-  onFileUploadStart: function(e) {
+  onFileUploadStart(e) {
     const reader = new FileReader()
     reader.onload = this.onFileUploadEnd
     reader.readAsText(e.target.files[0])
   },
 
-  onFileUploadEnd: function(e) {
+  onFileUploadEnd(e) {
     this.props.onAction(e.target.result)
   },
 
-  render: function() {
+  render() {
     const style = {
       borderColor: this.state.isDragActive ? "#000" : "#AAA",
     }

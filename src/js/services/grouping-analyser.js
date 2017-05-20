@@ -20,7 +20,7 @@ const _getGroupLengths = R.pipe(
 )
 
 module.exports = {
-  getAnalysis: function(grouped) {
+  getAnalysis(grouped) {
     const groupLengths = _getGroupLengths(grouped)
 
     const count = {name: "No. of Groups", value: groupLengths.length}
