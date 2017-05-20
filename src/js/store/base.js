@@ -6,31 +6,31 @@ const CHANGE_EVENT = "change"
 
 module.exports = function(defaults, handlers) {
 
-  var contents = defaults
+  let contents = defaults
 
   const store = R.mergeAll([{}, EventEmitter.prototype, {
 
-    resetState: function() {
+    resetState() {
       contents = defaults
     },
 
-    setState: function(state) {
+    setState(state) {
       contents = state
     },
 
-    getState: function() {
+    getState() {
       return contents
     },
 
-    emitChange: function() {
+    emitChange() {
       this.emit(CHANGE_EVENT)
     },
 
-    addChangeListener: function(callback) {
+    addChangeListener(callback) {
       this.on(CHANGE_EVENT, callback)
     },
 
-    removeChangeListener: function(callback) {
+    removeChangeListener(callback) {
       this.removeListener(CHANGE_EVENT, callback)
     },
   }])

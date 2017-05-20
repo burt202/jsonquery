@@ -2,6 +2,7 @@ const webpack = require("webpack")
 const path = require("path")
 const SwigWebpackPlugin = require("swig-webpack-plugin")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
+
 const packageJson = require("./package.json")
 
 module.exports = {

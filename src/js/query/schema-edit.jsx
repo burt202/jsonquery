@@ -15,25 +15,25 @@ const SchemaEdit = React.createClass({
     onCancel: PropTypes.func.isRequired,
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       schema: this.props.schema,
       inputKey: null,
     }
   },
 
-  showError: function(message) {
+  showError(message) {
     this.setState({"inputKey": Date.now()}) // to clear the input, resetting key of components forces re-render
     alert(message)
   },
 
-  onFileUploadStart: function(e) {
+  onFileUploadStart(e) {
     const reader = new FileReader()
     reader.onload = this.onFileUploadEnd
     reader.readAsText(e.target.files[0])
   },
 
-  onFileUploadEnd: function(e) {
+  onFileUploadEnd(e) {
     const json = e.target.result
 
     if (!validator.isValidJSON(json)) {
@@ -51,17 +51,17 @@ const SchemaEdit = React.createClass({
     this.props.onSave(parsed)
   },
 
-  onChange: function(field, type) {
+  onChange(field, type) {
     this.setState({
       schema: R.assoc(field, type, this.state.schema),
     })
   },
 
-  onSave: function() {
+  onSave() {
     this.props.onSave(this.state.schema)
   },
 
-  getSchemaRows: function() {
+  getSchemaRows() {
     return R.toPairs(this.state.schema).map(function(pair) {
       return (
         <SchemaEditRow
@@ -74,7 +74,7 @@ const SchemaEdit = React.createClass({
     }.bind(this))
   },
 
-  render: function() {
+  render() {
     return (
       <div className="schema-edit-cont">
         <h3>Edit Schema</h3>

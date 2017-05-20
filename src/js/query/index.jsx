@@ -28,37 +28,37 @@ const Query = React.createClass({
     average: PropTypes.string,
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       showSchemaControls: false,
     }
   },
 
-  onReset: function() {
+  onReset() {
     this.props.actionCreator.reset()
   },
 
-  onSchemaEdit: function() {
+  onSchemaEdit() {
     this.setState({showSchemaControls: true})
   },
 
-  filterResults: function(data) {
+  filterResults(data) {
     return dataProcessor.filter(data, this.props.schema, this.props.filters)
   },
 
-  sortResults: function(data) {
+  sortResults(data) {
     return (this.props.sorters.length) ? dataProcessor.sort(this.props.sorters, data) : data
   },
 
-  limitResults: function(data) {
+  limitResults(data) {
     return (this.props.limit) ? R.take(this.props.limit, data) : data
   },
 
-  pickIncludedFields: function(data) {
+  pickIncludedFields(data) {
     return R.map(R.pickAll(R.sortBy(R.identity, this.props.resultFields)))(data)
   },
 
-  filterSortAndLimit: function(data) {
+  filterSortAndLimit(data) {
     return R.pipe(
       this.filterResults,
       this.sortResults,
@@ -67,14 +67,14 @@ const Query = React.createClass({
     )(data)
   },
 
-  formatData: function(data) {
+  formatData(data) {
     if (this.props.groupings.length) return dataProcessor.group(this.props.groupings, this.props.showCounts, data)
     if (this.props.sum) return {total: utils.round(2, R.sum(R.pluck(this.props.sum, data)))}
     if (this.props.average) return {average: utils.round(2, R.mean(R.pluck(this.props.average, data)))}
     return data
   },
 
-  getSideOptions: function() {
+  getSideOptions() {
     return (
       <ul className="side-options right">
         <li><a className="site-link" onClick={this.onSchemaEdit}>Edit Schema</a></li>
@@ -83,16 +83,16 @@ const Query = React.createClass({
     )
   },
 
-  onCancel: function() {
+  onCancel() {
     this.setState({showSchemaControls: false})
   },
 
-  onSave: function(schema) {
+  onSave(schema) {
     this.setState({showSchemaControls: false})
     this.props.actionCreator.saveJson("schema", schema)
   },
 
-  getSchemaControls: function() {
+  getSchemaControls() {
     return (
       <SchemaEdit
         schema={this.props.schema}
@@ -102,7 +102,7 @@ const Query = React.createClass({
     )
   },
 
-  render: function() {
+  render() {
     if (this.state.showSchemaControls) return this.getSchemaControls()
 
     const filtered = this.filterSortAndLimit(this.props.data)

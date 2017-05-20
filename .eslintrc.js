@@ -1,4 +1,4 @@
-{
+module.exports = {
   "plugins": [
     "react"
   ],
@@ -35,7 +35,7 @@
     "no-func-assign": 2, // disallow overwriting functions written as function declarations
     "no-inner-declarations": [2, "functions"], // disallow function or variable declarations in nested blocks
     "no-invalid-regexp": 0, // disallow invalid regular expression strings in the RegExp constructor
-    "no-irregular-whitespace": 0, // disallow irregular whitespace outside of strings and comments
+    "no-irregular-whitespace": 2, // disallow irregular whitespace outside of strings and comments
     "no-negated-in-lhs": 0, // disallow negation of the left operand of an in expression
     "no-obj-calls": 2, // disallow the use of object properties of the global object (Math and JSON) as functions
     "no-regex-spaces": 0, // disallow multiple spaces in a regular expression literal
@@ -181,22 +181,22 @@
 
     // ECMAScript 6
     "arrow-body-style": 0, // require braces in arrow function body
-    "arrow-parens": 0, // require parens in arrow function arguments
-    "arrow-spacing": 0, // require space before/after arrow function's arrow
+    "arrow-parens": 2, // require parens in arrow function arguments
+    "arrow-spacing": 2, // require space before/after arrow function's arrow
     "constructor-super": 2, // verify calls of super() in constructors
     "generator-star-spacing": 0, // enforce spacing around the * in generator functions
     "no-arrow-condition": 0, // disallow arrow functions where a condition is expected
     "no-class-assign": 0, // disallow modifying variables of class declarations
-    "no-const-assign": 0, // disallow modifying variables that are declared using const
-    "no-dupe-class-members": 0, // disallow duplicate name in class members
+    "no-const-assign": 2, // disallow modifying variables that are declared using const
+    "no-dupe-class-members": 2, // disallow duplicate name in class members
     "no-this-before-super": 2, // disallow use of this/super before calling super() in constructors.
-    "no-var": 0, // require let or const instead of var
-    "object-shorthand": 0, // require method and property shorthand syntax for object literals
+    "no-var": 2, // require let or const instead of var
+    "object-shorthand": 2, // require method and property shorthand syntax for object literals
     "prefer-arrow-callback": 0, // suggest using arrow functions as callbacks
     "prefer-const": 2, // suggest using const declaration for variables that are never modified after declared
     "prefer-reflect": 0, // suggest using Reflect methods where applicable
     "prefer-spread": 0, // suggest using the spread operator instead of .apply().
-    "prefer-template": 0, // suggest using template literals instead of strings concatenation
+    "prefer-template": 2, // suggest using template literals instead of strings concatenation
     "require-yield": 0 // disallow generator functions that do not have yield
   }
 }

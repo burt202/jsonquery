@@ -12,16 +12,16 @@ const testSchema = {
 }
 
 const testUrl = "/?dataUrl=http://jsonquery.co.uk/test-data.json"
-const testUrlWithSchema = "/?dataUrl=http://jsonquery.co.uk/test-data.json&schema=" + encodeURIComponent(JSON.stringify(testSchema))
+const testUrlWithSchema = `/?dataUrl=http://jsonquery.co.uk/test-data.json&schema=${encodeURIComponent(JSON.stringify(testSchema))}`
 
 const Url = React.createClass({
   displayName: "Url",
 
-  goTo: function(url) {
+  goTo(url) {
     window.location = url
   },
 
-  render: function() {
+  render() {
     return (
       <div>
         <p>You can also load in data via the url. Use the <code>dataUrl</code> parameter and point it to the url where your data is located. The data must be in JSON format and depending on the size of the data set, it may take a long time to load in.</p>

@@ -5,8 +5,8 @@ function _makeCountRowCsvSafe(pair) {
 }
 
 function _makeCsvSafe(value) {
-  if (Array.isArray(value)) return "\"" + value.join(",") + "\""
-  if (R.is(String, value) && value.indexOf(",") >= 0) return "\"" + value + "\""
+  if (Array.isArray(value)) return `"${value.join(",")}"`
+  if (R.is(String, value) && value.indexOf(",") >= 0) return `"${value}"`
   return value
 }
 
@@ -24,7 +24,7 @@ function _turnObjIntoCountArray(obj) {
     R.map(function(pair) {
       if (Array.isArray(pair[1])) return R.map(function(count) {
         const split = R.split(": ", count)
-        return pair[0] + " - " + split[0] + ": " + split[1]
+        return `${pair[0]} - ${split[0]}: ${split[1]}`
       }, pair[1])
 
       return _turnObjIntoCountArray(pair[1])
@@ -63,7 +63,7 @@ function _getGroupedData(obj) {
         .concat(R.map(R.compose(R.join(","), R.map(_makeCsvSafe), R.values), pair[1]))
 
       return _getGroupedData(R.reduce(function(acc, val) {
-        const key = pair[0] + " - " + val[0]
+        const key = `${pair[0]} - ${val[0]}`
         acc[key] = val[1]
         return acc
       }, {}, R.toPairs(pair[1])))

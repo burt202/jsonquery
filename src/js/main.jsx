@@ -11,23 +11,23 @@ const Query = require("./query")
 require("../css/app.css")
 
 const Main = React.createClass({
-  getInitialState: function() {
+  getInitialState() {
     return store.getState()
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     store.addChangeListener(this.update)
   },
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     store.removeChangeListener(this.update)
   },
 
-  update: function() {
+  update() {
     this.setState(store.getState())
   },
 
-  render: function() {
+  render() {
     if (!this.state.schema || !this.state.data || !this.state.resultFields) {
       const parsed = queryString.parse(location.search)
 

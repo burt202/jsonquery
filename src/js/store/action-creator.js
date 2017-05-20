@@ -2,10 +2,10 @@ const R = require("ramda")
 const dispatcher = require("./dispatcher")
 
 module.exports = {
-  saveJson: function(name, data) {
+  saveJson(name, data) {
     dispatcher.dispatch({
       name: "saveJson",
-      value: {name: name, data: data},
+      value: {name, data},
     })
 
     if (name === "schema") {
@@ -16,101 +16,101 @@ module.exports = {
     }
   },
 
-  addFilter: function(name) {
+  addFilter(name) {
     dispatcher.dispatch({
       name: "addFilter",
-      value: {name: name},
+      value: {name},
     })
   },
 
-  deleteFilter: function(id) {
+  deleteFilter(id) {
     dispatcher.dispatch({
       name: "deleteFilter",
-      value: {id: id},
+      value: {id},
     })
   },
 
-  toggleFilter: function(id, active) {
+  toggleFilter(id, active) {
     dispatcher.dispatch({
       name: "updateFilter",
-      value: {id: id, value: {active: active}},
+      value: {id, value: {active}},
     })
   },
 
-  updateFilter: function(id, value) {
+  updateFilter(id, value) {
     dispatcher.dispatch({
       name: "updateFilter",
-      value: {id: id, value: value},
+      value: {id, value},
     })
   },
 
-  limit: function(number) {
+  limit(number) {
     dispatcher.dispatch({
       name: "limit",
-      value: {number: number},
+      value: {number},
     })
   },
 
-  reset: function() {
+  reset() {
     dispatcher.dispatch({
       name: "reset",
       value: {},
     })
   },
 
-  addGrouping: function(name) {
+  addGrouping(name) {
     dispatcher.dispatch({
       name: "addGrouping",
-      value: {name: name},
+      value: {name},
     })
   },
 
-  removeGrouping: function(name) {
+  removeGrouping(name) {
     dispatcher.dispatch({
       name: "removeGrouping",
-      value: {name: name},
+      value: {name},
     })
   },
 
-  addSorter: function(sorter) {
+  addSorter(sorter) {
     dispatcher.dispatch({
       name: "addSorter",
-      value: {sorter: sorter},
+      value: {sorter},
     })
   },
 
-  removeSorter: function(name) {
+  removeSorter(name) {
     dispatcher.dispatch({
       name: "removeSorter",
-      value: {name: name},
+      value: {name},
     })
   },
 
-  sum: function(name) {
+  sum(name) {
     dispatcher.dispatch({
       name: "sum",
-      value: {name: name},
+      value: {name},
     })
   },
 
-  average: function(name) {
+  average(name) {
     dispatcher.dispatch({
       name: "average",
-      value: {name: name},
+      value: {name},
     })
   },
 
-  updateResultFields: function(fields) {
+  updateResultFields(fields) {
     dispatcher.dispatch({
       name: "updateResultFields",
-      value: {fields: fields},
+      value: {fields},
     })
   },
 
-  showCounts: function(showCounts) {
+  showCounts(showCounts) {
     dispatcher.dispatch({
       name: "showCounts",
-      value: {showCounts: showCounts},
+      value: {showCounts},
     })
   },
 }

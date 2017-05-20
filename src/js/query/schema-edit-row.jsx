@@ -10,11 +10,11 @@ const SchemaEditRow = React.createClass({
     onChange: PropTypes.func.isRequired,
   },
 
-  onChange: function(e) {
+  onChange(e) {
     this.props.onChange(this.props.field, e.target.value)
   },
 
-  render: function() {
+  render() {
     return (
       <tr key={this.props.field}>
         <td>{this.props.field}</td>

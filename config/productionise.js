@@ -2,6 +2,7 @@ const webpack = require("webpack")
 const SwigWebpackPlugin = require("swig-webpack-plugin")
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin")
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
 
 const packageJson = require("../package.json")
 
@@ -15,7 +16,7 @@ const prodPlugins = [
       "NODE_ENV": JSON.stringify("production"),
     },
   }),
-  new webpack.optimize.UglifyJsPlugin({
+  new UglifyJsPlugin({
     compress: {
       warnings: false,
     },

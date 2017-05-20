@@ -23,19 +23,19 @@ const FromUrl = React.createClass({
     params: PropTypes.object.isRequired,
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       errors: null,
     }
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     fetchData(this.props.params.dataUrl)
     .then(this.onFetchComplete)
     .catch(this.onFetchError)
   },
 
-  onFetchComplete: function(data) {
+  onFetchComplete(data) {
     const errors = []
 
     if (!validator.isArray(data)) {
@@ -46,7 +46,7 @@ const FromUrl = React.createClass({
       errors.push("Data must have at least 1 item")
     }
 
-    var schema = null
+    let schema = null
 
     if (this.props.params.schema) {
       const fromUrl = decodeURIComponent(this.props.params.schema)
@@ -65,7 +65,7 @@ const FromUrl = React.createClass({
     if (!schema) schema = schemaGenerator.generate(data[0])
 
     if (errors.length) {
-      this.setState({errors: errors})
+      this.setState({errors})
       return
     }
 
@@ -73,11 +73,11 @@ const FromUrl = React.createClass({
     this.props.actionCreator.saveJson("schema", schema)
   },
 
-  onFetchError: function(err) {
+  onFetchError(err) {
     this.setState({errors: [err.message]})
   },
 
-  render: function() {
+  render() {
     if (this.state.errors) {
       return (<div><br /><pre>{JSON.stringify(this.state.errors, null, 2)}</pre></div>)
     }

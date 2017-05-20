@@ -15,7 +15,7 @@ describe("groupingAnalyser", function() {
     })
 
     describe("for 1 level of grouping", function() {
-      var res
+      let res
 
       beforeEach(function() {
         res = groupingAnalyser.getAnalysis({foo: [1, 2, 3], bar: [1]})
@@ -39,7 +39,7 @@ describe("groupingAnalyser", function() {
     })
 
     describe("for 2 levels of grouping", function() {
-      var res
+      let res
 
       beforeEach(function() {
         res = groupingAnalyser.getAnalysis({foo: {a: [1]}, bar: {b: [1, 2], c: [1]}})
