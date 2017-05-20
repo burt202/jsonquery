@@ -113,11 +113,11 @@ const Results = React.createClass({
   },
 
   getCopyLink() {
-    return (this.canCopyResults()) ? <li><a className="site-link" data-clipboard-action="copy" data-clipboard-target="#copy-cont">Copy To Clipboard</a></li> : null
+    return (this.canCopyResults()) ? <a className="site-link" data-clipboard-action="copy" data-clipboard-target="#copy-cont">Copy to clipboard</a> : null
   },
 
   render() {
-    new Clipboard("a.site-link[data-clipboard-action='copy']")
+    new Clipboard("pre a")
 
     return (
       <div>
