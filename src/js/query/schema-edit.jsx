@@ -5,6 +5,7 @@ const R = require("ramda")
 const validator = require("../services/validator")
 
 const SchemaEditRow = require("./schema-edit-row")
+const Code = require("../components/code")
 
 const SchemaEdit = React.createClass({
   displayName: "SchemaEdit",
@@ -84,9 +85,9 @@ const SchemaEdit = React.createClass({
               {this.getSchemaRows()}
             </tbody>
           </table>
-          <pre>
+          <Code language="json">
             {JSON.stringify(this.state.schema, null, 2)}
-          </pre>
+          </Code>
         </div>
         <p><label>Upload: </label><input type="file" key={this.state.inputKey} onChange={this.onFileUploadStart} /></p>
         <ul className="side-options right">
