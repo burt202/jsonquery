@@ -1,11 +1,11 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 
 const SLH = require("react-syntax-highlighter/dist/light")
 const SyntaxHighlighter = SLH.default
-const {registerLanguage} = SLH
 const language = require("react-syntax-highlighter/dist/languages/json").default
 const resultsStyle = require("react-syntax-highlighter/dist/styles/github").default
-registerLanguage("json", language)
+SLH.registerLanguage("json", language)
 
 function Code(props) {
   return (<SyntaxHighlighter language={props.language} style={resultsStyle}>
@@ -14,9 +14,8 @@ function Code(props) {
 }
 
 Code.propTypes = {
-  children: React.PropTypes.node.isRequired,
-  language: React.PropTypes.oneOf(["json"]),
+  children: PropTypes.node.isRequired,
+  language: PropTypes.oneOf(["json"]),
 }
-
 
 module.exports = Code
