@@ -5,6 +5,15 @@ const R = require("ramda")
 const GroupingControl = require("./grouping-control")
 const SortingControl = require("./sorting-control")
 
+const Inset = require("../components/inset")
+
+const {default: Subheader} = require("material-ui/Subheader")
+const {default: SelectField} = require("material-ui/SelectField")
+const {default: MenuItem} = require("material-ui/MenuItem")
+const {default: Divider} = require("material-ui/Divider")
+
+const LIMITS = [1, 2, 3, 5, 10, 20, 50, 75, 100, 150, 200, 250, 500]
+
 const Controls = React.createClass({
   displayName: "Controls",
 
@@ -18,40 +27,19 @@ const Controls = React.createClass({
     analyse: PropTypes.string,
   },
 
-  onAnalyseChange(e) {
+  onAnalyseChange(e, index, value) {
     this.props.actionCreator.analyse(e.target.value)
   },
 
-  onLimitChange(e) {
-    this.props.actionCreator.limit(parseInt(e.target.value, 10))
+  onLimitChange(e, index, value) {
+    this.props.actionCreator.limit(parseInt(value, 10))
   },
 
   getLimitControl() {
-    return (
-      <div className="input-control">
-        <label>Limit:</label>
-        <div className="body">
-          <div className="row">
-            <select onChange={this.onLimitChange} value={this.props.limit || ""}>
-              <option>Show all</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-              <option value="75">75</option>
-              <option value="100">100</option>
-              <option value="150">150</option>
-              <option value="200">200</option>
-              <option value="250">250</option>
-              <option value="500">500</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    )
+    return (<SelectField fullWidth value={this.props.limit || 0} onChange={this.onLimitChange}>
+      <MenuItem key="all" primaryText="Show all" value={0}/>
+      {LIMITS.map((v) => <MenuItem key={v} value={v} primaryText={v}/>)}
+    </SelectField>)
   },
 
   getNumberOptions() {
@@ -63,25 +51,16 @@ const Controls = React.createClass({
 
     return numberOptions.map(function(value) {
       return (
-        <option value={value} key={value}>{value}</option>
+        <MenuItem value={value} key={value} primaryText={value}/>
       )
     })
   },
 
   getAnalyseControl() {
-    return (
-      <div className="input-control">
-        <label>Analyse:</label>
-        <div className="body">
-          <div className="row">
-            <select onChange={this.onAnalyseChange} value={this.props.analyse || ""}>
-              <option></option>
-              {this.getNumberOptions()}
-            </select>
-          </div>
-        </div>
-      </div>
-    )
+    return (<SelectField fullWidth value={this.props.analyse} floatingLabelText="Analyse" onChange={this.onAnalyseChange}>
+      <MenuItem value={null} primaryText=""/>
+      {this.getNumberOptions()}
+    </SelectField>)
   },
 
   getGroupByControl() {
@@ -115,12 +94,24 @@ const Controls = React.createClass({
   render() {
     return (
       <div>
-        <h3>Controls</h3>
+        <Subheader>Sort</Subheader>
         {this.getSortByControl()}
-        {this.getLimitControl()}
-        <br />
+        <Divider/>
+
+        <Subheader>Group</Subheader>
         {this.getGroupByControl()}
-        {this.getAnalyseControl()}
+        <Divider/>
+
+        <Subheader>Limit</Subheader>
+        <Inset vertical={false}>
+          {this.getLimitControl()}
+        </Inset>
+        <Divider/>
+
+        <Subheader>Analyse</Subheader>
+        <Inset vertical={false}>
+          {this.getAnalyseControl()}
+        </Inset>
       </div>
     )
   },

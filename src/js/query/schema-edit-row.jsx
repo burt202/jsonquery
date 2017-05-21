@@ -1,6 +1,9 @@
 const React = require("react")
 const PropTypes = require("prop-types")
 
+const {default: SelectField} = require("material-ui/SelectField")
+const {MenuItem} = require("material-ui/Menu")
+
 const SchemaEditRow = React.createClass({
   displayName: "SchemaEditRow",
 
@@ -10,25 +13,23 @@ const SchemaEditRow = React.createClass({
     onChange: PropTypes.func.isRequired,
   },
 
-  onChange(e) {
-    this.props.onChange(this.props.field, e.target.value)
+  onChange(e, index, value) {
+    this.props.onChange(this.props.field, value)
   },
 
   render() {
-    return (
-      <tr key={this.props.field}>
-        <td>{this.props.field}</td>
-        <td>
-          <select value={this.props.type} onChange={this.onChange}>
-            <option value="string">String</option>
-            <option value="number">Number</option>
-            <option value="bool">Bool</option>
-            <option value="date">Date</option>
-            <option value="array">Array</option>
-          </select>
-        </td>
-      </tr>
-    )
+    return <SelectField
+      fullWidth
+      floatingLabelText={this.props.field}
+      onChange={this.onChange}
+      value={this.props.type}
+    >
+      <MenuItem value="string" primaryText="String"/>
+      <MenuItem value="number" primaryText="Number"/>
+      <MenuItem value="bool" primaryText="Bool"/>
+      <MenuItem value="date" primaryText="Date"/>
+      <MenuItem value="array" primaryText="Array"/>
+    </SelectField>
   },
 })
 

@@ -1,6 +1,12 @@
 const React = require("react")
 const PropTypes = require("prop-types")
 
+const Inset = require("../components/inset")
+const SpaceAfter = require("../components/space-after")
+
+const {default: RaisedButton} = require("material-ui/RaisedButton")
+const {default: UploadIcon} = require("material-ui/svg-icons/file/file-upload")
+
 const Upload = React.createClass({
   displayName: "Upload",
 
@@ -56,14 +62,32 @@ const Upload = React.createClass({
     this.props.onAction(e.target.result)
   },
 
+  triggerUpload() {
+    this.input.click()
+  },
+
   render() {
     const style = {
       borderColor: this.state.isDragActive ? "#000" : "#AAA",
     }
 
     return (
-      <div>
-        <p><input type="file" key={this.props.errorDate} onChange={this.onFileUploadStart} /></p>
+      <Inset>
+        <SpaceAfter>
+          <RaisedButton
+            label="Upload"
+            labelPosition="before"
+            secondary
+            icon={<UploadIcon/>}
+            onTouchTap = {this.triggerUpload}/>
+          <input
+            style={{display: "none"}}
+            ref={(e) => this.input = e}
+            type="file"
+            key={this.props.errorDate}
+            onChange={this.onFileUploadStart}
+          />
+        </SpaceAfter>
         <div
           style={style}
           className="drag-drop-area"
@@ -74,7 +98,7 @@ const Upload = React.createClass({
         >
           <h3>Drop file here</h3>
         </div>
-      </div>
+      </Inset>
     )
   },
 })

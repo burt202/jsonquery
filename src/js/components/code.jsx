@@ -8,12 +8,18 @@ const resultsStyle = require("react-syntax-highlighter/dist/styles/github").defa
 SLH.registerLanguage("json", language)
 
 function Code(props) {
-  return (<SyntaxHighlighter language={props.language} style={resultsStyle}>
+  return (<SyntaxHighlighter
+    codeTagProps={{
+      style: props.inline ? {whiteSpace: "normal"} : undefined,
+    }}
+    language={props.language}
+    style={resultsStyle}>
     {props.children}
   </SyntaxHighlighter>)
 }
 
 Code.propTypes = {
+  inline: PropTypes.bool,
   children: PropTypes.node.isRequired,
   language: PropTypes.oneOf(["json"]),
 }

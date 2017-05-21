@@ -3,6 +3,15 @@ const PropTypes = require("prop-types")
 const R = require("ramda")
 
 const validator = require("../services/validator")
+const Layout = require("../components/layout")
+
+const SpaceAfter = require("../components/space-after")
+const Inset = require("../components/inset")
+
+const {default: UploadIcon} = require("material-ui/svg-icons/file/file-upload")
+const {default: RaisedButton} = require("material-ui/RaisedButton")
+const {default: FlatButton} = require("material-ui/FlatButton")
+const {default: Divider} = require("material-ui/Divider")
 
 const SchemaEditRow = require("./schema-edit-row")
 const Code = require("../components/code")
@@ -75,27 +84,38 @@ const SchemaEdit = React.createClass({
     }.bind(this))
   },
 
+  triggerUpload() {
+    this.upload.click()
+  },
+
   render() {
-    return (
-      <div className="schema-edit-cont">
-        <h3>Edit Schema</h3>
-        <div className="rows">
-          <table className="table" style={{width: "60%"}}>
-            <tbody>
-              {this.getSchemaRows()}
-            </tbody>
-          </table>
-          <Code language="json">
-            {JSON.stringify(this.state.schema, null, 2)}
-          </Code>
+    return (<Layout
+      left={<div>
+        <div style={{display: "flex", justifyContent: "space-between"}}>
+          <FlatButton secondary label="Cancel" onTouchTap={this.props.onCancel}/>
+          <FlatButton secondary label="Save" onTouchTap={this.onSave}/>
         </div>
-        <p><label>Upload: </label><input type="file" key={this.state.inputKey} onChange={this.onFileUploadStart} /></p>
-        <ul className="side-options right">
-          <li><a className="site-link" onClick={this.props.onCancel}>Cancel</a></li>
-          <li><a className="site-link" onClick={this.onSave}>Save</a></li>
-        </ul>
-      </div>
-    )
+        <Divider/>
+        <Inset vertical={false}>
+          {this.getSchemaRows()}
+        </Inset>
+      </div>}
+
+      right={<Inset>
+        <SpaceAfter>
+          <RaisedButton
+            label="Upload"
+            labelPosition="before"
+            secondary
+            icon={<UploadIcon/>}
+            onTouchTap = {this.triggerUpload}/>
+          <input style={{display: "none"}} ref={(r) => this.upload = r} type="file" key={this.state.inputKey} onChange={this.onFileUploadStart} />
+        </SpaceAfter>
+        <Code language="json">
+          {JSON.stringify(this.state.schema, null, 2)}
+        </Code>
+      </Inset>}
+    />)
   },
 })
 

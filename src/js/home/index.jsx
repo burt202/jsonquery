@@ -1,9 +1,13 @@
 const React = require("react")
 const PropTypes = require("prop-types")
-const classNames = require("classnames")
 
 const validator = require("../services/validator")
 const schemaGenerator = require("../services/schema-generator")
+
+const {CardText, CardTitle} = require("material-ui/Card")
+const {default: Tabs, Tab} = require("material-ui/Tabs")
+
+const Layout = require("../components/layout")
 
 const Paste = require("./paste")
 const Upload = require("./upload")
@@ -56,41 +60,34 @@ const Home = React.createClass({
     this.props.actionCreator.saveJson("schema", schemaGenerator.generate(json[0]))
   },
 
-  getPasteComponent() {
-    if (this.state.selectedTab !== "paste") return null
-    return <Paste onAction={this.onAction} />
-  },
-
-  getUploadComponent() {
-    if (this.state.selectedTab !== "upload") return null
-    return <Upload onAction={this.onAction} errorDate={this.state.errorDate} />
-  },
-
-  getUrlComponent() {
-    if (this.state.selectedTab !== "url") return null
-    return <Url />
-  },
-
   render() {
-    const pasteActive = classNames({active: this.state.selectedTab === "paste"})
-    const uploadActive = classNames({active: this.state.selectedTab === "upload"})
-    const urlActive = classNames({active: this.state.selectedTab === "url"})
+    return (<Layout
+      left = {<div>
+        <CardTitle
+          title="Online JSON Querying Tool"
+          subtitle="Query your JSON with ease"
+        />
+        <CardText>
+          <p>Takes a JSON array and allows you to add multiple filters, groupings and sorting to manipulate the data in many ways.</p>
+          <p>Use the inputs on the right to supply your data.</p>
+          <p>We do not do anything with your data!</p>
+        </CardText>
+      </div>}
 
-    return (
-      <div className="home-cont">
-        <p>Online JSON Querying Tool. Query your JSON with ease.</p>
-        <p>Takes a JSON array and allows you to add multiple filters, groupings and sorting to manipulate the data in many ways. Use the inputs below to supply your data. We do not do anything with your data!</p>
-        <br />
-        <ul className="side-options">
-          <li className={pasteActive}><a className="site-link" onClick={this.selectTab.bind(this, "paste")}>By Pasting</a></li>
-          <li className={uploadActive}><a className="site-link" onClick={this.selectTab.bind(this, "upload")}>By Upload</a></li>
-          <li className={urlActive}><a className="site-link" onClick={this.selectTab.bind(this, "url")}>By Url</a></li>
-        </ul>
-        {this.getPasteComponent()}
-        {this.getUploadComponent()}
-        {this.getUrlComponent()}
-      </div>
-    )
+      right = {
+        <Tabs>
+          <Tab label="From clipboard">
+            <Paste onAction={this.onAction} />
+          </Tab>
+          <Tab label="From file">
+            <Upload onAction={this.onAction} errorDate={this.state.errorDate} />
+          </Tab>
+          <Tab label="From URL">
+            <Url/>
+          </Tab>
+        </Tabs>
+      }
+    />)
   },
 })
 

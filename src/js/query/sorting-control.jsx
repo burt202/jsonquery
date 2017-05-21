@@ -1,6 +1,12 @@
 const React = require("react")
 const PropTypes = require("prop-types")
 
+const Removeable = require("./removeable")
+const Inset = require("../components/inset")
+
+const {default: SelectField} = require("material-ui/SelectField")
+const {default: MenuItem} = require("material-ui/MenuItem")
+
 const SortingControl = React.createClass({
   displayName: "SortingControl",
 
@@ -18,9 +24,9 @@ const SortingControl = React.createClass({
     }
   },
 
-  onChange(prop, e) {
+  onChange(prop, e, index, value) {
     const toSet = {}
-    toSet[prop] = e.target.value
+    toSet[prop] = value
 
     this.setState(toSet, function() {
       if (this.state.field !== null && this.state.direction !== null) {
@@ -32,43 +38,34 @@ const SortingControl = React.createClass({
 
   getRows() {
     return this.props.sorters.map(function(sorter) {
-      return (
-        <div className="row" key={sorter.field}>
-          <div className="sorter">
-            {sorter.field} - {sorter.direction.toUpperCase()}
-            <a className="site-link" onClick={this.props.onRemove.bind(this, sorter.field)}>remove</a>
-          </div>
-        </div>
-      )
+      return <Removeable
+        key={sorter.field + sorter.direction}
+        onRemove={this.props.onRemove.bind(this, sorter.field)}
+        primaryText={sorter.field}
+        secondaryText={sorter.direction.toUpperCase()}
+      />
     }.bind(this))
   },
 
   render() {
     const options = this.props.options.map(function(value) {
       return (
-        <option value={value} key={value}>{value}</option>
+        <MenuItem value={value} key={value} primaryText={value}/>
       )
     })
 
-    return (
-      <div className="input-control">
-        <label>Sort By:</label>
-        <div className="body">
-          {this.getRows()}
-          <div className="row">
-            <select onChange={this.onChange.bind(this, "field")} value={this.state.field || ""}>
-              <option></option>
-              {options}
-            </select>
-            <select onChange={this.onChange.bind(this, "direction")} value={this.state.direction || ""}>
-              <option></option>
-              <option value="asc">ASC</option>
-              <option value="desc">DESC</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    )
+    return (<div>
+      {this.getRows()}
+      <Inset vertical={false}>
+        <SelectField fullWidth hintText="Field" onChange={this.onChange.bind(this, "field")} value={this.state.field || ""}>
+          {options}
+        </SelectField>
+        <SelectField fullWidth hintText="Direction" onChange={this.onChange.bind(this, "direction")} value={this.state.direction || ""}>
+          <MenuItem value="asc" primaryText="ASC"/>
+          <MenuItem value="desc" primaryText="DESC"/>
+        </SelectField>
+      </Inset>
+    </div>)
   },
 })
 

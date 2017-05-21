@@ -3,6 +3,11 @@ const PropTypes = require("prop-types")
 
 const testData = require("../../test-data.json")
 
+const Inset = require("../components/inset")
+const SpaceAfter = require("../components/space-after")
+
+const {default: RaisedButton} = require("material-ui/RaisedButton")
+
 const Paste = React.createClass({
   displayName: "Paste",
 
@@ -28,10 +33,12 @@ const Paste = React.createClass({
 
   render() {
     return (
-      <div>
-        <textarea value={this.state.data} onChange={this.onChange} />
-        <button onClick={this.onGo}>Go</button>
-      </div>
+      <Inset>
+        <SpaceAfter>
+          <textarea style={{width: "100%", height: 512}} value={this.state.data} onChange={this.onChange} />
+        </SpaceAfter>
+        <RaisedButton secondary onTouchTap={this.onGo} label="Go"/>
+      </Inset>
     )
   },
 })

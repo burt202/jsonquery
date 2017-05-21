@@ -9,13 +9,17 @@ const Home = require("./home")
 const FromUrl = require("./from-url")
 const Query = require("./query")
 
+const AppBar = require("material-ui/AppBar").default
+const FlatButton = require("material-ui/FlatButton").default
+
+
 require("../css/app.css")
 
 const Main = React.createClass({
   displayName: "Main",
 
   propTypes: {
-    version: PropTypes.string.isRequired,
+    version: PropTypes.string,
   },
 
   getInitialState() {
@@ -65,15 +69,14 @@ const Main = React.createClass({
   },
 
   render() {
-    return (
-      <div>
-        <div className="header">
-          <h1><a href="/">JSONQuery</a></h1>
-          <span>v{this.props.version} - <a className="site-link" href="https://github.com/burt202/jsonquery">Github</a></span>
-        </div>
-        {this.getContent()}
-      </div>
-    )
+    return (<div>
+      <AppBar
+        title = {<span>JSONQuery <span style={{fontSize: 12}}>v{this.props.version}</span></span>}
+        iconElementRight = {<FlatButton href="https://github.com/burt202/jsonquery" label="Github" />}
+        showMenuIconButton = {false}
+      />
+      {this.getContent()}
+    </div>)
   },
 })
 
