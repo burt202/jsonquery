@@ -1,4 +1,5 @@
 const React = require("react")
+const PropTypes = require("prop-types")
 const queryString = require("query-string")
 
 const actionCreator = require("./store/action-creator")
@@ -11,6 +12,10 @@ const Query = require("./query")
 require("../css/app.css")
 
 const Main = React.createClass({
+  propTypes: {
+    version: PropTypes.string.isRequired,
+  },
+
   getInitialState: function() {
     return store.getState()
   },
@@ -27,7 +32,7 @@ const Main = React.createClass({
     this.setState(store.getState())
   },
 
-  render: function() {
+  getContent: function() {
     if (!this.state.schema || !this.state.data || !this.state.resultFields) {
       const parsed = queryString.parse(location.search)
 
@@ -56,6 +61,17 @@ const Main = React.createClass({
       sum={this.state.sum}
       average={this.state.average}
     />
+  },
+  render: function() {
+    return (
+      <div>
+        <div className="header">
+          <h1><a href="/">JSONQuery</a></h1>
+          <span>v{this.props.version} - <a className="site-link" href="https://github.com/burt202/jsonquery">Github</a></span>
+        </div>
+        {this.getContent()}
+      </div>
+    )
   },
 })
 

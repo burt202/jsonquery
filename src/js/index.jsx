@@ -1,10 +1,12 @@
+/* global VERSION */
+
 const React = require("react")
 const ReactDOM = require("react-dom")
 const Main = require("./main")
 
 ReactDOM.render(
-  <Main />,
-  document.body.querySelector(".main")
+  <Main version={VERSION} />,
+  document.body.querySelector(".container")
 )
 
 // Hot Module Replacement API
@@ -15,9 +17,9 @@ if (module.hot) {
 
     ReactDOM.render(
       <AppContainer>
-        <Main />
+        <Main version={VERSION} />
       </AppContainer>,
-      document.body.querySelector(".main")
+      document.body.querySelector(".container")
     )
   })
 }

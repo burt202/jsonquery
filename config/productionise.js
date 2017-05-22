@@ -3,8 +3,6 @@ const SwigWebpackPlugin = require("swig-webpack-plugin")
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 
-const packageJson = require("../package.json")
-
 const R = require("ramda")
 
 const prodPlugins = [
@@ -25,7 +23,6 @@ const prodPlugins = [
     template: "./src/index.html",
     watch: "./src/index.html",
     data: {
-      version: packageJson.version,
       production: true,
       lastModified: Date.now(),
     },

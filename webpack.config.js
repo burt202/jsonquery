@@ -2,6 +2,7 @@ const webpack = require("webpack")
 const path = require("path")
 const SwigWebpackPlugin = require("swig-webpack-plugin")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
+
 const packageJson = require("./package.json")
 
 module.exports = {
@@ -47,13 +48,16 @@ module.exports = {
       {from: "CNAME", to: "CNAME", toType: "file"},
     ]),
 
+    new webpack.DefinePlugin({
+      "VERSION": JSON.stringify(packageJson.version),
+    }),
+
     new webpack.HotModuleReplacementPlugin(),
     new SwigWebpackPlugin({
       filename: "index.html",
       template: "./src/index.html",
       watch: "./src/index.html",
       data: {
-        version: packageJson.version,
         production: false,
         lastModified: Date.now(),
       },
