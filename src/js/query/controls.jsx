@@ -19,19 +19,19 @@ const Controls = React.createClass({
     average: PropTypes.string,
   },
 
-  onSumChange: function(e) {
+  onSumChange(e) {
     this.props.actionCreator.sum(e.target.value)
   },
 
-  onAverageChange: function(e) {
+  onAverageChange(e) {
     this.props.actionCreator.average(e.target.value)
   },
 
-  onLimitChange: function(e) {
+  onLimitChange(e) {
     this.props.actionCreator.limit(parseInt(e.target.value, 10))
   },
 
-  getLimitControl: function() {
+  getLimitControl() {
     return (
       <div className="input-control">
         <label>Limit:</label>
@@ -59,7 +59,7 @@ const Controls = React.createClass({
     )
   },
 
-  getNumberOptions: function() {
+  getNumberOptions() {
     const numberOptions = R.pipe(
       R.toPairs,
       R.filter(R.compose(R.equals("number"), R.prop(1))),
@@ -73,7 +73,7 @@ const Controls = React.createClass({
     })
   },
 
-  getAverageControl: function() {
+  getAverageControl() {
     return (
       <div className="input-control">
         <label>Average:</label>
@@ -89,7 +89,7 @@ const Controls = React.createClass({
     )
   },
 
-  getSumControl: function() {
+  getSumControl() {
     return (
       <div className="input-control">
         <label>Sum:</label>
@@ -105,7 +105,7 @@ const Controls = React.createClass({
     )
   },
 
-  getGroupByControl: function() {
+  getGroupByControl() {
     const options = R.without(this.props.groupings, Object.keys(this.props.schema))
 
     return (
@@ -120,7 +120,7 @@ const Controls = React.createClass({
     )
   },
 
-  getSortByControl: function() {
+  getSortByControl() {
     const options = R.without(R.pluck("field", this.props.sorters), Object.keys(this.props.schema))
 
     return (
@@ -133,7 +133,7 @@ const Controls = React.createClass({
     )
   },
 
-  render: function() {
+  render() {
     return (
       <div>
         <h3>Controls</h3>

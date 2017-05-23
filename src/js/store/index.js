@@ -26,7 +26,7 @@ const initialOperators = {
 }
 
 const handlers = {
-  saveJson: function(contents, payload) {
+  saveJson(contents, payload) {
     const toUpdate = {
       filters: [],
       groupings: [],
@@ -41,40 +41,40 @@ const handlers = {
     return R.merge(contents, toUpdate)
   },
 
-  updateResultFields: function(contents, payload) {
+  updateResultFields(contents, payload) {
     return R.merge(contents, {
       resultFields: payload.fields,
     })
   },
 
-  addFilter: function(contents, payload) {
+  addFilter(contents, payload) {
     const filterType = (contents.schema || {})[payload.name] || "string"
     const operator = initialOperators[filterType] || "eq"
 
     return R.merge(contents, {
-      filters: R.append({id: uuid.v4(), name: payload.name, value: "", operator: operator, active: true}, contents.filters),
+      filters: R.append({id: uuid.v4(), name: payload.name, value: "", operator, active: true}, contents.filters),
     })
   },
 
-  deleteFilter: function(contents, payload) {
+  deleteFilter(contents, payload) {
     return R.merge(contents, {
       filters: R.reject(R.propEq("id", payload.id), contents.filters),
     })
   },
 
-  updateFilter: function(contents, payload) {
+  updateFilter(contents, payload) {
     return R.merge(contents, {
       filters: utils.updateWhere({id: payload.id}, payload.value, contents.filters),
     })
   },
 
-  limit: function(contents, payload) {
+  limit(contents, payload) {
     return R.merge(contents, {
       limit: payload.number,
     })
   },
 
-  reset: function(contents) {
+  reset(contents) {
     return R.merge(contents, {
       filters: [],
       groupings: [],
@@ -86,7 +86,7 @@ const handlers = {
     })
   },
 
-  addGrouping: function(contents, payload) {
+  addGrouping(contents, payload) {
     return R.merge(contents, {
       sum: null,
       average: null,
@@ -95,7 +95,7 @@ const handlers = {
     })
   },
 
-  removeGrouping: function(contents, payload) {
+  removeGrouping(contents, payload) {
     const toMerge = {
       groupings: R.without([payload.name], contents.groupings || []),
     }
@@ -105,7 +105,7 @@ const handlers = {
     return R.merge(contents, toMerge)
   },
 
-  sum: function(contents, payload) {
+  sum(contents, payload) {
     return R.merge(contents, {
       sum: payload.name,
       average: null,
@@ -114,7 +114,7 @@ const handlers = {
     })
   },
 
-  average: function(contents, payload) {
+  average(contents, payload) {
     return R.merge(contents, {
       average: payload.name,
       sum: null,
@@ -123,19 +123,19 @@ const handlers = {
     })
   },
 
-  addSorter: function(contents, payload) {
+  addSorter(contents, payload) {
     return R.merge(contents, {
       sorters: R.append(payload.sorter, contents.sorters),
     })
   },
 
-  removeSorter: function(contents, payload) {
+  removeSorter(contents, payload) {
     return R.merge(contents, {
       sorters: R.reject(R.propEq("field", payload.name), contents.sorters),
     })
   },
 
-  showCounts: function(contents, payload) {
+  showCounts(contents, payload) {
     return R.merge(contents, {
       showCounts: payload.showCounts,
     })

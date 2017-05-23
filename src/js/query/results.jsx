@@ -23,18 +23,18 @@ const Results = React.createClass({
     average: PropTypes.string,
   },
 
-  downloadResults: function(type) {
+  downloadResults(type) {
     const formatted = type.formatter(this.props.results)
 
     const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
     const downloadLink = document.getElementById("hidden-download-link")
     downloadLink.setAttribute("href", dataStr)
-    downloadLink.setAttribute("download", new Date().toISOString() + "." + type.extension)
+    downloadLink.setAttribute("download", `${new Date().toISOString()}.${type.extension}`)
     downloadLink.click()
     downloadLink.setAttribute("href", "")
   },
 
-  getDownloadLinks: function() {
+  getDownloadLinks() {
     const sumedOrAveraged = !!(this.props.sum || this.props.average)
 
     const jsonFormatter = downloadFormatter.json(this.props.groupings, this.props.showCounts, sumedOrAveraged)
@@ -51,21 +51,21 @@ const Results = React.createClass({
     }.bind(this))
   },
 
-  isAggregateResult: function() {
+  isAggregateResult() {
     return this.props.showCounts || this.props.sum || this.props.average
   },
 
-  tooManyResultToShow: function() {
+  tooManyResultToShow() {
     return this.props.filteredLength > DISPLAY_THRESHOLD
   },
 
-  getDisplayData: function() {
+  getDisplayData() {
     if (!this.isAggregateResult() && this.tooManyResultToShow())
       return "Results set too large to display, use download options instead"
     return JSON.stringify(this.props.results, null, 2)
   },
 
-  onChangeHandler: function(e) {
+  onChangeHandler(e) {
     const field = e.target.name
     const isPresent = R.contains(field, this.props.resultFields)
     const updatedFields = (isPresent) ?
@@ -75,7 +75,7 @@ const Results = React.createClass({
     this.props.actionCreator.updateResultFields(updatedFields)
   },
 
-  getResultFieldOptions: function() {
+  getResultFieldOptions() {
     const schemaKeys = R.sortBy(R.identity, R.keys(this.props.schema))
 
     return schemaKeys.map(function(field) {
@@ -91,19 +91,19 @@ const Results = React.createClass({
     }.bind(this))
   },
 
-  getCheckboxes: function() {
+  getCheckboxes() {
     return (!this.isAggregateResult()) ? <p>Include: {this.getResultFieldOptions()}</p> : null
   },
 
-  canCopyResults: function() {
+  canCopyResults() {
     return this.props.showCounts || !this.tooManyResultToShow()
   },
 
-  getCopyLink: function() {
+  getCopyLink() {
     return (this.canCopyResults()) ? <a className="site-link" data-clipboard-action="copy" data-clipboard-target="#copy-cont">Copy to clipboard</a> : null
   },
 
-  render: function() {
+  render() {
     new Clipboard("a.site-link[data-clipboard-action='copy']")
 
     return (

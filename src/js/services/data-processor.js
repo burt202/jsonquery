@@ -152,12 +152,12 @@ function formatFilters(filters) {
 }
 
 module.exports = {
-  filter: function(data, schema, filters) {
+  filter(data, schema, filters) {
     const builtFilters = R.reduce(function(acc, filter) {
       if (!filter.active) return acc
 
       const type = schema[filter.name]
-      var filterMethod = null
+      let filterMethod = null
 
       if (type === "string") filterMethod = getStringFilter(filter)
       if (type === "number") filterMethod = getNumberFilter(filter)
@@ -176,11 +176,11 @@ module.exports = {
     return R.filter(R.where(formatFilters(builtFilters)), data)
   },
 
-  group: function(groupings, showCounts, data) {
+  group(groupings, showCounts, data) {
     return _group(groupings, showCounts, data)
   },
 
-  sort: function(sorters, data) {
+  sort(sorters, data) {
     return R.sortWith(R.map(function(sorter) {
       const direction = (sorter.direction === "asc") ? "ascend" : "descend"
       return R[direction](R.prop(sorter.field))

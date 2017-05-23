@@ -113,7 +113,7 @@ describe("schemaGenerator", function() {
   describe("generate", function() {
 
     tests.forEach(function(test) {
-      it("should translate " + test.name + " data into a schema correctly", function() {
+      it(`should translate ${test.name} data into a schema correctly`, function() {
         expect(schemaGenerator.generate(test.data)).to.eql(test.expected)
       })
     })

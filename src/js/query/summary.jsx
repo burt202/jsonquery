@@ -15,25 +15,25 @@ const Summary = React.createClass({
     groupings: PropTypes.array,
   },
 
-  getGroupingBreakdown: function(grouping) {
+  getGroupingBreakdown(grouping) {
     if (!grouping) return null
 
     return R.map(function(obj) {
-      return (<p key={obj.name}>{obj.name + ": " + obj.value}</p>)
+      return (<p key={obj.name}>{`${obj.name}: ${obj.value}`}</p>)
     }, groupingAnalyser.getAnalysis(grouping))
   },
 
-  getGrouping: function() {
+  getGrouping() {
     return (this.props.groupings.length) ? dataProcessor.group(this.props.groupings, false, this.props.results) : null
   },
 
-  showRawDataLength: function() {
+  showRawDataLength() {
     if (this.props.results.length === this.props.rawDataLength) return ""
     const percentage = (this.props.results.length / this.props.rawDataLength) * 100
-    return "/" + this.props.rawDataLength + " (" + utils.round(2, percentage) + "%)"
+    return `/${this.props.rawDataLength} (${utils.round(2, percentage)}%)`
   },
 
-  render: function() {
+  render() {
     const grouping = this.getGrouping()
 
     return (
