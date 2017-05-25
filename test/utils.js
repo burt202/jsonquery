@@ -28,4 +28,20 @@ describe("utils", function() {
       ])
     })
   })
+
+  describe("getMin", function() {
+    it("should return lowest value from array", function() {
+      const res = utils.getMin([2, 4, 5, 2])
+
+      expect(res).to.eql(2)
+    })
+  })
+
+  describe("getMax", function() {
+    it("should return highest value from array", function() {
+      const res = utils.getMax([2, 4, 5, 2])
+
+      expect(res).to.eql(5)
+    })
+  })
 })

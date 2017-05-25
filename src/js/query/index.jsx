@@ -58,9 +58,14 @@ const Query = React.createClass({
   },
 
   getAnalysis(data) {
+    const values = R.pluck(this.props.analyse, data)
+
     return {
-      sum: utils.round(2, R.sum(R.pluck(this.props.analyse, data))),
-      average: utils.round(2, R.mean(R.pluck(this.props.analyse, data))),
+      sum: utils.round(2, R.sum(values)),
+      average: utils.round(2, R.mean(values)),
+      lowest: utils.getMin(values),
+      highest: utils.getMax(values),
+      median: utils.round(2, R.median(values)),
     }
   },
 

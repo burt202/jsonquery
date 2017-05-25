@@ -2,14 +2,6 @@ const R = require("ramda")
 
 const utils = require("../utils")
 
-function getMax(arr) {
-  return Math.max.apply(null, arr)
-}
-
-function getMin(arr) {
-  return Math.min.apply(null, arr)
-}
-
 const _getGroupLengths = R.pipe(
   R.toPairs,
   R.map(function(pair) {
@@ -24,8 +16,8 @@ module.exports = {
     const groupLengths = _getGroupLengths(grouped)
 
     const count = {name: "No. of Groups", value: groupLengths.length}
-    const max = {name: "Max Group Size", value: getMax(groupLengths)}
-    const min = {name: "Min Group Size", value: getMin(groupLengths)}
+    const max = {name: "Max Group Size", value: utils.getMax(groupLengths)}
+    const min = {name: "Min Group Size", value: utils.getMin(groupLengths)}
     const mean = {name: "Average Group Size", value: R.compose(utils.round(2), R.mean)(groupLengths)}
 
     return (count.value) ? [count, max, min, mean] : []

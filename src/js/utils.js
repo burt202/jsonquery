@@ -9,4 +9,12 @@ module.exports = {
     const index = R.findIndex(R.whereEq(find), data)
     return R.adjust(R.merge(R.__, update), index, data)
   },
+
+  getMax(arr) {
+    return Math.max.apply(null, arr)
+  },
+
+  getMin(arr) {
+    return Math.min.apply(null, arr)
+  },
 }
