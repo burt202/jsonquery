@@ -95,15 +95,16 @@ function csvFromArray(json) {
 }
 
 module.exports = {
-  json: R.curry(function(groupings, showCounts, analysed, json) {
+  json: R.curry(function(groupings, showCounts, json) {
     return JSON.stringify(json, null, 2)
   }),
 
-  csv: R.curry(function(groupings, showCounts, analysed, json) {
+  csv: R.curry(function(groupings, showCounts, json) {
     if (R.isEmpty(json)) return null
-    if (analysed) return csvFromObject(json)
+    if (Array.isArray(json) && !showCounts) return csvFromArray(json)
+
     if (showCounts) return csvFromCounts(json)
     if (groupings.length && !showCounts) return csvFromGroupedData(json)
-    return csvFromArray(json)
+    return csvFromObject(json)
   }),
 }

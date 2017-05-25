@@ -7,8 +7,8 @@ describe("downloadFormatter", function() {
 
   describe("csv", function() {
     it("should return null if data set is empty", function() {
-      expect(downloadFormatter.csv([], false, false, [])).to.eql(null)
-      expect(downloadFormatter.csv([], false, false, {})).to.eql(null)
+      expect(downloadFormatter.csv([], false, [])).to.eql(null)
+      expect(downloadFormatter.csv([], false, {})).to.eql(null)
     })
 
     describe("when sumed or averaged", function() {
@@ -17,7 +17,7 @@ describe("downloadFormatter", function() {
           total: 20,
         }
 
-        expect(downloadFormatter.csv([], false, true, mockData)).to.eql(
+        expect(downloadFormatter.csv([], false, mockData)).to.eql(
           "total,20"
         )
       })
@@ -30,7 +30,7 @@ describe("downloadFormatter", function() {
           "Muse: 1",
         ]
 
-        expect(downloadFormatter.csv(["artist"], true, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], true, mockData)).to.eql(
           "Coldplay,2\r\nMuse,1"
         )
       })
@@ -41,7 +41,7 @@ describe("downloadFormatter", function() {
           Muse: ["Showbiz: 1"],
         }
 
-        expect(downloadFormatter.csv(["artist", "album"], true, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist", "album"], true, mockData)).to.eql(
           "Coldplay - Parachutes,1\r\nColdplay - X&Y,1\r\nMuse - Showbiz,1"
         )
       })
@@ -52,7 +52,7 @@ describe("downloadFormatter", function() {
           "Muse: 1",
         ]
 
-        expect(downloadFormatter.csv(["artist"], true, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], true, mockData)).to.eql(
           "\"10,000 Days\",2\r\nMuse,1"
         )
       })
@@ -66,7 +66,7 @@ describe("downloadFormatter", function() {
           Muse: [{artist: "Muse", album: "Showbiz", title: "Sunburn"}],
         }
 
-        expect(downloadFormatter.csv(["artist"], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], false, mockData)).to.eql(
           "artist,album,title\r\nColdplay\r\nColdplay,Parachutes,Shiver\r\nColdplay,X&Y,Square One\r\nMuse\r\nMuse,Showbiz,Sunburn"
         )
       })
@@ -82,7 +82,7 @@ describe("downloadFormatter", function() {
           },
         }
 
-        expect(downloadFormatter.csv(["artist", "album"], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist", "album"], false, mockData)).to.eql(
           "artist,album,title\r\nColdplay - Parachutes\r\nColdplay,Parachutes,Shiver\r\nColdplay - X&Y\r\nColdplay,X&Y,Square One\r\nMuse - Showbiz\r\nMuse,Showbiz,Sunburn"
         )
       })
@@ -92,7 +92,7 @@ describe("downloadFormatter", function() {
           Tool: [{artist: "Tool", album: "10,000 Days", title: "Schism"}],
         }
 
-        expect(downloadFormatter.csv(["artist"], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], false, mockData)).to.eql(
           "artist,album,title\r\nTool\r\nTool,\"10,000 Days\",Schism"
         )
       })
@@ -102,7 +102,7 @@ describe("downloadFormatter", function() {
           Coldplay: [{artist: "Coldplay", album: "Parachutes", title: "Shiver", genres: ["Rock", "Indie"]}],
         }
 
-        expect(downloadFormatter.csv(["artist"], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], false, mockData)).to.eql(
           "artist,album,title,genres\r\nColdplay\r\nColdplay,Parachutes,Shiver,\"Rock,Indie\""
         )
       })
@@ -112,7 +112,7 @@ describe("downloadFormatter", function() {
           "10,000 Days": [{artist: "Tool", album: "10,000 Days", title: "Schism"}],
         }
 
-        expect(downloadFormatter.csv(["artist"], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], false, mockData)).to.eql(
           "artist,album,title\r\n\"10,000 Days\"\r\nTool,\"10,000 Days\",Schism"
         )
       })
@@ -126,7 +126,7 @@ describe("downloadFormatter", function() {
           {artist: "Muse", album: "Showbiz", title: "Sunburn"},
         ]
 
-        expect(downloadFormatter.csv([], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv([], false, mockData)).to.eql(
           "artist,album,title\r\nColdplay,Parachutes,Shiver\r\nColdplay,X&Y,Square One\r\nMuse,Showbiz,Sunburn"
         )
       })
@@ -136,7 +136,7 @@ describe("downloadFormatter", function() {
           {artist: "Tool", album: "10,000 Days", title: "Schism"},
         ]
 
-        expect(downloadFormatter.csv([], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv([], false, mockData)).to.eql(
           "artist,album,title\r\nTool,\"10,000 Days\",Schism"
         )
       })
@@ -146,7 +146,7 @@ describe("downloadFormatter", function() {
           {artist: "Coldplay", album: "Parachutes", title: "Shiver", genres: ["Rock", "Indie"]},
         ]
 
-        expect(downloadFormatter.csv([], false, false, mockData)).to.eql(
+        expect(downloadFormatter.csv([], false, mockData)).to.eql(
           "artist,album,title,genres\r\nColdplay,Parachutes,Shiver,\"Rock,Indie\""
         )
       })

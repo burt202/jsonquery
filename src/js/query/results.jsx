@@ -34,10 +34,8 @@ const Results = React.createClass({
   },
 
   getDownloadLinks() {
-    const analysed = !!(this.props.analyse)
-
-    const jsonFormatter = downloadFormatter.json(this.props.groupings, this.props.showCounts, analysed)
-    const csvFormatter = downloadFormatter.csv(this.props.groupings, this.props.showCounts, analysed)
+    const jsonFormatter = downloadFormatter.json(this.props.groupings, this.props.showCounts)
+    const csvFormatter = downloadFormatter.csv(this.props.groupings, this.props.showCounts)
 
     const types = [
       {name: "JSON", mimetype: "application/json", extension: "json", formatter: jsonFormatter},
