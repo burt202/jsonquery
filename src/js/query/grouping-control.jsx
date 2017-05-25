@@ -53,7 +53,7 @@ const GroupingControl = React.createClass({
               <option></option>
               {options}
             </select>
-            <label className="result-field">
+            <label className="checkbox-label">
               <input
                 type="checkbox"
                 name="showCounts"

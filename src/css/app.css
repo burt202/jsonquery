@@ -153,6 +153,11 @@ ul.side-options li:last-of-type {
   margin-right: 0;
 }
 
+.checkbox-label {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
 /* Home */
 
 .home-cont .drag-drop-area {
@@ -238,11 +243,6 @@ ul.side-options li:last-of-type {
 }
 
 /* Results */
-
-.result-checkbox {
-  margin-right: 10px;
-  cursor: pointer;
-}
 
 .results-options {
   display: flex;

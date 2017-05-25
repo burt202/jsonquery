@@ -96,7 +96,7 @@ const Results = React.createClass({
       const disabled = R.contains(field, this.props.groupings)
 
       return (
-        <label className="result-checkbox" key={field}>
+        <label className="checkbox-label" key={field}>
           <input type="checkbox" name={field} disabled={disabled} checked={checked} onChange={this.onChangeHandler} />
           {field}
         </label>
