@@ -2,11 +2,17 @@ const React = require("react")
 const PropTypes = require("prop-types")
 const R = require("ramda")
 const Clipboard = require("clipboard")
+const classNames = require("classnames")
 
 const downloadFormatter = require("../services/download-formatter")
 const Code = require("../components/code")
 
 const DISPLAY_THRESHOLD = 1000
+
+const TYPES = [
+  {name: "JSON", value: "json", mimetype: "application/json"},
+  {name: "CSV", value: "csv", mimetype: "text/csv"},
+]
 
 const Results = React.createClass({
   displayName: "Results",
@@ -22,30 +28,40 @@ const Results = React.createClass({
     analyse: PropTypes.string,
   },
 
-  downloadResults(type) {
-    const formatted = type.formatter(this.props.results)
+  getInitialState() {
+    return {
+      type: "json",
+    }
+  },
+
+  setType(type) {
+    this.setState({type})
+  },
+
+  getViewTypes() {
+    return TYPES.map(function(type) {
+      const classnames = classNames({
+        "active": this.state.type === type.value,
+      })
+
+      return (
+        <li key={type.value} className={classnames}>
+          <a className="site-link" onClick={this.setType.bind(this, type.value)}>{type.name}</a>
+        </li>
+      )
+    }.bind(this))
+  },
+
+  downloadResults() {
+    const type = R.find(R.propEq("value", this.state.type), TYPES)
+    const formatted = downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results)
 
     const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
     const downloadLink = document.getElementById("hidden-download-link")
     downloadLink.setAttribute("href", dataStr)
-    downloadLink.setAttribute("download", `${new Date().toISOString()}.${type.extension}`)
+    downloadLink.setAttribute("download", `${new Date().toISOString()}.${type.value}`)
     downloadLink.click()
     downloadLink.setAttribute("href", "")
-  },
-
-  getDownloadLinks() {
-    const jsonFormatter = downloadFormatter.json(this.props.groupings, this.props.showCounts)
-    const csvFormatter = downloadFormatter.csv(this.props.groupings, this.props.showCounts)
-
-    const types = [
-      {name: "JSON", mimetype: "application/json", extension: "json", formatter: jsonFormatter},
-      {name: "CSV", mimetype: "text/csv", extension: "csv", formatter: csvFormatter},
-    ]
-
-    return types.map(function(type) {
-      const downloader = this.downloadResults.bind(this, type)
-      return (<a className="site-link" key={type.name} onClick={downloader}>{type.name}</a>)
-    }.bind(this))
   },
 
   isAggregateResult() {
@@ -59,7 +75,7 @@ const Results = React.createClass({
   getDisplayData() {
     if (!this.isAggregateResult() && this.tooManyResultToShow())
       return "Results set too large to display, use download options instead"
-    return JSON.stringify(this.props.results, null, 2)
+    return downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results)
   },
 
   onChangeHandler(e) {
@@ -80,7 +96,7 @@ const Results = React.createClass({
       const disabled = R.contains(field, this.props.groupings)
 
       return (
-        <label className="result-field" key={field}>
+        <label className="result-checkbox" key={field}>
           <input type="checkbox" name={field} disabled={disabled} checked={checked} onChange={this.onChangeHandler} />
           {field}
         </label>
@@ -97,7 +113,7 @@ const Results = React.createClass({
   },
 
   getCopyLink() {
-    return (this.canCopyResults()) ? <a className="site-link" data-clipboard-action="copy" data-clipboard-target="#copy-cont">Copy to clipboard</a> : null
+    return (this.canCopyResults()) ? <li><a className="site-link" data-clipboard-action="copy" data-clipboard-target="#copy-cont">Copy To Clipboard</a></li> : null
   },
 
   render() {
@@ -107,10 +123,18 @@ const Results = React.createClass({
       <div>
         <h3>Results</h3>
         {this.getCheckboxes()}
-        <p className="download-links">
-          Download results as: {this.getDownloadLinks()}
-          {this.getCopyLink()}
-        </p>
+        <br />
+
+        <div className="results-options">
+          <ul className="side-options">
+            {this.getViewTypes()}
+          </ul>
+          <ul className="side-options right">
+            {this.getCopyLink()}
+            <li><a className="site-link" onClick={this.downloadResults}>Download</a></li>
+          </ul>
+        </div>
+
         <div id="copy-cont">
           <Code language="json">
             {this.getDisplayData()}
