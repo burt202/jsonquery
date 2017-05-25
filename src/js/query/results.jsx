@@ -19,8 +19,7 @@ const Results = React.createClass({
     actionCreator: PropTypes.object.isRequired,
     showCounts: PropTypes.bool.isRequired,
     filteredLength: PropTypes.number.isRequired,
-    sum: PropTypes.string,
-    average: PropTypes.string,
+    analyse: PropTypes.string,
   },
 
   downloadResults(type) {
@@ -35,10 +34,10 @@ const Results = React.createClass({
   },
 
   getDownloadLinks() {
-    const sumedOrAveraged = !!(this.props.sum || this.props.average)
+    const analysed = !!(this.props.analyse)
 
-    const jsonFormatter = downloadFormatter.json(this.props.groupings, this.props.showCounts, sumedOrAveraged)
-    const csvFormatter = downloadFormatter.csv(this.props.groupings, this.props.showCounts, sumedOrAveraged)
+    const jsonFormatter = downloadFormatter.json(this.props.groupings, this.props.showCounts, analysed)
+    const csvFormatter = downloadFormatter.csv(this.props.groupings, this.props.showCounts, analysed)
 
     const types = [
       {name: "JSON", mimetype: "application/json", extension: "json", formatter: jsonFormatter},
@@ -52,7 +51,7 @@ const Results = React.createClass({
   },
 
   isAggregateResult() {
-    return this.props.showCounts || this.props.sum || this.props.average
+    return this.props.showCounts || this.props.analyse
   },
 
   tooManyResultToShow() {

@@ -15,16 +15,11 @@ const Controls = React.createClass({
     schema: PropTypes.object.isRequired,
     showCounts: PropTypes.bool.isRequired,
     limit: PropTypes.number,
-    sum: PropTypes.string,
-    average: PropTypes.string,
+    analyse: PropTypes.string,
   },
 
-  onSumChange(e) {
-    this.props.actionCreator.sum(e.target.value)
-  },
-
-  onAverageChange(e) {
-    this.props.actionCreator.average(e.target.value)
+  onAnalyseChange(e) {
+    this.props.actionCreator.analyse(e.target.value)
   },
 
   onLimitChange(e) {
@@ -73,29 +68,13 @@ const Controls = React.createClass({
     })
   },
 
-  getAverageControl() {
+  getAnalyseControl() {
     return (
       <div className="input-control">
-        <label>Average:</label>
+        <label>Analyse:</label>
         <div className="body">
           <div className="row">
-            <select onChange={this.onAverageChange} value={this.props.average || ""}>
-              <option></option>
-              {this.getNumberOptions()}
-            </select>
-          </div>
-        </div>
-      </div>
-    )
-  },
-
-  getSumControl() {
-    return (
-      <div className="input-control">
-        <label>Sum:</label>
-        <div className="body">
-          <div className="row">
-            <select onChange={this.onSumChange} value={this.props.sum || ""}>
+            <select onChange={this.onAnalyseChange} value={this.props.analyse || ""}>
               <option></option>
               {this.getNumberOptions()}
             </select>
@@ -141,8 +120,7 @@ const Controls = React.createClass({
         {this.getLimitControl()}
         <br />
         {this.getGroupByControl()}
-        {this.getAverageControl()}
-        {this.getSumControl()}
+        {this.getAnalyseControl()}
       </div>
     )
   },

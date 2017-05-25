@@ -13,8 +13,7 @@ const defaults = {
   resultFields: null,
   showCounts: false,
   limit: null,
-  sum: null,
-  average: null,
+  analyse: null,
 }
 
 const initialOperators = {
@@ -33,8 +32,7 @@ const handlers = {
       sorters: [],
       showCounts: false,
       limit: null,
-      sum: null,
-      average: null,
+      analyse: null,
     }
 
     toUpdate[payload.name] = payload.data
@@ -81,15 +79,13 @@ const handlers = {
       sorters: [],
       showCounts: false,
       limit: null,
-      sum: null,
-      average: null,
+      analyse: null,
     })
   },
 
   addGrouping(contents, payload) {
     return R.merge(contents, {
-      sum: null,
-      average: null,
+      analyse: null,
       groupings: R.append(payload.name, contents.groupings),
       resultFields: R.compose(R.uniq, R.append(payload.name))(contents.resultFields),
     })
@@ -105,19 +101,9 @@ const handlers = {
     return R.merge(contents, toMerge)
   },
 
-  sum(contents, payload) {
+  analyse(contents, payload) {
     return R.merge(contents, {
-      sum: payload.name,
-      average: null,
-      groupings: [],
-      showCounts: false,
-    })
-  },
-
-  average(contents, payload) {
-    return R.merge(contents, {
-      average: payload.name,
-      sum: null,
+      analyse: payload.name,
       groupings: [],
       showCounts: false,
     })

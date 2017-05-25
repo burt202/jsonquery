@@ -86,16 +86,9 @@ module.exports = {
     })
   },
 
-  sum(name) {
+  analyse(name) {
     dispatcher.dispatch({
-      name: "sum",
-      value: {name},
-    })
-  },
-
-  average(name) {
-    dispatcher.dispatch({
-      name: "average",
+      name: "analyse",
       value: {name},
     })
   },

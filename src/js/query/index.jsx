@@ -24,8 +24,7 @@ const Query = React.createClass({
     resultFields: PropTypes.array.isRequired,
     showCounts: PropTypes.bool.isRequired,
     limit: PropTypes.number,
-    sum: PropTypes.string,
-    average: PropTypes.string,
+    analyse: PropTypes.string,
   },
 
   getInitialState() {
@@ -58,6 +57,13 @@ const Query = React.createClass({
     return R.map(R.pickAll(R.sortBy(R.identity, this.props.resultFields)))(data)
   },
 
+  getAnalysis(data) {
+    return {
+      sum: utils.round(2, R.sum(R.pluck(this.props.analyse, data))),
+      average: utils.round(2, R.mean(R.pluck(this.props.analyse, data))),
+    }
+  },
+
   filterSortAndLimit(data) {
     return R.pipe(
       this.filterResults,
@@ -69,8 +75,7 @@ const Query = React.createClass({
 
   formatData(data) {
     if (this.props.groupings.length) return dataProcessor.group(this.props.groupings, this.props.showCounts, data)
-    if (this.props.sum) return {total: utils.round(2, R.sum(R.pluck(this.props.sum, data)))}
-    if (this.props.average) return {average: utils.round(2, R.mean(R.pluck(this.props.average, data)))}
+    if (this.props.analyse) return this.getAnalysis(data)
     return data
   },
 
@@ -123,8 +128,7 @@ const Query = React.createClass({
           sorters={this.props.sorters}
           showCounts={this.props.showCounts}
           limit={this.props.limit}
-          sum={this.props.sum}
-          average={this.props.average}
+          analyse={this.props.analyse}
         />
         <Summary
           rawDataLength={this.props.data.length}
@@ -139,8 +143,7 @@ const Query = React.createClass({
           actionCreator={this.props.actionCreator}
           showCounts={this.props.showCounts}
           filteredLength={filtered.length}
-          sum={this.props.sum}
-          average={this.props.average}
+          analyse={this.props.analyse}
         />
       </div>
     )

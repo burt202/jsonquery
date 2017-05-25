@@ -16,8 +16,7 @@ describe("store", function() {
       resultFields: null,
       showCounts: false,
       limit: null,
-      sum: null,
-      average: null,
+      analyse: null,
     })
   })
 
@@ -41,8 +40,7 @@ describe("store", function() {
         groupings: ["bar"],
         sorters: ["baz"],
         limit: "aaa",
-        average: "bbb",
-        sum: "ccc",
+        analyse: "bbb",
         showCounts: true,
       })
 
@@ -51,8 +49,7 @@ describe("store", function() {
       expect(store.getState().groupings).to.eql(["bar"])
       expect(store.getState().sorters).to.eql(["baz"])
       expect(store.getState().limit).to.eql("aaa")
-      expect(store.getState().average).to.eql("bbb")
-      expect(store.getState().sum).to.eql("ccc")
+      expect(store.getState().analyse).to.eql("bbb")
       expect(store.getState().showCounts).to.eql(true)
 
       dispatcher.dispatch({
@@ -64,8 +61,7 @@ describe("store", function() {
       expect(store.getState().groupings).to.eql([])
       expect(store.getState().sorters).to.eql([])
       expect(store.getState().limit).to.eql(null)
-      expect(store.getState().average).to.eql(null)
-      expect(store.getState().sum).to.eql(null)
+      expect(store.getState().analyse).to.eql(null)
       expect(store.getState().showCounts).to.eql(false)
     })
   })
@@ -155,8 +151,7 @@ describe("store", function() {
         groupings: ["bar"],
         sorters: ["baz"],
         limit: "aaa",
-        average: "bbb",
-        sum: "ccc",
+        analyse: "bbb",
         showCounts: true,
       })
     })
@@ -167,8 +162,7 @@ describe("store", function() {
       expect(store.getState().groupings).to.eql(["bar"])
       expect(store.getState().sorters).to.eql(["baz"])
       expect(store.getState().limit).to.eql("aaa")
-      expect(store.getState().average).to.eql("bbb")
-      expect(store.getState().sum).to.eql("ccc")
+      expect(store.getState().analyse).to.eql("bbb")
       expect(store.getState().showCounts).to.eql(true)
 
       dispatcher.dispatch({
@@ -180,18 +174,16 @@ describe("store", function() {
       expect(store.getState().groupings).to.eql([])
       expect(store.getState().sorters).to.eql([])
       expect(store.getState().limit).to.eql(null)
-      expect(store.getState().average).to.eql(null)
-      expect(store.getState().sum).to.eql(null)
+      expect(store.getState().analyse).to.eql(null)
       expect(store.getState().showCounts).to.eql(false)
     })
   })
 
   describe("addGrouping", function() {
-    it("should add groupings and nullify sum and average", function() {
-      store.setState({sum: "bar", average: "baz"})
+    it("should add groupings and nullify sum and analyse", function() {
+      store.setState({sum: "bar", analyse: "baz"})
 
-      expect(store.getState().sum).to.eql("bar")
-      expect(store.getState().average).to.eql("baz")
+      expect(store.getState().analyse).to.eql("baz")
 
       dispatcher.dispatch({
         name: "addGrouping",
@@ -199,8 +191,7 @@ describe("store", function() {
       })
 
       expect(store.getState().groupings).to.eql(["foo"])
-      expect(store.getState().sum).to.eql(null)
-      expect(store.getState().average).to.eql(null)
+      expect(store.getState().analyse).to.eql(null)
     })
 
     it("should ensure groupings field is included in results", function() {
@@ -295,39 +286,19 @@ describe("store", function() {
     })
   })
 
-  describe("sum", function() {
-    it("should add sum and nullify groupings and average", function() {
-      store.setState({groupings: ["bar"], average: "baz"})
-
-      expect(store.getState().groupings).to.eql(["bar"])
-      expect(store.getState().average).to.eql("baz")
-
-      dispatcher.dispatch({
-        name: "sum",
-        value: {name: "foo"},
-      })
-
-      expect(store.getState().sum).to.eql("foo")
-      expect(store.getState().groupings).to.eql([])
-      expect(store.getState().average).to.eql(null)
-    })
-  })
-
-  describe("average", function() {
+  describe("analyse", function() {
     it("should add sum and nullify groupings and sum", function() {
       store.setState({groupings: ["bar"], sum: "baz"})
 
       expect(store.getState().groupings).to.eql(["bar"])
-      expect(store.getState().sum).to.eql("baz")
 
       dispatcher.dispatch({
-        name: "average",
+        name: "analyse",
         value: {name: "foo"},
       })
 
-      expect(store.getState().average).to.eql("foo")
+      expect(store.getState().analyse).to.eql("foo")
       expect(store.getState().groupings).to.eql([])
-      expect(store.getState().sum).to.eql(null)
     })
   })
 })
