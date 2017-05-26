@@ -130,7 +130,7 @@ const _sortAndCount = R.pipe(
   R.toPairs,
   R.sortBy(R.prop(1)),
   R.reverse,
-  R.map(R.join(": "))
+  R.fromPairs
 )
 
 const _group = R.curry(function(groupings, showCounts, data) {

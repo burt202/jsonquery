@@ -758,18 +758,18 @@ describe("dateProcessor", function() {
     })
 
     it("should group data with counts when 'showCounts' is true", function() {
-      expect(dateProcessor.group(["type"], true, mockDataForGrouping)).to.eql([
-        "card: 3",
-        "cash: 2",
-        "loan: 1",
-      ])
+      expect(dateProcessor.group(["type"], true, mockDataForGrouping)).to.eql({
+        card: 3,
+        cash: 2,
+        loan: 1,
+      })
     })
 
     it("should group data with counts at 2 levels when 'showCounts' is true", function() {
       expect(dateProcessor.group(["type", "auto"], true, mockDataForGrouping)).to.eql({
-        cash: ["false: 1", "true: 1"],
-        loan: ["true: 1"],
-        card: ["true: 2", "false: 1"],
+        cash: {false: 1, true: 1},
+        loan: {true: 1},
+        card: {true: 2, false: 1},
       })
     })
   })

@@ -11,34 +11,35 @@ describe("downloadFormatter", function() {
       expect(downloadFormatter.csv([], false, {})).to.eql(null)
     })
 
-    describe("when sumed or averaged", function() {
+    describe("when analysed", function() {
       it("should format correctly", function() {
         const mockData = {
-          total: 20,
+          sum: 20,
+          average: 4,
         }
 
         expect(downloadFormatter.csv([], false, mockData)).to.eql(
-          "total,20"
+          "sum,20\r\naverage,4"
         )
       })
     })
 
     describe("when grouped counts", function() {
       it("should format correctly", function() {
-        const mockData = [
-          "Coldplay: 2",
-          "Muse: 1",
-        ]
+        const mockData = {
+          Coldplay: 2,
+          Muse: 1,
+        }
 
         expect(downloadFormatter.csv(["artist"], true, mockData)).to.eql(
           "Coldplay,2\r\nMuse,1"
         )
       })
 
-      it("should format correctly for mutiple", function() {
+      it("should format correctly for mutiple groupings", function() {
         const mockData = {
-          Coldplay: ["Parachutes: 1", "X&Y: 1"],
-          Muse: ["Showbiz: 1"],
+          Coldplay: {Parachutes: 1, "X&Y": 1},
+          Muse: {Showbiz: 1},
         }
 
         expect(downloadFormatter.csv(["artist", "album"], true, mockData)).to.eql(
@@ -47,10 +48,10 @@ describe("downloadFormatter", function() {
       })
 
       it("should cope when the count field has a comma", function() {
-        const mockData = [
-          "10,000 Days: 2",
-          "Muse: 1",
-        ]
+        const mockData = {
+          "10,000 Days": 2,
+          Muse: 1,
+        }
 
         expect(downloadFormatter.csv(["artist"], true, mockData)).to.eql(
           "\"10,000 Days\",2\r\nMuse,1"
@@ -148,6 +149,16 @@ describe("downloadFormatter", function() {
 
         expect(downloadFormatter.csv([], false, mockData)).to.eql(
           "artist,album,title,genres\r\nColdplay,Parachutes,Shiver,\"Rock,Indie\""
+        )
+      })
+
+      it("should cope when there is an object value", function() {
+        const mockData = [
+          {artist: "Coldplay", album: "Parachutes", title: "Shiver", genres: {Rock: true, Indie: false}},
+        ]
+
+        expect(downloadFormatter.csv([], false, mockData)).to.eql(
+          "artist,album,title,genres\r\nColdplay,Parachutes,Shiver,{\"Rock\":true,\"Indie\":false}"
         )
       })
     })

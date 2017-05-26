@@ -180,8 +180,8 @@ describe("store", function() {
   })
 
   describe("addGrouping", function() {
-    it("should add groupings and nullify sum and analyse", function() {
-      store.setState({sum: "bar", analyse: "baz"})
+    it("should add groupings and nullify analyse", function() {
+      store.setState({analyse: "baz"})
 
       expect(store.getState().analyse).to.eql("baz")
 
@@ -287,8 +287,8 @@ describe("store", function() {
   })
 
   describe("analyse", function() {
-    it("should add sum and nullify groupings and sum", function() {
-      store.setState({groupings: ["bar"], sum: "baz"})
+    it("should add analyse and nullify groupings", function() {
+      store.setState({groupings: ["bar"], analyse: "baz"})
 
       expect(store.getState().groupings).to.eql(["bar"])
 

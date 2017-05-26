@@ -15,6 +15,7 @@
     "classnames": "^2.2.5",
     "clipboard": "^1.6.0",
     "date-fns": "^1.28.1",
+    "flat": "^2.0.1",
     "flux": "^2.1.1",
     "prop-types": "^15.5.10",
     "query-string": "^4.3.2",

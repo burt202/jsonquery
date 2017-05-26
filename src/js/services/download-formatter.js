@@ -1,43 +1,29 @@
 const R = require("ramda")
-
-function _makeCountRowCsvSafe(pair) {
-  return [_makeCsvSafe(pair[0]), pair[1]]
-}
+const flat = require("flat")
 
 function _makeCsvSafe(value) {
   if (Array.isArray(value)) return `"${value.join(",")}"`
   if (R.is(String, value) && value.indexOf(",") >= 0) return `"${value}"`
+  if (R.is(Object, value)) return JSON.stringify(value)
   return value
+}
+
+function csvFromArray(json) {
+  const header = R.keys(json[0]).join(",")
+
+  return R.pipe(
+    R.map(function(row) {
+      return R.compose(R.join(","), R.map(_makeCsvSafe), R.values)(row)
+    }),
+    R.prepend(header),
+    R.join("\r\n")
+  )(json)
 }
 
 function csvFromObject(json) {
   return R.pipe(
     R.toPairs,
-    R.map(R.join(",")),
-    R.join("\r\n")
-  )(json)
-}
-
-function _turnObjIntoCountArray(obj) {
-  return R.pipe(
-    R.toPairs,
-    R.map(function(pair) {
-      if (Array.isArray(pair[1])) return R.map(function(count) {
-        const split = R.split(": ", count)
-        return `${pair[0]} - ${split[0]}: ${split[1]}`
-      }, pair[1])
-
-      return _turnObjIntoCountArray(pair[1])
-    }),
-    R.flatten
-  )(obj)
-}
-
-function csvFromCounts(json) {
-  if (!Array.isArray(json)) json = _turnObjIntoCountArray(json)
-
-  return R.pipe(
-    R.map(R.compose(R.join(","), _makeCountRowCsvSafe, R.split(": "))),
+    R.map(R.compose(R.join(","), R.map(_makeCsvSafe))),
     R.join("\r\n")
   )(json)
 }
@@ -82,18 +68,6 @@ function csvFromGroupedData(json) {
   )(json)
 }
 
-function csvFromArray(json) {
-  const header = R.keys(json[0]).join(",")
-
-  return R.pipe(
-    R.map(function(row) {
-      return R.compose(R.join(","), R.map(_makeCsvSafe), R.values)(row)
-    }),
-    R.prepend(header),
-    R.join("\r\n")
-  )(json)
-}
-
 module.exports = {
   json: R.curry(function(groupings, showCounts, json) {
     return JSON.stringify(json, null, 2)
@@ -101,10 +75,9 @@ module.exports = {
 
   csv: R.curry(function(groupings, showCounts, json) {
     if (R.isEmpty(json)) return null
-    if (Array.isArray(json) && !showCounts) return csvFromArray(json)
-
-    if (showCounts) return csvFromCounts(json)
-    if (groupings.length && !showCounts) return csvFromGroupedData(json)
+    if (Array.isArray(json)) return csvFromArray(json)
+    if (showCounts) return csvFromObject(flat(json, {delimiter: " - "}))
+    if (groupings.length) return csvFromGroupedData(json)
     return csvFromObject(json)
   }),
 }
