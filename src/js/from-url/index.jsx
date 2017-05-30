@@ -6,6 +6,12 @@ const schemaGenerator = require("../services/schema-generator")
 
 function fetchData(url) {
   return fetch(url, {method: "get"})
+  .catch(() => {
+    return fetch(url, {
+      method: "get",
+      credentials: "include",
+    })
+  })
   .then(function(response) {
     if (!response.ok) {
       throw Error(response.statusText)
