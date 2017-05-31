@@ -6,8 +6,11 @@ const schemaGenerator = require("../services/schema-generator")
 
 const Code = require("../components/code")
 
-function fetchData(url) {
-  return fetch(url, {method: "get"})
+function fetchData(url, withCredentials) {
+  const opts = {method: "get"}
+  if (withCredentials) opts.credentials = "include"
+
+  return fetch(url, opts)
   .then(function(response) {
     if (!response.ok) {
       throw Error(response.statusText)
@@ -32,7 +35,10 @@ const FromUrl = React.createClass({
   },
 
   componentDidMount() {
-    fetchData(this.props.params.dataUrl)
+    fetchData(
+      this.props.params.dataUrl,
+      Object.prototype.hasOwnProperty.call(this.props.params, "withCredentials")
+    )
     .then(this.onFetchComplete)
     .catch(this.onFetchError)
   },
