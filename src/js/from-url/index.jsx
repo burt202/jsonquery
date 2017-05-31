@@ -4,6 +4,8 @@ const PropTypes = require("prop-types")
 const validator = require("../services/validator")
 const schemaGenerator = require("../services/schema-generator")
 
+const Code = require("../components/code")
+
 function fetchData(url) {
   return fetch(url, {method: "get"})
   .then(function(response) {
@@ -79,7 +81,7 @@ const FromUrl = React.createClass({
 
   render() {
     if (this.state.errors) {
-      return (<div><br /><pre>{JSON.stringify(this.state.errors, null, 2)}</pre></div>)
+      return (<div><br /><Code language="json">{JSON.stringify(this.state.errors, null, 2)}</Code></div>)
     }
 
     return (
