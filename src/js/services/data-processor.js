@@ -129,8 +129,7 @@ function getArrayFilter(filter) {
 const _sortAndCount = R.pipe(
   R.map(R.length),
   R.toPairs,
-  R.sortBy(R.prop(1)),
-  R.reverse,
+  R.compose(R.reverse, R.sortBy(R.prop(1))),
   R.fromPairs
 )
 
@@ -188,5 +187,26 @@ module.exports = {
       const direction = (sorter.direction === "asc") ? "ascend" : "descend"
       return R[direction](R.prop(sorter.field))
     }, sorters), data)
+  },
+
+  sortAndLimitObject(sortField, limit, data) {
+    let sorters = [R.descend(R.prop("value"))]
+    if (sortField === "asc") sorters = [R.ascend(R.prop("value"))]
+    if (sortField === "pathdesc") sorters = [R.ascend(R.prop("path")), R.descend(R.prop("value"))]
+    if (sortField === "pathasc") sorters = [R.ascend(R.prop("path")), R.ascend(R.prop("value"))]
+
+    return R.pipe(
+      R.toPairs,
+      R.map(function(pair) {
+        const path = R.compose(R.join(","), R.init, R.split(" - "))(pair[0])
+        return {key: pair[0], path, value: pair[1]}
+      }),
+      R.sortWith(sorters),
+      R.take(limit || data.length),
+      R.reduce(function(acc, val) {
+        acc[val.key] = val.value
+        return acc
+      }, {})
+    )(data)
   },
 }

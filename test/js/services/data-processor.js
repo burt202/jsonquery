@@ -808,4 +808,50 @@ describe("dateProcessor", function() {
       ])
     })
   })
+
+  describe("sortAndLimitObject", function() {
+    const mockDataForSorting = {
+      "cash - true": 1,
+      "loan - true": 1,
+      "card - true": 2,
+      "cash - false": 1,
+      "card - false": 1,
+    }
+
+    it("should return object in order of count descending", function() {
+      expect(Object.keys(dateProcessor.sortAndLimitObject("desc", null, mockDataForSorting))).to.eql([
+        "card - true",
+        "cash - true",
+        "loan - true",
+        "cash - false",
+        "card - false",
+      ])
+    })
+
+    it("should return object in order of count descending limited by number", function() {
+      expect(Object.keys(dateProcessor.sortAndLimitObject("desc", 3, mockDataForSorting))).to.eql([
+        "card - true",
+        "cash - true",
+        "loan - true",
+      ])
+    })
+
+    it("should return object in order of count ascending", function() {
+      expect(Object.keys(dateProcessor.sortAndLimitObject("asc", null, mockDataForSorting))).to.eql([
+        "cash - true",
+        "loan - true",
+        "cash - false",
+        "card - false",
+        "card - true",
+      ])
+    })
+
+    it("should return object in order of count ascending limited by number", function() {
+      expect(Object.keys(dateProcessor.sortAndLimitObject("asc", 3, mockDataForSorting))).to.eql([
+        "cash - true",
+        "loan - true",
+        "cash - false",
+      ])
+    })
+  })
 })
