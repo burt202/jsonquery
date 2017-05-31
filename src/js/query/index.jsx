@@ -79,7 +79,7 @@ const Query = React.createClass({
   },
 
   formatData(data) {
-    if (this.props.groupings.length) return dataProcessor.group(this.props.groupings, this.props.showCounts, data)
+    if (this.props.groupings.length) return dataProcessor.group(this.props.groupings, this.props.showCounts, false, data)
     if (this.props.analyse) return this.getAnalysis(data)
     return data
   },

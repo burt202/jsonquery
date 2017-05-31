@@ -1,4 +1,5 @@
 const R = require("ramda")
+const flat = require("flat")
 
 const parse = require("date-fns/parse")
 const isValid = require("date-fns/is_valid")
@@ -176,8 +177,10 @@ module.exports = {
     return R.filter(R.where(formatFilters(builtFilters)), data)
   },
 
-  group(groupings, showCounts, data) {
-    return _group(groupings, showCounts, data)
+  group(groupings, showCounts, flatten, data) {
+    const groups = _group(groupings, showCounts, data)
+    if (flatten) return flat(groups, {delimiter: " - ", maxDepth: groupings.length})
+    return groups
   },
 
   sort(sorters, data) {

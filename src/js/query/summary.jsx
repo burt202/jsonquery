@@ -24,7 +24,7 @@ const Summary = React.createClass({
   },
 
   getGrouping() {
-    return (this.props.groupings.length) ? dataProcessor.group(this.props.groupings, false, this.props.results) : null
+    return (this.props.groupings.length) ? dataProcessor.group(this.props.groupings, false, false, this.props.results) : null
   },
 
   showRawDataLength() {
