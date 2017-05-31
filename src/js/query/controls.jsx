@@ -14,6 +14,7 @@ const Controls = React.createClass({
     sorters: PropTypes.array,
     schema: PropTypes.object.isRequired,
     showCounts: PropTypes.bool.isRequired,
+    flatten: PropTypes.bool.isRequired,
     limit: PropTypes.number,
     analyse: PropTypes.string,
   },
@@ -92,9 +93,11 @@ const Controls = React.createClass({
         groupings={this.props.groupings}
         options={options}
         showCounts={this.props.showCounts}
+        flatten={this.props.flatten}
         onAdd={this.props.actionCreator.addGrouping}
         onRemove={this.props.actionCreator.removeGrouping}
         onShowCountsChange={this.props.actionCreator.showCounts}
+        onFlattenChange={this.props.actionCreator.flatten}
       />
     )
   },

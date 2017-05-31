@@ -15,6 +15,7 @@ describe("store", function() {
       data: null,
       resultFields: null,
       showCounts: false,
+      flatten: false,
       limit: null,
       analyse: null,
     })
@@ -238,7 +239,7 @@ describe("store", function() {
     })
 
     it("should reset showCounts if groupings is deselected", function() {
-      store.setState({showCounts: true})
+      store.setState({showCounts: true, groupings: ["baz"]})
 
       expect(store.getState().showCounts).to.eql(true)
 
@@ -248,6 +249,45 @@ describe("store", function() {
       })
 
       expect(store.getState().showCounts).to.eql(false)
+    })
+
+    it("should not reset showCounts if groupings is still at least 1", function() {
+      store.setState({showCounts: true, groupings: ["bar", "baz"]})
+
+      expect(store.getState().showCounts).to.eql(true)
+
+      dispatcher.dispatch({
+        name: "removeGrouping",
+        value: {name: "baz"},
+      })
+
+      expect(store.getState().showCounts).to.eql(true)
+    })
+
+    it("should reset flatten if groupings is 1 or less", function() {
+      store.setState({flatten: true, groupings: ["foo", "bar"]})
+
+      expect(store.getState().flatten).to.eql(true)
+
+      dispatcher.dispatch({
+        name: "removeGrouping",
+        value: {name: "bar"},
+      })
+
+      expect(store.getState().flatten).to.eql(false)
+    })
+
+    it("should not reset flatten if groupings is still more than one", function() {
+      store.setState({flatten: true, groupings: ["foo", "bar", "baz"]})
+
+      expect(store.getState().flatten).to.eql(true)
+
+      dispatcher.dispatch({
+        name: "removeGrouping",
+        value: {name: "baz"},
+      })
+
+      expect(store.getState().flatten).to.eql(true)
     })
   })
 
@@ -283,6 +323,17 @@ describe("store", function() {
       })
 
       expect(store.getState().showCounts).to.eql(true)
+    })
+  })
+
+  describe("flatten", function() {
+    it("should update flatten", function() {
+      dispatcher.dispatch({
+        name: "flatten",
+        value: {flatten: true},
+      })
+
+      expect(store.getState().flatten).to.eql(true)
     })
   })
 

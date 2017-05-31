@@ -106,4 +106,11 @@ module.exports = {
       value: {showCounts},
     })
   },
+
+  flatten(flatten) {
+    dispatcher.dispatch({
+      name: "flatten",
+      value: {flatten},
+    })
+  },
 }

@@ -59,6 +59,7 @@ const Main = React.createClass({
       data={this.state.data}
       resultFields={this.state.resultFields}
       showCounts={this.state.showCounts}
+      flatten={this.state.flatten}
       limit={this.state.limit}
       analyse={this.state.analyse}
     />

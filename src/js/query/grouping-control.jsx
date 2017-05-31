@@ -8,9 +8,11 @@ const GroupingControl = React.createClass({
     groupings: PropTypes.array,
     options: PropTypes.array.isRequired,
     showCounts: PropTypes.bool.isRequired,
+    flatten: PropTypes.bool.isRequired,
     onAdd: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
     onShowCountsChange: PropTypes.func.isRequired,
+    onFlattenChange: PropTypes.func.isRequired,
   },
 
   onAdd(e) {
@@ -19,6 +21,10 @@ const GroupingControl = React.createClass({
 
   onShowCountsChange() {
     this.props.onShowCountsChange(!this.props.showCounts)
+  },
+
+  onFlattenChange() {
+    this.props.onFlattenChange(!this.props.flatten)
   },
 
   getRows() {
@@ -32,6 +38,25 @@ const GroupingControl = React.createClass({
         </div>
       )
     }.bind(this))
+  },
+
+  getFlattenOptions() {
+    if (this.props.groupings.length <= 1) return null
+
+    const disabled = !(this.props.groupings && this.props.groupings.length)
+
+    return (
+      <label className="checkbox-label">
+        <input
+          type="checkbox"
+          name="flatten"
+          disabled={disabled}
+          checked={this.props.flatten}
+          onChange={this.onFlattenChange}
+        />
+        Flatten
+      </label>
+    )
   },
 
   render() {
@@ -63,6 +88,7 @@ const GroupingControl = React.createClass({
               />
               Show counts
             </label>
+            {this.getFlattenOptions()}
           </div>
         </div>
       </div>

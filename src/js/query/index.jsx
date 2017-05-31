@@ -23,6 +23,7 @@ const Query = React.createClass({
     data: PropTypes.array.isRequired,
     resultFields: PropTypes.array.isRequired,
     showCounts: PropTypes.bool.isRequired,
+    flatten: PropTypes.bool.isRequired,
     limit: PropTypes.number,
     analyse: PropTypes.string,
   },
@@ -79,7 +80,7 @@ const Query = React.createClass({
   },
 
   formatData(data) {
-    if (this.props.groupings.length) return dataProcessor.group(this.props.groupings, this.props.showCounts, false, data)
+    if (this.props.groupings.length) return dataProcessor.group(this.props.groupings, this.props.showCounts, this.props.flatten, data)
     if (this.props.analyse) return this.getAnalysis(data)
     return data
   },
@@ -132,6 +133,7 @@ const Query = React.createClass({
           groupings={this.props.groupings}
           sorters={this.props.sorters}
           showCounts={this.props.showCounts}
+          flatten={this.props.flatten}
           limit={this.props.limit}
           analyse={this.props.analyse}
         />

@@ -12,6 +12,7 @@ const defaults = {
   data: null,
   resultFields: null,
   showCounts: false,
+  flatten: false,
   limit: null,
   analyse: null,
 }
@@ -31,6 +32,7 @@ const handlers = {
       groupings: [],
       sorters: [],
       showCounts: false,
+      flatten: false,
       limit: null,
       analyse: null,
     }
@@ -78,6 +80,7 @@ const handlers = {
       groupings: [],
       sorters: [],
       showCounts: false,
+      flatten: false,
       limit: null,
       analyse: null,
     })
@@ -97,6 +100,7 @@ const handlers = {
     }
 
     if (!toMerge.groupings.length) toMerge.showCounts = false
+    if (toMerge.groupings.length <= 1) toMerge.flatten = false
 
     return R.merge(contents, toMerge)
   },
@@ -106,6 +110,7 @@ const handlers = {
       analyse: payload.name,
       groupings: [],
       showCounts: false,
+      flatten: false,
     })
   },
 
@@ -127,6 +132,11 @@ const handlers = {
     })
   },
 
+  flatten(contents, payload) {
+    return R.merge(contents, {
+      flatten: payload.flatten,
+    })
+  },
 }
 
 module.exports = createStore(defaults, handlers)
