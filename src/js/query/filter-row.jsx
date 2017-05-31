@@ -1,7 +1,13 @@
 const React = require("react")
 const PropTypes = require("prop-types")
 const R = require("ramda")
-const classNames = require("classnames")
+
+const {default: SelectField} = require("material-ui/SelectField")
+const {default: MenuItem} = require("material-ui/MenuItem")
+const {default: TextField} = require("material-ui/TextField")
+const {default: Toggle} = require("material-ui/Toggle")
+const {default: IconButton} = require("material-ui/IconButton")
+const {default: RemoveIcon} = require("material-ui/svg-icons/content/remove-circle")
 
 const defaultInput = {}
 const dateInput = {placeholder: "YYYYMMDD", maxLength: 8}
@@ -75,7 +81,11 @@ const FilterRow = React.createClass({
     if (!filterConfig[this.props.type]) return "Invalid Type"
 
     const options = filterConfig[this.props.type].map(function(option) {
-      return <option key={option.value} value={option.value}>{option.text}</option>
+      return <MenuItem
+        key={option.value}
+        value={option.value}
+        primaryText={option.text}
+      />
     })
 
     let inputs = []
@@ -85,28 +95,38 @@ const FilterRow = React.createClass({
       inputs = selectedOperator.inputs.map(function(inputConfig, index) {
         const inc = (index) ? index : ""
 
-        return React.createElement("input", R.merge({
+        return React.createElement(TextField, R.merge({
+          fullWidth: true,
           key: this.props.filter.id + inc,
-          type: "text",
           name: this.props.filter.id + inc,
           value: this.props.filter[`value${inc}`] || "",
-          onChange: this.updateFilter.bind(this, `value${inc}`),
+          onChange: this.updateFilterText.bind(this, `value${inc}`),
         }, inputConfig))
       }.bind(this))
     }
 
-    const classnames = classNames("filter-controls", this.props.type)
-
     return (
-      <div className={classnames}>
-        <select
-          name={this.props.filter.id}
-          value={this.props.filter.operator}
-          onChange={this.updateFilter.bind(this, "operator")}
-        >
-          {options}
-        </select>
-        <div className="inputs">
+      <div style={{position: "relative"}}>
+        <div style={{opacity: this.props.filter.active ? 1 : 0.5}}>
+          <div style={{display: "flex", alignItems: "flex-end"}}>
+            <SelectField
+              fullWidth
+              name={this.props.filter.id}
+              value={this.props.filter.operator}
+              onChange={this.updateFilter.bind(this, "operator")}
+              floatingLabelText={this.props.filter.name}
+            >
+              {options}
+            </SelectField>
+            <Toggle
+              toggled={this.props.filter.active}
+              onToggle={this.toggleFilter}
+              style={{width: "initial", marginBottom: 12}}
+            />
+          <IconButton onTouchTap={this.deleteFilter} style={{padding: 0, width: 24, height: 24, marginLeft: 8, marginBottom: 12}}>
+              <RemoveIcon color="#aaa" hoverColor="#444"/>
+            </IconButton>
+          </div>
           {inputs}
         </div>
       </div>
@@ -121,23 +141,32 @@ const FilterRow = React.createClass({
     this.props.onDelete(this.props.filter.id)
   },
 
-  updateFilter(prop, e) {
+  updateFilter(prop, e, index, value) {
     const toUpdate = {}
-    toUpdate[prop] = e.target.value
+    toUpdate[prop] = value
+    this.props.onUpdate(this.props.filter.id, toUpdate)
+  },
+
+  updateFilterText(prop, e, value) {
+    const toUpdate = {}
+    toUpdate[prop] = value
     this.props.onUpdate(this.props.filter.id, toUpdate)
   },
 
   render() {
-    const toggleClass = (this.props.filter.active) ? "active" : "inactive"
+    // const toggleClass = (this.props.filter.active) ? "active" : "inactive"
 
-    return (
-      <tr key={this.props.filter.id} className={toggleClass}>
-        <td>{this.props.filter.name}</td>
-        <td>{this.getInputControlByType()}</td>
-        <td><a className="site-link" onClick={this.toggleFilter}>Toggle</a></td>
-        <td><a className="site-link" onClick={this.deleteFilter}>Remove</a></td>
-      </tr>
-    )
+    return <div>
+      {this.getInputControlByType()}
+    </div>
+
+    // return (
+    //   <tr key={this.props.filter.id} className={toggleClass}>
+    //     <td>{this.getInputControlByType()}</td>
+    //     <td><a className="site-link" onClick={this.toggleFilter}>Toggle</a></td>
+    //     <td><a className="site-link" onClick={this.deleteFilter}>Remove</a></td>
+    //   </tr>
+    // )
   },
 })
 

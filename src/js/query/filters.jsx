@@ -2,6 +2,12 @@ const React = require("react")
 const PropTypes = require("prop-types")
 const FilterRow = require("./filter-row")
 
+const Inset = require("../components/inset")
+
+const {default: Subheader} = require("material-ui/Subheader")
+const {default: SelectField} = require("material-ui/SelectField")
+const {default: MenuItem} = require("material-ui/MenuItem")
+
 const Filters = React.createClass({
   displayName: "Filters",
 
@@ -17,39 +23,28 @@ const Filters = React.createClass({
     }
   },
 
-  onAddFilter(e) {
+  onAddFilter(e, index, value) {
     this.setState({lastFilteredAddedAt: Date.now()})
-    this.props.actionCreator.addFilter(e.target.value)
+    this.props.actionCreator.addFilter(value)
   },
 
   getFilterControl() {
     const options = Object.keys(this.props.schema).map(function(value) {
       return (
-        <option value={value} key={value}>{value}</option>
+        <MenuItem value={value} key={value} primaryText={value}/>
       )
     })
 
-    return (
-      <div className="input-control">
-        <label>Add Filter:</label>
-        <div className="body">
-          <div className="row">
-            <select onChange={this.onAddFilter} key={this.state.lastFilteredAddedAt}>
-              <option></option>
-              {options}
-            </select>
-          </div>
-        </div>
-      </div>
-    )
+    return (<SelectField
+      fullWidth
+      onChange={this.onAddFilter}
+      hintText={"Field"}
+    >
+      {options}
+    </SelectField>)
   },
 
   getFilterRows() {
-    if (!this.props.filters.length)
-      return (
-        <tr><td>No filters</td></tr>
-      )
-
     return this.props.filters.map(function(filter) {
       return <FilterRow
         key={filter.id}
@@ -65,21 +60,11 @@ const Filters = React.createClass({
   render() {
     return (
       <div>
-        <h3>Filters</h3>
-        <table className="table filters">
-          <thead>
-            <tr>
-              <th>Field</th>
-              <th>Value</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.getFilterRows()}
-          </tbody>
-        </table>
-        {this.getFilterControl()}
+        <Subheader>Filter</Subheader>
+        <Inset vertical={false}>
+          {this.getFilterRows()}
+          {this.getFilterControl()}
+        </Inset>
       </div>
     )
   },

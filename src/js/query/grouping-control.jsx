@@ -1,6 +1,15 @@
 const React = require("react")
 const PropTypes = require("prop-types")
 
+const Inset = require("../components/inset")
+const SpaceAfter = require("../components/space-after")
+
+const Removeable = require("./removeable")
+
+const {default: SelectField} = require("material-ui/SelectField")
+const {default: MenuItem} = require("material-ui/MenuItem")
+const {default: Checkbox} = require("material-ui/Checkbox")
+
 const GroupingControl = React.createClass({
   displayName: "GroupingControl",
 
@@ -13,8 +22,8 @@ const GroupingControl = React.createClass({
     onShowCountsChange: PropTypes.func.isRequired,
   },
 
-  onAdd(e) {
-    this.props.onAdd(e.target.value)
+  onAdd(e, index, value) {
+    this.props.onAdd(value)
   },
 
   onShowCountsChange() {
@@ -23,14 +32,11 @@ const GroupingControl = React.createClass({
 
   getRows() {
     return this.props.groupings.map(function(grouping) {
-      return (
-        <div className="row" key={grouping}>
-          <div className="grouping">
-            {grouping}
-            <a className="site-link" onClick={this.props.onRemove.bind(this, grouping)}>remove</a>
-          </div>
-        </div>
-      )
+      return <Removeable
+        key={grouping}
+        onRemove={this.props.onRemove.bind(this, grouping)}
+        primaryText={grouping}
+      />
     }.bind(this))
   },
 
@@ -39,34 +45,26 @@ const GroupingControl = React.createClass({
 
     const options = this.props.options.map(function(value) {
       return (
-        <option value={value} key={value}>{value}</option>
+        <MenuItem value={value} key={value} primaryText={value}/>
       )
     })
 
-    return (
-      <div className="input-control">
-        <label>Group By:</label>
-        <div className="body">
-          {this.getRows()}
-          <div className="row">
-            <select onChange={this.onAdd} value="">
-              <option></option>
-              {options}
-            </select>
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                name="showCounts"
-                disabled={disabled}
-                checked={this.props.showCounts}
-                onChange={this.onShowCountsChange}
-              />
-              Show counts
-            </label>
-          </div>
-        </div>
-      </div>
-    )
+    return (<div>
+      {this.getRows()}
+      <Inset vertical={false}>
+        <SpaceAfter>
+          <SelectField fullWidth onChange={this.onAdd} hintText="Field" value="">
+            {options}
+          </SelectField>
+          <Checkbox
+            label="Show counts"
+            checked={this.props.showCounts}
+            disabled={disabled}
+            onCheck={this.onShowCountsChange}
+          />
+        </SpaceAfter>
+      </Inset>
+    </div>)
   },
 })
 

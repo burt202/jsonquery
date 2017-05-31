@@ -5,11 +5,16 @@ const R = require("ramda")
 const dataProcessor = require("../services/data-processor")
 const utils = require("../utils")
 
+const Layout = require("../components/layout")
+
 const Filters = require("./filters")
 const Controls = require("./controls")
 const Summary = require("./summary")
 const Results = require("./results")
 const SchemaEdit = require("./schema-edit")
+
+const {default: RaisedButton} = require("material-ui/FlatButton")
+const {default: Divider} = require("material-ui/Divider")
 
 const Query = React.createClass({
   displayName: "Query",
@@ -61,7 +66,7 @@ const Query = React.createClass({
     const values = R.pluck(this.props.analyse, data)
 
     return {
-      sum: utils.round(2, R.sum(values)),
+      analyse: utils.round(2, R.analyse(values)),
       average: utils.round(2, R.mean(values)),
       lowest: utils.getMin(values),
       highest: utils.getMax(values),
@@ -85,12 +90,16 @@ const Query = React.createClass({
   },
 
   getSideOptions() {
-    return (
-      <ul className="side-options right">
-        <li><a className="site-link" onClick={this.onSchemaEdit}>Edit Schema</a></li>
-        <li><a className="site-link" onClick={this.onReset}>Reset</a></li>
-      </ul>
-    )
+    const canReset = this.props.filters.length
+      || this.props.groupings.length
+      || this.props.sorters.length
+      || this.props.analyse
+      || this.props.limit
+
+    return <div style={{display: "flex", justifyContent: "space-between"}}>
+      <RaisedButton secondary label="Edit schema" onTouchTap={this.onSchemaEdit}/>
+      <RaisedButton disabled={!canReset} secondary label="Reset" onTouchTap={this.onReset}/>
+    </div>
   },
 
   onCancel() {
@@ -119,38 +128,50 @@ const Query = React.createClass({
     const results = this.formatData(filtered)
 
     return (
-      <div className="query-cont">
-        {this.getSideOptions()}
-        <Filters
-          actionCreator={this.props.actionCreator}
-          filters={this.props.filters}
-          schema={this.props.schema}
-        />
-        <Controls
-          actionCreator={this.props.actionCreator}
-          schema={this.props.schema}
-          groupings={this.props.groupings}
-          sorters={this.props.sorters}
-          showCounts={this.props.showCounts}
-          limit={this.props.limit}
-          analyse={this.props.analyse}
-        />
-        <Summary
-          rawDataLength={this.props.data.length}
-          results={filtered}
-          groupings={this.props.groupings}
-        />
-        <Results
-          results={results}
-          groupings={this.props.groupings}
-          resultFields={this.props.resultFields}
-          schema={this.props.schema}
-          actionCreator={this.props.actionCreator}
-          showCounts={this.props.showCounts}
-          filteredLength={filtered.length}
-          analyse={this.props.analyse}
-        />
-      </div>
+      <Layout
+        left = {<div>
+
+          {this.getSideOptions()}
+          <Divider/>
+
+          <Filters
+            actionCreator={this.props.actionCreator}
+            filters={this.props.filters}
+            schema={this.props.schema}
+          />
+
+          <Divider/>
+
+          <Controls
+            actionCreator={this.props.actionCreator}
+            schema={this.props.schema}
+            groupings={this.props.groupings}
+            sorters={this.props.sorters}
+            showCounts={this.props.showCounts}
+            limit={this.props.limit}
+            analyse={this.props.analyse}
+          />
+
+        </div>}
+        right = {<div>
+          <Summary
+            rawDataLength={this.props.data.length}
+            results={filtered}
+            groupings={this.props.groupings}
+          />
+          <Divider/>
+          <Results
+            results={results}
+            groupings={this.props.groupings}
+            resultFields={this.props.resultFields}
+            schema={this.props.schema}
+            actionCreator={this.props.actionCreator}
+            showCounts={this.props.showCounts}
+            filteredLength={filtered.length}
+            analyse={this.props.analyse}
+          />
+      </div>}
+      />
     )
   },
 })

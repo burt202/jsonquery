@@ -2,6 +2,12 @@ const React = require("react")
 const PropTypes = require("prop-types")
 const R = require("ramda")
 
+const Inset = require("../components/inset")
+const SpaceAfter = require("../components/space-after")
+
+const {default: Subheader} = require("material-ui/Subheader")
+const {default: Chip} = require("material-ui/Chip")
+
 const dataProcessor = require("../services/data-processor")
 const groupingAnalyser = require("../services/grouping-analyser")
 const utils = require("../utils")
@@ -18,9 +24,10 @@ const Summary = React.createClass({
   getGroupingBreakdown(grouping) {
     if (!grouping) return null
 
-    return R.map(function(obj) {
-      return (<p key={obj.name}>{`${obj.name}: ${obj.value}`}</p>)
-    }, groupingAnalyser.getAnalysis(grouping))
+    return R.map(
+      ({name, value}) => <Stat label={name} value={value} key={name}/>,
+      groupingAnalyser.getAnalysis(grouping)
+    )
   },
 
   getGrouping() {
@@ -38,14 +45,28 @@ const Summary = React.createClass({
 
     return (
       <div>
-        <h3 className="summary">Summary</h3>
-        <div className="summary-stats">
-          <p>Total: {this.props.results.length}{this.showRawDataLength()}</p>
-          {this.getGroupingBreakdown(grouping)}
-        </div>
+        <Subheader>Summary</Subheader>
+        <Inset vertical={false}>
+          <SpaceAfter>
+            <div style={{display: "flex", flexWrap: "wrap"}}>
+              <Stat label="Total" value={this.props.results.length + this.showRawDataLength()}/>
+              {this.getGroupingBreakdown(grouping)}
+            </div>
+          </SpaceAfter>
+        </Inset>
       </div>
     )
   },
 })
 
 module.exports = Summary
+
+const style = {marginRight: 8, marginBottom: 8}
+function Stat({label, value}) {
+  return <Chip style={style}>{label}: {value}</Chip>
+}
+
+Stat.propTypes = {
+  label: PropTypes.node.isRequired,
+  value: PropTypes.node.isRequired,
+}
