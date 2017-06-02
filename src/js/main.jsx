@@ -60,6 +60,8 @@ const Main = React.createClass({
       resultFields={this.state.resultFields}
       showCounts={this.state.showCounts}
       flatten={this.state.flatten}
+      groupSort={this.state.groupSort}
+      groupLimit={this.state.groupLimit}
       limit={this.state.limit}
       analyse={this.state.analyse}
     />

@@ -113,4 +113,18 @@ module.exports = {
       value: {flatten},
     })
   },
+
+  groupSort(groupSort) {
+    dispatcher.dispatch({
+      name: "groupSort",
+      value: {groupSort},
+    })
+  },
+
+  groupLimit(groupLimit) {
+    dispatcher.dispatch({
+      name: "groupLimit",
+      value: {groupLimit},
+    })
+  },
 }

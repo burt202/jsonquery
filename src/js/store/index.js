@@ -13,6 +13,8 @@ const defaults = {
   resultFields: null,
   showCounts: false,
   flatten: false,
+  groupSort: "desc",
+  groupLimit: null,
   limit: null,
   analyse: null,
 }
@@ -27,16 +29,7 @@ const initialOperators = {
 
 const handlers = {
   saveJson(contents, payload) {
-    const toUpdate = {
-      filters: [],
-      groupings: [],
-      sorters: [],
-      showCounts: false,
-      flatten: false,
-      limit: null,
-      analyse: null,
-    }
-
+    const toUpdate = R.omit(["data", "schema", "resultFields"], defaults)
     toUpdate[payload.name] = payload.data
     return R.merge(contents, toUpdate)
   },
@@ -75,15 +68,7 @@ const handlers = {
   },
 
   reset(contents) {
-    return R.merge(contents, {
-      filters: [],
-      groupings: [],
-      sorters: [],
-      showCounts: false,
-      flatten: false,
-      limit: null,
-      analyse: null,
-    })
+    return R.merge(contents, R.omit(["data", "schema", "resultFields"], defaults))
   },
 
   addGrouping(contents, payload) {
@@ -99,8 +84,12 @@ const handlers = {
       groupings: R.without([payload.name], contents.groupings || []),
     }
 
-    if (!toMerge.groupings.length) toMerge.showCounts = false
     if (toMerge.groupings.length <= 1) toMerge.flatten = false
+    if (!toMerge.groupings.length) {
+      toMerge.showCounts = false
+      toMerge.groupSort = "desc"
+      toMerge.groupLimit = null
+    }
 
     return R.merge(contents, toMerge)
   },
@@ -111,6 +100,8 @@ const handlers = {
       groupings: [],
       showCounts: false,
       flatten: false,
+      groupSort: "desc",
+      groupLimit: null,
     })
   },
 
@@ -127,14 +118,40 @@ const handlers = {
   },
 
   showCounts(contents, payload) {
-    return R.merge(contents, {
+    const toMerge = {
       showCounts: payload.showCounts,
-    })
+    }
+
+    if (!toMerge.showCounts) {
+      toMerge.groupSort = "desc"
+      toMerge.groupLimit = null
+    }
+
+    return R.merge(contents, toMerge)
   },
 
   flatten(contents, payload) {
-    return R.merge(contents, {
+    const toMerge = {
       flatten: payload.flatten,
+    }
+
+    if (!toMerge.flatten) {
+      toMerge.groupSort = "desc"
+      toMerge.groupLimit = null
+    }
+
+    return R.merge(contents, toMerge)
+  },
+
+  groupSort(contents, payload) {
+    return R.merge(contents, {
+      groupSort: payload.groupSort,
+    })
+  },
+
+  groupLimit(contents, payload) {
+    return R.merge(contents, {
+      groupLimit: payload.groupLimit,
     })
   },
 }
