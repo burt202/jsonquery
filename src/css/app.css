@@ -249,6 +249,19 @@ ul.side-options li:last-of-type {
   justify-content: space-between;
 }
 
+.include-checkboxes {
+  display: flex;
+}
+
+.include-checkboxes .label {
+  margin-right: 10px;
+}
+
+.include-checkboxes label {
+  white-space: nowrap;
+  display: inline-block;
+}
+
 /* Summary */
 
 h3.summary {

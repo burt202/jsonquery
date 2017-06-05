@@ -105,7 +105,7 @@ const Results = React.createClass({
   },
 
   getCheckboxes() {
-    return (!this.isAggregateResult()) ? <p>Include: {this.getResultFieldOptions()}</p> : null
+    return (!this.isAggregateResult()) ? <div className="include-checkboxes"><span className="label">Include:</span><span>{this.getResultFieldOptions()}</span></div> : null
   },
 
   canCopyResults() {
@@ -123,7 +123,6 @@ const Results = React.createClass({
       <div>
         <h3>Results</h3>
         {this.getCheckboxes()}
-        <br />
 
         <div className="results-options">
           <ul className="side-options">
