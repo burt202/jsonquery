@@ -8,9 +8,11 @@ const resultsStyle = require("react-syntax-highlighter/dist/styles/github").defa
 SLH.registerLanguage("json", language)
 
 function Code(props) {
-  return (<SyntaxHighlighter language={props.language} style={resultsStyle}>
-    {props.children}
-  </SyntaxHighlighter>)
+  return (
+    <SyntaxHighlighter language={props.language} style={resultsStyle}>
+      {props.children}
+    </SyntaxHighlighter>
+  )
 }
 
 Code.propTypes = {
