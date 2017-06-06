@@ -26,15 +26,20 @@ const display = {
   },
   table(data) {
     const rows = data.split("\r\n")
+    const headerCols = rows[0].split(",")
 
-    const headerRow = rows[0].split(",").map(function(col) {
+    const headerRow = headerCols.map(function(col) {
       return <th>{col}</th>
     })
 
     const dataRows = R.tail(rows).map(function(row) {
-      const cols = row.split(",").map(function(col) {
-        return <td>{col}</td>
-      })
+      const colSplit = row.split(",")
+
+      const cols = (colSplit.length === 1)
+        ? <td colSpan={headerCols.length} style={{fontWeight: "bold"}}>{colSplit[0]}</td>
+        : colSplit.map(function(col) {
+          return <td>{col}</td>
+        })
 
       return <tr>{cols}</tr>
     })
