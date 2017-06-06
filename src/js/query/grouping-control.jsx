@@ -80,8 +80,10 @@ const GroupingControl = React.createClass({
     return (
       <span>
         <select onChange={this.onSortChange} value={this.props.groupSort || ""}>
-          <option value="asc">ASC</option>
           <option value="desc">DESC</option>
+          <option value="asc">ASC</option>
+          <option value="pathdesc">Path DESC</option>
+          <option value="pathasc">Path ASC</option>
         </select>
         <LimitControl
           onChange={this.onLimitChange}

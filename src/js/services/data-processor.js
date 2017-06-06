@@ -126,17 +126,10 @@ function getArrayFilter(filter) {
   return null
 }
 
-const _sortAndCount = R.pipe(
-  R.map(R.length),
-  R.toPairs,
-  R.compose(R.reverse, R.sortBy(R.prop(1))),
-  R.fromPairs
-)
-
 const _group = R.curry(function(groupings, showCounts, data) {
   data = R.groupBy(R.prop(groupings[0]), data)
   groupings = R.tail(groupings)
-  if (!groupings.length) return (showCounts) ? _sortAndCount(data) : data
+  if (!groupings.length) return (showCounts) ? R.map(R.length, data) : data
 
   return R.map(_group(groupings, showCounts), data)
 })
@@ -190,23 +183,20 @@ module.exports = {
   },
 
   sortAndLimitObject(sortField, limit, data) {
-    let sorters = [R.descend(R.prop("value"))]
-    if (sortField === "asc") sorters = [R.ascend(R.prop("value"))]
-    if (sortField === "pathdesc") sorters = [R.ascend(R.prop("path")), R.descend(R.prop("value"))]
-    if (sortField === "pathasc") sorters = [R.ascend(R.prop("path")), R.ascend(R.prop("value"))]
+    let sorters = [R.descend(R.prop("count"))]
+    if (sortField === "asc") sorters = [R.ascend(R.prop("count"))]
+    if (sortField === "pathdesc") sorters = [R.ascend(R.prop("path")), R.descend(R.prop("count"))]
+    if (sortField === "pathasc") sorters = [R.ascend(R.prop("path")), R.ascend(R.prop("count"))]
 
     return R.pipe(
       R.toPairs,
       R.map(function(pair) {
         const path = R.compose(R.join(","), R.init, R.split(" - "))(pair[0])
-        return {key: pair[0], path, value: pair[1]}
+        return {name: pair[0], path, count: pair[1]}
       }),
       R.sortWith(sorters),
       R.take(limit || data.length),
-      R.reduce(function(acc, val) {
-        acc[val.key] = val.value
-        return acc
-      }, {})
+      R.map(R.pick(["name", "count"]))
     )(data)
   },
 }
