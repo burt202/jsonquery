@@ -28,20 +28,20 @@ const display = {
     const rows = data.split("\r\n")
     const headerCols = rows[0].split(",")
 
-    const headerRow = headerCols.map(function(col) {
-      return <th>{col}</th>
+    const headerRow = headerCols.map(function(col, index) {
+      return <th key={index}>{col}</th>
     })
 
-    const dataRows = R.tail(rows).map(function(row) {
+    const dataRows = R.tail(rows).map(function(row, index) {
       const colSplit = row.split(",")
 
       const cols = (colSplit.length === 1)
         ? <td colSpan={headerCols.length} style={{fontWeight: "bold"}}>{colSplit[0]}</td>
-        : colSplit.map(function(col) {
-          return <td>{col}</td>
+        : colSplit.map(function(col, index) {
+          return <td key={index}>{col}</td>
         })
 
-      return <tr>{cols}</tr>
+      return <tr key={index}>{cols}</tr>
     })
 
     return (
