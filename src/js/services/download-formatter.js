@@ -1,5 +1,4 @@
 const R = require("ramda")
-const flat = require("flat")
 
 function _makeCsvSafe(value) {
   if (Array.isArray(value)) return `"${value.join(",")}"`
@@ -69,14 +68,13 @@ function csvFromGroupedData(json) {
 }
 
 module.exports = {
-  json: R.curry(function(groupings, showCounts, json) {
+  json: R.curry(function(groupings, json) {
     return JSON.stringify(json, null, 2)
   }),
 
-  table: R.curry(function(groupings, showCounts, json) {
+  table: R.curry(function(groupings, json) {
     if (R.isEmpty(json)) return null
     if (Array.isArray(json)) return csvFromArray(json)
-    if (showCounts) return csvFromObject(flat(json, {delimiter: " - "}))
     if (groupings.length) return csvFromGroupedData(json)
     return csvFromObject(json)
   }),
