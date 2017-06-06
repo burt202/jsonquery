@@ -10,9 +10,47 @@ const Code = require("../components/code")
 const DISPLAY_THRESHOLD = 1000
 
 const TYPES = [
-  {name: "JSON", value: "json", mimetype: "application/json"},
-  {name: "CSV", value: "csv", mimetype: "text/csv"},
+  {name: "JSON", value: "json", extension: "json", mimetype: "application/json"},
+  {name: "Table", value: "table", extension: "csv", mimetype: "text/csv"},
 ]
+
+const display = {
+  json(data) {
+    return (
+      <div id="copy-cont">
+        <Code language="json">
+          {data}
+        </Code>
+      </div>
+    )
+  },
+  table(data) {
+    const rows = data.split("\r\n")
+
+    const headerRow = rows[0].split(",").map(function(col) {
+      return <th>{col}</th>
+    })
+
+    const dataRows = R.tail(rows).map(function(row) {
+      const cols = row.split(",").map(function(col) {
+        return <td>{col}</td>
+      })
+
+      return <tr>{cols}</tr>
+    })
+
+    return (
+      <table className="table">
+        <thead>
+          <tr>{headerRow}</tr>
+        </thead>
+        <tbody>
+          {dataRows}
+        </tbody>
+      </table>
+    )
+  },
+}
 
 const Results = React.createClass({
   displayName: "Results",
@@ -59,7 +97,7 @@ const Results = React.createClass({
     const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
     const downloadLink = document.getElementById("hidden-download-link")
     downloadLink.setAttribute("href", dataStr)
-    downloadLink.setAttribute("download", `${new Date().toISOString()}.${type.value}`)
+    downloadLink.setAttribute("download", `${new Date().toISOString()}.${type.extension}`)
     downloadLink.click()
     downloadLink.setAttribute("href", "")
   },
@@ -74,8 +112,10 @@ const Results = React.createClass({
 
   getDisplayData() {
     if (!this.isAggregateResult() && this.tooManyResultToShow())
-      return "Results set too large to display, use download options instead"
-    return downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results)
+      return display.json("Results set too large to display, use download options instead")
+
+    const formatted = downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results)
+    return display[this.state.type](formatted)
   },
 
   onChangeHandler(e) {
@@ -109,7 +149,7 @@ const Results = React.createClass({
   },
 
   canCopyResults() {
-    return this.props.showCounts || !this.tooManyResultToShow()
+    return this.state.type === "json" && (this.props.showCounts || !this.tooManyResultToShow())
   },
 
   getCopyLink() {
@@ -134,11 +174,7 @@ const Results = React.createClass({
           </ul>
         </div>
 
-        <div id="copy-cont">
-          <Code language="json">
-            {this.getDisplayData()}
-          </Code>
-        </div>
+        {this.getDisplayData()}
         <a id="hidden-download-link" style={{display: "none"}}></a>
       </div>
     )
