@@ -11,37 +11,50 @@ const Summary = React.createClass({
 
   propTypes: {
     rawDataLength: PropTypes.number.isRequired,
-    results: PropTypes.array.isRequired,
+    filtered: PropTypes.array.isRequired,
     groupings: PropTypes.array,
-  },
-
-  getGroupingBreakdown(grouping) {
-    if (!grouping) return null
-
-    return R.map(function(obj) {
-      return (<p key={obj.name}>{`${obj.name}: ${obj.value}`}</p>)
-    }, groupingAnalyser.getAnalysis(grouping))
+    groupLimit: PropTypes.number,
   },
 
   getGrouping() {
-    return (this.props.groupings.length) ? dataProcessor.group(this.props.groupings, false, false, this.props.results) : null
+    return (this.props.groupings.length) ? dataProcessor.group(this.props.groupings, false, false, this.props.filtered) : null
   },
 
-  showRawDataLength() {
-    if (this.props.results.length === this.props.rawDataLength) return ""
-    const percentage = (this.props.results.length / this.props.rawDataLength) * 100
-    return `/${this.props.rawDataLength} (${utils.round(2, percentage)}%)`
+  getFilteredTotal() {
+    if (this.props.filtered.length === this.props.rawDataLength) return null
+    const percentage = utils.round(2, (this.props.filtered.length / this.props.rawDataLength) * 100)
+    return <p>Filtered: {this.props.filtered.length} ({percentage}%)</p>
+  },
+
+  getGroupLimitedTotal(grouped) {
+    if (!this.props.groupings.length || !this.props.groupLimit) return null
+    const res = dataProcessor.sortAndLimitObject("desc", this.props.groupLimit, grouped)
+    const groupedTotal = R.compose(R.length, R.flatten, R.pluck("count"))(res)
+    const absolutePercentage = utils.round(2, (groupedTotal / this.props.rawDataLength) * 100)
+    const relativePercentage = utils.round(2, (groupedTotal / this.props.filtered.length) * 100)
+    const relativePercentageTitle = `Relative to filtered data: ${relativePercentage}%`
+    return <p title={relativePercentageTitle}>Group Limited: {groupedTotal} ({absolutePercentage}%)</p>
+  },
+
+  getGroupingBreakdown(grouped) {
+    if (!grouped || this.props.groupLimit) return null
+
+    return R.map(function(obj) {
+      return (<p key={obj.name}>{`${obj.name}: ${obj.value}`}</p>)
+    }, groupingAnalyser.getAnalysis(grouped))
   },
 
   render() {
-    const grouping = this.getGrouping()
+    const grouped = this.getGrouping()
 
     return (
       <div>
         <h3 className="summary">Summary</h3>
         <div className="summary-stats">
-          <p>Total: {this.props.results.length}{this.showRawDataLength()}</p>
-          {this.getGroupingBreakdown(grouping)}
+          <p>Total: {this.props.rawDataLength}</p>
+          {this.getFilteredTotal()}
+          {this.getGroupLimitedTotal(grouped)}
+          {this.getGroupingBreakdown(grouped)}
         </div>
       </div>
     )
