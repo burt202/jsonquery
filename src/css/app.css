@@ -124,11 +124,6 @@ th {
   background-color: #f9f9f9;
 }
 
-textarea {
-  width: 730px;
-  height: 350px;
-}
-
 ul.side-options {
   display: flex;
   flex-direction: row;
@@ -167,6 +162,20 @@ ul.side-options li:last-of-type {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.home-cont textarea.paste {
+  width: 730px;
+  height: 350px;
+}
+
+.home-cont input[type=text].url {
+  width: 500px;
+}
+
+.home-cont textarea.urlSchema {
+  width: 730px;
+  height: 200px;
 }
 
 /* Filters */
@@ -295,7 +304,7 @@ h3.summary {
   text-align: center;
 }
 
-/* From Url */
+/* Schema Edit */
 
 .schema-edit-cont .rows {
   display: flex;

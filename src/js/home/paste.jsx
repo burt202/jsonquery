@@ -29,7 +29,7 @@ const Paste = React.createClass({
   render() {
     return (
       <div>
-        <textarea value={this.state.data} onChange={this.onChange} />
+        <textarea className="paste" value={this.state.data} onChange={this.onChange} />
         <button onClick={this.onGo}>Go</button>
       </div>
     )
