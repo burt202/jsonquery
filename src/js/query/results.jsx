@@ -15,7 +15,7 @@ const TYPES = [
 ]
 
 const display = {
-  json(data) {
+  json(properties, data) {
     return (
       <div id="copy-cont">
         <Code language="json">
@@ -24,7 +24,7 @@ const display = {
       </div>
     )
   },
-  table(data) {
+  table(properties, data) {
     const rows = data.split("\r\n")
     const headerCols = rows[0].split(",")
 
@@ -32,7 +32,15 @@ const display = {
       return <th key={index}>{col}</th>
     })
 
-    const dataRows = R.tail(rows).map(function(row, index) {
+    const tableHeader = !properties.analyse ? (
+      <thead>
+        <tr>{headerRow}</tr>
+      </thead>
+    ) : null
+
+    const dataRows = tableHeader ? R.tail(rows) : rows
+
+    const tableBodyRows = dataRows.map(function(row, index) {
       const colSplit = row.split(",")
 
       const cols = (colSplit.length === 1)
@@ -46,11 +54,9 @@ const display = {
 
     return (
       <table className="table">
-        <thead>
-          <tr>{headerRow}</tr>
-        </thead>
+        {tableHeader}
         <tbody>
-          {dataRows}
+          {tableBodyRows}
         </tbody>
       </table>
     )
@@ -117,10 +123,10 @@ const Results = React.createClass({
 
   getDisplayData() {
     if (!this.isAggregateResult() && this.tooManyResultToShow())
-      return display.json("Results set too large to display, use download options instead")
+      return display.json(this.props, "Results set too large to display, use download options instead")
 
     const formatted = downloadFormatter[this.state.type](this.props.groupings, this.props.results)
-    return display[this.state.type](formatted)
+    return display[this.state.type](this.props, formatted)
   },
 
   onChangeHandler(e) {
