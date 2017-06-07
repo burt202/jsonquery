@@ -65,7 +65,7 @@ const Url = React.createClass({
           </label>
         </p>
         <p>If you wanted to override the automatic schema generation you can also supply your own schema, but this is optional. The schema must be valid JSON and gets URL encoded when turned into a URL parameter.</p>
-        <p><textarea className="urlSchema" value={this.state.schema} onChange={this.onSchemaChange} /></p>
+        <textarea className="urlSchema" value={this.state.schema} onChange={this.onSchemaChange} />
         <button onClick={this.onGo}>Go</button>
       </div>
     )
