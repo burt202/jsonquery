@@ -14,6 +14,16 @@ const TYPES = [
   {name: "Table", value: "table", extension: "csv", mimetype: "text/csv"},
 ]
 
+function splitRow(row) {
+  const matches = []
+
+  row.replace(/".*"|[^,]+/g, function(match) {
+    matches.push(match)
+  })
+
+  return matches
+}
+
 const display = {
   json(properties, data) {
     return (
@@ -26,7 +36,7 @@ const display = {
   },
   table(properties, data) {
     const rows = data.split("\r\n")
-    const headerCols = rows[0].split(",")
+    const headerCols = splitRow(rows[0])
 
     const headerRow = headerCols.map(function(col, index) {
       return <th key={index}>{col}</th>
@@ -41,7 +51,7 @@ const display = {
     const dataRows = tableHeader ? R.tail(rows) : rows
 
     const tableBodyRows = dataRows.map(function(row, index) {
-      const colSplit = row.split(",")
+      const colSplit = splitRow(row)
 
       const cols = (colSplit.length === 1)
         ? <td colSpan={headerCols.length} style={{fontWeight: "bold"}}>{colSplit[0]}</td>
