@@ -103,7 +103,7 @@ const Results = React.createClass({
 
   downloadResults() {
     const type = R.find(R.propEq("value", this.state.type), TYPES)
-    const formatted = downloadFormatter[this.state.type](this.props.groupings, this.props.results)
+    const formatted = downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results)
 
     const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
     const downloadLink = document.getElementById("hidden-download-link")
@@ -125,7 +125,7 @@ const Results = React.createClass({
     if (!this.isAggregateResult() && this.tooManyResultToShow())
       return display.json(this.props, "Results set too large to display, use download options instead")
 
-    const formatted = downloadFormatter[this.state.type](this.props.groupings, this.props.results)
+    const formatted = downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results)
     return display[this.state.type](this.props, formatted)
   },
 
