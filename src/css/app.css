@@ -273,11 +273,11 @@ ul.side-options li:last-of-type {
 
 /* Summary */
 
-h3.summary {
+.summary-cont h3 {
   margin-bottom: 0;
 }
 
-.summary-stats {
+.summary-cont .stats {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -286,7 +286,7 @@ h3.summary {
   align-content: flex-end;
 }
 
-.summary-stats p {
+.summary-cont .stats p {
   width: 200px;
   margin-bottom: 0;
 }
