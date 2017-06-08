@@ -245,12 +245,17 @@ ul.side-options li:last-of-type {
 
 /* Results */
 
+.results-cont h3 {
+  margin-bottom: 0;
+}
+
 .results-options {
   display: flex;
   justify-content: space-between;
 }
 
 .include-checkboxes {
+  margin-top: 16px;
   display: flex;
 }
 

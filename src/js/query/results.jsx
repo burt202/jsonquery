@@ -181,7 +181,7 @@ const Results = React.createClass({
     new Clipboard("a.site-link[data-clipboard-action='copy']")
 
     return (
-      <div>
+      <div className="results-cont">
         <h3>Results</h3>
         {this.getCheckboxes()}
 
