@@ -25,36 +25,71 @@ describe("downloadFormatter", function() {
     })
 
     describe("when grouped counts", function() {
-      it("should format correctly", function() {
+      it("should format correctly when object", function() {
         const mockData = {
           Coldplay: 2,
           Muse: 1,
         }
 
         expect(downloadFormatter.table(["artist"], true, mockData)).to.eql(
-          "Coldplay,2\r\nMuse,1"
+          "name,count\r\nColdplay,2\r\nMuse,1"
         )
       })
 
-      it("should format correctly for mutiple groupings", function() {
+      it("should format correctly when object for mutiple groupings", function() {
         const mockData = {
           Coldplay: {Parachutes: 1, "X&Y": 1},
           Muse: {Showbiz: 1},
         }
 
         expect(downloadFormatter.table(["artist", "album"], true, mockData)).to.eql(
-          "Coldplay - Parachutes,1\r\nColdplay - X&Y,1\r\nMuse - Showbiz,1"
+          "name,count\r\nColdplay - Parachutes,1\r\nColdplay - X&Y,1\r\nMuse - Showbiz,1"
         )
       })
 
-      it("should cope when the count field has a comma", function() {
+      it("should cope when the count field has a comma when object", function() {
         const mockData = {
           "10,000 Days": 2,
           Muse: 1,
         }
 
         expect(downloadFormatter.table(["artist"], true, mockData)).to.eql(
-          "\"10,000 Days\",2\r\nMuse,1"
+          "name,count\r\n\"10,000 Days\",2\r\nMuse,1"
+        )
+      })
+
+      it("should format correctly when array", function() {
+        const mockData = [
+          {name: "Coldplay", count: 2},
+          {name: "Muse", count: 1},
+        ]
+
+        expect(downloadFormatter.table(["artist"], true, mockData)).to.eql(
+          "name,count\r\nColdplay,2\r\nMuse,1"
+        )
+      })
+
+      it("should format correctly when array for mutiple groupings", function() {
+        const mockData = [
+          {name: "Coldplay - Parachutes", count: 1},
+          {name: "Coldplay - X&Y", count: 1},
+          {name: "Muse - Showbiz", count: 1},
+        ]
+
+        expect(downloadFormatter.table(["artist", "album"], true, mockData)).to.eql(
+          "name,count\r\nColdplay - Parachutes,1\r\nColdplay - X&Y,1\r\nMuse - Showbiz,1"
+        )
+      })
+
+
+      it("should cope when the count field has a comma when array", function() {
+        const mockData = [
+          {name: "10,000 Days", count: 2},
+          {name: "Muse", count: 1},
+        ]
+
+        expect(downloadFormatter.table(["artist"], true, mockData)).to.eql(
+          "name,count\r\n\"10,000 Days\",2\r\nMuse,1"
         )
       })
     })

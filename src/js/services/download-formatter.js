@@ -76,7 +76,7 @@ module.exports = {
   table: R.curry(function(groupings, showCounts, json) {
     if (R.isEmpty(json)) return null
     if (Array.isArray(json)) return csvFromArray(json)
-    if (showCounts) return csvFromObject(flat(json, {delimiter: " - "}))
+    if (showCounts) return `name,count\r\n${csvFromObject(flat(json, {delimiter: " - "}))}`
     if (groupings.length) return csvFromGroupedData(json)
     return csvFromObject(json)
   }),
