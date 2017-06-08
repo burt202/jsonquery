@@ -15,14 +15,6 @@ body {
   background-color: #fff;
 }
 
-p > code {
-  background: #eee;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  padding: 0 4px;
-  color: darkred;
-}
-
 pre {
   margin: 0 0 10px;
   border: 1px solid #ccc;
