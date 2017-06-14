@@ -1,6 +1,8 @@
 const R = require("ramda")
 const flat = require("flat")
 
+const validator = require("./validator")
+
 const parse = require("date-fns/parse")
 const isValid = require("date-fns/is_valid")
 const isDateBefore = require("date-fns/is_before")
@@ -111,6 +113,27 @@ function getDateFilter(filter) {
   return null
 }
 
+function getTimeFilter(filter) {
+  if (filter.value && filter.value.length) {
+    if (filter.operator === "eq") return R.equals(filter.value)
+    if (filter.operator === "neq") return R.compose(R.not, R.equals(filter.value))
+
+    if (filter.value.length >= 5 && validator.isValidTime(filter.value)) {
+      if (filter.operator === "be") return R.gt(filter.value)
+      if (filter.operator === "af") return R.lt(filter.value)
+    }
+
+    if (filter.value1 && filter.value1.length >= 5 && validator.isValidTime(filter.value1)) {
+      if (filter.operator === "btw") return isBetween(filter.value, filter.value1)
+    }
+  }
+
+  if (filter.operator === "nl") return R.isNil
+  if (filter.operator === "nnl") return R.compose(R.not, R.isNil)
+
+  return null
+}
+
 function getArrayFilter(filter) {
   if (filter.value && filter.value.length) {
     if (filter.operator === "cos") return R.contains(filter.value)
@@ -156,6 +179,7 @@ module.exports = {
       if (type === "number") filterMethod = getNumberFilter(filter)
       if (type === "bool") filterMethod = getBoolFilter(filter)
       if (type === "date") filterMethod = getDateFilter(filter)
+      if (type === "time") filterMethod = getTimeFilter(filter)
       if (type === "array") filterMethod = getArrayFilter(filter)
 
       if (filterMethod) {

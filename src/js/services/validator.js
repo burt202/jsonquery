@@ -15,7 +15,11 @@ module.exports = {
   },
 
   isValidDate(data) {
-    return isValid(parse(data))
+    return /^([0-9]{4})-([0-9]{2})/.test(data) && isValid(parse(data))
+  },
+
+  isValidTime(data) {
+    return /^([01]?[0-9]|2[0-3]):([0-5][0-9])(:[0-5][0-9])?$/.test(data)
   },
 
   isArray(data) {

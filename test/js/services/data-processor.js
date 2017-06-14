@@ -545,6 +545,98 @@ describe("dateProcessor", function() {
       })
     })
 
+    describe("time", function() {
+      const mockDataForFiltering = [
+        {time: "00:00:00", value: 64},
+        {time: "08:00:10", value: 63},
+        {time: null, value: 64},
+        {time: "15:02:30", value: 65},
+        {time: "01:00:00", value: 65},
+      ]
+
+      const mockSchema = {
+        time: "time",
+      }
+
+      it("should filter when operator is 'eq'", function() {
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
+          {name: "time", operator: "eq", value: "15:02:30", active: true},
+        ])
+
+        expect(res).to.eql([
+          {time: "15:02:30", value: 65},
+        ])
+      })
+
+      it("should filter when operator is 'neq'", function() {
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
+          {name: "time", operator: "neq", value: "15:02:30", active: true},
+        ])
+
+        expect(res).to.eql([
+          {time: "00:00:00", value: 64},
+          {time: "08:00:10", value: 63},
+          {time: null, value: 64},
+          {time: "01:00:00", value: 65},
+        ])
+      })
+
+      it("should filter when operator is 'nl'", function() {
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
+          {name: "time", operator: "nl", value: "", active: true},
+        ])
+
+        expect(res).to.eql([
+          {time: null, value: 64},
+        ])
+      })
+
+      it("should filter when operator is 'nnl'", function() {
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
+          {name: "time", operator: "nnl", value: "", active: true},
+        ])
+
+        expect(res).to.eql([
+          {time: "00:00:00", value: 64},
+          {time: "08:00:10", value: 63},
+          {time: "15:02:30", value: 65},
+          {time: "01:00:00", value: 65},
+        ])
+      })
+
+      it("should filter when operator is 'be'", function() {
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
+          {name: "time", operator: "be", value: "02:08:56", active: true},
+        ])
+
+        expect(res).to.eql([
+          {time: "00:00:00", value: 64},
+          {time: "01:00:00", value: 65},
+        ])
+      })
+
+      it("should filter when operator is 'af'", function() {
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
+          {name: "time", operator: "af", value: "02:08:56", active: true},
+        ])
+
+        expect(res).to.eql([
+          {time: "08:00:10", value: 63},
+          {time: "15:02:30", value: 65},
+        ])
+      })
+
+      it("should filter when operator is 'btw'", function() {
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
+          {name: "time", operator: "btw", value: "02:08:56", value1: "09:08", active: true},
+        ])
+
+        expect(res).to.eql([
+          {time: "08:00:10", value: 63},
+        ])
+      })
+    })
+
     describe("array", function() {
 
       const mockDataForFiltering = [

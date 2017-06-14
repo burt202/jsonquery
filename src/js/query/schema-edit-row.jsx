@@ -24,6 +24,7 @@ const SchemaEditRow = React.createClass({
             <option value="number">Number</option>
             <option value="bool">Bool</option>
             <option value="date">Date</option>
+            <option value="time">Time</option>
             <option value="array">Array</option>
           </select>
         </td>

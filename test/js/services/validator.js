@@ -35,6 +35,37 @@ describe("validator", function() {
     })
   })
 
+  describe("isValidDate", function() {
+    it("should return true when data is a date", function() {
+      expect(validator.isValidDate("2009-09")).to.eql(true)
+    })
+
+    it("should return false when data is not a date", function() {
+      expect(validator.isValidDate("date")).to.eql(false)
+    })
+  })
+
+  describe("isValidTime", function() {
+    it("should return true when data is a time stamp", function() {
+      expect(validator.isValidTime("22:16")).to.eql(true)
+      expect(validator.isValidTime("10:16")).to.eql(true)
+      expect(validator.isValidTime("00:16")).to.eql(true)
+      expect(validator.isValidTime("00:16:09")).to.eql(true)
+    })
+
+    it("should return false when data is not a time stamp", function() {
+      expect(validator.isValidTime("time")).to.eql(false)
+      expect(validator.isValidTime("22:66")).to.eql(false)
+      expect(validator.isValidTime("22:66a")).to.eql(false)
+      expect(validator.isValidTime("0:66a")).to.eql(false)
+      expect(validator.isValidTime("24:10")).to.eql(false)
+      expect(validator.isValidTime("10:0")).to.eql(false)
+      expect(validator.isValidTime("00s:16:09")).to.eql(false)
+      expect(validator.isValidTime("00:16:09s")).to.eql(false)
+      expect(validator.isValidTime("22:15:98")).to.eql(false)
+    })
+  })
+
   describe("isArray", function() {
     it("should return true when data is array", function() {
       expect(validator.isArray(["foo"])).to.eql(true)

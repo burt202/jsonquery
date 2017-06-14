@@ -6,6 +6,7 @@ const classNames = require("classnames")
 const defaultInput = {}
 const dateInput = {placeholder: "YYYYMMDD", maxLength: 8}
 const dateTimeInput = {placeholder: "YYYYMMDD (hhmm)", maxLength: 13}
+const timeInput = {placeholder: "hh:mm:ss", maxLength: 8}
 const separateWithCommaInput = {placeholder: "separate with comma"}
 const regexInput = {placeholder: "enter regex here"}
 
@@ -45,6 +46,15 @@ const filterConfig = {
     {text: "Is before", value: "be", inputs: [dateTimeInput]},
     {text: "Is after", value: "af", inputs: [dateTimeInput]},
     {text: "Is between", value: "btw", inputs: [dateTimeInput, dateTimeInput]},
+    {text: "Is null", value: "nl"},
+    {text: "Is not null", value: "nnl"},
+  ],
+  time: [
+    {text: "Equal to", value: "eq", inputs: [defaultInput]},
+    {text: "Not equal to", value: "neq", inputs: [defaultInput]},
+    {text: "Is before", value: "be", inputs: [timeInput]},
+    {text: "Is after", value: "af", inputs: [timeInput]},
+    {text: "Is between", value: "btw", inputs: [timeInput, timeInput]},
     {text: "Is null", value: "nl"},
     {text: "Is not null", value: "nnl"},
   ],

@@ -22,8 +22,9 @@ const defaults = {
 const initialOperators = {
   string: "eq",
   number: "eq",
-  date: "eq",
   bool: "nl",
+  date: "eq",
+  time: "eq",
   array: "cos",
 }
 
