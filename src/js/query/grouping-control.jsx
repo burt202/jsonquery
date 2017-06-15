@@ -77,13 +77,26 @@ const GroupingControl = React.createClass({
     if (!this.props.groupings.length || !this.props.showCounts) return null
     if (this.props.groupings.length > 1 && !this.props.flatten) return null
 
+    let options = [
+      {value: "desc", name: "Count DESC"},
+      {value: "asc", name: "Count ASC"},
+      {value: "namedesc", name: "Name DESC"},
+      {value: "nameasc", name: "Name ASC"},
+    ]
+
+    if (this.props.groupings.length > 1) {
+      options = options.concat([
+        {value: "pathdesc", name: "Path DESC"},
+        {value: "pathasc", name: "Path ASC"},
+      ])
+    }
+
     return (
       <span>
         <select onChange={this.onSortChange} value={this.props.groupSort || ""}>
-          <option value="desc">DESC</option>
-          <option value="asc">ASC</option>
-          <option value="pathdesc">Path DESC</option>
-          <option value="pathasc">Path ASC</option>
+          {options.map(function(option) {
+            return <option key={option.value} value={option.value}>{option.name}</option>
+          })}
         </select>
         <LimitControl
           onChange={this.onLimitChange}

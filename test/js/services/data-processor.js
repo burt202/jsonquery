@@ -946,6 +946,42 @@ describe("dateProcessor", function() {
       ])
     })
 
+    it("should return object in order of name descending", function() {
+      expect(dateProcessor.sortAndLimitObject("namedesc", null, mockDataForSorting)).to.eql([
+        {name: "loan - true", count: 1},
+        {name: "cash - true", count: 1},
+        {name: "cash - false", count: 1},
+        {name: "card - true", count: 2},
+        {name: "card - false", count: 1},
+      ])
+    })
+
+    it("should return object in order of name descending limited by number", function() {
+      expect(dateProcessor.sortAndLimitObject("namedesc", 3, mockDataForSorting)).to.eql([
+        {name: "loan - true", count: 1},
+        {name: "cash - true", count: 1},
+        {name: "cash - false", count: 1},
+      ])
+    })
+
+    it("should return object in order of name ascending", function() {
+      expect(dateProcessor.sortAndLimitObject("nameasc", null, mockDataForSorting)).to.eql([
+        {name: "card - false", count: 1},
+        {name: "card - true", count: 2},
+        {name: "cash - false", count: 1},
+        {name: "cash - true", count: 1},
+        {name: "loan - true", count: 1},
+      ])
+    })
+
+    it("should return object in order of name ascending limited by number", function() {
+      expect(dateProcessor.sortAndLimitObject("nameasc", 3, mockDataForSorting)).to.eql([
+        {name: "card - false", count: 1},
+        {name: "card - true", count: 2},
+        {name: "cash - false", count: 1},
+      ])
+    })
+
     it("should return object in order of path/count descending", function() {
       expect(dateProcessor.sortAndLimitObject("pathdesc", null, mockDataForSorting)).to.eql([
         {name: "card - true", count: 2},

@@ -209,6 +209,8 @@ module.exports = {
   sortAndLimitObject(sortField, limit, data) {
     let sorters = [R.descend(R.prop("count"))]
     if (sortField === "asc") sorters = [R.ascend(R.prop("count"))]
+    if (sortField === "nameasc") sorters = [R.ascend(R.prop("name"))]
+    if (sortField === "namedesc") sorters = [R.descend(R.prop("name"))]
     if (sortField === "pathdesc") sorters = [R.ascend(R.prop("path")), R.descend(R.prop("count"))]
     if (sortField === "pathasc") sorters = [R.ascend(R.prop("path")), R.ascend(R.prop("count"))]
 
