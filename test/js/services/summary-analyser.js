@@ -17,7 +17,7 @@ describe("summaryAnalyser", function() {
 
   describe("getGroupLimitedTotal", function() {
     it("should return total and percentage", function() {
-      const mockLimitedGroups = [{count: [{}, {}]}, {count: [{}, {}, {}]}]
+      const mockLimitedGroups = [{count: 2}, {count: 3}]
       const res = summaryAnalyser.getGroupLimitedTotal(mockFiltered, 8, mockLimitedGroups)
 
       expect(res).to.eql({
@@ -37,15 +37,21 @@ describe("summaryAnalyser", function() {
       })
     })
 
-    describe("for 1 level of grouping", function() {
+    describe("when there are groups", function() {
       let res
 
       beforeEach(function() {
-        res = summaryAnalyser.getGroupingAnalysis({foo: [1, 2, 3], bar: [1]})
+        res = summaryAnalyser.getGroupingAnalysis({
+          foo: 1,
+          bar: 3,
+          baz: 2,
+          aaa: 1,
+          bbb: 3,
+        })
       })
 
       it("should return the total number of groups", function() {
-        expect(res[0]).to.eql({name: "No. of Groups", value: 2})
+        expect(res[0]).to.eql({name: "No. of Groups", value: 5})
       })
 
       it("should return the size of the biggest group", function() {
@@ -58,30 +64,6 @@ describe("summaryAnalyser", function() {
 
       it("should return the mean average group size", function() {
         expect(res[3]).to.eql({name: "Average Group Size", value: 2})
-      })
-    })
-
-    describe("for 2 levels of grouping", function() {
-      let res
-
-      beforeEach(function() {
-        res = summaryAnalyser.getGroupingAnalysis({foo: {a: [1]}, bar: {b: [1, 2], c: [1]}})
-      })
-
-      it("should return the total number of groups", function() {
-        expect(res[0]).to.eql({name: "No. of Groups", value: 3})
-      })
-
-      it("should return the size of the biggest group", function() {
-        expect(res[1]).to.eql({name: "Max Group Size", value: 2})
-      })
-
-      it("should return the size of the smallest group", function() {
-        expect(res[2]).to.eql({name: "Min Group Size", value: 1})
-      })
-
-      it("should return the mean average group size", function() {
-        expect(res[3]).to.eql({name: "Average Group Size", value: 1.33})
       })
     })
   })

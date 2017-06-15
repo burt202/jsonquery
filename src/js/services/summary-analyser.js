@@ -2,15 +2,6 @@ const R = require("ramda")
 
 const utils = require("../utils")
 
-const _getGroupLengths = R.pipe(
-  R.toPairs,
-  R.map(function(pair) {
-    if (Array.isArray(pair[1])) return R.length(pair[1])
-    return _getGroupLengths(pair[1])
-  }),
-  R.flatten
-)
-
 module.exports = {
   getFilteredTotal(filtered, rawDataLength) {
     const percentage = utils.round(2, (filtered.length / rawDataLength) * 100)
@@ -18,7 +9,7 @@ module.exports = {
   },
 
   getGroupLimitedTotal(filtered, rawDataLength, sortedGroups) {
-    const groupedTotal = R.compose(R.length, R.flatten, R.pluck("count"))(sortedGroups)
+    const groupedTotal = R.compose(R.sum, R.flatten, R.pluck("count"))(sortedGroups)
     const absolutePercentage = utils.round(2, (groupedTotal / rawDataLength) * 100)
     const relativePercentage = utils.round(2, (groupedTotal / filtered.length) * 100)
     const relativePercentageTitle = `Relative to filtered data: ${relativePercentage}%`
@@ -26,7 +17,7 @@ module.exports = {
   },
 
   getGroupingAnalysis(grouped) {
-    const groupLengths = _getGroupLengths(grouped)
+    const groupLengths = R.values(grouped)
 
     const count = {name: "No. of Groups", value: groupLengths.length}
     const max = {name: "Max Group Size", value: utils.getMax(groupLengths)}

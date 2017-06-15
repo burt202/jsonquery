@@ -12,11 +12,12 @@ const Summary = React.createClass({
     rawDataLength: PropTypes.number.isRequired,
     filtered: PropTypes.array.isRequired,
     groupings: PropTypes.array,
+    groupSort: PropTypes.string,
     groupLimit: PropTypes.number,
   },
 
   getGrouping() {
-    return (this.props.groupings.length) ? dataProcessor.group(this.props.groupings, false, false, this.props.filtered) : null
+    return (this.props.groupings.length) ? dataProcessor.group(this.props.groupings, true, true, this.props.filtered) : null
   },
 
   getTotal() {
@@ -30,7 +31,7 @@ const Summary = React.createClass({
 
   getGroupLimitedTotal(grouped) {
     if (!this.props.groupings.length || !this.props.groupLimit) return null
-    const limitedGroups = dataProcessor.sortAndLimitObject("desc", this.props.groupLimit, grouped)
+    const limitedGroups = dataProcessor.sortAndLimitObject(this.props.groupSort, this.props.groupLimit, grouped)
     return summaryAnalyser.getGroupLimitedTotal(this.props.filtered, this.props.rawDataLength, limitedGroups)
   },
 
