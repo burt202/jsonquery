@@ -10,22 +10,12 @@ const Code = require("../components/code")
 const DISPLAY_THRESHOLD = 1000
 
 const TYPES = [
-  {name: "JSON", value: "json", extension: "json", mimetype: "application/json"},
-  {name: "Table", value: "table", extension: "csv", mimetype: "text/csv"},
+  {name: "JSON", view: "json", extension: "json", mimetype: "application/json"},
+  {name: "Table", view: "table", extension: "csv", mimetype: "text/csv"},
 ]
 
-function splitRow(row) {
-  const matches = []
-
-  row.replace(/".*"|[^,]+/g, function(match) {
-    matches.push(match)
-  })
-
-  return matches
-}
-
 const display = {
-  json(properties, data) {
+  json(data) {
     return (
       <div id="copy-cont">
         <Code language="json">
@@ -34,30 +24,34 @@ const display = {
       </div>
     )
   },
-  table(properties, data) {
-    const rows = data.split("\r\n")
-    const headerCols = splitRow(rows[0])
+  table(rows) {
+    const header = R.find(R.propEq("type", "header"), rows)
 
-    const headerRow = headerCols.map(function(col, index) {
-      return <th key={index}>{col}</th>
-    })
+    let tableHeader = null
 
-    const tableHeader = !properties.analyse ? (
-      <thead>
-        <tr>{headerRow}</tr>
-      </thead>
-    ) : null
+    if (header) {
+      const headerRow = header.cols.map(function(col, index) {
+        return <th key={index}>{col}</th>
+      })
 
-    const dataRows = tableHeader ? R.tail(rows) : rows
+      tableHeader = <thead><tr>{headerRow}</tr></thead>
+    }
+
+    const dataRows = R.reject(R.propEq("type", "header"), rows)
 
     const tableBodyRows = dataRows.map(function(row, index) {
-      const colSplit = splitRow(row)
+      if (row.type === "title") {
+        return (
+          <tr key={index}>
+            <td colSpan={row.span} style={{fontWeight: "bold"}}>{row.cols[0]}</td>
+          </tr>
+        )
+      }
 
-      const cols = (colSplit.length === 1)
-        ? <td colSpan={headerCols.length} style={{fontWeight: "bold"}}>{colSplit[0]}</td>
-        : colSplit.map(function(col, index) {
-          return <td key={index}>{col}</td>
-        })
+      const cols = row.cols.map(function(col, index) {
+        if (typeof col === "boolean") col = col.toString()
+        return <td key={index}>{col}</td>
+      })
 
       return <tr key={index}>{cols}</tr>
     })
@@ -100,20 +94,20 @@ const Results = React.createClass({
   getViewTypes() {
     return TYPES.map(function(type) {
       const classnames = classNames({
-        "active": this.state.type === type.value,
+        "active": this.state.type === type.view,
       })
 
       return (
-        <li key={type.value} className={classnames}>
-          <a className="site-link" onClick={this.setType.bind(this, type.value)}>{type.name}</a>
+        <li key={type.view} className={classnames}>
+          <a className="site-link" onClick={this.setType.bind(this, type.view)}>{type.name}</a>
         </li>
       )
     }.bind(this))
   },
 
   downloadResults() {
-    const type = R.find(R.propEq("value", this.state.type), TYPES)
-    const formatted = downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results)
+    const type = R.find(R.propEq("view", this.state.type), TYPES)
+    const formatted = downloadFormatter[type.extension](this.props.groupings, this.props.showCounts, this.props.results)
 
     const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
     const downloadLink = document.getElementById("hidden-download-link")
@@ -133,10 +127,10 @@ const Results = React.createClass({
 
   getDisplayData() {
     if (!this.isAggregateResult() && this.tooManyResultToShow())
-      return display.json(this.props, "Results set too large to display, use download options instead")
+      return display.json("Results set too large to display, use download options instead")
 
     const formatted = downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results)
-    return display[this.state.type](this.props, formatted)
+    return display[this.state.type](formatted)
   },
 
   onChangeHandler(e) {
