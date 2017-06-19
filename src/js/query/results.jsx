@@ -126,8 +126,10 @@ const Results = React.createClass({
   },
 
   getDisplayData() {
-    if (!this.isAggregateResult() && this.tooManyResultToShow())
-      return display.json("Results set too large to display, use download options instead")
+    if (!this.isAggregateResult() && this.tooManyResultToShow()) {
+      const type = R.find(R.propEq("view", this.state.type), TYPES)
+      return display.json(`Results set too large to display, use download link for .${type.extension} file`)
+    }
 
     const formatted = downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results)
     return display[this.state.type](formatted)
