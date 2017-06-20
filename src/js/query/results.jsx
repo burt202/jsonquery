@@ -1,201 +1,113 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+
+const ResultsSummary = require("./results-summary")
+const ResultsDisplay = require("./results-display")
+
 const R = require("ramda")
-const Clipboard = require("clipboard")
-const classNames = require("classnames")
 
-const downloadFormatter = require("../services/download-formatter")
-const Code = require("../components/code")
+const dataProcessor = require("../services/data-processor")
+const utils = require("../utils")
 
-const DISPLAY_THRESHOLD = 1000
-
-const TYPES = [
-  {name: "JSON", view: "json", extension: "json", mimetype: "application/json"},
-  {name: "Table", view: "table", extension: "csv", mimetype: "text/csv"},
-]
-
-const display = {
-  json(data) {
-    return (
-      <div id="copy-cont">
-        <Code language="json">
-          {data}
-        </Code>
-      </div>
-    )
-  },
-  table(rows) {
-    const header = R.find(R.propEq("type", "header"), rows)
-
-    let tableHeader = null
-
-    if (header) {
-      const headerRow = header.cols.map(function(col, index) {
-        return <th key={index}>{col}</th>
-      })
-
-      tableHeader = <thead><tr>{headerRow}</tr></thead>
-    }
-
-    const dataRows = R.reject(R.propEq("type", "header"), rows)
-
-    const tableBodyRows = dataRows.map(function(row, index) {
-      if (row.type === "title") {
-        return (
-          <tr key={index}>
-            <td colSpan={row.span} style={{fontWeight: "bold"}}>{row.cols[0]}</td>
-          </tr>
-        )
-      }
-
-      const cols = row.cols.map(function(col, index) {
-        if (typeof col === "boolean") col = col.toString()
-        return <td key={index}>{col}</td>
-      })
-
-      return <tr key={index}>{cols}</tr>
-    })
-
-    return (
-      <table className="table">
-        {tableHeader}
-        <tbody>
-          {tableBodyRows}
-        </tbody>
-      </table>
-    )
-  },
-}
-
-const Results = React.createClass({
+const SchemaEditRow = React.createClass({
   displayName: "Results",
 
   propTypes: {
-    results: PropTypes.any.isRequired,
-    groupings: PropTypes.array,
-    resultFields: PropTypes.array.isRequired,
-    schema: PropTypes.object.isRequired,
     actionCreator: PropTypes.object.isRequired,
+    filters: PropTypes.array.isRequired,
+    groupings: PropTypes.array,
+    sorters: PropTypes.array,
+    schema: PropTypes.object.isRequired,
+    data: PropTypes.array.isRequired,
+    resultFields: PropTypes.array.isRequired,
     showCounts: PropTypes.bool.isRequired,
-    filteredLength: PropTypes.number.isRequired,
+    flatten: PropTypes.bool.isRequired,
+    groupSort: PropTypes.string.isRequired,
+    groupLimit: PropTypes.number,
+    limit: PropTypes.number,
     analyse: PropTypes.string,
   },
 
-  getInitialState() {
+  filterResults(data) {
+    return dataProcessor.filter(data, this.props.schema, this.props.filters)
+  },
+
+  sortResults(data) {
+    return (this.props.sorters.length) ? dataProcessor.sort(this.props.sorters, data) : data
+  },
+
+  limitResults(data) {
+    return (this.props.limit) ? R.take(this.props.limit, data) : data
+  },
+
+  pickIncludedFields(data) {
+    return R.map(R.pickAll(R.sortBy(R.identity, this.props.resultFields)))(data)
+  },
+
+  getAnalysis(data) {
+    const values = R.pluck(this.props.analyse, data)
+
     return {
-      type: "json",
+      sum: utils.round(2, R.sum(values)),
+      average: utils.round(2, R.mean(values)),
+      lowest: utils.getMin(values),
+      highest: utils.getMax(values),
+      median: utils.round(2, R.median(values)),
     }
   },
 
-  setType(type) {
-    this.setState({type})
+  filterSortAndLimit(data) {
+    return R.pipe(
+      this.filterResults,
+      this.sortResults,
+      this.limitResults,
+      this.pickIncludedFields
+    )(data)
   },
 
-  getViewTypes() {
-    return TYPES.map(function(type) {
-      const classnames = classNames({
-        "active": this.state.type === type.view,
-      })
-
-      return (
-        <li key={type.view} className={classnames}>
-          <a className="site-link" onClick={this.setType.bind(this, type.view)}>{type.name}</a>
-        </li>
-      )
-    }.bind(this))
+  isGroupingSortable() {
+    if (this.props.groupings.length === 1 && this.props.showCounts) return true
+    if (this.props.groupings.length > 1 && this.props.flatten && this.props.showCounts) return true
+    return false
   },
 
-  downloadResults() {
-    const type = R.find(R.propEq("view", this.state.type), TYPES)
-    const formatted = downloadFormatter[type.extension](this.props.groupings, this.props.showCounts, this.props.results)
-
-    const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
-    const downloadLink = document.getElementById("hidden-download-link")
-    downloadLink.setAttribute("href", dataStr)
-    downloadLink.setAttribute("download", `${new Date().toISOString()}.${type.extension}`)
-    downloadLink.click()
-    downloadLink.setAttribute("href", "")
-  },
-
-  isAggregateResult() {
-    return this.props.showCounts || this.props.analyse
-  },
-
-  tooManyResultToShow() {
-    return this.props.filteredLength > DISPLAY_THRESHOLD
-  },
-
-  getDisplayData() {
-    if (!this.isAggregateResult() && this.tooManyResultToShow()) {
-      const type = R.find(R.propEq("view", this.state.type), TYPES)
-      return display.json(`Results set too large to display, use download link for .${type.extension} file`)
+  formatData(data) {
+    if (this.props.groupings.length) {
+      const grouped = dataProcessor.group(this.props.groupings, this.props.showCounts, this.props.flatten, data)
+      return this.isGroupingSortable() ? dataProcessor.sortAndLimitObject(this.props.groupSort, this.props.groupLimit, grouped) : grouped
     }
 
-    const formatted = downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results)
-    return display[this.state.type](formatted)
-  },
+    if (this.props.analyse) return this.getAnalysis(data)
 
-  onChangeHandler(e) {
-    const field = e.target.name
-    const isPresent = R.contains(field, this.props.resultFields)
-    const updatedFields = (isPresent) ?
-      R.without([field], this.props.resultFields) :
-      R.append(field, this.props.resultFields)
-
-    this.props.actionCreator.updateResultFields(updatedFields)
-  },
-
-  getResultFieldOptions() {
-    const schemaKeys = R.sortBy(R.identity, R.keys(this.props.schema))
-
-    return schemaKeys.map(function(field) {
-      const checked = R.contains(field, this.props.resultFields)
-      const disabled = R.contains(field, this.props.groupings)
-
-      return (
-        <label className="checkbox-label" key={field}>
-          <input type="checkbox" name={field} disabled={disabled} checked={checked} onChange={this.onChangeHandler} />
-          {field}
-        </label>
-      )
-    }.bind(this))
-  },
-
-  getCheckboxes() {
-    return (!this.isAggregateResult()) ? <div className="include-checkboxes"><span className="label">Include:</span><span>{this.getResultFieldOptions()}</span></div> : null
-  },
-
-  canCopyResults() {
-    return this.state.type === "json" && (this.props.showCounts || !this.tooManyResultToShow())
-  },
-
-  getCopyLink() {
-    return (this.canCopyResults()) ? <li><a className="site-link" data-clipboard-action="copy" data-clipboard-target="#copy-cont">Copy To Clipboard</a></li> : null
+    return data
   },
 
   render() {
-    new Clipboard("a.site-link[data-clipboard-action='copy']")
+    const filtered = this.filterSortAndLimit(this.props.data)
+    const results = this.formatData(filtered)
 
     return (
-      <div className="results-cont">
-        <h3>Results</h3>
-        {this.getCheckboxes()}
-
-        <div className="results-options">
-          <ul className="side-options">
-            {this.getViewTypes()}
-          </ul>
-          <ul className="side-options right">
-            {this.getCopyLink()}
-            <li><a className="site-link" onClick={this.downloadResults}>Download</a></li>
-          </ul>
-        </div>
-
-        {this.getDisplayData()}
-        <a id="hidden-download-link" style={{display: "none"}}></a>
+      <div>
+        <ResultsSummary
+          rawDataLength={this.props.data.length}
+          filtered={filtered}
+          groupings={this.props.groupings}
+          groupSort={this.props.groupSort}
+          groupLimit={this.props.groupLimit}
+        />
+        <ResultsDisplay
+          results={results}
+          groupings={this.props.groupings}
+          resultFields={this.props.resultFields}
+          schema={this.props.schema}
+          actionCreator={this.props.actionCreator}
+          showCounts={this.props.showCounts}
+          filteredLength={filtered.length}
+          analyse={this.props.analyse}
+        />
       </div>
     )
   },
 })
 
-module.exports = Results
+module.exports = SchemaEditRow

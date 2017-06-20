@@ -1,13 +1,8 @@
 const React = require("react")
 const PropTypes = require("prop-types")
-const R = require("ramda")
-
-const dataProcessor = require("../services/data-processor")
-const utils = require("../utils")
 
 const Filters = require("./filters")
 const Controls = require("./controls")
-const Summary = require("./summary")
 const Results = require("./results")
 const SchemaEdit = require("./schema-edit")
 
@@ -44,60 +39,6 @@ const Query = React.createClass({
     this.setState({showSchemaControls: true})
   },
 
-  filterResults(data) {
-    return dataProcessor.filter(data, this.props.schema, this.props.filters)
-  },
-
-  sortResults(data) {
-    return (this.props.sorters.length) ? dataProcessor.sort(this.props.sorters, data) : data
-  },
-
-  limitResults(data) {
-    return (this.props.limit) ? R.take(this.props.limit, data) : data
-  },
-
-  pickIncludedFields(data) {
-    return R.map(R.pickAll(R.sortBy(R.identity, this.props.resultFields)))(data)
-  },
-
-  getAnalysis(data) {
-    const values = R.pluck(this.props.analyse, data)
-
-    return {
-      sum: utils.round(2, R.sum(values)),
-      average: utils.round(2, R.mean(values)),
-      lowest: utils.getMin(values),
-      highest: utils.getMax(values),
-      median: utils.round(2, R.median(values)),
-    }
-  },
-
-  filterSortAndLimit(data) {
-    return R.pipe(
-      this.filterResults,
-      this.sortResults,
-      this.limitResults,
-      this.pickIncludedFields
-    )(data)
-  },
-
-  isGroupingSortable() {
-    if (this.props.groupings.length === 1 && this.props.showCounts) return true
-    if (this.props.groupings.length > 1 && this.props.flatten && this.props.showCounts) return true
-    return false
-  },
-
-  formatData(data) {
-    if (this.props.groupings.length) {
-      const grouped = dataProcessor.group(this.props.groupings, this.props.showCounts, this.props.flatten, data)
-      return this.isGroupingSortable() ? dataProcessor.sortAndLimitObject(this.props.groupSort, this.props.groupLimit, grouped) : grouped
-    }
-
-    if (this.props.analyse) return this.getAnalysis(data)
-
-    return data
-  },
-
   getSideOptions() {
     return (
       <ul className="side-options right">
@@ -129,9 +70,6 @@ const Query = React.createClass({
   render() {
     if (this.state.showSchemaControls) return this.getSchemaControls()
 
-    const filtered = this.filterSortAndLimit(this.props.data)
-    const results = this.formatData(filtered)
-
     return (
       <div className="query-cont">
         {this.getSideOptions()}
@@ -152,22 +90,20 @@ const Query = React.createClass({
           limit={this.props.limit}
           analyse={this.props.analyse}
         />
-        <Summary
-          rawDataLength={this.props.data.length}
-          filtered={filtered}
-          groupings={this.props.groupings}
-          groupSort={this.props.groupSort}
-          groupLimit={this.props.groupLimit}
-        />
         <Results
-          results={results}
+          data={this.props.data}
+          flatten={this.props.flatten}
+          filters={this.props.filters}
+          sorters={this.props.sorters}
+          limit={this.props.limit}
           groupings={this.props.groupings}
           resultFields={this.props.resultFields}
           schema={this.props.schema}
           actionCreator={this.props.actionCreator}
           showCounts={this.props.showCounts}
-          filteredLength={filtered.length}
           analyse={this.props.analyse}
+          groupSort={this.props.groupSort}
+          groupLimit={this.props.groupLimit}
         />
       </div>
     )

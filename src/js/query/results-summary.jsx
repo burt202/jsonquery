@@ -6,7 +6,7 @@ const dataProcessor = require("../services/data-processor")
 const summaryAnalyser = require("../services/summary-analyser")
 
 const Summary = React.createClass({
-  displayName: "Summary",
+  displayName: "ResultsSummary",
 
   propTypes: {
     rawDataLength: PropTypes.number.isRequired,
