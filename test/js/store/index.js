@@ -437,4 +437,48 @@ describe("store", function() {
       expect(store.getState().groupLimit).to.eql(null)
     })
   })
+
+  describe("groupSort", function() {
+    it("should add group sort", function() {
+      dispatcher.dispatch({
+        name: "groupSort",
+        value: {groupSort: "foo"},
+      })
+
+      expect(store.getState().groupSort).to.eql("foo")
+    })
+  })
+
+  describe("groupLimit", function() {
+    it("should add group limit", function() {
+      dispatcher.dispatch({
+        name: "groupLimit",
+        value: {groupLimit: "foo"},
+      })
+
+      expect(store.getState().groupLimit).to.eql("foo")
+    })
+  })
+
+  describe("saveCalculatedFields", function() {
+    it("should save calculated fields", function() {
+      dispatcher.dispatch({
+        name: "saveCalculatedFields",
+        value: {calculatedFields: "foo"},
+      })
+
+      expect(store.getState().calculatedFields).to.eql("foo")
+    })
+  })
+
+  describe("saveCalculationsString", function() {
+    it("should save the calculation string", function() {
+      dispatcher.dispatch({
+        name: "saveCalculationsString",
+        value: {calculationsString: "foo"},
+      })
+
+      expect(store.getState().calculationsString).to.eql("foo")
+    })
+  })
 })
