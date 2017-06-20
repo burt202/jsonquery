@@ -7,7 +7,12 @@ const utils = require("../utils")
 
 const R = require("ramda")
 
-const calculationsWrapper = `function addCalculations(fns, item) {
+const calculationsWrapper = `// Helper functions available
+// --------------------------
+// - formatDate(date, format) see https://date-fns.org/docs/format
+// - round(decimals, number)
+
+function addCalculations(fns, item) {
   return {}
 }`
 
@@ -42,7 +47,6 @@ const AddCalculations = React.createClass({
       const calculations = calculationFn(fns, row)
       return R.merge(R.omit(this.props.calculatedFields, row), calculations)
     }.bind(this), this.props.data)
-
 
     this.props.onSave(schema, data, this.state.calculationsString, R.keys(schemaForCalculations))
   },
