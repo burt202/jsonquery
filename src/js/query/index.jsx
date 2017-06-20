@@ -5,6 +5,7 @@ const Filters = require("./filters")
 const Controls = require("./controls")
 const Results = require("./results")
 const SchemaEdit = require("./schema-edit")
+const AddCalculations = require("./add-calculations")
 
 const Query = React.createClass({
   displayName: "Query",
@@ -16,6 +17,8 @@ const Query = React.createClass({
     sorters: PropTypes.array,
     schema: PropTypes.object.isRequired,
     data: PropTypes.array.isRequired,
+    calculatedFields: PropTypes.array.isRequired,
+    calculationsString: PropTypes.string,
     resultFields: PropTypes.array.isRequired,
     showCounts: PropTypes.bool.isRequired,
     flatten: PropTypes.bool.isRequired,
@@ -27,7 +30,7 @@ const Query = React.createClass({
 
   getInitialState() {
     return {
-      showSchemaControls: false,
+      selectedPage: "query",
     }
   },
 
@@ -35,44 +38,58 @@ const Query = React.createClass({
     this.props.actionCreator.reset()
   },
 
-  onSchemaEdit() {
-    this.setState({showSchemaControls: true})
-  },
-
-  getSideOptions() {
-    return (
-      <ul className="side-options right">
-        <li><a className="site-link" onClick={this.onSchemaEdit}>Edit Schema</a></li>
-        <li><a className="site-link" onClick={this.onReset}>Reset</a></li>
-      </ul>
-    )
-  },
-
   onCancel() {
-    this.setState({showSchemaControls: false})
+    this.setState({selectedPage: "query"})
   },
 
-  onSave(schema) {
-    this.setState({showSchemaControls: false})
+  onSchemaEditSave(schema) {
+    this.setState({selectedPage: "query"})
     this.props.actionCreator.saveJson("schema", schema)
   },
 
-  getSchemaControls() {
+  onAddCalculationSave(schema, data, calculationsString, calculatedFields) {
+    this.setState({selectedPage: "query"})
+    this.props.actionCreator.saveJson("data", data)
+    this.props.actionCreator.saveJson("schema", schema)
+    this.props.actionCreator.saveCalculatedFields(calculatedFields)
+    this.props.actionCreator.saveCalculationsString(calculationsString)
+  },
+
+  getEditSchemaComponent() {
     return (
       <SchemaEdit
         schema={this.props.schema}
-        onSave={this.onSave}
+        onSave={this.onSchemaEditSave}
+        onCancel={this.onCancel}
+      />
+    )
+  },
+
+  getAddCalculationComponent() {
+    return (
+      <AddCalculations
+        data={this.props.data}
+        schema={this.props.schema}
+        calculatedFields={this.props.calculatedFields}
+        calculationsString={this.props.calculationsString}
+        onSave={this.onAddCalculationSave}
         onCancel={this.onCancel}
       />
     )
   },
 
   render() {
-    if (this.state.showSchemaControls) return this.getSchemaControls()
+    if (this.state.selectedPage === "editSchema") return this.getEditSchemaComponent()
+    if (this.state.selectedPage === "addCalc") return this.getAddCalculationComponent()
 
     return (
       <div className="query-cont">
-        {this.getSideOptions()}
+        <ul className="side-options right">
+          <li><a className="site-link" onClick={() => this.setState({selectedPage: "addCalc"})}>Add Calculations</a></li>
+          <li><a className="site-link" onClick={() => this.setState({selectedPage: "editSchema"})}>Edit Schema</a></li>
+          <li><a className="site-link" onClick={this.onReset}>Reset</a></li>
+        </ul>
+
         <Filters
           actionCreator={this.props.actionCreator}
           filters={this.props.filters}

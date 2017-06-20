@@ -313,3 +313,10 @@ ul.side-options li:last-of-type {
   flex-grow: 1;
   margin-left: 15px;
 }
+
+/* Calculations */
+
+.add-calculations-cont textarea.calculations {
+  width: 730px;
+  height: 250px;
+}

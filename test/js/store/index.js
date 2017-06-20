@@ -20,6 +20,8 @@ describe("store", function() {
       groupLimit: null,
       limit: null,
       analyse: null,
+      calculatedFields: [],
+      calculationsString: null,
     })
   })
 
@@ -159,6 +161,11 @@ describe("store", function() {
         groupLimit: 10,
         limit: "aaa",
         analyse: "bbb",
+        calculatedFields: ["dd"],
+        calculationsString: "ff",
+        data: "data",
+        schema: "schema",
+        resultFields: "resultFields",
       })
     })
 
@@ -188,6 +195,19 @@ describe("store", function() {
       expect(store.getState().groupLimit).to.eql(null)
       expect(store.getState().limit).to.eql(null)
       expect(store.getState().analyse).to.eql(null)
+    })
+
+    it("should not reset some fields", function() {
+      dispatcher.dispatch({
+        name: "reset",
+        value: {},
+      })
+
+      expect(store.getState().calculationsString).to.eql("ff")
+      expect(store.getState().calculatedFields).to.eql(["dd"])
+      expect(store.getState().data).to.eql("data")
+      expect(store.getState().schema).to.eql("schema")
+      expect(store.getState().resultFields).to.eql("resultFields")
     })
   })
 

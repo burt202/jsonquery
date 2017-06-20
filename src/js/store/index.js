@@ -8,6 +8,8 @@ const defaults = {
   filters: [],
   groupings: [],
   sorters: [],
+  calculatedFields: [],
+  calculationsString: null,
   schema: null,
   data: null,
   resultFields: null,
@@ -69,7 +71,9 @@ const handlers = {
   },
 
   reset(contents) {
-    return R.merge(contents, R.omit(["data", "schema", "resultFields"], defaults))
+    return R.merge(contents, R.omit([
+      "data", "schema", "resultFields", "calculationsString", "calculatedFields",
+    ], defaults))
   },
 
   addGrouping(contents, payload) {
@@ -153,6 +157,18 @@ const handlers = {
   groupLimit(contents, payload) {
     return R.merge(contents, {
       groupLimit: payload.groupLimit,
+    })
+  },
+
+  saveCalculatedFields(contents, payload) {
+    return R.merge(contents, {
+      calculatedFields: payload.calculatedFields,
+    })
+  },
+
+  saveCalculationsString(contents, payload) {
+    return R.merge(contents, {
+      calculationsString: payload.calculationsString,
     })
   },
 }

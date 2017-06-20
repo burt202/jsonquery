@@ -16,6 +16,20 @@ module.exports = {
     }
   },
 
+  saveCalculatedFields(calculatedFields) {
+    dispatcher.dispatch({
+      name: "saveCalculatedFields",
+      value: {calculatedFields},
+    })
+  },
+
+  saveCalculationsString(calculationsString) {
+    dispatcher.dispatch({
+      name: "saveCalculationsString",
+      value: {calculationsString},
+    })
+  },
+
   addFilter(name) {
     dispatcher.dispatch({
       name: "addFilter",
