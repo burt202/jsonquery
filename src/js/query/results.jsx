@@ -9,7 +9,7 @@ const R = require("ramda")
 const dataProcessor = require("../services/data-processor")
 const utils = require("../utils")
 
-const SchemaEditRow = React.createClass({
+const Results = React.createClass({
   displayName: "Results",
 
   propTypes: {
@@ -110,4 +110,4 @@ const SchemaEditRow = React.createClass({
   },
 })
 
-module.exports = SchemaEditRow
+module.exports = Results
