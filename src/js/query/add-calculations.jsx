@@ -18,6 +18,8 @@ function addCalculations(fns, item) {
   return {}
 }`
 
+const fns = {formatDate, round: utils.round}
+
 const AddCalculations = React.createClass({
   displayName: "AddCalculations",
 
@@ -37,7 +39,10 @@ const AddCalculations = React.createClass({
   },
 
   onSave() {
-    const fns = {formatDate, round: utils.round}
+    if (!this.state.calculationsString.length) {
+      this.props.onSave(this.props.schema, this.props.data, calculationsWrapper, [])
+      return
+    }
 
     let calculationFn
 
