@@ -37,10 +37,17 @@ const AddCalculations = React.createClass({
   },
 
   onSave() {
-    // do some validation and alert/return early
-
     const fns = {formatDate, round: utils.round}
-    const calculationFn = eval(`(${this.state.calculationsString})`)
+
+    let calculationFn
+
+    try {
+      calculationFn = eval(`(${this.state.calculationsString})`)
+      calculationFn(fns, this.props.data[0])
+    } catch (e) {
+      alert("Calculations not valid")
+      return
+    }
 
     const schemaForCalculations = schemaGenerator.generate(calculationFn(fns, this.props.data[0]))
     const schema = R.merge(R.omit(this.props.calculatedFields, this.props.schema), schemaForCalculations)
