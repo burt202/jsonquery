@@ -5,6 +5,8 @@ const schemaGenerator = require("../services/schema-generator")
 const formatDate = require("date-fns/format")
 const utils = require("../utils")
 
+const Code = require("../components/code")
+
 const R = require("ramda")
 
 const calculationsWrapper = `// Helper functions available
@@ -62,6 +64,10 @@ const AddCalculations = React.createClass({
       <div className="add-calculations-cont">
         <h3>Add Calculations</h3>
         <textarea className="calculations" value={this.state.calculationsString} onChange={this.onChange} />
+        <h4>Sample Item</h4>
+        <Code language="json">
+          {JSON.stringify(this.props.data[0], null, 2)}
+        </Code>
         <ul className="side-options right">
           <li><a className="site-link" onClick={this.props.onCancel}>Cancel</a></li>
           <li><a className="site-link" onClick={this.onSave}>Save</a></li>
