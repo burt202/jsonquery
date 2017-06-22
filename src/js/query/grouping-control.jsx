@@ -82,13 +82,18 @@ const GroupingControl = React.createClass({
       {value: "asc", name: "Count ASC"},
       {value: "namedesc", name: "Name DESC"},
       {value: "nameasc", name: "Name ASC"},
-      {value: "natural", name: "Natural"},
     ]
 
     if (this.props.groupings.length > 1) {
       options = options.concat([
         {value: "pathdesc", name: "Path DESC"},
         {value: "pathasc", name: "Path ASC"},
+      ])
+    }
+
+    if (this.props.groupings.length === 1) {
+      options = options.concat([
+        {value: "natural", name: "Natural"},
       ])
     }
 
