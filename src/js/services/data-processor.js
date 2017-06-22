@@ -167,6 +167,17 @@ function formatFilters(filters) {
   )(filters)
 }
 
+function isNumeric(num) {
+  return !isNaN(num)
+}
+
+const naturalOrders = [
+  ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+  ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+  ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+]
+
 module.exports = {
   filter(data, schema, filters) {
     const builtFilters = R.reduce(function(acc, filter) {
@@ -214,11 +225,28 @@ module.exports = {
     if (sortField === "pathdesc") sorters = [R.ascend(R.prop("path")), R.descend(R.prop("count"))]
     if (sortField === "pathasc") sorters = [R.ascend(R.prop("path")), R.ascend(R.prop("count"))]
 
+    const keysAreNumbers = R.all(isNumeric)(Object.keys(data))
+
+    if (sortField === "natural") {
+      const fieldsString = R.compose(R.join(""), R.sort(R.ascend(R.identity)), R.keys)(data)
+
+      const matcher = R.find(function(orders) {
+        return R.compose(R.join(""), R.sort(R.ascend(R.identity)))(orders) === fieldsString
+      }, naturalOrders)
+
+      if (matcher) {
+        sorters = [function(a, b) {
+          return matcher.indexOf(a.name) - matcher.indexOf(b.name)
+        }]
+      }
+    }
+
     return R.pipe(
       R.toPairs,
       R.map(function(pair) {
         const path = R.compose(R.join(","), R.init, R.split(" - "))(pair[0])
-        return {name: pair[0], path, count: pair[1]}
+        const name = (keysAreNumbers) ? parseFloat(pair[0]) : pair[0]
+        return {name, path, count: pair[1]}
       }),
       R.sortWith(sorters),
       R.take(limit || data.length),

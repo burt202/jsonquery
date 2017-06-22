@@ -1017,5 +1017,155 @@ describe("dateProcessor", function() {
         {name: "cash - true", count: 1},
       ])
     })
+
+    it("should return object in natural order of full month name", function() {
+      const data = {
+        November: 4081,
+        April: 5777,
+        February: 8836,
+        March: 8150,
+        January: 8595,
+        October: 3868,
+        August: 3581,
+        July: 4880,
+        June: 5506,
+        December: 5161,
+        September: 2418,
+        May: 6839,
+      }
+
+      expect(dateProcessor.sortAndLimitObject("natural", null, data)).to.eql([
+        {name: "January", count: 8595},
+        {name: "February", count: 8836},
+        {name: "March", count: 8150},
+        {name: "April", count: 5777},
+        {name: "May", count: 6839},
+        {name: "June", count: 5506},
+        {name: "July", count: 4880},
+        {name: "August", count: 3581},
+        {name: "September", count: 2418},
+        {name: "October", count: 3868},
+        {name: "November", count: 4081},
+        {name: "December", count: 5161},
+      ])
+    })
+
+    it("should return object in natural order of short month name", function() {
+      const data = {
+        Nov: 4081,
+        Apr: 5777,
+        Feb: 8836,
+        Mar: 8150,
+        Jan: 8595,
+        Oct: 3868,
+        Aug: 3581,
+        Jul: 4880,
+        Jun: 5506,
+        Dec: 5161,
+        Sep: 2418,
+        May: 6839,
+      }
+
+      expect(dateProcessor.sortAndLimitObject("natural", null, data)).to.eql([
+        {name: "Jan", count: 8595},
+        {name: "Feb", count: 8836},
+        {name: "Mar", count: 8150},
+        {name: "Apr", count: 5777},
+        {name: "May", count: 6839},
+        {name: "Jun", count: 5506},
+        {name: "Jul", count: 4880},
+        {name: "Aug", count: 3581},
+        {name: "Sep", count: 2418},
+        {name: "Oct", count: 3868},
+        {name: "Nov", count: 4081},
+        {name: "Dec", count: 5161},
+      ])
+    })
+
+    it("should return object in natural order of full day name", function() {
+      const data = {
+        Friday: 4081,
+        Wednesday: 5777,
+        Saturday: 8836,
+        Tuesday: 8150,
+        Sunday: 8595,
+        Monday: 3868,
+        Thursday: 3581,
+      }
+
+      expect(dateProcessor.sortAndLimitObject("natural", null, data)).to.eql([
+        {name: "Monday", count: 3868},
+        {name: "Tuesday", count: 8150},
+        {name: "Wednesday", count: 5777},
+        {name: "Thursday", count: 3581},
+        {name: "Friday", count: 4081},
+        {name: "Saturday", count: 8836},
+        {name: "Sunday", count: 8595},
+      ])
+    })
+
+    it("should return object in natural order of short day name", function() {
+      const data = {
+        Fri: 4081,
+        Wed: 5777,
+        Sat: 8836,
+        Tue: 8150,
+        Sun: 8595,
+        Mon: 3868,
+        Thu: 3581,
+      }
+
+      expect(dateProcessor.sortAndLimitObject("natural", null, data)).to.eql([
+        {name: "Mon", count: 3868},
+        {name: "Tue", count: 8150},
+        {name: "Wed", count: 5777},
+        {name: "Thu", count: 3581},
+        {name: "Fri", count: 4081},
+        {name: "Sat", count: 8836},
+        {name: "Sun", count: 8595},
+      ])
+    })
+
+    it("should return object in natural order of short day name limited by number", function() {
+      const data = {
+        Fri: 4081,
+        Wed: 5777,
+        Sat: 8836,
+        Tue: 8150,
+        Sun: 8595,
+        Mon: 3868,
+        Thu: 3581,
+      }
+
+      expect(dateProcessor.sortAndLimitObject("natural", 5, data)).to.eql([
+        {name: "Mon", count: 3868},
+        {name: "Tue", count: 8150},
+        {name: "Wed", count: 5777},
+        {name: "Thu", count: 3581},
+        {name: "Fri", count: 4081},
+      ])
+    })
+
+    it("should sort name descending naturally if all numbers", function() {
+      const data = {
+        "52": 4081,
+        "100": 5777,
+        "89": 8836,
+        "2": 8150,
+        "22.4": 8595,
+        "37.89": 3868,
+        "10": 3581,
+      }
+
+      expect(dateProcessor.sortAndLimitObject("namedesc", null, data)).to.eql([
+        {name: 100, count: 5777},
+        {name: 89, count: 8836},
+        {name: 52, count: 4081},
+        {name: 37.89, count: 3868},
+        {name: 22.4, count: 8595},
+        {name: 10, count: 3581},
+        {name: 2, count: 8150},
+      ])
+    })
   })
 })

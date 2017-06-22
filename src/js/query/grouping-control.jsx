@@ -82,6 +82,7 @@ const GroupingControl = React.createClass({
       {value: "asc", name: "Count ASC"},
       {value: "namedesc", name: "Name DESC"},
       {value: "nameasc", name: "Name ASC"},
+      {value: "natural", name: "Natural"},
     ]
 
     if (this.props.groupings.length > 1) {
