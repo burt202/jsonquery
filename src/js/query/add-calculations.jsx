@@ -35,6 +35,7 @@ const AddCalculations = React.createClass({
   getInitialState() {
     return {
       calculationsString: this.props.calculationsString || calculationsWrapper,
+      errors: "",
     }
   },
 
@@ -50,7 +51,9 @@ const AddCalculations = React.createClass({
       calculationFn = eval(`(${this.state.calculationsString})`)
       calculationFn(fns, this.props.data[0])
     } catch (e) {
-      alert("Calculations not valid")
+      this.setState({
+        errors: e.stack,
+      })
       return
     }
 
@@ -68,7 +71,18 @@ const AddCalculations = React.createClass({
   onChange(e) {
     this.setState({
       calculationsString: e.target.value,
+      errors: "",
     })
+  },
+
+  getErrorDisplay() {
+    if (!this.state.errors.length) return null
+
+    return (
+      <Code language="json">
+        {this.state.errors}
+      </Code>
+    )
   },
 
   render() {
@@ -76,6 +90,7 @@ const AddCalculations = React.createClass({
       <div className="add-calculations-cont">
         <h3>Add Calculations</h3>
         <textarea className="calculations" value={this.state.calculationsString} onChange={this.onChange} />
+        {this.getErrorDisplay()}
         <h4>Sample Item</h4>
         <Code language="json">
           {JSON.stringify(this.props.data[0], null, 2)}
