@@ -2,6 +2,7 @@ const R = require("ramda")
 const flat = require("flat")
 
 const validator = require("./validator")
+const utils = require("../utils")
 
 const parse = require("date-fns/parse")
 const isValid = require("date-fns/is_valid")
@@ -226,6 +227,7 @@ module.exports = {
     if (sortField === "pathasc") sorters = [R.ascend(R.prop("path")), R.ascend(R.prop("count"))]
 
     const keysAreNumbers = R.all(isNumeric)(Object.keys(data))
+    let totalCount = 0
 
     if (sortField === "natural") {
       const fieldsString = R.compose(R.join(""), R.sort(R.ascend(R.identity)), R.keys)(data)
@@ -250,7 +252,13 @@ module.exports = {
       }),
       R.sortWith(sorters),
       R.take(limit || data.length),
-      R.map(R.pick(["name", "count"]))
+      R.tap(function(d) {
+        totalCount = R.compose(R.sum, R.pluck("count"))(d)
+      }),
+      R.map(function(row) {
+        const percentage = utils.round(2, (row.count / totalCount) * 100)
+        return R.compose(R.assoc("percentage", percentage), R.pick(["name", "count"]))(row)
+      })
     )(data)
   },
 }
