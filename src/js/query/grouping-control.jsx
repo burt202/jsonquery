@@ -86,9 +86,23 @@ const GroupingControl = React.createClass({
     )
   },
 
-  render() {
-    const disabled = !(this.props.groupings && this.props.groupings.length)
+  getShowCountsOption() {
+    if (!this.props.groupings || !this.props.groupings.length) return null
 
+    return (
+      <label className="checkbox-label">
+        <input
+          type="checkbox"
+          name="showCounts"
+          checked={this.props.showCounts}
+          onChange={this.onShowCountsChange}
+        />
+        Show counts
+      </label>
+    )
+  },
+
+  render() {
     const options = this.props.options.map(function(value) {
       return (
         <option value={value} key={value}>{value}</option>
@@ -105,16 +119,7 @@ const GroupingControl = React.createClass({
               <option></option>
               {options}
             </select>
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                name="showCounts"
-                disabled={disabled}
-                checked={this.props.showCounts}
-                onChange={this.onShowCountsChange}
-              />
-              Show counts
-            </label>
+            {this.getShowCountsOption()}
             {this.getSortAndLimitOptions()}
           </div>
         </div>
