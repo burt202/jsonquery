@@ -21,7 +21,6 @@ const Query = React.createClass({
     calculationsString: PropTypes.string,
     resultFields: PropTypes.array.isRequired,
     showCounts: PropTypes.bool.isRequired,
-    flatten: PropTypes.bool.isRequired,
     groupSort: PropTypes.string.isRequired,
     groupLimit: PropTypes.number,
     limit: PropTypes.number,
@@ -101,7 +100,6 @@ const Query = React.createClass({
           groupings={this.props.groupings}
           sorters={this.props.sorters}
           showCounts={this.props.showCounts}
-          flatten={this.props.flatten}
           groupSort={this.props.groupSort}
           groupLimit={this.props.groupLimit}
           limit={this.props.limit}
@@ -109,7 +107,6 @@ const Query = React.createClass({
         />
         <Results
           data={this.props.data}
-          flatten={this.props.flatten}
           filters={this.props.filters}
           sorters={this.props.sorters}
           limit={this.props.limit}

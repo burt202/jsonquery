@@ -205,10 +205,9 @@ module.exports = {
     return R.filter(R.where(formatFilters(builtFilters)), data)
   },
 
-  group(groupings, showCounts, flatten, data) {
+  group(groupings, showCounts, data) {
     const groups = _group(groupings, showCounts, data)
-    if (flatten) return flat(groups, {delimiter: " - ", maxDepth: groupings.length})
-    return groups
+    return flat(groups, {delimiter: " - ", maxDepth: groupings.length})
   },
 
   sort(sorters, data) {

@@ -15,7 +15,6 @@ describe("store", function() {
       data: null,
       resultFields: null,
       showCounts: false,
-      flatten: false,
       groupSort: "desc",
       groupLimit: null,
       limit: null,
@@ -156,7 +155,6 @@ describe("store", function() {
         groupings: ["bar"],
         sorters: ["baz"],
         showCounts: true,
-        flatten: true,
         groupSort: "asc",
         groupLimit: 10,
         limit: "aaa",
@@ -175,7 +173,6 @@ describe("store", function() {
       expect(store.getState().groupings).to.eql(["bar"])
       expect(store.getState().sorters).to.eql(["baz"])
       expect(store.getState().showCounts).to.eql(true)
-      expect(store.getState().flatten).to.eql(true)
       expect(store.getState().groupSort).to.eql("asc")
       expect(store.getState().groupLimit).to.eql(10)
       expect(store.getState().limit).to.eql("aaa")
@@ -190,7 +187,6 @@ describe("store", function() {
       expect(store.getState().groupings).to.eql([])
       expect(store.getState().sorters).to.eql([])
       expect(store.getState().showCounts).to.eql(false)
-      expect(store.getState().flatten).to.eql(false)
       expect(store.getState().groupSort).to.eql("desc")
       expect(store.getState().groupLimit).to.eql(null)
       expect(store.getState().limit).to.eql(null)
@@ -302,32 +298,6 @@ describe("store", function() {
       expect(store.getState().groupSort).to.eql("asc")
       expect(store.getState().groupLimit).to.eql(10)
     })
-
-    it("should reset flatten if groupings is 1 or less", function() {
-      store.setState({flatten: true, groupings: ["foo", "bar"]})
-
-      expect(store.getState().flatten).to.eql(true)
-
-      dispatcher.dispatch({
-        name: "removeGrouping",
-        value: {name: "bar"},
-      })
-
-      expect(store.getState().flatten).to.eql(false)
-    })
-
-    it("should not reset flatten if groupings is still more than one", function() {
-      store.setState({flatten: true, groupings: ["foo", "bar", "baz"]})
-
-      expect(store.getState().flatten).to.eql(true)
-
-      dispatcher.dispatch({
-        name: "removeGrouping",
-        value: {name: "baz"},
-      })
-
-      expect(store.getState().flatten).to.eql(true)
-    })
   })
 
   describe("addSorter", function() {
@@ -381,46 +351,17 @@ describe("store", function() {
     })
   })
 
-  describe("flatten", function() {
-    it("should update flatten", function() {
-      dispatcher.dispatch({
-        name: "flatten",
-        value: {flatten: true},
-      })
-
-      expect(store.getState().flatten).to.eql(true)
-    })
-
-    it("should reset groupSort and groupLimit when set to false", function() {
-      store.setState({groupSort: "asc", groupLimit: 10})
-
-      expect(store.getState().groupSort).to.eql("asc")
-      expect(store.getState().groupLimit).to.eql(10)
-
-      dispatcher.dispatch({
-        name: "flatten",
-        value: {flatten: false},
-      })
-
-      expect(store.getState().flatten).to.eql(false)
-      expect(store.getState().groupSort).to.eql("desc")
-      expect(store.getState().groupLimit).to.eql(null)
-    })
-  })
-
   describe("analyse", function() {
-    it("should add analyse and reset groupings, showCounts, flatten, groupSort and groupLimit", function() {
+    it("should add analyse and reset groupings, showCounts, groupSort and groupLimit", function() {
       store.setState({
         groupings: ["bar"],
         showCounts: true,
-        flatten: true,
         groupSort: "asc",
         groupLimit: 10,
       })
 
       expect(store.getState().groupings).to.eql(["bar"])
       expect(store.getState().showCounts).to.eql(true)
-      expect(store.getState().flatten).to.eql(true)
       expect(store.getState().groupSort).to.eql("asc")
       expect(store.getState().groupLimit).to.eql(10)
 
@@ -432,7 +373,6 @@ describe("store", function() {
       expect(store.getState().analyse).to.eql("foo")
       expect(store.getState().groupings).to.eql([])
       expect(store.getState().showCounts).to.eql(false)
-      expect(store.getState().flatten).to.eql(false)
       expect(store.getState().groupSort).to.eql("desc")
       expect(store.getState().groupLimit).to.eql(null)
     })

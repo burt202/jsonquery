@@ -10,13 +10,11 @@ const GroupingControl = React.createClass({
     groupings: PropTypes.array,
     options: PropTypes.array.isRequired,
     showCounts: PropTypes.bool.isRequired,
-    flatten: PropTypes.bool.isRequired,
     groupSort: PropTypes.string.isRequired,
     groupLimit: PropTypes.number,
     onAdd: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
     onShowCountsChange: PropTypes.func.isRequired,
-    onFlattenChange: PropTypes.func.isRequired,
     onGroupSortChange: PropTypes.func.isRequired,
     onGroupLimitChange: PropTypes.func.isRequired,
   },
@@ -27,10 +25,6 @@ const GroupingControl = React.createClass({
 
   onShowCountsChange() {
     this.props.onShowCountsChange(!this.props.showCounts)
-  },
-
-  onFlattenChange() {
-    this.props.onFlattenChange(!this.props.flatten)
   },
 
   onSortChange(e) {
@@ -54,28 +48,8 @@ const GroupingControl = React.createClass({
     }.bind(this))
   },
 
-  getFlattenOptions() {
-    if (this.props.groupings.length <= 1) return null
-
-    const disabled = !(this.props.groupings && this.props.groupings.length)
-
-    return (
-      <label className="checkbox-label">
-        <input
-          type="checkbox"
-          name="flatten"
-          disabled={disabled}
-          checked={this.props.flatten}
-          onChange={this.onFlattenChange}
-        />
-        Flatten
-      </label>
-    )
-  },
-
   getSortAndLimitOptions() {
     if (!this.props.groupings.length || !this.props.showCounts) return null
-    if (this.props.groupings.length > 1 && !this.props.flatten) return null
 
     let options = [
       {value: "desc", name: "Count DESC"},
@@ -141,7 +115,6 @@ const GroupingControl = React.createClass({
               />
               Show counts
             </label>
-            {this.getFlattenOptions()}
             {this.getSortAndLimitOptions()}
           </div>
         </div>

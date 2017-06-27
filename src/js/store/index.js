@@ -14,7 +14,6 @@ const defaults = {
   data: null,
   resultFields: null,
   showCounts: false,
-  flatten: false,
   groupSort: "desc",
   groupLimit: null,
   limit: null,
@@ -89,7 +88,6 @@ const handlers = {
       groupings: R.without([payload.name], contents.groupings || []),
     }
 
-    if (toMerge.groupings.length <= 1) toMerge.flatten = false
     if (!toMerge.groupings.length) {
       toMerge.showCounts = false
       toMerge.groupSort = "desc"
@@ -104,7 +102,6 @@ const handlers = {
       analyse: payload.name,
       groupings: [],
       showCounts: false,
-      flatten: false,
       groupSort: "desc",
       groupLimit: null,
     })
@@ -128,19 +125,6 @@ const handlers = {
     }
 
     if (!toMerge.showCounts) {
-      toMerge.groupSort = "desc"
-      toMerge.groupLimit = null
-    }
-
-    return R.merge(contents, toMerge)
-  },
-
-  flatten(contents, payload) {
-    const toMerge = {
-      flatten: payload.flatten,
-    }
-
-    if (!toMerge.flatten) {
       toMerge.groupSort = "desc"
       toMerge.groupLimit = null
     }

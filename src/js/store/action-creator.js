@@ -121,13 +121,6 @@ module.exports = {
     })
   },
 
-  flatten(flatten) {
-    dispatcher.dispatch({
-      name: "flatten",
-      value: {flatten},
-    })
-  },
-
   groupSort(groupSort) {
     dispatcher.dispatch({
       name: "groupSort",

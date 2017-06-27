@@ -15,7 +15,6 @@ const Controls = React.createClass({
     sorters: PropTypes.array,
     schema: PropTypes.object.isRequired,
     showCounts: PropTypes.bool.isRequired,
-    flatten: PropTypes.bool.isRequired,
     groupSort: PropTypes.string.isRequired,
     groupLimit: PropTypes.number,
     limit: PropTypes.number,
@@ -84,13 +83,11 @@ const Controls = React.createClass({
         groupings={this.props.groupings}
         options={options}
         showCounts={this.props.showCounts}
-        flatten={this.props.flatten}
         groupSort={this.props.groupSort}
         groupLimit={this.props.groupLimit}
         onAdd={this.props.actionCreator.addGrouping}
         onRemove={this.props.actionCreator.removeGrouping}
         onShowCountsChange={this.props.actionCreator.showCounts}
-        onFlattenChange={this.props.actionCreator.flatten}
         onGroupSortChange={this.props.actionCreator.groupSort}
         onGroupLimitChange={this.props.actionCreator.groupLimit}
       />

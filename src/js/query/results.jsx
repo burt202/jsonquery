@@ -21,7 +21,6 @@ const Results = React.createClass({
     data: PropTypes.array.isRequired,
     resultFields: PropTypes.array.isRequired,
     showCounts: PropTypes.bool.isRequired,
-    flatten: PropTypes.bool.isRequired,
     groupSort: PropTypes.string.isRequired,
     groupLimit: PropTypes.number,
     limit: PropTypes.number,
@@ -66,14 +65,13 @@ const Results = React.createClass({
   },
 
   isGroupingSortable() {
-    if (this.props.groupings.length === 1 && this.props.showCounts) return true
-    if (this.props.groupings.length > 1 && this.props.flatten && this.props.showCounts) return true
+    if (this.props.groupings.length && this.props.showCounts) return true
     return false
   },
 
   formatData(data) {
     if (this.props.groupings.length) {
-      const grouped = dataProcessor.group(this.props.groupings, this.props.showCounts, this.props.flatten, data)
+      const grouped = dataProcessor.group(this.props.groupings, this.props.showCounts, data)
       return this.isGroupingSortable() ? dataProcessor.sortAndLimitObject(this.props.groupSort, this.props.groupLimit, grouped) : grouped
     }
 

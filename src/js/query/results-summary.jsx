@@ -17,7 +17,7 @@ const Summary = React.createClass({
   },
 
   getGrouping() {
-    return (this.props.groupings.length) ? dataProcessor.group(this.props.groupings, true, true, this.props.filtered) : null
+    return (this.props.groupings.length) ? dataProcessor.group(this.props.groupings, true, this.props.filtered) : null
   },
 
   getTotal() {
