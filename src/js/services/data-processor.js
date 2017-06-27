@@ -175,6 +175,13 @@ const naturalOrders = [
   ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
 ]
 
+const noMatcherFoundErrorString = `No natural matcher found for data. See supported sets below:
+
+Full month names: January, February, March...
+Short month names: Jan, Feb, Mar...
+Full day names: Monday, Tuesday, Wednesday...
+Short day names: Mon, Tue, Wed...`
+
 module.exports = {
   filter(data, schema, filters) {
     const builtFilters = R.reduce(function(acc, filter) {
@@ -235,6 +242,8 @@ module.exports = {
         sorters = [function(a, b) {
           return matcher.indexOf(a.name) - matcher.indexOf(b.name)
         }]
+      } else {
+        return noMatcherFoundErrorString
       }
     }
 

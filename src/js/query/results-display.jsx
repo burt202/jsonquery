@@ -5,6 +5,7 @@ const Clipboard = require("clipboard")
 const classNames = require("classnames")
 
 const downloadFormatter = require("../services/download-formatter")
+const validator = require("../services/validator")
 const Code = require("../components/code")
 
 const DISPLAY_THRESHOLD = 1000
@@ -130,6 +131,8 @@ const Results = React.createClass({
       const type = R.find(R.propEq("view", this.state.type), TYPES)
       return display.json(`Results set too large to display, use download link for .${type.extension} file`)
     }
+
+    if (validator.isString(this.props.results)) return display.json(this.props.results)
 
     const formatted = downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results)
     return display[this.state.type](formatted)

@@ -1118,5 +1118,19 @@ describe("dateProcessor", function() {
         {name: 2, count: 8150, percentage: 19},
       ])
     })
+
+    it("should return error when no matcher is found for data", function() {
+      const data = {
+        "52": 4081,
+        "100": 5777,
+        "89": 8836,
+        "2": 8150,
+        "22.4": 8595,
+        "37.89": 3868,
+        "10": 3581,
+      }
+
+      expect(dateProcessor.sortAndLimitObject("natural", null, data)).to.be.a("string")
+    })
   })
 })
