@@ -39,4 +39,8 @@ module.exports = {
 
     return true
   },
+
+  isStringNumeric(num) {
+    return !isNaN(num)
+  },
 }

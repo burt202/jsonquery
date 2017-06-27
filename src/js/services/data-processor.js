@@ -168,10 +168,6 @@ function formatFilters(filters) {
   )(filters)
 }
 
-function isNumeric(num) {
-  return !isNaN(num)
-}
-
 const naturalOrders = [
   ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
   ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
@@ -225,7 +221,7 @@ module.exports = {
     if (sortField === "pathdesc") sorters = [R.ascend(R.prop("path")), R.descend(R.prop("count"))]
     if (sortField === "pathasc") sorters = [R.ascend(R.prop("path")), R.ascend(R.prop("count"))]
 
-    const keysAreNumbers = R.all(isNumeric)(Object.keys(data))
+    const keysAreNumbers = R.all(validator.isStringNumeric)(Object.keys(data))
     let totalCount = 0
 
     if (sortField === "natural") {

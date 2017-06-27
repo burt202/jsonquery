@@ -95,4 +95,14 @@ describe("validator", function() {
       expect(validator.isValidJSON("jhfds")).to.eql(false)
     })
   })
+
+  describe("isStringNumeric", function() {
+    it("should return true when string is valid number", function() {
+      expect(validator.isStringNumeric("2.12")).to.eql(true)
+    })
+
+    it("should return false when string is not valid number", function() {
+      expect(validator.isStringNumeric("foo")).to.eql(false)
+    })
+  })
 })
