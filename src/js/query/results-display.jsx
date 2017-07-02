@@ -8,6 +8,7 @@ const validator = require("../services/validator")
 
 const JsonDisplay = require("./results-display-json")
 const TableDisplay = require("./results-display-table")
+const ChartDisplay = require("./results-display-chart")
 
 const DISPLAY_THRESHOLD = 1000
 
@@ -36,10 +37,16 @@ const Results = React.createClass({
   },
 
   getViewTypes() {
-    return [
+    const types = [
       {name: "JSON", view: "json", extension: "json", mimetype: "application/json", downloadable: true, component: JsonDisplay},
       {name: "Table", view: "table", extension: "csv", mimetype: "text/csv", downloadable: true, component: TableDisplay},
     ]
+
+    if (this.props.groupings.length && this.props.showCounts) {
+      types.push({name: "Chart", view: "chart", extension: "png", mimetype: "image/png", downloadable: false, component: ChartDisplay})
+    }
+
+    return types
   },
 
   getViewTypesLinks() {
