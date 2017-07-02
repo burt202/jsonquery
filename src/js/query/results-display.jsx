@@ -1,72 +1,15 @@
 const React = require("react")
 const PropTypes = require("prop-types")
 const R = require("ramda")
-const Clipboard = require("clipboard")
 const classNames = require("classnames")
 
 const downloadFormatter = require("../services/download-formatter")
 const validator = require("../services/validator")
-const Code = require("../components/code")
+
+const JsonDisplay = require("./results-display-json")
+const TableDisplay = require("./results-display-table")
 
 const DISPLAY_THRESHOLD = 1000
-
-const TYPES = [
-  {name: "JSON", view: "json", extension: "json", mimetype: "application/json"},
-  {name: "Table", view: "table", extension: "csv", mimetype: "text/csv"},
-]
-
-const display = {
-  json(data) {
-    return (
-      <div id="copy-cont">
-        <Code language="json">
-          {data}
-        </Code>
-      </div>
-    )
-  },
-  table(rows) {
-    const header = R.find(R.propEq("type", "header"), rows)
-
-    let tableHeader = null
-
-    if (header) {
-      const headerRow = header.cols.map(function(col, index) {
-        return <th key={index}>{col}</th>
-      })
-
-      tableHeader = <thead><tr>{headerRow}</tr></thead>
-    }
-
-    const dataRows = R.reject(R.propEq("type", "header"), rows)
-
-    const tableBodyRows = dataRows.map(function(row, index) {
-      if (row.type === "title") {
-        return (
-          <tr key={index}>
-            <td colSpan={row.span} style={{fontWeight: "bold"}}>{row.cols[0]}</td>
-          </tr>
-        )
-      }
-
-      const cols = row.cols.map(function(col, index) {
-        if (typeof col === "boolean") col = col.toString()
-        return <td key={index}>{col}</td>
-      })
-
-      return <tr key={index}>{cols}</tr>
-    })
-
-    return (
-      <table className="table">
-        {tableHeader}
-        <tbody>
-          {tableBodyRows}
-        </tbody>
-      </table>
-    )
-  },
-}
 
 const Results = React.createClass({
   displayName: "ResultsDisplay",
@@ -93,7 +36,14 @@ const Results = React.createClass({
   },
 
   getViewTypes() {
-    return TYPES.map(function(type) {
+    return [
+      {name: "JSON", view: "json", extension: "json", mimetype: "application/json", downloadable: true, component: JsonDisplay},
+      {name: "Table", view: "table", extension: "csv", mimetype: "text/csv", downloadable: true, component: TableDisplay},
+    ]
+  },
+
+  getViewTypesLinks() {
+    return this.getViewTypes().map(function(type) {
       const classnames = classNames({
         "active": this.state.type === type.view,
       })
@@ -107,7 +57,7 @@ const Results = React.createClass({
   },
 
   downloadResults() {
-    const type = R.find(R.propEq("view", this.state.type), TYPES)
+    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
     const formatted = downloadFormatter[type.extension](this.props.groupings, this.props.showCounts, this.props.results)
 
     const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
@@ -127,15 +77,17 @@ const Results = React.createClass({
   },
 
   getDisplayData() {
+    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
+
     if (!this.isAggregateResult() && this.tooManyResultToShow()) {
-      const type = R.find(R.propEq("view", this.state.type), TYPES)
-      return display.json(`Results set too large to display, use download link for .${type.extension} file`)
+      return <JsonDisplay data={`Results set too large to display, use download link for .${type.extension} file`} />
     }
 
-    if (validator.isString(this.props.results)) return display.json(this.props.results)
+    if (validator.isString(this.props.results)) return <JsonDisplay data={this.props.results} />
 
-    const formatted = downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results)
-    return display[this.state.type](formatted)
+    const formatted = downloadFormatter[this.state.type] ? downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results) : this.props.results
+    const Component = type.component
+    return <Component data={formatted} />
   },
 
   onChangeHandler(e) {
@@ -168,17 +120,18 @@ const Results = React.createClass({
     return (!this.isAggregateResult()) ? <div className="include-checkboxes"><span className="label">Include:</span><span>{this.getResultFieldOptions()}</span></div> : null
   },
 
-  canCopyResults() {
-    return this.state.type === "json" && (this.props.showCounts || !this.tooManyResultToShow())
-  },
+  getDownloadLink() {
+    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
+    if (!type.downloadable) return null
 
-  getCopyLink() {
-    return (this.canCopyResults()) ? <li><a className="site-link" data-clipboard-action="copy" data-clipboard-target="#copy-cont">Copy To Clipboard</a></li> : null
+    return (
+      <ul className="side-options right">
+        <li><a className="site-link" onClick={this.downloadResults}>Download</a></li>
+      </ul>
+    )
   },
 
   render() {
-    new Clipboard("a.site-link[data-clipboard-action='copy']")
-
     return (
       <div className="results-cont">
         <h3>Results</h3>
@@ -186,12 +139,9 @@ const Results = React.createClass({
 
         <div className="results-options">
           <ul className="side-options">
-            {this.getViewTypes()}
+            {this.getViewTypesLinks()}
           </ul>
-          <ul className="side-options right">
-            {this.getCopyLink()}
-            <li><a className="site-link" onClick={this.downloadResults}>Download</a></li>
-          </ul>
+          {this.getDownloadLink()}
         </div>
 
         {this.getDisplayData()}

@@ -268,6 +268,22 @@ ul.side-options li:last-of-type {
   display: inline-block;
 }
 
+.json-display {
+  position: relative;
+}
+
+.json-display a {
+  display: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px;
+}
+
+.json-display:hover a {
+  display: inline-block;
+}
+
 /* Summary */
 
 .summary-cont h3 {
