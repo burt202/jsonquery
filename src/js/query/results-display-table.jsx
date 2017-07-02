@@ -4,6 +4,10 @@ const PropTypes = require("prop-types")
 const R = require("ramda")
 
 function TableDisplay(props) {
+  function onDownload() {
+    props.onDownload()
+  }
+
   const header = R.find(R.propEq("type", "header"), props.data)
 
   let tableHeader = null
@@ -35,18 +39,26 @@ function TableDisplay(props) {
     return <tr key={index}>{cols}</tr>
   })
 
+  const downloadLink = props.onDownload ? (<ul className="side-options right">
+      <li><a className="site-link" onClick={onDownload}>Download</a></li>
+    </ul>) : null
+
   return (
-    <table className="table">
-      {tableHeader}
-      <tbody>
-        {tableBodyRows}
-      </tbody>
-    </table>
+    <div>
+      {downloadLink}
+      <table className="table">
+        {tableHeader}
+        <tbody>
+          {tableBodyRows}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
 TableDisplay.propTypes = {
   data: PropTypes.any.isRequired,
+  onDownload: PropTypes.func,
 }
 
 module.exports = TableDisplay

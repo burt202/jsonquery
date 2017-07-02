@@ -249,9 +249,8 @@ ul.side-options li:last-of-type {
   margin-bottom: 0;
 }
 
-.results-options {
-  display: flex;
-  justify-content: space-between;
+.results-options ul {
+  margin-bottom: 0;
 }
 
 .include-checkboxes {
@@ -265,22 +264,6 @@ ul.side-options li:last-of-type {
 
 .include-checkboxes label {
   white-space: nowrap;
-  display: inline-block;
-}
-
-.json-display {
-  position: relative;
-}
-
-.json-display a {
-  display: none;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 5px;
-}
-
-.json-display:hover a {
   display: inline-block;
 }
 

@@ -37,8 +37,8 @@ const Results = React.createClass({
 
   getViewTypes() {
     return [
-      {name: "JSON", view: "json", extension: "json", mimetype: "application/json", downloadable: true, component: JsonDisplay},
-      {name: "Table", view: "table", extension: "csv", mimetype: "text/csv", downloadable: true, component: TableDisplay},
+      {name: "JSON", view: "json", extension: "json", mimetype: "application/json", downloader: this.baseDownloader, component: JsonDisplay},
+      {name: "Table", view: "table", extension: "csv", mimetype: "text/csv", downloader: this.baseDownloader, component: TableDisplay},
     ]
   },
 
@@ -56,7 +56,7 @@ const Results = React.createClass({
     }.bind(this))
   },
 
-  downloadResults() {
+  baseDownloader() {
     const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
     const formatted = downloadFormatter[type.extension](this.props.groupings, this.props.showCounts, this.props.results)
 
@@ -87,7 +87,7 @@ const Results = React.createClass({
 
     const formatted = downloadFormatter[this.state.type] ? downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results) : this.props.results
     const Component = type.component
-    return <Component data={formatted} />
+    return <Component data={formatted} onDownload={type.downloader} />
   },
 
   onChangeHandler(e) {
@@ -120,17 +120,6 @@ const Results = React.createClass({
     return (!this.isAggregateResult()) ? <div className="include-checkboxes"><span className="label">Include:</span><span>{this.getResultFieldOptions()}</span></div> : null
   },
 
-  getDownloadLink() {
-    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
-    if (!type.downloadable) return null
-
-    return (
-      <ul className="side-options right">
-        <li><a className="site-link" onClick={this.downloadResults}>Download</a></li>
-      </ul>
-    )
-  },
-
   render() {
     return (
       <div className="results-cont">
@@ -141,7 +130,6 @@ const Results = React.createClass({
           <ul className="side-options">
             {this.getViewTypesLinks()}
           </ul>
-          {this.getDownloadLink()}
         </div>
 
         {this.getDisplayData()}
