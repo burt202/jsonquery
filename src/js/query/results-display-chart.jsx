@@ -86,6 +86,10 @@ const ChartDisplay = React.createClass({
     }
 
     const pieOptions = {
+      title: {
+        display: !!this.state.title.length,
+        text: this.state.title,
+      },
       legend: {
         position: "right",
       },
@@ -130,7 +134,7 @@ const ChartDisplay = React.createClass({
           </select>
           <input value={this.state.title} onChange={this.onTitleChange} placeholder="Chart name here..." />
         </p>
-        <Component data={chartData} options={chart.options} ref={(c) => this.chartComponent = c} />
+        <Component data={chartData} options={chart.options} ref={(c) => this.chartComponent = c} redraw />
       </div>
     )
   },
