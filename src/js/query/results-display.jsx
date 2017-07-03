@@ -42,7 +42,7 @@ const Results = React.createClass({
       {name: "Table", view: "table", extension: "csv", mimetype: "text/csv", downloader: this.baseDownloader, component: TableDisplay},
     ]
 
-    if (this.props.groupings.length && this.props.showCounts) {
+    if (this.props.groupings.length === 1 && this.props.showCounts) {
       types.push({name: "Chart", view: "chart", extension: "png", mimetype: "image/png", downloader: this.chartDownloader, component: ChartDisplay})
     }
 
