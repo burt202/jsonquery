@@ -5,6 +5,9 @@ const R = require("ramda")
 
 const utils = require("../utils")
 
+const Bar = require("react-chartjs-2").Bar
+const Pie = require("react-chartjs-2").Pie
+
 function getColours(data) {
   let count = 0
 
@@ -46,7 +49,16 @@ const ChartDisplay = React.createClass({
   },
 
   render() {
-    const chartData = {
+    const barData = {
+      labels: R.pluck("name", this.props.data),
+      datasets: [{
+        data: R.pluck("count", this.props.data),
+        backgroundColor: "#aec6cf",
+        hoverBackgroundColor: "#aec6cf",
+      }],
+    }
+
+    const pieData = {
       labels: R.pluck("name", this.props.data),
       datasets: [{
         data: R.pluck("count", this.props.data),
@@ -59,6 +71,9 @@ const ChartDisplay = React.createClass({
       title: {
         display: !!this.state.title.length,
         text: this.state.title,
+      },
+      tooltips: {
+        displayColors: false,
       },
       legend: {
         display: false,
@@ -90,6 +105,9 @@ const ChartDisplay = React.createClass({
         display: !!this.state.title.length,
         text: this.state.title,
       },
+      tooltips: {
+        displayColors: false,
+      },
       legend: {
         position: "right",
       },
@@ -112,8 +130,8 @@ const ChartDisplay = React.createClass({
     }
 
     const chartTypeMap = {
-      bar: {options: barOptions, component: require("react-chartjs-2").Bar},
-      pie: {options: pieOptions, component: require("react-chartjs-2").Pie},
+      bar: {options: barOptions, component: Bar, data: barData},
+      pie: {options: pieOptions, component: Pie, data: pieData},
     }
 
     const chart = chartTypeMap[this.state.type]
@@ -134,7 +152,7 @@ const ChartDisplay = React.createClass({
           </select>
           <input value={this.state.title} onChange={this.onTitleChange} placeholder="Chart name here..." />
         </p>
-        <Component data={chartData} options={chart.options} ref={(c) => this.chartComponent = c} redraw />
+        <Component data={chart.data} options={chart.options} ref={(c) => this.chartComponent = c} redraw />
       </div>
     )
   },
