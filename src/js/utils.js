@@ -17,4 +17,9 @@ module.exports = {
   getMin(arr) {
     return Math.min.apply(null, arr)
   },
+
+  rainbow(count, index) {
+    const value = 360 / count * index
+    return `hsl(${value}, 90%, 60%)`
+  },
 }

@@ -3,10 +3,15 @@ const PropTypes = require("prop-types")
 
 const R = require("ramda")
 
-const Bar = require("react-chartjs-2").Bar
+const utils = require("../utils")
 
-const chartTypeMap = {
-  bar: Bar,
+function getColours(data) {
+  let count = 0
+
+  return data.map(function() {
+    count++
+    return utils.rainbow(data.length, count)
+  })
 }
 
 const ChartDisplay = React.createClass({
@@ -28,6 +33,12 @@ const ChartDisplay = React.createClass({
     this.props.onDownload(this.chartComponent.chart_instance)
   },
 
+  onTypeChange(e) {
+    this.setState({
+      type: e.target.value,
+    })
+  },
+
   onTitleChange(e) {
     this.setState({
       title: e.target.value,
@@ -37,10 +48,14 @@ const ChartDisplay = React.createClass({
   render() {
     const chartData = {
       labels: R.pluck("name", this.props.data),
-      datasets: [{data: R.pluck("count", this.props.data)}],
+      datasets: [{
+        data: R.pluck("count", this.props.data),
+        backgroundColor: getColours(this.props.data),
+        hoverBackgroundColor: getColours(this.props.data),
+      }],
     }
 
-    const options = {
+    const barOptions = {
       title: {
         display: !!this.state.title.length,
         text: this.state.title,
@@ -70,7 +85,35 @@ const ChartDisplay = React.createClass({
       },
     }
 
-    const Component = chartTypeMap[this.state.type]
+    const pieOptions = {
+      legend: {
+        position: "right",
+      },
+      layout: {
+        padding: {
+          left: 25,
+          right: 25,
+          top: 25,
+          bottom: 25,
+        },
+      },
+      scales: {
+        yAxes: [{
+          display: false,
+        }],
+        xAxes: [{
+          display: false,
+        }],
+      },
+    }
+
+    const chartTypeMap = {
+      bar: {options: barOptions, component: require("react-chartjs-2").Bar},
+      pie: {options: pieOptions, component: require("react-chartjs-2").Pie},
+    }
+
+    const chart = chartTypeMap[this.state.type]
+    const Component = chart.component
 
     const downloadLink = this.props.onDownload ? (<ul className="side-options right">
         <li><a className="site-link" onClick={this.onDownload}>Download</a></li>
@@ -79,8 +122,15 @@ const ChartDisplay = React.createClass({
     return (
       <div>
         {downloadLink}
-        <p><input value={this.state.title} onChange={this.onTitleChange} placeholder="Chart name here..." /></p>
-        <Component data={chartData} options={options} ref={(c) => this.chartComponent = c} />
+        <p className="chart-options">
+          <label>Type:</label>
+          <select value={this.state.type} onChange={this.onTypeChange}>
+            <option value="bar">Bar</option>
+            <option value="pie">Pie</option>
+          </select>
+          <input value={this.state.title} onChange={this.onTitleChange} placeholder="Chart name here..." />
+        </p>
+        <Component data={chartData} options={chart.options} ref={(c) => this.chartComponent = c} />
       </div>
     )
   },

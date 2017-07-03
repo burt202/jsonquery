@@ -44,4 +44,12 @@ describe("utils", function() {
       expect(res).to.eql(5)
     })
   })
+
+  describe("rainbow", function() {
+    it("should return hsl colour string", function() {
+      const res = utils.rainbow(10, 5)
+
+      expect(res).to.eql("hsl(180, 90%, 60%)")
+    })
+  })
 })
