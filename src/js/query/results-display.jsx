@@ -32,17 +32,22 @@ const Results = React.createClass({
     }
   },
 
+  componentWillReceiveProps(newProps) {
+    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes(newProps))
+    if (!type) this.setType("json")
+  },
+
   setType(type) {
     this.setState({type})
   },
 
-  getViewTypes() {
+  getViewTypes(props) {
     const types = [
       {name: "JSON", view: "json", extension: "json", mimetype: "application/json", downloader: this.baseDownloader, component: JsonDisplay},
       {name: "Table", view: "table", extension: "csv", mimetype: "text/csv", downloader: this.baseDownloader, component: TableDisplay},
     ]
 
-    if (this.props.groupings.length === 1 && this.props.showCounts) {
+    if (props.groupings.length === 1 && props.showCounts) {
       types.push({name: "Chart", view: "chart", extension: "png", mimetype: "image/png", downloader: this.chartDownloader, component: ChartDisplay})
     }
 
@@ -50,7 +55,7 @@ const Results = React.createClass({
   },
 
   getViewTypesLinks() {
-    return this.getViewTypes().map(function(type) {
+    return this.getViewTypes(this.props).map(function(type) {
       const classnames = classNames({
         "active": this.state.type === type.view,
       })
@@ -64,7 +69,7 @@ const Results = React.createClass({
   },
 
   baseDownloader() {
-    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
+    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes(this.props))
 
     const formatted = downloadFormatter[type.extension](this.props.groupings, this.props.showCounts, this.props.results)
     const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
@@ -77,7 +82,7 @@ const Results = React.createClass({
   },
 
   chartDownloader(chart) {
-    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
+    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes(this.props))
 
     const width = chart.ctx.canvas.width
     const height = chart.ctx.canvas.height
@@ -109,7 +114,7 @@ const Results = React.createClass({
   },
 
   getDisplayData() {
-    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
+    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes(this.props))
 
     if (!this.isAggregateResult() && this.tooManyResultToShow()) {
       return <JsonDisplay data={`Results set too large to display, use download link for .${type.extension} file`} />
