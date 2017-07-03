@@ -8,6 +8,7 @@ const validator = require("../services/validator")
 
 const JsonDisplay = require("./results-display-json")
 const TableDisplay = require("./results-display-table")
+const ChartDisplay = require("./results-display-chart")
 
 const DISPLAY_THRESHOLD = 1000
 
@@ -36,10 +37,16 @@ const Results = React.createClass({
   },
 
   getViewTypes() {
-    return [
+    const types = [
       {name: "JSON", view: "json", extension: "json", mimetype: "application/json", downloader: this.baseDownloader, component: JsonDisplay},
       {name: "Table", view: "table", extension: "csv", mimetype: "text/csv", downloader: this.baseDownloader, component: TableDisplay},
     ]
+
+    if (this.props.groupings.length && this.props.showCounts) {
+      types.push({name: "Chart", view: "chart", extension: "png", mimetype: "image/png", downloader: this.chartDownloader, component: ChartDisplay})
+    }
+
+    return types
   },
 
   getViewTypesLinks() {
@@ -58,9 +65,34 @@ const Results = React.createClass({
 
   baseDownloader() {
     const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
-    const formatted = downloadFormatter[type.extension](this.props.groupings, this.props.showCounts, this.props.results)
 
+    const formatted = downloadFormatter[type.extension](this.props.groupings, this.props.showCounts, this.props.results)
     const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
+
+    const downloadLink = document.getElementById("hidden-download-link")
+    downloadLink.setAttribute("href", dataStr)
+    downloadLink.setAttribute("download", `${new Date().toISOString()}.${type.extension}`)
+    downloadLink.click()
+    downloadLink.setAttribute("href", "")
+  },
+
+  chartDownloader(chart) {
+    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
+
+    const width = chart.ctx.canvas.width
+    const height = chart.ctx.canvas.height
+
+    const newCanvas = document.createElement("canvas")
+    newCanvas.width = width
+    newCanvas.height = height
+
+    const ctx = newCanvas.getContext("2d")
+    ctx.fillStyle = "white"
+    ctx.fillRect(0, 0, width, height)
+    ctx.drawImage(chart.ctx.canvas, 0, 0)
+
+    const dataStr = newCanvas.toDataURL()
+
     const downloadLink = document.getElementById("hidden-download-link")
     downloadLink.setAttribute("href", dataStr)
     downloadLink.setAttribute("download", `${new Date().toISOString()}.${type.extension}`)
