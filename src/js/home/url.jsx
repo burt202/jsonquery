@@ -27,6 +27,7 @@ const Url = React.createClass({
   onUrlChange(e) {
     this.setState({
       url: e.target.value,
+      schema: "",
     })
   },
 
