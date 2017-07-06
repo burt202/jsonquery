@@ -49,9 +49,10 @@ const Url = React.createClass({
       return
     }
 
+    const url = encodeURIComponent(this.state.url)
     const schema = (this.state.schema.length) ? `&schema=${encodeURIComponent(this.state.schema)}` : ""
     const withCredentials = (this.state.checked) ? "&withCredentials" : ""
-    window.location = `?dataUrl=${this.state.url}${schema}${withCredentials}`
+    window.location = `?dataUrl=${url}${schema}${withCredentials}`
   },
 
   render() {
