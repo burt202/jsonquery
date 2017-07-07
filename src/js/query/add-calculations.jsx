@@ -3,6 +3,7 @@ const PropTypes = require("prop-types")
 
 const schemaGenerator = require("../services/schema-generator")
 const formatDate = require("date-fns/format")
+const differenceInDays = require("date-fns/difference_in_days")
 const utils = require("../utils")
 
 const Code = require("../components/code")
@@ -12,13 +13,14 @@ const R = require("ramda")
 const calculationsWrapper = `// Helper functions available
 // --------------------------
 // - formatDate(date, format) see https://date-fns.org/docs/format
+// - differenceInDays(date, date)
 // - round(decimals, number)
 
 function addCalculations(fns, item) {
   return {}
 }`
 
-const fns = {formatDate, round: utils.round}
+const fns = {formatDate, differenceInDays, round: utils.round}
 
 const AddCalculations = React.createClass({
   displayName: "AddCalculations",
