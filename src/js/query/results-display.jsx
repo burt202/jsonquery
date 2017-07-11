@@ -117,7 +117,12 @@ const Results = React.createClass({
     const type = R.find(R.propEq("view", this.state.type), this.getViewTypes(this.props))
 
     if (!this.isAggregateResult() && this.tooManyResultToShow()) {
-      return <JsonDisplay data={`Results set too large to display, use download link for .${type.extension} file`} />
+      return (
+        <JsonDisplay
+          data={`Results set too large to display, use download link for .${type.extension} file`}
+          onDownload={this.baseDownloader}
+        />
+      )
     }
 
     if (validator.isString(this.props.results)) return <JsonDisplay data={this.props.results} />
