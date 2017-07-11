@@ -129,7 +129,7 @@ const Results = React.createClass({
 
     const formatted = downloadFormatter[this.state.type] ? downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results) : this.props.results
     const Component = type.component
-    return <Component data={formatted} onDownload={type.downloader} />
+    return <Component data={formatted} onDownload={type.downloader} filteredLength={this.props.filteredLength} />
   },
 
   onChangeHandler(e) {

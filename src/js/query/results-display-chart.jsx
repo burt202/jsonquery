@@ -22,6 +22,7 @@ const ChartDisplay = React.createClass({
 
   propTypes: {
     data: PropTypes.any.isRequired,
+    filteredLength: PropTypes.number,
     onDownload: PropTypes.func,
   },
 
@@ -29,6 +30,7 @@ const ChartDisplay = React.createClass({
     return {
       type: "bar",
       title: "",
+      combineRemainder: false,
     }
   },
 
@@ -48,22 +50,47 @@ const ChartDisplay = React.createClass({
     })
   },
 
+  onCombineRemainderChange() {
+    this.setState({
+      combineRemainder: !this.state.combineRemainder,
+    })
+  },
+
   render() {
+    let data = this.props.data
+
+    const remainder = this.props.filteredLength - R.sum(R.pluck("count", this.props.data))
+
+    if (remainder && this.state.combineRemainder) {
+      data = R.append({name: "Other", count: remainder}, data)
+    }
+
+    const combineRemainderInput = (remainder) ? (
+      <label className="checkbox-label">
+        <input
+          type="checkbox"
+          name="showCounts"
+          checked={this.state.combineRemainder}
+          onChange={this.onCombineRemainderChange}
+        />
+        Combine remainder
+      </label>) : null
+
     const barData = {
-      labels: R.pluck("name", this.props.data),
+      labels: R.pluck("name", data),
       datasets: [{
-        data: R.pluck("count", this.props.data),
+        data: R.pluck("count", data),
         backgroundColor: "#aec6cf",
         hoverBackgroundColor: "#aec6cf",
       }],
     }
 
     const pieData = {
-      labels: R.pluck("name", this.props.data),
+      labels: R.pluck("name", data),
       datasets: [{
-        data: R.pluck("count", this.props.data),
-        backgroundColor: getColours(this.props.data),
-        hoverBackgroundColor: getColours(this.props.data),
+        data: R.pluck("count", data),
+        backgroundColor: getColours(data),
+        hoverBackgroundColor: getColours(data),
       }],
     }
 
@@ -151,6 +178,7 @@ const ChartDisplay = React.createClass({
             <option value="pie">Pie</option>
           </select>
           <input value={this.state.title} onChange={this.onTitleChange} placeholder="Chart name here..." />
+          {combineRemainderInput}
         </p>
         <Component data={chart.data} options={chart.options} ref={(c) => this.chartComponent = c} redraw />
       </div>
