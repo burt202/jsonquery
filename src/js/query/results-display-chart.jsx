@@ -12,8 +12,7 @@ function getColours(data) {
   let count = 0
 
   return data.map(function() {
-    count++
-    return utils.rainbow(data.length, count)
+    return utils.rainbow(data.length, count++)
   })
 }
 
