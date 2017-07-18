@@ -25,6 +25,7 @@ const Query = React.createClass({
     groupLimit: PropTypes.number,
     limit: PropTypes.number,
     analyse: PropTypes.string,
+    combineRemainder: PropTypes.bool.isRequired,
   },
 
   getInitialState() {
@@ -104,6 +105,7 @@ const Query = React.createClass({
           groupLimit={this.props.groupLimit}
           limit={this.props.limit}
           analyse={this.props.analyse}
+          combineRemainder={this.props.combineRemainder}
         />
         <Results
           data={this.props.data}
@@ -118,6 +120,7 @@ const Query = React.createClass({
           analyse={this.props.analyse}
           groupSort={this.props.groupSort}
           groupLimit={this.props.groupLimit}
+          combineRemainder={this.props.combineRemainder}
         />
       </div>
     )

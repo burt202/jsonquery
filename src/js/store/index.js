@@ -18,6 +18,7 @@ const defaults = {
   groupLimit: null,
   limit: null,
   analyse: null,
+  combineRemainder: false,
 }
 
 const initialOperators = {
@@ -92,6 +93,7 @@ const handlers = {
       toMerge.showCounts = false
       toMerge.groupSort = "desc"
       toMerge.groupLimit = null
+      toMerge.combineRemainder = false
     }
 
     return R.merge(contents, toMerge)
@@ -104,6 +106,7 @@ const handlers = {
       showCounts: false,
       groupSort: "desc",
       groupLimit: null,
+      combineRemainder: false,
     })
   },
 
@@ -127,6 +130,7 @@ const handlers = {
     if (!toMerge.showCounts) {
       toMerge.groupSort = "desc"
       toMerge.groupLimit = null
+      toMerge.combineRemainder = false
     }
 
     return R.merge(contents, toMerge)
@@ -139,8 +143,20 @@ const handlers = {
   },
 
   groupLimit(contents, payload) {
-    return R.merge(contents, {
+    const toMerge = {
       groupLimit: payload.groupLimit,
+    }
+
+    if (!payload.groupLimit) {
+      toMerge.combineRemainder = false
+    }
+
+    return R.merge(contents, toMerge)
+  },
+
+  combineRemainder(contents, payload) {
+    return R.merge(contents, {
+      combineRemainder: payload.combineRemainder,
     })
   },
 

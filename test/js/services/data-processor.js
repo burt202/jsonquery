@@ -862,7 +862,7 @@ describe("dateProcessor", function() {
     }
 
     it("should return object in order of count descending", function() {
-      expect(dateProcessor.sortAndLimitObject("desc", null, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("desc", null, false, mockDataForSorting)).to.eql([
         {name: "card - true", count: 2, percentage: 33.33},
         {name: "cash - true", count: 1, percentage: 16.67},
         {name: "loan - true", count: 1, percentage: 16.67},
@@ -872,7 +872,7 @@ describe("dateProcessor", function() {
     })
 
     it("should return object in order of count descending limited by number", function() {
-      expect(dateProcessor.sortAndLimitObject("desc", 3, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("desc", 3, false, mockDataForSorting)).to.eql([
         {name: "card - true", count: 2, percentage: 50},
         {name: "cash - true", count: 1, percentage: 25},
         {name: "loan - true", count: 1, percentage: 25},
@@ -880,7 +880,7 @@ describe("dateProcessor", function() {
     })
 
     it("should return object in order of count ascending", function() {
-      expect(dateProcessor.sortAndLimitObject("asc", null, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("asc", null, false, mockDataForSorting)).to.eql([
         {name: "cash - true", count: 1, percentage: 16.67},
         {name: "loan - true", count: 1, percentage: 16.67},
         {name: "cash - false", count: 1, percentage: 16.67},
@@ -890,7 +890,7 @@ describe("dateProcessor", function() {
     })
 
     it("should return object in order of count ascending limited by number", function() {
-      expect(dateProcessor.sortAndLimitObject("asc", 3, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("asc", 3, false, mockDataForSorting)).to.eql([
         {name: "cash - true", count: 1, percentage: 33.33},
         {name: "loan - true", count: 1, percentage: 33.33},
         {name: "cash - false", count: 1, percentage: 33.33},
@@ -898,7 +898,7 @@ describe("dateProcessor", function() {
     })
 
     it("should return object in order of name descending", function() {
-      expect(dateProcessor.sortAndLimitObject("namedesc", null, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("namedesc", null, false, mockDataForSorting)).to.eql([
         {name: "loan - true", count: 1, percentage: 16.67},
         {name: "cash - true", count: 1, percentage: 16.67},
         {name: "cash - false", count: 1, percentage: 16.67},
@@ -908,7 +908,7 @@ describe("dateProcessor", function() {
     })
 
     it("should return object in order of name descending limited by number", function() {
-      expect(dateProcessor.sortAndLimitObject("namedesc", 3, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("namedesc", 3, false, mockDataForSorting)).to.eql([
         {name: "loan - true", count: 1, percentage: 33.33},
         {name: "cash - true", count: 1, percentage: 33.33},
         {name: "cash - false", count: 1, percentage: 33.33},
@@ -916,7 +916,7 @@ describe("dateProcessor", function() {
     })
 
     it("should return object in order of name ascending", function() {
-      expect(dateProcessor.sortAndLimitObject("nameasc", null, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("nameasc", null, false, mockDataForSorting)).to.eql([
         {name: "card - false", count: 1, percentage: 16.67},
         {name: "card - true", count: 2, percentage: 33.33},
         {name: "cash - false", count: 1, percentage: 16.67},
@@ -926,7 +926,7 @@ describe("dateProcessor", function() {
     })
 
     it("should return object in order of name ascending limited by number", function() {
-      expect(dateProcessor.sortAndLimitObject("nameasc", 3, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("nameasc", 3, false, mockDataForSorting)).to.eql([
         {name: "card - false", count: 1, percentage: 25},
         {name: "card - true", count: 2, percentage: 50},
         {name: "cash - false", count: 1, percentage: 25},
@@ -934,7 +934,7 @@ describe("dateProcessor", function() {
     })
 
     it("should return object in order of path/count descending", function() {
-      expect(dateProcessor.sortAndLimitObject("pathdesc", null, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("pathdesc", null, false, mockDataForSorting)).to.eql([
         {name: "card - true", count: 2, percentage: 33.33},
         {name: "card - false", count: 1, percentage: 16.67},
         {name: "cash - true", count: 1, percentage: 16.67},
@@ -944,7 +944,7 @@ describe("dateProcessor", function() {
     })
 
     it("should return object in order of path/count descending limited by number", function() {
-      expect(dateProcessor.sortAndLimitObject("pathdesc", 3, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("pathdesc", 3, false, mockDataForSorting)).to.eql([
         {name: "card - true", count: 2, percentage: 50},
         {name: "card - false", count: 1, percentage: 25},
         {name: "cash - true", count: 1, percentage: 25},
@@ -952,7 +952,7 @@ describe("dateProcessor", function() {
     })
 
     it("should return object in order of path/count ascending", function() {
-      expect(dateProcessor.sortAndLimitObject("pathasc", null, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("pathasc", null, false, mockDataForSorting)).to.eql([
         {name: "card - false", count: 1, percentage: 16.67},
         {name: "card - true", count: 2, percentage: 33.33},
         {name: "cash - true", count: 1, percentage: 16.67},
@@ -962,7 +962,7 @@ describe("dateProcessor", function() {
     })
 
     it("should return object in order of path/count ascending limited by number", function() {
-      expect(dateProcessor.sortAndLimitObject("pathasc", 3, mockDataForSorting)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("pathasc", 3, false, mockDataForSorting)).to.eql([
         {name: "card - false", count: 1, percentage: 25},
         {name: "card - true", count: 2, percentage: 50},
         {name: "cash - true", count: 1, percentage: 25},
@@ -985,7 +985,7 @@ describe("dateProcessor", function() {
         May: 6839,
       }
 
-      expect(dateProcessor.sortAndLimitObject("natural", null, data)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("natural", null, false, data)).to.eql([
         {name: "January", count: 8595, percentage: 12.7},
         {name: "February", count: 8836, percentage: 13.05},
         {name: "March", count: 8150, percentage: 12.04},
@@ -1017,7 +1017,7 @@ describe("dateProcessor", function() {
         May: 6839,
       }
 
-      expect(dateProcessor.sortAndLimitObject("natural", null, data)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("natural", null, false, data)).to.eql([
         {name: "Jan", count: 8595, percentage: 12.7},
         {name: "Feb", count: 8836, percentage: 13.05},
         {name: "Mar", count: 8150, percentage: 12.04},
@@ -1044,7 +1044,7 @@ describe("dateProcessor", function() {
         Thursday: 3581,
       }
 
-      expect(dateProcessor.sortAndLimitObject("natural", null, data)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("natural", null, false, data)).to.eql([
         {name: "Monday", count: 3868, percentage: 9.02},
         {name: "Tuesday", count: 8150, percentage: 19},
         {name: "Wednesday", count: 5777, percentage: 13.47},
@@ -1066,7 +1066,7 @@ describe("dateProcessor", function() {
         Thu: 3581,
       }
 
-      expect(dateProcessor.sortAndLimitObject("natural", null, data)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("natural", null, false, data)).to.eql([
         {name: "Mon", count: 3868, percentage: 9.02},
         {name: "Tue", count: 8150, percentage: 19},
         {name: "Wed", count: 5777, percentage: 13.47},
@@ -1088,7 +1088,7 @@ describe("dateProcessor", function() {
         Thu: 3581,
       }
 
-      expect(dateProcessor.sortAndLimitObject("natural", 5, data)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("natural", 5, false, data)).to.eql([
         {name: "Mon", count: 3868, percentage: 15.19},
         {name: "Tue", count: 8150, percentage: 32.01},
         {name: "Wed", count: 5777, percentage: 22.69},
@@ -1108,7 +1108,7 @@ describe("dateProcessor", function() {
         "10": 3581,
       }
 
-      expect(dateProcessor.sortAndLimitObject("namedesc", null, data)).to.eql([
+      expect(dateProcessor.sortAndLimitObject("namedesc", null, false, data)).to.eql([
         {name: 100, count: 5777, percentage: 13.47},
         {name: 89, count: 8836, percentage: 20.6},
         {name: 52, count: 4081, percentage: 9.52},
@@ -1130,7 +1130,16 @@ describe("dateProcessor", function() {
         "10": 3581,
       }
 
-      expect(dateProcessor.sortAndLimitObject("natural", null, data)).to.be.a("string")
+      expect(dateProcessor.sortAndLimitObject("natural", null, false, data)).to.be.a("string")
+    })
+
+    it("should return object with combined remainder", function() {
+      expect(dateProcessor.sortAndLimitObject("desc", 3, true, mockDataForSorting)).to.eql([
+        {name: "card - true", count: 2, percentage: 33.33},
+        {name: "cash - true", count: 1, percentage: 16.67},
+        {name: "loan - true", count: 1, percentage: 16.67},
+        {name: "Other", count: 2, percentage: 33.33},
+      ])
     })
   })
 })

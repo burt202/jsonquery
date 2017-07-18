@@ -134,4 +134,11 @@ module.exports = {
       value: {groupLimit},
     })
   },
+
+  combineRemainder(combineRemainder) {
+    dispatcher.dispatch({
+      name: "combineRemainder",
+      value: {combineRemainder},
+    })
+  },
 }

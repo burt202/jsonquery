@@ -220,7 +220,7 @@ module.exports = {
     }, sorters), data)
   },
 
-  sortAndLimitObject(sortField, limit, data) {
+  sortAndLimitObject(sortField, limit, combineRemainder, data) {
     let sorters = [R.descend(R.prop("count"))]
     if (sortField === "asc") sorters = [R.ascend(R.prop("count"))]
     if (sortField === "nameasc") sorters = [R.ascend(R.prop("name"))]
@@ -230,6 +230,7 @@ module.exports = {
 
     const keysAreNumbers = R.all(validator.isStringNumeric)(Object.keys(data))
     let totalCount = 0
+    let formatted
 
     if (sortField === "natural") {
       const fieldsString = R.compose(R.join(""), R.sort(R.ascend(R.identity)), R.keys)(data)
@@ -254,10 +255,18 @@ module.exports = {
         const name = (keysAreNumbers) ? parseFloat(pair[0]) : pair[0]
         return {name, path, count: pair[1]}
       }),
+      R.tap(function(d) {
+        formatted = d
+      }),
       R.sortWith(sorters),
       R.take(limit || data.length),
       R.tap(function(d) {
-        totalCount = R.compose(R.sum, R.pluck("count"))(d)
+        const set = (combineRemainder) ? formatted : d
+        totalCount = R.compose(R.sum, R.pluck("count"))(set)
+      }),
+      R.when(R.always(combineRemainder), function(d) {
+        const count = totalCount - R.compose(R.sum, R.pluck("count"))(d)
+        return R.append({name: "Other", count}, d)
       }),
       R.map(function(row) {
         const percentage = utils.round(2, (row.count / totalCount) * 100)

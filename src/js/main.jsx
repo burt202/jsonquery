@@ -65,6 +65,7 @@ const Main = React.createClass({
       groupLimit={this.state.groupLimit}
       limit={this.state.limit}
       analyse={this.state.analyse}
+      combineRemainder={this.state.combineRemainder}
     />
   },
 

@@ -17,6 +17,8 @@ const GroupingControl = React.createClass({
     onShowCountsChange: PropTypes.func.isRequired,
     onGroupSortChange: PropTypes.func.isRequired,
     onGroupLimitChange: PropTypes.func.isRequired,
+    combineRemainder: PropTypes.bool.isRequired,
+    onCombineRemainderChange: PropTypes.func.isRequired,
   },
 
   onAdd(e) {
@@ -33,6 +35,10 @@ const GroupingControl = React.createClass({
 
   onLimitChange(e) {
     this.props.onGroupLimitChange(parseInt(e.target.value, 10))
+  },
+
+  onCombineRemainderChange() {
+    this.props.onCombineRemainderChange(!this.props.combineRemainder)
   },
 
   getRows() {
@@ -71,6 +77,17 @@ const GroupingControl = React.createClass({
       ])
     }
 
+    const combineRemainderInput = (this.props.groupLimit) ? (
+      <label className="checkbox-label">
+        <input
+          type="checkbox"
+          name="showCounts"
+          checked={this.props.combineRemainder}
+          onChange={this.onCombineRemainderChange}
+        />
+        Combine remainder
+      </label>) : null
+
     return (
       <span>
         <select onChange={this.onSortChange} value={this.props.groupSort || ""}>
@@ -82,6 +99,7 @@ const GroupingControl = React.createClass({
           onChange={this.onLimitChange}
           value={this.props.groupLimit}
         />
+        {combineRemainderInput}
       </span>
     )
   },

@@ -25,6 +25,7 @@ const Results = React.createClass({
     groupLimit: PropTypes.number,
     limit: PropTypes.number,
     analyse: PropTypes.string,
+    combineRemainder: PropTypes.bool.isRequired,
   },
 
   filterResults(data) {
@@ -67,7 +68,7 @@ const Results = React.createClass({
   formatData(data) {
     if (this.props.groupings.length) {
       const grouped = dataProcessor.group(this.props.groupings, this.props.showCounts, data)
-      return this.props.showCounts ? dataProcessor.sortAndLimitObject(this.props.groupSort, this.props.groupLimit, grouped) : grouped
+      return this.props.showCounts ? dataProcessor.sortAndLimitObject(this.props.groupSort, this.props.groupLimit, this.props.combineRemainder, grouped) : grouped
     }
 
     if (this.props.analyse) return this.getAnalysis(data)

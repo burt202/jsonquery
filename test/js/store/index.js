@@ -21,6 +21,7 @@ describe("store", function() {
       analyse: null,
       calculatedFields: [],
       calculationsString: null,
+      combineRemainder: false,
     })
   })
 
@@ -265,12 +266,19 @@ describe("store", function() {
       expect(store.getState().groupings).to.eql([])
     })
 
-    it("should reset showCounts, groupSort and groupLimit if groupings is deselected", function() {
-      store.setState({showCounts: true, groupSort: "asc", groupLimit: 10, groupings: ["baz"]})
+    it("should reset showCounts, combineRemainder, groupSort and groupLimit if groupings is deselected", function() {
+      store.setState({
+        showCounts: true,
+        groupSort: "asc",
+        groupLimit: 10,
+        groupings: ["baz"],
+        combineRemainder: true,
+      })
 
       expect(store.getState().showCounts).to.eql(true)
       expect(store.getState().groupSort).to.eql("asc")
       expect(store.getState().groupLimit).to.eql(10)
+      expect(store.getState().combineRemainder).to.eql(true)
 
       dispatcher.dispatch({
         name: "removeGrouping",
@@ -280,14 +288,22 @@ describe("store", function() {
       expect(store.getState().showCounts).to.eql(false)
       expect(store.getState().groupSort).to.eql("desc")
       expect(store.getState().groupLimit).to.eql(null)
+      expect(store.getState().combineRemainder).to.eql(false)
     })
 
-    it("should not reset showCounts, groupSort and groupLimit if groupings is still at least 1", function() {
-      store.setState({showCounts: true, groupSort: "asc", groupLimit: 10, groupings: ["bar", "baz"]})
+    it("should not reset showCounts, combineRemainder, groupSort and groupLimit if groupings is still at least 1", function() {
+      store.setState({
+        showCounts: true,
+        groupSort: "asc",
+        groupLimit: 10,
+        groupings: ["bar", "baz"],
+        combineRemainder: true,
+      })
 
       expect(store.getState().showCounts).to.eql(true)
       expect(store.getState().groupSort).to.eql("asc")
       expect(store.getState().groupLimit).to.eql(10)
+      expect(store.getState().combineRemainder).to.eql(true)
 
       dispatcher.dispatch({
         name: "removeGrouping",
@@ -297,6 +313,7 @@ describe("store", function() {
       expect(store.getState().showCounts).to.eql(true)
       expect(store.getState().groupSort).to.eql("asc")
       expect(store.getState().groupLimit).to.eql(10)
+      expect(store.getState().combineRemainder).to.eql(true)
     })
   })
 
@@ -334,11 +351,12 @@ describe("store", function() {
       expect(store.getState().showCounts).to.eql(true)
     })
 
-    it("should reset groupSort and groupLimit when set to false", function() {
-      store.setState({groupSort: "asc", groupLimit: 10})
+    it("should reset groupSort, groupLimit and combineRemainder when set to false", function() {
+      store.setState({groupSort: "asc", groupLimit: 10, combineRemainder: true})
 
       expect(store.getState().groupSort).to.eql("asc")
       expect(store.getState().groupLimit).to.eql(10)
+      expect(store.getState().combineRemainder).to.eql(true)
 
       dispatcher.dispatch({
         name: "showCounts",
@@ -348,22 +366,25 @@ describe("store", function() {
       expect(store.getState().showCounts).to.eql(false)
       expect(store.getState().groupSort).to.eql("desc")
       expect(store.getState().groupLimit).to.eql(null)
+      expect(store.getState().combineRemainder).to.eql(false)
     })
   })
 
   describe("analyse", function() {
-    it("should add analyse and reset groupings, showCounts, groupSort and groupLimit", function() {
+    it("should add analyse and reset groupings, showCounts, combineRemainder, groupSort and groupLimit", function() {
       store.setState({
         groupings: ["bar"],
         showCounts: true,
         groupSort: "asc",
         groupLimit: 10,
+        combineRemainder: true,
       })
 
       expect(store.getState().groupings).to.eql(["bar"])
       expect(store.getState().showCounts).to.eql(true)
       expect(store.getState().groupSort).to.eql("asc")
       expect(store.getState().groupLimit).to.eql(10)
+      expect(store.getState().combineRemainder).to.eql(true)
 
       dispatcher.dispatch({
         name: "analyse",
@@ -375,6 +396,7 @@ describe("store", function() {
       expect(store.getState().showCounts).to.eql(false)
       expect(store.getState().groupSort).to.eql("desc")
       expect(store.getState().groupLimit).to.eql(null)
+      expect(store.getState().combineRemainder).to.eql(false)
     })
   })
 
@@ -397,6 +419,31 @@ describe("store", function() {
       })
 
       expect(store.getState().groupLimit).to.eql("foo")
+    })
+
+    it("should add reset combineRemainder if group limit is unset", function() {
+      store.setState({
+        groupLimit: "foo",
+        combineRemainder: true,
+      })
+
+      dispatcher.dispatch({
+        name: "groupLimit",
+        value: {groupLimit: null},
+      })
+
+      expect(store.getState().combineRemainder).to.eql(false)
+    })
+  })
+
+  describe("combineRemainder", function() {
+    it("should add group limit", function() {
+      dispatcher.dispatch({
+        name: "combineRemainder",
+        value: {combineRemainder: "foo"},
+      })
+
+      expect(store.getState().combineRemainder).to.eql("foo")
     })
   })
 

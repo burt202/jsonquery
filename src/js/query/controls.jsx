@@ -15,6 +15,7 @@ const Controls = React.createClass({
     sorters: PropTypes.array,
     schema: PropTypes.object.isRequired,
     showCounts: PropTypes.bool.isRequired,
+    combineRemainder: PropTypes.bool.isRequired,
     groupSort: PropTypes.string.isRequired,
     groupLimit: PropTypes.number,
     limit: PropTypes.number,
@@ -90,6 +91,8 @@ const Controls = React.createClass({
         onShowCountsChange={this.props.actionCreator.showCounts}
         onGroupSortChange={this.props.actionCreator.groupSort}
         onGroupLimitChange={this.props.actionCreator.groupLimit}
+        combineRemainder={this.props.combineRemainder}
+        onCombineRemainderChange={this.props.actionCreator.combineRemainder}
       />
     )
   },
