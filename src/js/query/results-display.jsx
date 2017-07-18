@@ -32,30 +32,20 @@ const Results = React.createClass({
     }
   },
 
-  componentWillReceiveProps(newProps) {
-    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes(newProps))
-    if (!type) this.setType("json")
-  },
-
   setType(type) {
     this.setState({type})
   },
 
-  getViewTypes(props) {
-    const types = [
+  getViewTypes() {
+    return [
       {name: "JSON", view: "json", extension: "json", mimetype: "application/json", downloader: this.baseDownloader, component: JsonDisplay},
       {name: "Table", view: "table", extension: "csv", mimetype: "text/csv", downloader: this.baseDownloader, component: TableDisplay},
+      {name: "Chart", view: "chart", extension: "png", mimetype: "image/png", downloader: this.chartDownloader, component: ChartDisplay},
     ]
-
-    if (props.groupings.length === 1 && props.showCounts) {
-      types.push({name: "Chart", view: "chart", extension: "png", mimetype: "image/png", downloader: this.chartDownloader, component: ChartDisplay})
-    }
-
-    return types
   },
 
   getViewTypesLinks() {
-    return this.getViewTypes(this.props).map(function(type) {
+    return this.getViewTypes().map(function(type) {
       const classnames = classNames({
         "active": this.state.type === type.view,
       })
@@ -69,7 +59,7 @@ const Results = React.createClass({
   },
 
   baseDownloader() {
-    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes(this.props))
+    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
 
     const formatted = downloadFormatter[type.extension](this.props.groupings, this.props.showCounts, this.props.results)
     const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
@@ -82,7 +72,7 @@ const Results = React.createClass({
   },
 
   chartDownloader(chart) {
-    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes(this.props))
+    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
 
     const width = chart.ctx.canvas.width
     const height = chart.ctx.canvas.height
@@ -116,6 +106,16 @@ const Results = React.createClass({
   getDisplayData() {
     const type = R.find(R.propEq("view", this.state.type), this.getViewTypes(this.props))
 
+    if (validator.isString(this.props.results)) return <JsonDisplay data={this.props.results} />
+
+    if (type.view === "chart" && (!this.props.groupings.length || !this.props.showCounts)) {
+      return <JsonDisplay data="You must select a grouping with counts to use the charts display" />
+    }
+
+    if (type.view === "chart" && this.props.groupings.length > 1) {
+      return <JsonDisplay data="Currently only one level of grouping is supported in the charts display" />
+    }
+
     if (!this.isAggregateResult() && this.tooManyResultToShow()) {
       return (
         <JsonDisplay
@@ -124,8 +124,6 @@ const Results = React.createClass({
         />
       )
     }
-
-    if (validator.isString(this.props.results)) return <JsonDisplay data={this.props.results} />
 
     const formatted = downloadFormatter[this.state.type] ? downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results) : this.props.results
     const Component = type.component
