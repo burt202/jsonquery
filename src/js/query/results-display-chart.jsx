@@ -16,6 +16,14 @@ function getColours(data) {
   })
 }
 
+function getCumulative(data) {
+  const mapIndexed = R.addIndex(R.map)
+
+  return mapIndexed(function(val, idx) {
+    return R.compose(R.sum, R.slice(0, idx + 1))(data)
+  }, data)
+}
+
 const ChartDisplay = React.createClass({
   displayName: "ChartDisplay",
 
@@ -28,6 +36,7 @@ const ChartDisplay = React.createClass({
     return {
       type: "bar",
       title: "",
+      cumulative: false,
     }
   },
 
@@ -47,11 +56,17 @@ const ChartDisplay = React.createClass({
     })
   },
 
+  onCumulativeChange() {
+    this.setState({
+      cumulative: !this.state.cumulative,
+    })
+  },
+
   render() {
     const barData = {
       labels: R.pluck("name", this.props.data),
       datasets: [{
-        data: R.pluck("count", this.props.data),
+        data: (this.state.cumulative) ? getCumulative(R.pluck("count", this.props.data)) : R.pluck("count", this.props.data),
         backgroundColor: "#aec6cf",
         hoverBackgroundColor: "#aec6cf",
       }],
@@ -136,6 +151,18 @@ const ChartDisplay = React.createClass({
     const chart = chartTypeMap[this.state.type]
     const Component = chart.component
 
+    const cumulativeCheckbox = (this.state.type === "bar") ? (
+      <label className="checkbox-label">
+        <input
+          type="checkbox"
+          name="cumulative"
+          checked={this.state.cumulative}
+          onChange={this.onCumulativeChange}
+        />
+        Cumulative
+      </label>) : null
+
+
     const downloadLink = this.props.onDownload ? (<ul className="side-options right">
         <li><a className="site-link" onClick={this.onDownload}>Download</a></li>
       </ul>) : null
@@ -150,6 +177,7 @@ const ChartDisplay = React.createClass({
             <option value="pie">Pie</option>
           </select>
           <input value={this.state.title} onChange={this.onTitleChange} placeholder="Chart name here..." />
+          {cumulativeCheckbox}
         </p>
         <Component data={chart.data} options={chart.options} ref={(c) => this.chartComponent = c} redraw />
       </div>
