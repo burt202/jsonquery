@@ -1,6 +1,6 @@
 {
   "name": "jsonquery",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "license": "ISC",
   "scripts": {
     "lint": "eslint src/ test/ --ext .js,.jsx",
