@@ -8,7 +8,7 @@ const Bar = require("react-chartjs-2").Bar
 
 function BarChart(props) {
   const data = {
-    labels: R.pluck("name", this.props.data),
+    labels: R.pluck("name", props.data),
     datasets: [{
       data: (props.cumulative) ? utils.getCumulative(R.pluck("count", props.data)) : R.pluck("count", props.data),
       backgroundColor: "#aec6cf",

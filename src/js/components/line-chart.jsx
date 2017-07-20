@@ -8,7 +8,7 @@ const Line = require("react-chartjs-2").Line
 
 function LineChart(props) {
   const data = {
-    labels: R.pluck("name", this.props.data),
+    labels: R.pluck("name", props.data),
     datasets: [{
       data: (props.cumulative) ? utils.getCumulative(R.pluck("count", props.data)) : R.pluck("count", props.data),
     }],
