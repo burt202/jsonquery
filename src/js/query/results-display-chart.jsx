@@ -7,6 +7,7 @@ const utils = require("../utils")
 
 const Bar = require("react-chartjs-2").Bar
 const Pie = require("react-chartjs-2").Pie
+const Line = require("react-chartjs-2").Line
 
 function getColours(data) {
   let count = 0
@@ -81,7 +82,47 @@ const ChartDisplay = React.createClass({
       }],
     }
 
+    const lineData = {
+      labels: R.pluck("name", this.props.data),
+      datasets: [{
+        data: (this.state.cumulative) ? getCumulative(R.pluck("count", this.props.data)) : R.pluck("count", this.props.data),
+      }],
+    }
+
     const barOptions = {
+      title: {
+        display: !!this.state.title.length,
+        text: this.state.title,
+      },
+      tooltips: {
+        displayColors: false,
+      },
+      legend: {
+        display: false,
+      },
+      layout: {
+        padding: {
+          left: 25,
+          right: 25,
+          top: 25,
+          bottom: 25,
+        },
+      },
+      scales: {
+        yAxes: [{
+          gridLines: {
+            display: false,
+          },
+        }],
+        xAxes: [{
+          gridLines: {
+            display: false,
+          },
+        }],
+      },
+    }
+
+    const lineOptions = {
       title: {
         display: !!this.state.title.length,
         text: this.state.title,
@@ -146,12 +187,13 @@ const ChartDisplay = React.createClass({
     const chartTypeMap = {
       bar: {options: barOptions, component: Bar, data: barData},
       pie: {options: pieOptions, component: Pie, data: pieData},
+      line: {options: lineOptions, component: Line, data: lineData},
     }
 
     const chart = chartTypeMap[this.state.type]
     const Component = chart.component
 
-    const cumulativeCheckbox = (this.state.type === "bar") ? (
+    const cumulativeCheckbox = (this.state.type === "bar" || this.state.type === "line") ? (
       <label className="checkbox-label">
         <input
           type="checkbox"
@@ -175,6 +217,7 @@ const ChartDisplay = React.createClass({
           <select value={this.state.type} onChange={this.onTypeChange}>
             <option value="bar">Bar</option>
             <option value="pie">Pie</option>
+            <option value="line">Line</option>
           </select>
           <input value={this.state.title} onChange={this.onTitleChange} placeholder="Chart name here..." />
           {cumulativeCheckbox}
