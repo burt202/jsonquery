@@ -22,4 +22,12 @@ module.exports = {
     const value = 360 / count * index
     return `hsl(${value}, 90%, 60%)`
   },
+
+  getCumulative(data) {
+    const mapIndexed = R.addIndex(R.map)
+
+    return mapIndexed(function(val, idx) {
+      return R.compose(R.sum, R.slice(0, idx + 1))(data)
+    }, data)
+  },
 }

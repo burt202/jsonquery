@@ -52,4 +52,12 @@ describe("utils", function() {
       expect(res).to.eql("hsl(180, 90%, 60%)")
     })
   })
+
+  describe("getCumulative", function() {
+    it("should return array values in cumulative state", function() {
+      const res = utils.getCumulative([2, 4, 1, 6, 8])
+
+      expect(res).to.eql([2, 6, 7, 13, 21])
+    })
+  })
 })

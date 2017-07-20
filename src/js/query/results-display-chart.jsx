@@ -1,28 +1,14 @@
 const React = require("react")
 const PropTypes = require("prop-types")
 
-const R = require("ramda")
+const Bar = require("../components/bar-chart")
+const Pie = require("../components/pie-chart")
+const Line = require("../components/line-chart")
 
-const utils = require("../utils")
-
-const Bar = require("react-chartjs-2").Bar
-const Pie = require("react-chartjs-2").Pie
-const Line = require("react-chartjs-2").Line
-
-function getColours(data) {
-  let count = 0
-
-  return data.map(function() {
-    return utils.rainbow(data.length, count++)
-  })
-}
-
-function getCumulative(data) {
-  const mapIndexed = R.addIndex(R.map)
-
-  return mapIndexed(function(val, idx) {
-    return R.compose(R.sum, R.slice(0, idx + 1))(data)
-  }, data)
+const chartTypeMap = {
+  bar: Bar,
+  pie: Pie,
+  line: Line,
 }
 
 const ChartDisplay = React.createClass({
@@ -64,134 +50,7 @@ const ChartDisplay = React.createClass({
   },
 
   render() {
-    const barData = {
-      labels: R.pluck("name", this.props.data),
-      datasets: [{
-        data: (this.state.cumulative) ? getCumulative(R.pluck("count", this.props.data)) : R.pluck("count", this.props.data),
-        backgroundColor: "#aec6cf",
-        hoverBackgroundColor: "#aec6cf",
-      }],
-    }
-
-    const pieData = {
-      labels: R.pluck("name", this.props.data),
-      datasets: [{
-        data: R.pluck("count", this.props.data),
-        backgroundColor: getColours(this.props.data),
-        hoverBackgroundColor: getColours(this.props.data),
-      }],
-    }
-
-    const lineData = {
-      labels: R.pluck("name", this.props.data),
-      datasets: [{
-        data: (this.state.cumulative) ? getCumulative(R.pluck("count", this.props.data)) : R.pluck("count", this.props.data),
-      }],
-    }
-
-    const barOptions = {
-      title: {
-        display: !!this.state.title.length,
-        text: this.state.title,
-      },
-      tooltips: {
-        displayColors: false,
-      },
-      legend: {
-        display: false,
-      },
-      layout: {
-        padding: {
-          left: 25,
-          right: 25,
-          top: 25,
-          bottom: 25,
-        },
-      },
-      scales: {
-        yAxes: [{
-          gridLines: {
-            display: false,
-          },
-        }],
-        xAxes: [{
-          gridLines: {
-            display: false,
-          },
-        }],
-      },
-    }
-
-    const lineOptions = {
-      title: {
-        display: !!this.state.title.length,
-        text: this.state.title,
-      },
-      tooltips: {
-        displayColors: false,
-      },
-      legend: {
-        display: false,
-      },
-      layout: {
-        padding: {
-          left: 25,
-          right: 25,
-          top: 25,
-          bottom: 25,
-        },
-      },
-      scales: {
-        yAxes: [{
-          gridLines: {
-            display: false,
-          },
-        }],
-        xAxes: [{
-          gridLines: {
-            display: false,
-          },
-        }],
-      },
-    }
-
-    const pieOptions = {
-      title: {
-        display: !!this.state.title.length,
-        text: this.state.title,
-      },
-      tooltips: {
-        displayColors: false,
-      },
-      legend: {
-        position: "right",
-      },
-      layout: {
-        padding: {
-          left: 25,
-          right: 25,
-          top: 25,
-          bottom: 25,
-        },
-      },
-      scales: {
-        yAxes: [{
-          display: false,
-        }],
-        xAxes: [{
-          display: false,
-        }],
-      },
-    }
-
-    const chartTypeMap = {
-      bar: {options: barOptions, component: Bar, data: barData},
-      pie: {options: pieOptions, component: Pie, data: pieData},
-      line: {options: lineOptions, component: Line, data: lineData},
-    }
-
-    const chart = chartTypeMap[this.state.type]
-    const Component = chart.component
+    const Component = chartTypeMap[this.state.type]
 
     const cumulativeCheckbox = (this.state.type === "bar" || this.state.type === "line") ? (
       <label className="checkbox-label">
@@ -204,14 +63,11 @@ const ChartDisplay = React.createClass({
         Cumulative
       </label>) : null
 
-
-    const downloadLink = this.props.onDownload ? (<ul className="side-options right">
-        <li><a className="site-link" onClick={this.onDownload}>Download</a></li>
-      </ul>) : null
-
     return (
       <div>
-        {downloadLink}
+        <ul className="side-options right">
+          <li><a className="site-link" onClick={this.onDownload}>Download</a></li>
+        </ul>
         <p className="chart-options">
           <label>Type:</label>
           <select value={this.state.type} onChange={this.onTypeChange}>
@@ -222,7 +78,7 @@ const ChartDisplay = React.createClass({
           <input value={this.state.title} onChange={this.onTitleChange} placeholder="Chart name here..." />
           {cumulativeCheckbox}
         </p>
-        <Component data={chart.data} options={chart.options} ref={(c) => this.chartComponent = c} redraw />
+        <Component data={this.props.data} title={this.state.title} cumulative={this.state.cumulative} />
       </div>
     )
   },
