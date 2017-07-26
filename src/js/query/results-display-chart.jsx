@@ -4,11 +4,13 @@ const PropTypes = require("prop-types")
 const Bar = require("../components/bar-chart")
 const Pie = require("../components/pie-chart")
 const Line = require("../components/line-chart")
+const Doughnut = require("../components/doughnut-chart")
 
 const chartTypeMap = {
   bar: Bar,
   pie: Pie,
   line: Line,
+  doughnut: Doughnut,
 }
 
 const ChartDisplay = React.createClass({
@@ -73,6 +75,7 @@ const ChartDisplay = React.createClass({
           <select value={this.state.type} onChange={this.onTypeChange}>
             <option value="bar">Bar</option>
             <option value="pie">Pie</option>
+            <option value="doughnut">Doughnut</option>
             <option value="line">Line</option>
           </select>
           <input value={this.state.title} onChange={this.onTitleChange} placeholder="Chart name here..." />
