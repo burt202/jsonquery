@@ -156,8 +156,24 @@ const Results = React.createClass({
     }.bind(this))
   },
 
+  unSelectResultFields() {
+    this.props.actionCreator.updateResultFields([])
+  },
+
+  showResultFields() {
+    return (
+      <div className="include-checkboxes">
+        <span className="label">Include:</span>
+        <div>
+          <span>{this.getResultFieldOptions()}</span>
+          <p><a className="site-link" onClick={this.unSelectResultFields}>Unselect All</a></p>
+        </div>
+      </div>
+    )
+  },
+
   getCheckboxes() {
-    return (!this.isAggregateResult()) ? <div className="include-checkboxes"><span className="label">Include:</span><span>{this.getResultFieldOptions()}</span></div> : null
+    return (!this.isAggregateResult()) ? this.showResultFields() : null
   },
 
   render() {
