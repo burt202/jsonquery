@@ -267,6 +267,10 @@ ul.side-options li:last-of-type {
   margin-right: 10px;
 }
 
+.tableHeaderCell {
+  cursor: pointer;
+}
+
 /* Summary */
 
 .summary-cont h3 {

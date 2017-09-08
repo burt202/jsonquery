@@ -1,11 +1,22 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const Clipboard = require("clipboard")
 
 const R = require("ramda")
 
 function TableDisplay(props) {
+  new Clipboard("th.tableHeaderCell")
+
   function onDownload() {
     props.onDownload()
+  }
+
+  function getHeaderCopyText(index) {
+    return R.pipe(
+      R.reject(R.propEq("type", "header")),
+      R.map(R.compose(R.prop(index), R.prop("cols"))),
+      R.join(",")
+    )(props.data)
   }
 
   const header = R.find(R.propEq("type", "header"), props.data)
@@ -14,7 +25,7 @@ function TableDisplay(props) {
 
   if (header) {
     const headerRow = header.cols.map(function(col, index) {
-      return <th key={index}>{col}</th>
+      return <th key={index} className="tableHeaderCell" data-clipboard-text={getHeaderCopyText(index)} title="Click to copy">{col}</th>
     })
 
     tableHeader = <thead><tr>{headerRow}</tr></thead>
