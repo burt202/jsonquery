@@ -25,7 +25,7 @@ function TableDisplay(props) {
 
   if (header) {
     const headerRow = header.cols.map(function(col, index) {
-      return <th key={index} className="tableHeaderCell" data-clipboard-text={getHeaderCopyText(index)} title="Click to copy">{col}</th>
+      return <th key={index} className="tableHeaderCell" data-clipboard-text={getHeaderCopyText(index)} title="Copy column data">{col}</th>
     })
 
     tableHeader = <thead><tr>{headerRow}</tr></thead>
