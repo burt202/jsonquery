@@ -46,11 +46,15 @@ const FromUrl = React.createClass({
   onFetchComplete(data) {
     const errors = []
 
-    if (!validator.isArray(data)) {
+    if (!data) {
+      errors.push("Empty reponse. Make sure CORS is setup properly on the data domain")
+    }
+
+    if (data && !validator.isArray(data)) {
       errors.push("Data must be an array")
     }
 
-    if (!data.length) {
+    if (data && !data.length) {
       errors.push("Data must have at least 1 item")
     }
 
@@ -70,12 +74,12 @@ const FromUrl = React.createClass({
       schema = JSON.parse(fromUrl)
     }
 
-    if (!schema) schema = schemaGenerator.generate(data[0])
-
     if (errors.length) {
       this.setState({errors})
       return
     }
+
+    if (!schema) schema = schemaGenerator.generate(data[0])
 
     this.props.actionCreator.saveJson("data", data)
     this.props.actionCreator.saveJson("schema", schema)
