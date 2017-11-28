@@ -397,10 +397,10 @@ describe("dateProcessor", function() {
         ])
 
         expect(res).to.eql([
-        {name: "foo", deleted: true},
-        {name: "bar", deleted: false},
-        {name: "abc", deleted: true},
-        {name: "123", deleted: false},
+          {name: "foo", deleted: true},
+          {name: "bar", deleted: false},
+          {name: "abc", deleted: true},
+          {name: "123", deleted: false},
         ])
       })
     })

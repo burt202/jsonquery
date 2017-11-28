@@ -51,8 +51,8 @@ function TableDisplay(props) {
   })
 
   const downloadLink = props.onDownload ? (<ul className="side-options right">
-      <li><a className="site-link" onClick={onDownload}>Download</a></li>
-    </ul>) : null
+    <li><a className="site-link" onClick={onDownload}>Download</a></li>
+  </ul>) : null
 
   return (
     <div>

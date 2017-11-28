@@ -52,9 +52,9 @@ function _getGroupedData(obj) {
         const span = R.keys(pair[1][0]).length
 
         return [{type: "title", cols: [_makeTableSafe(pair[0])], span}]
-        .concat(R.map(R.compose(function(cols) {
-          return {type: "data", cols}
-        }, R.map(_makeTableSafe), R.values), pair[1]))
+          .concat(R.map(R.compose(function(cols) {
+            return {type: "data", cols}
+          }, R.map(_makeTableSafe), R.values), pair[1]))
       }
 
       return _getGroupedData(R.reduce(function(acc, val) {

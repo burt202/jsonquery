@@ -11,13 +11,13 @@ function fetchData(url, withCredentials) {
   if (withCredentials) opts.credentials = "include"
 
   return fetch(url, opts)
-  .then(function(response) {
-    if (!response.ok) {
-      throw Error(response.statusText)
-    }
+    .then(function(response) {
+      if (!response.ok) {
+        throw Error(response.statusText)
+      }
 
-    return response.json()
-  })
+      return response.json()
+    })
 }
 
 const FromUrl = React.createClass({
@@ -39,8 +39,8 @@ const FromUrl = React.createClass({
       this.props.params.dataUrl,
       Object.prototype.hasOwnProperty.call(this.props.params, "withCredentials")
     )
-    .then(this.onFetchComplete)
-    .catch(this.onFetchError)
+      .then(this.onFetchComplete)
+      .catch(this.onFetchError)
   },
 
   onFetchComplete(data) {
