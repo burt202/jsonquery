@@ -157,7 +157,11 @@ const Results = React.createClass({
   },
 
   unSelectResultFields() {
-    this.props.actionCreator.updateResultFields([])
+    this.props.actionCreator.updateResultFields(this.props.groupings)
+  },
+
+  selectResultFields() {
+    this.props.actionCreator.updateResultFields(R.keys(this.props.schema))
   },
 
   showResultFields() {
@@ -166,7 +170,10 @@ const Results = React.createClass({
         <span className="label">Include:</span>
         <div>
           <span>{this.getResultFieldOptions()}</span>
-          <p><a className="site-link" onClick={this.unSelectResultFields}>Unselect All</a></p>
+          <p>
+            <a className="site-link" style={{marginRight: "15px"}} onClick={this.unSelectResultFields}>Unselect All</a>
+            <a className="site-link" onClick={this.selectResultFields}>Select All</a>
+          </p>
         </div>
       </div>
     )
