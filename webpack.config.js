@@ -1,6 +1,6 @@
 const webpack = require("webpack")
 const path = require("path")
-const SwigWebpackPlugin = require("swig-webpack-plugin")
+const NunjucksWebpackPlugin = require("nunjucks-webpack-plugin")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 
 const packageJson = require("./package.json")
@@ -23,9 +23,9 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.jsx$/, use: [{loader: "jsx-loader"}] },
-      { test: /\.json$/, use: [{loader: "json-loader"}] },
-      { test: /\.css$/, use: [
+      {test: /\.jsx$/, use: [{loader: "jsx-loader"}]},
+      {test: /\.json$/, use: [{loader: "json-loader"}]},
+      {test: /\.css$/, use: [
         {loader: "style-loader"},
         {loader: "css-loader"},
       ]},
@@ -53,14 +53,17 @@ module.exports = {
     }),
 
     new webpack.HotModuleReplacementPlugin(),
-    new SwigWebpackPlugin({
-      filename: "index.html",
-      template: "./src/index.html",
-      watch: "./src/index.html",
-      data: {
-        production: false,
-        lastModified: Date.now(),
-      },
+    new NunjucksWebpackPlugin({
+      templates: [
+        {
+          from: "./src/index.html",
+          to: "index.html",
+          context: {
+            production: false,
+            lastModified: Date.now(),
+          },
+        },
+      ],
     }),
   ],
 }

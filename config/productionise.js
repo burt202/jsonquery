@@ -1,5 +1,5 @@
 const webpack = require("webpack")
-const SwigWebpackPlugin = require("swig-webpack-plugin")
+const NunjucksWebpackPlugin = require("nunjucks-webpack-plugin")
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
@@ -14,19 +14,18 @@ const prodPlugins = [
       "NODE_ENV": JSON.stringify("production"),
     },
   }),
-  new UglifyJsPlugin({
-    compress: {
-      warnings: false,
-    },
-  }),
-  new SwigWebpackPlugin({
-    filename: "index.html",
-    template: "./src/index.html",
-    watch: "./src/index.html",
-    data: {
-      production: true,
-      lastModified: Date.now(),
-    },
+  new UglifyJsPlugin({}),
+  new NunjucksWebpackPlugin({
+    templates: [
+      {
+        from: "./src/index.html",
+        to: "index.html",
+        context: {
+          production: true,
+          lastModified: Date.now(),
+        },
+      },
+    ],
   }),
 ]
 
