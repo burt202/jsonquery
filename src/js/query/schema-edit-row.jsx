@@ -1,7 +1,8 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 
-const SchemaEditRow = React.createClass({
+const SchemaEditRow = createReactClass({
   displayName: "SchemaEditRow",
 
   propTypes: {

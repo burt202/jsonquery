@@ -1,7 +1,8 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 
-const SortingControl = React.createClass({
+const SortingControl = createReactClass({
   displayName: "SortingControl",
 
   propTypes: {

@@ -1,5 +1,6 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 const R = require("ramda")
 const classNames = require("classnames")
 
@@ -70,7 +71,7 @@ const filterConfig = {
   ],
 }
 
-const FilterRow = React.createClass({
+const FilterRow = createReactClass({
   displayName: "FilterRow",
 
   propTypes: {

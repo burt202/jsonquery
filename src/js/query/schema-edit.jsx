@@ -1,5 +1,6 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 const R = require("ramda")
 
 const validator = require("../services/validator")
@@ -7,7 +8,7 @@ const validator = require("../services/validator")
 const SchemaEditRow = require("./schema-edit-row")
 const Code = require("../components/code")
 
-const SchemaEdit = React.createClass({
+const SchemaEdit = createReactClass({
   displayName: "SchemaEdit",
 
   propTypes: {

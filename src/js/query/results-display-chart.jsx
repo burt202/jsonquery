@@ -1,5 +1,6 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 
 const Bar = require("../components/bar-chart")
 const Pie = require("../components/pie-chart")
@@ -13,7 +14,7 @@ const chartTypeMap = {
   doughnut: Doughnut,
 }
 
-const ChartDisplay = React.createClass({
+const ChartDisplay = createReactClass({
   displayName: "ChartDisplay",
 
   propTypes: {

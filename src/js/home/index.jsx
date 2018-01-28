@@ -1,5 +1,6 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 const classNames = require("classnames")
 
 const validator = require("../services/validator")
@@ -9,7 +10,7 @@ const Paste = require("./paste")
 const Upload = require("./upload")
 const Url = require("./url")
 
-const Home = React.createClass({
+const Home = createReactClass({
   displayName: "Home",
 
   propTypes: {

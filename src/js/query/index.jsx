@@ -1,5 +1,6 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 
 const Filters = require("./filters")
 const Controls = require("./controls")
@@ -7,7 +8,7 @@ const Results = require("./results")
 const SchemaEdit = require("./schema-edit")
 const AddCalculations = require("./add-calculations")
 
-const Query = React.createClass({
+const Query = createReactClass({
   displayName: "Query",
 
   propTypes: {

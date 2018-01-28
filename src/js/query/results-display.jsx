@@ -1,5 +1,6 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 const R = require("ramda")
 const classNames = require("classnames")
 
@@ -12,7 +13,7 @@ const ChartDisplay = require("./results-display-chart")
 
 const DISPLAY_THRESHOLD = 1000
 
-const Results = React.createClass({
+const Results = createReactClass({
   displayName: "ResultsDisplay",
 
   propTypes: {

@@ -1,5 +1,6 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 
 const validator = require("../services/validator")
 const schemaGenerator = require("../services/schema-generator")
@@ -20,7 +21,7 @@ function fetchData(url, withCredentials) {
     })
 }
 
-const FromUrl = React.createClass({
+const FromUrl = createReactClass({
   displayName: "FromUrl",
 
   propTypes: {

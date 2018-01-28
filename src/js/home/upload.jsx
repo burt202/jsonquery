@@ -1,7 +1,8 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 
-const Upload = React.createClass({
+const Upload = createReactClass({
   displayName: "Upload",
 
   propTypes: {

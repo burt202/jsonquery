@@ -1,5 +1,6 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 
 const ResultsSummary = require("./results-summary")
 const ResultsDisplay = require("./results-display")
@@ -9,7 +10,7 @@ const R = require("ramda")
 const dataProcessor = require("../services/data-processor")
 const utils = require("../utils")
 
-const Results = React.createClass({
+const Results = createReactClass({
   displayName: "Results",
 
   propTypes: {

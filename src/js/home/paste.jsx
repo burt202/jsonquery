@@ -1,9 +1,10 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 
 const testData = require("../../test-data.json")
 
-const Paste = React.createClass({
+const Paste = createReactClass({
   displayName: "Paste",
 
   propTypes: {

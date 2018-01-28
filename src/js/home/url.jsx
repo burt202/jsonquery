@@ -1,4 +1,5 @@
 const React = require("react")
+const createReactClass = require("create-react-class")
 
 const testSchema = {
   Album: "string",
@@ -13,7 +14,7 @@ const testSchema = {
 
 const testUrl = "http://jsonquery.co.uk/test-data.json"
 
-const Url = React.createClass({
+const Url = createReactClass({
   displayName: "Url",
 
   getInitialState() {

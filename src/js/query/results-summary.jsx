@@ -1,11 +1,12 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 const R = require("ramda")
 
 const dataProcessor = require("../services/data-processor")
 const summaryAnalyser = require("../services/summary-analyser")
 
-const Summary = React.createClass({
+const Summary = createReactClass({
   displayName: "ResultsSummary",
 
   propTypes: {

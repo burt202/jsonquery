@@ -1,5 +1,6 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 
 const schemaGenerator = require("../services/schema-generator")
 const formatDate = require("date-fns/format")
@@ -22,7 +23,7 @@ function addCalculations(fns, item) {
 
 const fns = {formatDate, differenceInDays, round: utils.round}
 
-const AddCalculations = React.createClass({
+const AddCalculations = createReactClass({
   displayName: "AddCalculations",
 
   propTypes: {

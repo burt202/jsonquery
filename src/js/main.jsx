@@ -1,5 +1,6 @@
 const React = require("react")
 const PropTypes = require("prop-types")
+const createReactClass = require("create-react-class")
 const queryString = require("query-string")
 
 const actionCreator = require("./store/action-creator")
@@ -11,7 +12,7 @@ const Query = require("./query")
 
 require("../css/app.css")
 
-const Main = React.createClass({
+const Main = createReactClass({
   displayName: "Main",
 
   propTypes: {

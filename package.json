@@ -19,6 +19,7 @@
     "chart.js": "^2.7.1",
     "classnames": "^2.2.5",
     "clipboard": "^1.7.1",
+    "create-react-class": "^15.6.2",
     "date-fns": "^1.29.0",
     "flat": "^4.0.0",
     "flux": "^2.1.1",
