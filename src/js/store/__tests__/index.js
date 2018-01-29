@@ -1,8 +1,8 @@
 const chai = require("chai")
 const expect = chai.expect
 
-const dispatcher = require("../../../src/js/store/dispatcher")
-const store = require("../../../src/js/store/index")
+const dispatcher = require("../dispatcher")
+const store = require("../index")
 
 describe("store", function() {
 

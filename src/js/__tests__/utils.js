@@ -1,7 +1,7 @@
 const chai = require("chai")
 const expect = chai.expect
 
-const utils = require("../src/js/utils")
+const utils = require("../utils")
 
 describe("utils", function() {
 

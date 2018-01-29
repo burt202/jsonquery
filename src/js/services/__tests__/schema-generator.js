@@ -1,7 +1,7 @@
 const chai = require("chai")
 const expect = chai.expect
 
-const schemaGenerator = require("../../../src/js/services/schema-generator")
+const schemaGenerator = require("../schema-generator")
 
 const tests = [
   {

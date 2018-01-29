@@ -1,7 +1,7 @@
 const chai = require("chai")
 const expect = chai.expect
 
-const summaryAnalyser = require("../../../src/js/services/summary-analyser")
+const summaryAnalyser = require("../summary-analyser")
 
 const mockFiltered = [{}, {}, {}, {}, {}, {}]
 

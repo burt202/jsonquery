@@ -1,7 +1,7 @@
 const chai = require("chai")
 const expect = chai.expect
 
-const dateProcessor = require("../../../src/js/services/data-processor")
+const dateProcessor = require("../data-processor")
 
 describe("dateProcessor", function() {
 
