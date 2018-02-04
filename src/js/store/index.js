@@ -1,7 +1,7 @@
 const R = require("ramda")
 const uuid = require("uuid")
+const {createStore} = require("redux")
 
-const createStore = require("./base")
 const utils = require("../utils")
 
 const defaults = {
@@ -31,9 +31,18 @@ const initialOperators = {
 }
 
 const handlers = {
+  _resetState() {
+    return defaults
+  },
+
+  _setState(contents, payload) {
+    return R.merge({}, payload)
+  },
+
   saveJson(contents, payload) {
     const toUpdate = R.omit(["data", "schema", "resultFields"], defaults)
     toUpdate[payload.name] = payload.data
+    if (payload.name === "schema") toUpdate.resultFields = R.keys(payload.data)
     return R.merge(contents, toUpdate)
   },
 
@@ -173,4 +182,10 @@ const handlers = {
   },
 }
 
-module.exports = createStore(defaults, handlers)
+function reducers(contents, action) {
+  if (!contents) contents = defaults
+  if (!handlers[action.type]) return contents
+  return handlers[action.type](contents, action.value)
+}
+
+module.exports = createStore(reducers)

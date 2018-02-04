@@ -1,7 +1,6 @@
 const chai = require("chai")
 const expect = chai.expect
 
-const dispatcher = require("../dispatcher")
 const store = require("../index")
 
 describe("store", function() {
@@ -26,13 +25,13 @@ describe("store", function() {
   })
 
   afterEach(function() {
-    store.resetState()
+    store.dispatch({type: "_resetState"})
   })
 
   describe("saveJson", function() {
     it("should save json under the passed prop name", function() {
-      dispatcher.dispatch({
-        name: "saveJson",
+      store.dispatch({
+        type: "saveJson",
         value: {name: "schema", data: {foo: "string"}},
       })
 
@@ -40,13 +39,16 @@ describe("store", function() {
     })
 
     it("should reset filters, groupings and sortBy values to their defaults", function() {
-      store.setState({
-        filters: [{id: 1, name: "foo", value: "", operator: "eq", active: true}],
-        groupings: ["bar"],
-        sorters: ["baz"],
-        limit: "aaa",
-        analyse: "bbb",
-        showCounts: true,
+      store.dispatch({
+        type: "_setState",
+        value: {
+          filters: [{id: 1, name: "foo", value: "", operator: "eq", active: true}],
+          groupings: ["bar"],
+          sorters: ["baz"],
+          limit: "aaa",
+          analyse: "bbb",
+          showCounts: true,
+        },
       })
 
       expect(store.getState().filters.length).to.eql(1)
@@ -57,8 +59,8 @@ describe("store", function() {
       expect(store.getState().analyse).to.eql("bbb")
       expect(store.getState().showCounts).to.eql(true)
 
-      dispatcher.dispatch({
-        name: "saveJson",
+      store.dispatch({
+        type: "saveJson",
         value: {name: "schema", data: {foo: "string"}},
       })
 
@@ -73,8 +75,8 @@ describe("store", function() {
 
   describe("updateResultFields", function() {
     it("should save field names", function() {
-      dispatcher.dispatch({
-        name: "updateResultFields",
+      store.dispatch({
+        type: "updateResultFields",
         value: {fields: ["foo"]},
       })
 
@@ -84,8 +86,8 @@ describe("store", function() {
 
   describe("addFilter", function() {
     it("should add filter", function() {
-      dispatcher.dispatch({
-        name: "addFilter",
+      store.dispatch({
+        type: "addFilter",
         value: {name: "foo"},
       })
 
@@ -103,15 +105,20 @@ describe("store", function() {
 
   describe("deleteFilter", function() {
     beforeEach(function() {
-      store.setState({filters: [{id: 1, name: "foo", value: "", operator: "eq", active: true}]})
+      store.dispatch({
+        type: "_setState",
+        value: {
+          filters: [{id: 1, name: "foo", value: "", operator: "eq", active: true}],
+        },
+      })
     })
 
     it("should delete filter", function() {
       expect(store.getState().filters.length).to.eql(1)
       expect(store.getState().filters[0].name).to.eql("foo")
 
-      dispatcher.dispatch({
-        name: "deleteFilter",
+      store.dispatch({
+        type: "deleteFilter",
         value: {id: 1},
       })
 
@@ -121,15 +128,20 @@ describe("store", function() {
 
   describe("updateFilter", function() {
     beforeEach(function() {
-      store.setState({filters: [{id: 1, name: "foo", value: "", operator: "eq", active: true}]})
+      store.dispatch({
+        type: "_setState",
+        value: {
+          filters: [{id: 1, name: "foo", value: "", operator: "eq", active: true}],
+        },
+      })
     })
 
     it("should update filter", function() {
       expect(store.getState().filters.length).to.eql(1)
       expect(store.getState().filters[0].value).to.eql("")
 
-      dispatcher.dispatch({
-        name: "updateFilter",
+      store.dispatch({
+        type: "updateFilter",
         value: {id: 1, value: {value: "bar"}},
       })
 
@@ -140,8 +152,8 @@ describe("store", function() {
 
   describe("limit", function() {
     it("limit", function() {
-      dispatcher.dispatch({
-        name: "limit",
+      store.dispatch({
+        type: "limit",
         value: {number: 2},
       })
 
@@ -151,20 +163,23 @@ describe("store", function() {
 
   describe("reset", function() {
     beforeEach(function() {
-      store.setState({
-        filters: [{id: 1, name: "foo", value: "", operator: "eq", active: true}],
-        groupings: ["bar"],
-        sorters: ["baz"],
-        showCounts: true,
-        groupSort: "asc",
-        groupLimit: 10,
-        limit: "aaa",
-        analyse: "bbb",
-        calculatedFields: ["dd"],
-        calculationsString: "ff",
-        data: "data",
-        schema: "schema",
-        resultFields: "resultFields",
+      store.dispatch({
+        type: "_setState",
+        value: {
+          filters: [{id: 1, name: "foo", value: "", operator: "eq", active: true}],
+          groupings: ["bar"],
+          sorters: ["baz"],
+          showCounts: true,
+          groupSort: "asc",
+          groupLimit: 10,
+          limit: "aaa",
+          analyse: "bbb",
+          calculatedFields: ["dd"],
+          calculationsString: "ff",
+          data: "data",
+          schema: "schema",
+          resultFields: "resultFields",
+        },
       })
     })
 
@@ -179,8 +194,8 @@ describe("store", function() {
       expect(store.getState().limit).to.eql("aaa")
       expect(store.getState().analyse).to.eql("bbb")
 
-      dispatcher.dispatch({
-        name: "reset",
+      store.dispatch({
+        type: "reset",
         value: {},
       })
 
@@ -195,8 +210,8 @@ describe("store", function() {
     })
 
     it("should not reset some fields", function() {
-      dispatcher.dispatch({
-        name: "reset",
+      store.dispatch({
+        type: "reset",
         value: {},
       })
 
@@ -210,12 +225,17 @@ describe("store", function() {
 
   describe("addGrouping", function() {
     it("should add groupings and nullify analyse", function() {
-      store.setState({analyse: "baz"})
+      store.dispatch({
+        type: "_setState",
+        value: {
+          analyse: "baz",
+        },
+      })
 
       expect(store.getState().analyse).to.eql("baz")
 
-      dispatcher.dispatch({
-        name: "addGrouping",
+      store.dispatch({
+        type: "addGrouping",
         value: {name: "foo"},
       })
 
@@ -224,12 +244,17 @@ describe("store", function() {
     })
 
     it("should ensure groupings field is included in results", function() {
-      store.setState({resultFields: []})
+      store.dispatch({
+        type: "_setState",
+        value: {
+          resultFields: [],
+        },
+      })
 
       expect(store.getState().resultFields).to.eql([])
 
-      dispatcher.dispatch({
-        name: "addGrouping",
+      store.dispatch({
+        type: "addGrouping",
         value: {name: "baz"},
       })
 
@@ -238,12 +263,17 @@ describe("store", function() {
     })
 
     it("should make sure result fields array contains unique values", function() {
-      store.setState({resultFields: ["foo", "bar"]})
+      store.dispatch({
+        type: "_setState",
+        value: {
+          resultFields: ["foo", "bar"],
+        },
+      })
 
       expect(store.getState().resultFields).to.eql(["foo", "bar"])
 
-      dispatcher.dispatch({
-        name: "addGrouping",
+      store.dispatch({
+        type: "addGrouping",
         value: {name: "bar"},
       })
 
@@ -254,12 +284,17 @@ describe("store", function() {
 
   describe("removeGrouping", function() {
     it("should remove field from grouping", function() {
-      store.setState({groupings: ["baz"]})
+      store.dispatch({
+        type: "_setState",
+        value: {
+          groupings: ["baz"],
+        },
+      })
 
       expect(store.getState().groupings).to.eql(["baz"])
 
-      dispatcher.dispatch({
-        name: "removeGrouping",
+      store.dispatch({
+        type: "removeGrouping",
         value: {name: "baz"},
       })
 
@@ -267,12 +302,15 @@ describe("store", function() {
     })
 
     it("should reset showCounts, combineRemainder, groupSort and groupLimit if groupings is deselected", function() {
-      store.setState({
-        showCounts: true,
-        groupSort: "asc",
-        groupLimit: 10,
-        groupings: ["baz"],
-        combineRemainder: true,
+      store.dispatch({
+        type: "_setState",
+        value: {
+          showCounts: true,
+          groupSort: "asc",
+          groupLimit: 10,
+          groupings: ["baz"],
+          combineRemainder: true,
+        },
       })
 
       expect(store.getState().showCounts).to.eql(true)
@@ -280,8 +318,8 @@ describe("store", function() {
       expect(store.getState().groupLimit).to.eql(10)
       expect(store.getState().combineRemainder).to.eql(true)
 
-      dispatcher.dispatch({
-        name: "removeGrouping",
+      store.dispatch({
+        type: "removeGrouping",
         value: {name: "baz"},
       })
 
@@ -292,12 +330,15 @@ describe("store", function() {
     })
 
     it("should not reset showCounts, combineRemainder, groupSort and groupLimit if groupings is still at least 1", function() {
-      store.setState({
-        showCounts: true,
-        groupSort: "asc",
-        groupLimit: 10,
-        groupings: ["bar", "baz"],
-        combineRemainder: true,
+      store.dispatch({
+        type: "_setState",
+        value: {
+          showCounts: true,
+          groupSort: "asc",
+          groupLimit: 10,
+          groupings: ["bar", "baz"],
+          combineRemainder: true,
+        },
       })
 
       expect(store.getState().showCounts).to.eql(true)
@@ -305,8 +346,8 @@ describe("store", function() {
       expect(store.getState().groupLimit).to.eql(10)
       expect(store.getState().combineRemainder).to.eql(true)
 
-      dispatcher.dispatch({
-        name: "removeGrouping",
+      store.dispatch({
+        type: "removeGrouping",
         value: {name: "baz"},
       })
 
@@ -319,8 +360,8 @@ describe("store", function() {
 
   describe("addSorter", function() {
     it("should add sorter", function() {
-      dispatcher.dispatch({
-        name: "addSorter",
+      store.dispatch({
+        type: "addSorter",
         value: {sorter: {field: "foo", direction: "desc"}},
       })
 
@@ -330,10 +371,15 @@ describe("store", function() {
 
   describe("removeSorter", function() {
     it("should remove sorter", function() {
-      store.setState({sorters: [{field: "foo", direction: "desc"}]})
+      store.dispatch({
+        type: "_setState",
+        value: {
+          sorters: [{field: "foo", direction: "desc"}],
+        },
+      })
 
-      dispatcher.dispatch({
-        name: "removeSorter",
+      store.dispatch({
+        type: "removeSorter",
         value: {name: "foo"},
       })
 
@@ -343,8 +389,8 @@ describe("store", function() {
 
   describe("showCounts", function() {
     it("should update showCounts", function() {
-      dispatcher.dispatch({
-        name: "showCounts",
+      store.dispatch({
+        type: "showCounts",
         value: {showCounts: true},
       })
 
@@ -352,14 +398,19 @@ describe("store", function() {
     })
 
     it("should reset groupSort, groupLimit and combineRemainder when set to false", function() {
-      store.setState({groupSort: "asc", groupLimit: 10, combineRemainder: true})
+      store.dispatch({
+        type: "_setState",
+        value: {
+          groupSort: "asc", groupLimit: 10, combineRemainder: true,
+        },
+      })
 
       expect(store.getState().groupSort).to.eql("asc")
       expect(store.getState().groupLimit).to.eql(10)
       expect(store.getState().combineRemainder).to.eql(true)
 
-      dispatcher.dispatch({
-        name: "showCounts",
+      store.dispatch({
+        type: "showCounts",
         value: {showCounts: false},
       })
 
@@ -372,12 +423,15 @@ describe("store", function() {
 
   describe("analyse", function() {
     it("should add analyse and reset groupings, showCounts, combineRemainder, groupSort and groupLimit", function() {
-      store.setState({
-        groupings: ["bar"],
-        showCounts: true,
-        groupSort: "asc",
-        groupLimit: 10,
-        combineRemainder: true,
+      store.dispatch({
+        type: "_setState",
+        value: {
+          groupings: ["bar"],
+          showCounts: true,
+          groupSort: "asc",
+          groupLimit: 10,
+          combineRemainder: true,
+        },
       })
 
       expect(store.getState().groupings).to.eql(["bar"])
@@ -386,8 +440,8 @@ describe("store", function() {
       expect(store.getState().groupLimit).to.eql(10)
       expect(store.getState().combineRemainder).to.eql(true)
 
-      dispatcher.dispatch({
-        name: "analyse",
+      store.dispatch({
+        type: "analyse",
         value: {name: "foo"},
       })
 
@@ -402,8 +456,8 @@ describe("store", function() {
 
   describe("groupSort", function() {
     it("should add group sort", function() {
-      dispatcher.dispatch({
-        name: "groupSort",
+      store.dispatch({
+        type: "groupSort",
         value: {groupSort: "foo"},
       })
 
@@ -413,8 +467,8 @@ describe("store", function() {
 
   describe("groupLimit", function() {
     it("should add group limit", function() {
-      dispatcher.dispatch({
-        name: "groupLimit",
+      store.dispatch({
+        type: "groupLimit",
         value: {groupLimit: "foo"},
       })
 
@@ -422,13 +476,16 @@ describe("store", function() {
     })
 
     it("should add reset combineRemainder if group limit is unset", function() {
-      store.setState({
-        groupLimit: "foo",
-        combineRemainder: true,
+      store.dispatch({
+        type: "_setState",
+        value: {
+          groupLimit: "foo",
+          combineRemainder: true,
+        },
       })
 
-      dispatcher.dispatch({
-        name: "groupLimit",
+      store.dispatch({
+        type: "groupLimit",
         value: {groupLimit: null},
       })
 
@@ -438,8 +495,8 @@ describe("store", function() {
 
   describe("combineRemainder", function() {
     it("should add group limit", function() {
-      dispatcher.dispatch({
-        name: "combineRemainder",
+      store.dispatch({
+        type: "combineRemainder",
         value: {combineRemainder: "foo"},
       })
 
@@ -449,8 +506,8 @@ describe("store", function() {
 
   describe("saveCalculatedFields", function() {
     it("should save calculated fields", function() {
-      dispatcher.dispatch({
-        name: "saveCalculatedFields",
+      store.dispatch({
+        type: "saveCalculatedFields",
         value: {calculatedFields: "foo"},
       })
 
@@ -460,8 +517,8 @@ describe("store", function() {
 
   describe("saveCalculationsString", function() {
     it("should save the calculation string", function() {
-      dispatcher.dispatch({
-        name: "saveCalculationsString",
+      store.dispatch({
+        type: "saveCalculationsString",
         value: {calculationsString: "foo"},
       })
 

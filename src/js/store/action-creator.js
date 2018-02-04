@@ -1,144 +1,136 @@
-const R = require("ramda")
-const dispatcher = require("./dispatcher")
-
-module.exports = {
-  saveJson(name, data) {
-    dispatcher.dispatch({
-      name: "saveJson",
-      value: {name, data},
-    })
-
-    if (name === "schema") {
-      dispatcher.dispatch({
-        name: "updateResultFields",
-        value: {fields: R.keys(data)},
+module.exports = function(store) {
+  return {
+    saveJson(name, data) {
+      store.dispatch({
+        type: "saveJson",
+        value: {name, data},
       })
-    }
-  },
+    },
 
-  saveCalculatedFields(calculatedFields) {
-    dispatcher.dispatch({
-      name: "saveCalculatedFields",
-      value: {calculatedFields},
-    })
-  },
+    saveCalculatedFields(calculatedFields) {
+      store.dispatch({
+        type: "saveCalculatedFields",
+        value: {calculatedFields},
+      })
+    },
 
-  saveCalculationsString(calculationsString) {
-    dispatcher.dispatch({
-      name: "saveCalculationsString",
-      value: {calculationsString},
-    })
-  },
+    saveCalculationsString(calculationsString) {
+      store.dispatch({
+        type: "saveCalculationsString",
+        value: {calculationsString},
+      })
+    },
 
-  addFilter(name) {
-    dispatcher.dispatch({
-      name: "addFilter",
-      value: {name},
-    })
-  },
+    addFilter(name) {
+      store.dispatch({
+        type: "addFilter",
+        value: {name},
+      })
+    },
 
-  deleteFilter(id) {
-    dispatcher.dispatch({
-      name: "deleteFilter",
-      value: {id},
-    })
-  },
+    deleteFilter(id) {
+      store.dispatch({
+        type: "deleteFilter",
+        value: {id},
+      })
+    },
 
-  toggleFilter(id, active) {
-    dispatcher.dispatch({
-      name: "updateFilter",
-      value: {id, value: {active}},
-    })
-  },
+    toggleFilter(id, active) {
+      store.dispatch({
+        type: "updateFilter",
+        value: {id, value: {active}},
+      })
+    },
 
-  updateFilter(id, value) {
-    dispatcher.dispatch({
-      name: "updateFilter",
-      value: {id, value},
-    })
-  },
+    updateFilter(id, value) {
+      store.dispatch({
+        type: "updateFilter",
+        value: {id, value},
+      })
+    },
 
-  limit(number) {
-    dispatcher.dispatch({
-      name: "limit",
-      value: {number},
-    })
-  },
+    limit(number) {
+      store.dispatch({
+        type: "limit",
+        value: {number},
+      })
+    },
 
-  reset() {
-    dispatcher.dispatch({
-      name: "reset",
-      value: {},
-    })
-  },
+    reset() {
+      store.dispatch({
+        type: "reset",
+        value: {},
+      })
+    },
 
-  addGrouping(name) {
-    dispatcher.dispatch({
-      name: "addGrouping",
-      value: {name},
-    })
-  },
+    addGrouping(name) {
+      store.dispatch({
+        type: "addGrouping",
+        value: {name},
+      })
+    },
 
-  removeGrouping(name) {
-    dispatcher.dispatch({
-      name: "removeGrouping",
-      value: {name},
-    })
-  },
+    removeGrouping(name) {
+      store.dispatch({
+        type: "removeGrouping",
+        value: {name},
+      })
+    },
 
-  addSorter(sorter) {
-    dispatcher.dispatch({
-      name: "addSorter",
-      value: {sorter},
-    })
-  },
+    addSorter(sorter) {
+      store.dispatch({
+        type: "addSorter",
+        value: {sorter},
+      })
+    },
 
-  removeSorter(name) {
-    dispatcher.dispatch({
-      name: "removeSorter",
-      value: {name},
-    })
-  },
+    removeSorter(name) {
+      store.dispatch({
+        type: "removeSorter",
+        value: {name},
+      })
+    },
 
-  analyse(name) {
-    dispatcher.dispatch({
-      name: "analyse",
-      value: {name},
-    })
-  },
+    analyse(name) {
+      store.dispatch({
+        type: "analyse",
+        value: {name},
+      })
+    },
 
-  updateResultFields(fields) {
-    dispatcher.dispatch({
-      name: "updateResultFields",
-      value: {fields},
-    })
-  },
+    updateResultFields(fields) {
+      store.dispatch({
+        type: "updateResultFields",
+        value: {fields},
+      })
+    },
 
-  showCounts(showCounts) {
-    dispatcher.dispatch({
-      name: "showCounts",
-      value: {showCounts},
-    })
-  },
+    showCounts(showCounts) {
+      store.dispatch({
+        type: "showCounts",
+        value: {showCounts},
+      })
+    },
 
-  groupSort(groupSort) {
-    dispatcher.dispatch({
-      name: "groupSort",
-      value: {groupSort},
-    })
-  },
+    groupSort(groupSort) {
+      store.dispatch({
+        type: "groupSort",
+        value: {groupSort},
+      })
+    },
 
-  groupLimit(groupLimit) {
-    dispatcher.dispatch({
-      name: "groupLimit",
-      value: {groupLimit},
-    })
-  },
+    groupLimit(groupLimit) {
+      store.dispatch({
+        type: "groupLimit",
+        value: {groupLimit},
+      })
+    },
 
-  combineRemainder(combineRemainder) {
-    dispatcher.dispatch({
-      name: "combineRemainder",
-      value: {combineRemainder},
-    })
-  },
+    combineRemainder(combineRemainder) {
+      store.dispatch({
+        type: "combineRemainder",
+        value: {combineRemainder},
+      })
+    },
+  }
 }

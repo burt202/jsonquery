@@ -22,7 +22,6 @@
     "create-react-class": "^15.6.2",
     "date-fns": "^1.29.0",
     "flat": "^4.0.0",
-    "flux": "^2.1.1",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.1",
     "ramda": "^0.25.0",
@@ -30,6 +29,7 @@
     "react-chartjs-2": "^2.7.0",
     "react-dom": "^16.2.0",
     "react-syntax-highlighter": "^5.8.0",
+    "redux": "^3.7.2",
     "uuid": "^3.2.1"
   },
   "devDependencies": {

@@ -3,8 +3,8 @@ const PropTypes = require("prop-types")
 const createReactClass = require("create-react-class")
 const queryString = require("query-string")
 
-const actionCreator = require("./store/action-creator")
 const store = require("./store/index")
+const actionCreator = require("./store/action-creator")(store)
 
 const Home = require("./home")
 const FromUrl = require("./from-url")
@@ -19,24 +19,22 @@ const Main = createReactClass({
     version: PropTypes.string.isRequired,
   },
 
-  getInitialState() {
-    return store.getState()
-  },
-
   componentDidMount() {
-    store.addChangeListener(this.update)
+    this.unsubscribe = store.subscribe(this.update)
   },
 
   componentWillUnmount() {
-    store.removeChangeListener(this.update)
+    this.unsubscribe()
   },
 
   update() {
-    this.setState(store.getState())
+    this.forceUpdate()
   },
 
   getContent() {
-    if (!this.state.schema || !this.state.data || !this.state.resultFields) {
+    const state = store.getState()
+
+    if (!state.schema || !state.data || !state.resultFields) {
       const parsed = queryString.parse(location.search)
 
       if (parsed.dataUrl) {
@@ -53,20 +51,20 @@ const Main = createReactClass({
 
     return <Query
       actionCreator={actionCreator}
-      filters={this.state.filters}
-      groupings={this.state.groupings}
-      sorters={this.state.sorters}
-      schema={this.state.schema}
-      data={this.state.data}
-      calculatedFields={this.state.calculatedFields}
-      calculationsString={this.state.calculationsString}
-      resultFields={this.state.resultFields}
-      showCounts={this.state.showCounts}
-      groupSort={this.state.groupSort}
-      groupLimit={this.state.groupLimit}
-      limit={this.state.limit}
-      analyse={this.state.analyse}
-      combineRemainder={this.state.combineRemainder}
+      filters={state.filters}
+      groupings={state.groupings}
+      sorters={state.sorters}
+      schema={state.schema}
+      data={state.data}
+      calculatedFields={state.calculatedFields}
+      calculationsString={state.calculationsString}
+      resultFields={state.resultFields}
+      showCounts={state.showCounts}
+      groupSort={state.groupSort}
+      groupLimit={state.groupLimit}
+      limit={state.limit}
+      analyse={state.analyse}
+      combineRemainder={state.combineRemainder}
     />
   },
 
