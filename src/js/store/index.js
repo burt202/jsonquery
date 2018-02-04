@@ -1,6 +1,6 @@
 const R = require("ramda")
 const uuid = require("uuid")
-const {createStore} = require("redux")
+const {applyMiddleware, createStore} = require("redux")
 
 const utils = require("../utils")
 
@@ -188,4 +188,15 @@ function reducers(contents, action) {
   return handlers[action.type](contents, action.value)
 }
 
-module.exports = createStore(reducers)
+const middlewares = []
+
+if (process.env.NODE_ENV !== "production") {
+  const {createLogger} = require("redux-logger")
+  const logger = createLogger({
+    collapsed: (getState, action, logEntry) => !logEntry.error,
+  })
+
+  middlewares.push(logger)
+}
+
+module.exports = createStore(reducers, applyMiddleware.apply(this, middlewares))

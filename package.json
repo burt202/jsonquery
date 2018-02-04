@@ -8,7 +8,7 @@
   },
   "scripts": {
     "lint": "eslint src/ test/ --ext .js,.jsx",
-    "test": "mocha --opts test/mocha-unit.opts",
+    "test": "NODE_ENV='production' mocha --opts test/mocha-unit.opts",
     "start": "webpack-dev-server --progress --colors",
     "build": "rm -rf build; webpack --config ./config/webpack.config.prod.js --progress",
     "deploy": "gh-pages -d build",
@@ -30,6 +30,7 @@
     "react-dom": "^16.2.0",
     "react-syntax-highlighter": "^5.8.0",
     "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
