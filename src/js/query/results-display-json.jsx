@@ -1,11 +1,11 @@
 const React = require("react")
 const PropTypes = require("prop-types")
-const Clipboard = require("clipboard")
+const ClipboardJS = require("clipboard")
 
 const Code = require("../components/code")
 
 function JsonDisplay(props) {
-  new Clipboard("a.site-link[data-clipboard-action='copy']")
+  new ClipboardJS("a.site-link[data-clipboard-action='copy']")
 
   function onDownload() {
     props.onDownload()

@@ -9,6 +9,11 @@ module.exports = {
     "mocha": 1,
     "es6": 1
   },
+  "settings": {
+    "react": {
+      "version": "16.0"
+    }
+  },
   "rules": {
     "react/display-name": 0,
 

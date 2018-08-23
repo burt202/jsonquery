@@ -1,11 +1,11 @@
 const React = require("react")
 const PropTypes = require("prop-types")
-const Clipboard = require("clipboard")
+const ClipboardJS = require("clipboard")
 
 const R = require("ramda")
 
 function TableDisplay(props) {
-  new Clipboard("th.tableHeaderCell")
+  new ClipboardJS("th.tableHeaderCell")
 
   function onDownload() {
     props.onDownload()
