@@ -18,7 +18,6 @@
   "dependencies": {
     "chart.js": "^2.7.2",
     "classnames": "^2.2.6",
-    "clipboard": "^2.0.1",
     "create-react-class": "^15.6.3",
     "date-fns": "^1.29.0",
     "flat": "^4.1.0",
@@ -27,6 +26,7 @@
     "ramda": "^0.25.0",
     "react": "^16.4.2",
     "react-chartjs-2": "^2.7.4",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.4.2",
     "react-syntax-highlighter": "^8.0.1",
     "redux": "^4.0.0",

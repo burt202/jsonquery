@@ -1,11 +1,10 @@
 const React = require("react")
 const PropTypes = require("prop-types")
-const ClipboardJS = require("clipboard")
+const CopyToClipboard = require("react-copy-to-clipboard").CopyToClipboard
 
 const R = require("ramda")
 
 function TableDisplay(props) {
-  new ClipboardJS("th.tableHeaderCell")
 
   function onDownload() {
     props.onDownload()
@@ -25,7 +24,11 @@ function TableDisplay(props) {
 
   if (header) {
     const headerRow = header.cols.map(function(col, index) {
-      return <th key={index} className="tableHeaderCell" data-clipboard-text={getHeaderCopyText(index)} title="Copy column data">{col}</th>
+      return (
+        <th key={index} className="tableHeaderCell" title="Copy column data">
+          <CopyToClipboard text={getHeaderCopyText(index)}><span>{col}</span></CopyToClipboard>
+        </th>
+      )
     })
 
     tableHeader = <thead><tr>{headerRow}</tr></thead>
