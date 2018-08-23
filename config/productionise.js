@@ -1,13 +1,15 @@
 const webpack = require("webpack")
 const NunjucksWebpackPlugin = require("nunjucks-webpack-plugin")
-const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
 
 const R = require("ramda")
 
 const prodPlugins = [
-  new ExtractTextPlugin("bundle.css"),
+  new MiniCssExtractPlugin({
+    filename: "bundle.css",
+  }),
   new OptimizeCssAssetsPlugin(),
   new webpack.DefinePlugin({
     "process.env": {
@@ -31,10 +33,10 @@ const prodPlugins = [
 
 const prodRules = [{
   test: /\.css$/,
-  loader: ExtractTextPlugin.extract({
-    fallback: "style-loader",
-    use: "css-loader",
-  }),
+  use: [
+    {loader: MiniCssExtractPlugin.loader},
+    {loader: "css-loader"},
+  ],
 }]
 
 module.exports = function(webpackConfig) {
@@ -45,7 +47,7 @@ module.exports = function(webpackConfig) {
 
   const oldRules = webpackConfig.module.rules.slice(0, webpackConfig.module.rules.length - 1)
   const entry = webpackConfig.entry.slice(-1)
-  const result = R.merge(webpackConfig, {plugins, entry})
+  const result = R.merge(webpackConfig, {plugins, entry, mode: "production"})
 
   result.module.rules = oldRules.concat(prodRules)
 

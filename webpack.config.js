@@ -6,6 +6,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin")
 const packageJson = require("./package.json")
 
 module.exports = {
+  mode: "development",
   entry: [
     "react-hot-loader/patch",
     "webpack-dev-server/client?http://localhost:8080",
@@ -23,12 +24,19 @@ module.exports = {
   },
   module: {
     rules: [
-      {test: /\.jsx$/, use: [{loader: "jsx-loader"}]},
-      {test: /\.json$/, use: [{loader: "json-loader"}]},
-      {test: /\.css$/, use: [
-        {loader: "style-loader"},
-        {loader: "css-loader"},
-      ]},
+      {
+        test: /\.jsx$/,
+        use: [
+          {loader: "jsx-loader"},
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {loader: "style-loader"},
+          {loader: "css-loader"},
+        ],
+      },
     ],
   },
   devServer: {
