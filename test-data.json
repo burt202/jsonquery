@@ -1,52 +1,102 @@
 [
   {
-    "Album": "Favourite Worst Nightmare",
-    "Artist": "Arctic Monkeys",
-    "Genre": "Alternative Rock",
-    "Length": 172,
-    "Size": "22.05 MB",
-    "Title": "Brianstorm",
-    "Track": 1,
-    "Year": 2007
+    "manufacturer": "Ford",
+    "model": "Fiesta",
+    "year": 2014,
+    "automatic": false,
+    "engineSize": 1.2,
+    "bhp": 95,
+    "features": ["dabRadio", "sunroof"],
+    "dateRegistered": "2015-08-24T09:32:00.000Z"
   },
   {
-    "Album": "Humbug",
-    "Artist": "Arctic Monkeys",
-    "Genre": "Alternative Rock",
-    "Length": 283,
-    "Size": "31.24 MB",
-    "Title": "Dance Little Liar",
-    "Track": 8,
-    "Year": 2009
+    "manufacturer": "Honda",
+    "model": "Jazz",
+    "year": 2010,
+    "automatic": true,
+    "engineSize": 1.2,
+    "bhp": 85,
+    "features": ["dabRadio"],
+    "dateRegistered": "2010-01-21T12:12:00.000Z"
   },
   {
-    "Album": "The Resistance",
-    "Artist": "Muse",
-    "Genre": "Rock",
-    "Length": 236,
-    "Size": "24.09 MB",
-    "Title": "Undisclosed Desires",
-    "Track": 3,
-    "Year": 2009
+    "manufacturer": "Ferrari",
+    "model": "FF",
+    "year": 2016,
+    "automatic": true,
+    "engineSize": 6.2,
+    "bhp": 600,
+    "features": ["dabRadio", "parkingSensors", "launchControl"],
+    "dateRegistered": "2016-03-01T11:29:00.000Z"
   },
   {
-    "Album": "Presence",
-    "Artist": "Led Zeppelin",
-    "Genre": "Rock",
-    "Length": 628,
-    "Size": "68.25 MB",
-    "Title": "Achilles Last Stand",
-    "Track": 1,
-    "Year": 1976
+    "manufacturer": "Audi",
+    "model": "A8",
+    "year": 2015,
+    "automatic": true,
+    "engineSize": 3.8,
+    "bhp": 400,
+    "features": ["dabRadio", "parkingSensors", "heatedSeats", "satNav"],
+    "dateRegistered": "2017-09-21T12:28:00.000Z"
   },
   {
-    "Album": "<I°_°I>",
-    "Artist": "Caravan Palace",
-    "Genre": "Jazz",
-    "Length": 229,
-    "Size": "24.39 MB",
-    "Title": "Lone Digger",
-    "Track": 1,
-    "Year": 2015
+    "manufacturer": "Seat",
+    "model": "Ibiza",
+    "year": 2017,
+    "automatic": false,
+    "engineSize": 1.2,
+    "bhp": 90,
+    "features": ["dabRadio", "satNav"],
+    "dateRegistered": "2017-04-06T15:28:00.000Z"
+  },
+  {
+    "manufacturer": "Audi",
+    "model": "RS3",
+    "year": 2018,
+    "automatic": false,
+    "engineSize": 3.0,
+    "bhp": 350,
+    "features": ["dabRadio", "satNav", "alloys"],
+    "dateRegistered": "2018-05-06T15:37:00.000Z"
+  },
+  {
+    "manufacturer": "Ford",
+    "model": "Focus",
+    "year": 2015,
+    "automatic": false,
+    "engineSize": 1.8,
+    "bhp": 180,
+    "features": ["dabRadio", "satNav", "alloys"],
+    "dateRegistered": "2016-01-08T11:37:00.000Z"
+  },
+  {
+    "manufacturer": "Porsche",
+    "model": "Cayman",
+    "year": 2017,
+    "automatic": false,
+    "engineSize": 3,
+    "bhp": 350,
+    "features": ["dabRadio", "satNav", "alloys"],
+    "dateRegistered": "2017-08-08T11:45:00.000Z"
+  },
+  {
+    "manufacturer": "Caterham",
+    "model": "7",
+    "year": 2017,
+    "automatic": false,
+    "engineSize": 3.5,
+    "bhp": 350,
+    "features": [],
+    "dateRegistered": "2017-08-08T11:45:00.000Z"
+  },
+  {
+    "manufacturer": "Range Rover",
+    "model": "Velar",
+    "year": 2018,
+    "automatic": true,
+    "engineSize": 3.0,
+    "bhp": 250,
+    "features": ["dabRadio", "parkingSensors", "heatedSeats", "satNav"],
+    "dateRegistered": "2018-07-03T16:45:00.000Z"
   }
 ]
