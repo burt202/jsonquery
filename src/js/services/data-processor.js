@@ -36,6 +36,10 @@ const isOneOf = R.curry(function(filterValue, dataValue) {
   return R.compose(R.contains(dataValue), R.split(","), R.defaultTo(""))(filterValue)
 })
 
+const containsOneOf = R.curry(function(filterValue, dataValue) {
+  return R.compose(R.any(R.equals(true)), R.map(R.contains(R.__, dataValue)), R.split(","))(filterValue)
+})
+
 const isBetween = R.curry(function(start, end, dataValue) {
   return R.allPass([R.gt(R.__, start), R.lt(R.__, end)])(dataValue)
 })
@@ -53,6 +57,7 @@ function getStringFilter(filter) {
     if (filter.operator === "iof") return isOneOf(filter.value)
     if (filter.operator === "inof") return R.compose(R.not, isOneOf(filter.value))
     if (filter.operator === "rgm") return matches(filter.value)
+    if (filter.operator === "rgnm") return R.compose(R.not, matches(filter.value))
   }
 
   if (filter.operator === "nl") return R.isNil
@@ -74,6 +79,7 @@ function getNumberFilter(filter) {
 
     if (filter.value1 && filter.value1.length) {
       if (filter.operator === "btw") return isBetween(parseFloat(filter.value), parseFloat(filter.value1))
+      if (filter.operator === "nbtw") return R.compose(R.not, isBetween(parseFloat(filter.value), parseFloat(filter.value1)))
     }
   }
 
@@ -105,6 +111,7 @@ function getDateFilter(filter) {
 
     if (filter.value1 && filter.value1.length >= 8 && isValidDate(filter.value1)) {
       if (filter.operator === "btw") return isBetweenDates(filter.value, filter.value1)
+      if (filter.operator === "nbtw") return R.compose(R.not, isBetweenDates(filter.value, filter.value1))
     }
   }
 
@@ -126,6 +133,7 @@ function getTimeFilter(filter) {
 
     if (filter.value1 && filter.value1.length >= 5 && validator.isValidTime(filter.value1)) {
       if (filter.operator === "btw") return isBetween(filter.value, filter.value1)
+      if (filter.operator === "nbtw") return R.compose(R.not, isBetween(filter.value, filter.value1))
     }
   }
 
@@ -139,6 +147,7 @@ function getArrayFilter(filter) {
   if (filter.value && filter.value.length) {
     if (filter.operator === "cos") return R.contains(filter.value)
     if (filter.operator === "con") return R.contains(parseFloat(filter.value))
+    if (filter.operator === "cof") return containsOneOf(filter.value)
     if (filter.operator === "hl") return R.compose(R.equals(parseInt(filter.value, 10)), R.length)
     if (filter.operator === "dhl") return R.compose(R.not, R.equals(parseInt(filter.value, 10)), R.length)
     if (filter.operator === "hlgt") return R.compose(R.gt(R.__, parseInt(filter.value, 10)), R.length)

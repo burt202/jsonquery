@@ -20,6 +20,7 @@ const filterConfig = {
     {text: "Is one of", value: "iof", inputs: [separateWithCommaInput]},
     {text: "Is not one of", value: "inof", inputs: [separateWithCommaInput]},
     {text: "Matches", value: "rgm", inputs: [regexInput]},
+    {text: "Does not match", value: "rgnm", inputs: [regexInput]},
   ],
   number: [
     {text: "Equal to", value: "eq", inputs: [defaultInput]},
@@ -33,6 +34,7 @@ const filterConfig = {
     {text: "Is one of", value: "iof", inputs: [separateWithCommaInput]},
     {text: "Is not one of", value: "inof", inputs: [separateWithCommaInput]},
     {text: "Is between", value: "btw", inputs: [defaultInput, defaultInput]},
+    {text: "Is not between", value: "nbtw", inputs: [defaultInput, defaultInput]},
   ],
   bool: [
     {text: "Is null", value: "nl"},
@@ -47,6 +49,7 @@ const filterConfig = {
     {text: "Is before", value: "be", inputs: [dateTimeInput]},
     {text: "Is after", value: "af", inputs: [dateTimeInput]},
     {text: "Is between", value: "btw", inputs: [dateTimeInput, dateTimeInput]},
+    {text: "Is not between", value: "nbtw", inputs: [dateTimeInput, dateTimeInput]},
     {text: "Is null", value: "nl"},
     {text: "Is not null", value: "nnl"},
   ],
@@ -56,12 +59,14 @@ const filterConfig = {
     {text: "Is before", value: "be", inputs: [timeInput]},
     {text: "Is after", value: "af", inputs: [timeInput]},
     {text: "Is between", value: "btw", inputs: [timeInput, timeInput]},
+    {text: "Is not between", value: "nbtw", inputs: [timeInput, timeInput]},
     {text: "Is null", value: "nl"},
     {text: "Is not null", value: "nnl"},
   ],
   array: [
     {text: "Contains String", value: "cos", inputs: [defaultInput]},
     {text: "Contains Number", value: "con", inputs: [defaultInput]},
+    {text: "Contains one of", value: "cof", inputs: [separateWithCommaInput]},
     {text: "Has length of", value: "hl", inputs: [defaultInput]},
     {text: "Doesnt Have length of", value: "dhl", inputs: [defaultInput]},
     {text: "Has length greater than", value: "hlgt", inputs: [defaultInput]},

@@ -160,6 +160,17 @@ describe("dateProcessor", function() {
           {name: "123", type: "card"},
         ])
       })
+
+      it("should filter when operator is 'rgnm'", function() {
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
+          {name: "type", operator: "rgnm", value: "ca", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "baz", type: "loan"},
+          {name: "abc", type: null},
+        ])
+      })
     })
 
     describe("number", function() {
@@ -326,6 +337,20 @@ describe("dateProcessor", function() {
 
         expect(res).to.eql([
           {name: "bar", code: 102},
+        ])
+      })
+
+      it("should filter when operator is 'nbtw'", function() {
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
+          {name: "code", operator: "nbtw", value: "101", value1: "103", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "foo", code: 101},
+          {name: "baz", code: 103},
+          {name: "abc", code: 103},
+          {name: "123", code: null},
+          {name: "456", code: 0},
         ])
       })
 
@@ -532,6 +557,19 @@ describe("dateProcessor", function() {
         ])
       })
 
+      it("should filter when operator is 'nbtw'", function() {
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
+          {name: "dateCreated", operator: "nbtw", value: "20160712", value1: "20160910", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "foo", dateCreated: "2016-09-11T17:16:27"},
+          {name: "baz", dateCreated: "2016-06-11T17:16:27"},
+          {name: "abc", dateCreated: null},
+          {name: "123", dateCreated: "2016-07-11T17:16:27"},
+        ])
+      })
+
       it("should filter when operator is 'btw' for datetime strings", function() {
         const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
           {name: "dateCreated", operator: "btw", value: "20160711 0345", value1: "20160911 1854", active: true},
@@ -541,6 +579,17 @@ describe("dateProcessor", function() {
           {name: "foo", dateCreated: "2016-09-11T17:16:27"},
           {name: "bar", dateCreated: "2016-08-11T17:16:27"},
           {name: "123", dateCreated: "2016-07-11T17:16:27"},
+        ])
+      })
+
+      it("should filter when operator is 'nbtw' for datetime strings", function() {
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
+          {name: "dateCreated", operator: "nbtw", value: "20160711 0345", value1: "20160911 1854", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "baz", dateCreated: "2016-06-11T17:16:27"},
+          {name: "abc", dateCreated: null},
         ])
       })
     })
@@ -635,6 +684,19 @@ describe("dateProcessor", function() {
           {time: "08:00:10", value: 63},
         ])
       })
+
+      it("should filter when operator is 'nbtw'", function() {
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
+          {name: "time", operator: "nbtw", value: "02:08:56", value1: "09:08", active: true},
+        ])
+
+        expect(res).to.eql([
+          {time: "00:00:00", value: 64},
+          {time: null, value: 64},
+          {time: "15:02:30", value: 65},
+          {time: "01:00:00", value: 65},
+        ])
+      })
     })
 
     describe("array", function() {
@@ -669,6 +731,18 @@ describe("dateProcessor", function() {
         expect(res).to.eql([
           {name: "bar", types: ["cash", "card"]},
           {name: "abc", types: ["card", 101]},
+        ])
+      })
+
+      it("should filter when operator is 'cof'", function() {
+        const res = dateProcessor.filter(mockDataForFiltering, mockSchema, [
+          {name: "types", operator: "cof", value: "card,investment", active: true},
+        ])
+
+        expect(res).to.eql([
+          {name: "bar", types: ["cash", "card"]},
+          {name: "abc", types: ["card", 101]},
+          {name: "123", types: ["investment"]},
         ])
       })
 
