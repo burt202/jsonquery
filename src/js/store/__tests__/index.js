@@ -21,6 +21,7 @@ describe("store", function() {
       calculatedFields: [],
       calculationsString: null,
       combineRemainder: false,
+      toast: undefined,
     })
   })
 

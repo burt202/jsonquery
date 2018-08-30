@@ -29,6 +29,22 @@ pre {
   width: 780px;
 }
 
+.toast-outer {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.toast-inner {
+  background: #A6D785;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
 .header {
   display: flex;
 }

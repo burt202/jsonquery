@@ -19,6 +19,7 @@ const defaults = {
   limit: null,
   analyse: null,
   combineRemainder: false,
+  toast: undefined,
 }
 
 const initialOperators = {
@@ -178,6 +179,12 @@ const handlers = {
   saveCalculationsString(contents, payload) {
     return R.merge(contents, {
       calculationsString: payload.calculationsString,
+    })
+  },
+
+  updateToast(contents, payload) {
+    return R.merge(contents, {
+      toast: payload.toast,
     })
   },
 }

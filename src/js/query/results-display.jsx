@@ -59,6 +59,16 @@ const Results = createReactClass({
     }.bind(this))
   },
 
+  onCopy() {
+    const actionCreator = this.props.actionCreator
+
+    actionCreator.showToast("Copied!")
+
+    setTimeout(function() {
+      actionCreator.removeToast()
+    }, 3000)
+  },
+
   baseDownloader() {
     const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
 
@@ -128,7 +138,7 @@ const Results = createReactClass({
 
     const formatted = downloadFormatter[this.state.type] ? downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results) : this.props.results
     const Component = type.component
-    return <Component data={formatted} onDownload={type.downloader} filteredLength={this.props.filteredLength} />
+    return <Component data={formatted} onDownload={type.downloader} filteredLength={this.props.filteredLength} onCopy={this.onCopy} />
   },
 
   onChangeHandler(e) {

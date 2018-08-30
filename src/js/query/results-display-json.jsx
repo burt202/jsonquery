@@ -12,7 +12,7 @@ function JsonDisplay(props) {
 
   const downloadLink = props.onDownload ? (<ul className="side-options right">
     <li><a className="site-link">
-      <CopyToClipboard text={props.data}>
+      <CopyToClipboard text={props.data} onCopy={props.onCopy}>
         <span>Copy To Clipboard</span>
       </CopyToClipboard></a>
     </li>
@@ -34,6 +34,7 @@ function JsonDisplay(props) {
 JsonDisplay.propTypes = {
   data: PropTypes.any.isRequired,
   onDownload: PropTypes.func,
+  onCopy: PropTypes.func,
 }
 
 module.exports = JsonDisplay

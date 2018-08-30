@@ -68,6 +68,20 @@ const Main = createReactClass({
     />
   },
 
+  getToast() {
+    const state = store.getState()
+
+    if (state.toast) {
+      return (
+        <div className="toast-outer">
+          <div className="toast-inner">{state.toast}</div>
+        </div>
+      )
+    }
+
+    return undefined
+  },
+
   render() {
     return (
       <div>
@@ -75,6 +89,7 @@ const Main = createReactClass({
           <h1><a href="/">JSONQuery</a></h1>
           <span>v{this.props.version} - <a className="site-link" href="https://github.com/burt202/jsonquery">Github</a></span>
         </div>
+        {this.getToast()}
         {this.getContent()}
       </div>
     )

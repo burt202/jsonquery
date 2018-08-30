@@ -132,5 +132,19 @@ module.exports = function(store) {
         value: {combineRemainder},
       })
     },
+
+    showToast(toast) {
+      store.dispatch({
+        type: "updateToast",
+        value: {toast},
+      })
+    },
+
+    removeToast() {
+      store.dispatch({
+        type: "updateToast",
+        value: {toast: undefined},
+      })
+    },
   }
 }
