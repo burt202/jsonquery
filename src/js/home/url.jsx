@@ -1,18 +1,12 @@
 const React = require("react")
 const createReactClass = require("create-react-class")
 
-const testSchema = {
-  Album: "string",
-  Artist: "string",
-  Genre: "string",
-  Length: "number",
-  Size: "string",
-  Title: "string",
-  Track: "number",
-  Year: "date",
-}
+const schemaGenerator = require("../services/schema-generator")
 
-const testUrl = "http://jsonquery.co.uk/test-data.json"
+const testData = require("../../test-data.json")
+const testSchema = schemaGenerator.generate(testData[0])
+
+const testUrl = "https://jsonquery.co.uk/test-data.json"
 
 const Url = createReactClass({
   displayName: "Url",
