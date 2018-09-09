@@ -3,9 +3,9 @@ const PropTypes = require("prop-types")
 const createReactClass = require("create-react-class")
 const R = require("ramda")
 
-const GroupingControl = require("./grouping-control")
-const SortingControl = require("./sorting-control")
-const LimitControl = require("./limit-control")
+const GroupingControl = require("./grouping")
+const SortingControl = require("./sorting")
+const LimitControl = require("./limit")
 
 const Controls = createReactClass({
   displayName: "Controls",
