@@ -1,7 +1,7 @@
 const React = require("react")
 const PropTypes = require("prop-types")
 const createReactClass = require("create-react-class")
-const FilterRow = require("./filter-row")
+const FilterRow = require("./row")
 
 const Filters = createReactClass({
   displayName: "Filters",
