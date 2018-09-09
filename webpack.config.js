@@ -7,6 +7,9 @@ const packageJson = require("./package.json")
 
 module.exports = {
   mode: "development",
+  performance: {
+    hints: false,
+  },
   entry: [
     "react-hot-loader/patch",
     "webpack-dev-server/client?http://localhost:8080",
