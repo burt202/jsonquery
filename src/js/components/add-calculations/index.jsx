@@ -94,7 +94,7 @@ const AddCalculations = createReactClass({
         <h3>Add Calculations</h3>
         <textarea className="calculations" value={this.state.calculationsString} onChange={this.onChange} />
         {this.getErrorDisplay()}
-        <h4>Sample Item</h4>
+        <h4>Sample Data Item</h4>
         <Code language="json">
           {JSON.stringify(this.props.data[0], null, 2)}
         </Code>
