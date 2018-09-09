@@ -6,7 +6,7 @@ const R = require("ramda")
 const validator = require("../../services/validator")
 
 const SchemaEditRow = require("./schema-edit-row")
-const Code = require("../components/code")
+const Code = require("../shared/code")
 
 const SchemaEdit = createReactClass({
   displayName: "SchemaEdit",

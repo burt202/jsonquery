@@ -2,7 +2,7 @@ const React = require("react")
 const PropTypes = require("prop-types")
 const createReactClass = require("create-react-class")
 
-const LimitControl = require("../components/limit-control")
+const LimitControl = require("./limit-control")
 
 const GroupingControl = createReactClass({
   displayName: "GroupingControl",

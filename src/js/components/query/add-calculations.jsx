@@ -7,7 +7,7 @@ const formatDate = require("date-fns/format")
 const differenceInDays = require("date-fns/difference_in_days")
 const utils = require("../../utils")
 
-const Code = require("../components/code")
+const Code = require("../shared/code")
 
 const R = require("ramda")
 

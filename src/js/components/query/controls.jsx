@@ -5,7 +5,7 @@ const R = require("ramda")
 
 const GroupingControl = require("./grouping-control")
 const SortingControl = require("./sorting-control")
-const LimitControl = require("../components/limit-control")
+const LimitControl = require("./limit-control")
 
 const Controls = createReactClass({
   displayName: "Controls",

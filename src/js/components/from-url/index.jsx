@@ -5,7 +5,7 @@ const createReactClass = require("create-react-class")
 const validator = require("../../services/validator")
 const schemaGenerator = require("../../services/schema-generator")
 
-const Code = require("../components/code")
+const Code = require("../shared/code")
 
 function fetchData(url, withCredentials) {
   const opts = {method: "get"}
