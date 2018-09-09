@@ -1,9 +1,9 @@
 const React = require("react")
 const createReactClass = require("create-react-class")
 
-const schemaGenerator = require("../services/schema-generator")
+const schemaGenerator = require("../../services/schema-generator")
 
-const testData = require("../../test-data.json")
+const testData = require("../../../test-data.json")
 const testSchema = schemaGenerator.generate(testData[0])
 
 const testUrl = "https://jsonquery.co.uk/test-data.json"

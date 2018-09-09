@@ -2,10 +2,10 @@ const React = require("react")
 const PropTypes = require("prop-types")
 const createReactClass = require("create-react-class")
 
-const schemaGenerator = require("../services/schema-generator")
+const schemaGenerator = require("../../services/schema-generator")
 const formatDate = require("date-fns/format")
 const differenceInDays = require("date-fns/difference_in_days")
-const utils = require("../utils")
+const utils = require("../../utils")
 
 const Code = require("../components/code")
 

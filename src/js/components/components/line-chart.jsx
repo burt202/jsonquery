@@ -2,25 +2,15 @@ const React = require("react")
 const PropTypes = require("prop-types")
 
 const R = require("ramda")
-const utils = require("../utils")
+const utils = require("../../utils")
 
-const Doughnut = require("react-chartjs-2").Doughnut
+const Line = require("react-chartjs-2").Line
 
-function getColours(data) {
-  let count = 0
-
-  return data.map(function() {
-    return utils.rainbow(data.length, count++)
-  })
-}
-
-function DoughnutChart(props) {
+function LineChart(props) {
   const data = {
     labels: R.pluck("name", props.data),
     datasets: [{
-      data: R.pluck("count", props.data),
-      backgroundColor: getColours(props.data),
-      hoverBackgroundColor: getColours(props.data),
+      data: (props.cumulative) ? utils.getCumulative(R.pluck("count", props.data)) : R.pluck("count", props.data),
     }],
   }
 
@@ -33,7 +23,7 @@ function DoughnutChart(props) {
       displayColors: false,
     },
     legend: {
-      position: "right",
+      display: false,
     },
     layout: {
       padding: {
@@ -45,22 +35,27 @@ function DoughnutChart(props) {
     },
     scales: {
       yAxes: [{
-        display: false,
+        gridLines: {
+          display: false,
+        },
       }],
       xAxes: [{
-        display: false,
+        gridLines: {
+          display: false,
+        },
       }],
     },
   }
 
   return (
-    <Doughnut data={data} options={options} ref={(c) => this.chartComponent = c} redraw />
+    <Line data={data} options={options} ref={(c) => this.chartComponent = c} redraw />
   )
 }
 
-DoughnutChart.propTypes = {
+LineChart.propTypes = {
   data: PropTypes.array.isRequired,
   title: PropTypes.string,
+  cumulative: PropTypes.bool.isRequired,
 }
 
-module.exports = DoughnutChart
+module.exports = LineChart

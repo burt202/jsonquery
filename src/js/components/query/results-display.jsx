@@ -4,8 +4,8 @@ const createReactClass = require("create-react-class")
 const R = require("ramda")
 const classNames = require("classnames")
 
-const downloadFormatter = require("../services/download-formatter")
-const validator = require("../services/validator")
+const downloadFormatter = require("../../services/download-formatter")
+const validator = require("../../services/validator")
 
 const JsonDisplay = require("./results-display-json")
 const TableDisplay = require("./results-display-table")

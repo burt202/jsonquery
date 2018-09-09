@@ -2,8 +2,8 @@ const React = require("react")
 const PropTypes = require("prop-types")
 const createReactClass = require("create-react-class")
 
-const validator = require("../services/validator")
-const schemaGenerator = require("../services/schema-generator")
+const validator = require("../../services/validator")
+const schemaGenerator = require("../../services/schema-generator")
 
 const Code = require("../components/code")
 

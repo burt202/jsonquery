@@ -6,9 +6,9 @@ const queryString = require("query-string")
 const store = require("./store/index")
 const actionCreator = require("./store/action-creator")(store)
 
-const Home = require("./home")
-const FromUrl = require("./from-url")
-const Query = require("./query")
+const Home = require("./components/home")
+const FromUrl = require("./components/from-url")
+const Query = require("./components/query")
 
 require("../css/app.css")
 

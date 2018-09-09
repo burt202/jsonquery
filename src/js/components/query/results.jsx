@@ -7,8 +7,8 @@ const ResultsDisplay = require("./results-display")
 
 const R = require("ramda")
 
-const dataProcessor = require("../services/data-processor")
-const utils = require("../utils")
+const dataProcessor = require("../../services/data-processor")
+const utils = require("../../utils")
 
 const Results = createReactClass({
   displayName: "Results",

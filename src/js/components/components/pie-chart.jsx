@@ -2,7 +2,7 @@ const React = require("react")
 const PropTypes = require("prop-types")
 
 const R = require("ramda")
-const utils = require("../utils")
+const utils = require("../../utils")
 
 const Pie = require("react-chartjs-2").Pie
 
