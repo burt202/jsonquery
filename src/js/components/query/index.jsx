@@ -5,7 +5,7 @@ const createReactClass = require("create-react-class")
 const Filters = require("./filters")
 const Controls = require("./controls")
 const Results = require("./results")
-const SchemaEdit = require("./schema-edit")
+const SchemaEdit = require("../schema-edit")
 const AddCalculations = require("./add-calculations")
 
 const Query = createReactClass({

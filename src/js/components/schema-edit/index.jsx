@@ -5,7 +5,7 @@ const R = require("ramda")
 
 const validator = require("../../services/validator")
 
-const SchemaEditRow = require("./schema-edit-row")
+const SchemaEditRow = require("./row")
 const Code = require("../shared/code")
 
 const SchemaEdit = createReactClass({
@@ -90,7 +90,7 @@ const SchemaEdit = createReactClass({
             {JSON.stringify(this.state.schema, null, 2)}
           </Code>
         </div>
-        <p><label>Upload: </label><input type="file" key={this.state.inputKey} onChange={this.onFileUploadStart} /></p>
+        <p><label>Override By Upload: </label><input type="file" key={this.state.inputKey} onChange={this.onFileUploadStart} /></p>
         <ul className="side-options right">
           <li><a className="site-link" onClick={this.props.onCancel}>Cancel</a></li>
           <li><a className="site-link" onClick={this.onSave}>Save</a></li>
