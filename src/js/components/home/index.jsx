@@ -10,6 +10,8 @@ const Paste = require("./paste")
 const Upload = require("./upload")
 const Url = require("./url")
 
+const testData = require("../../../test-data.json")
+
 const Home = createReactClass({
   displayName: "Home",
 
@@ -59,7 +61,7 @@ const Home = createReactClass({
 
   getPasteComponent() {
     if (this.state.selectedTab !== "paste") return null
-    return <Paste onAction={this.onAction} />
+    return <Paste onAction={this.onAction} data={testData} />
   },
 
   getUploadComponent() {

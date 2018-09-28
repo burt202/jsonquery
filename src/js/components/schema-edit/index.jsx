@@ -7,6 +7,7 @@ const validator = require("../../services/validator")
 
 const Rows = require("./rows")
 const Upload = require("../home/upload")
+const Paste = require("../home/paste")
 
 const SchemaEdit = createReactClass({
   displayName: "SchemaEdit",
@@ -50,7 +51,12 @@ const SchemaEdit = createReactClass({
 
   getRowsComponent() {
     if (this.state.selectedTab !== "rows") return null
-    return <Rows schema={this.props.schema} onSave={this.onAction} />
+    return <Rows onAction={this.onAction} schema={this.props.schema} />
+  },
+
+  getPasteComponent() {
+    if (this.state.selectedTab !== "paste") return null
+    return <Paste onAction={this.onAction} data={this.props.schema} />
   },
 
   getUploadComponent() {
@@ -60,6 +66,7 @@ const SchemaEdit = createReactClass({
 
   render() {
     const rowsActive = classNames({active: this.state.selectedTab === "rows"})
+    const pasteActive = classNames({active: this.state.selectedTab === "paste"})
     const uploadActive = classNames({active: this.state.selectedTab === "upload"})
 
     return (
@@ -70,9 +77,11 @@ const SchemaEdit = createReactClass({
         <br />
         <ul className="side-options">
           <li className={rowsActive}><a className="site-link" onClick={this.selectTab.bind(this, "rows")}>By Rows</a></li>
+          <li className={pasteActive}><a className="site-link" onClick={this.selectTab.bind(this, "paste")}>By Pasting</a></li>
           <li className={uploadActive}><a className="site-link" onClick={this.selectTab.bind(this, "upload")}>By Upload</a></li>
         </ul>
         {this.getRowsComponent()}
+        {this.getPasteComponent()}
         {this.getUploadComponent()}
       </div>
     )

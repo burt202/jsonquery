@@ -10,7 +10,7 @@ const SchemaEditRows = createReactClass({
 
   propTypes: {
     schema: PropTypes.object.isRequired,
-    onSave: PropTypes.func.isRequired,
+    onAction: PropTypes.func.isRequired,
   },
 
   getInitialState() {
@@ -33,7 +33,7 @@ const SchemaEditRows = createReactClass({
   },
 
   onSave() {
-    this.props.onSave(this.state.schema)
+    this.props.onAction(this.state.schema)
   },
 
   getSchemaRows() {

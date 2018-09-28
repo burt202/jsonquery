@@ -170,12 +170,12 @@ ul.side-options li:last-of-type {
   align-items: center;
 }
 
-/* Home */
-
-.home-cont textarea.paste {
+textarea.paste {
   width: 730px;
   height: 350px;
 }
+
+/* Home */
 
 .home-cont input[type=text].url {
   width: 500px;
