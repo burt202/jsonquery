@@ -16,12 +16,19 @@ const SchemaEditRows = createReactClass({
   getInitialState() {
     return {
       schema: this.props.schema,
+      fieldName: "",
     }
   },
 
-  onChange(field, type) {
+  onChangeExisting(field, type) {
     this.setState({
       schema: R.assoc(field, type, this.state.schema),
+    })
+  },
+
+  onRemoveExisting(field) {
+    this.setState({
+      schema: R.dissoc(field, this.state.schema),
     })
   },
 
@@ -36,10 +43,24 @@ const SchemaEditRows = createReactClass({
           key={pair[0]}
           field={pair[0]}
           type={pair[1]}
-          onChange={this.onChange}
+          onChange={this.onChangeExisting}
+          onRemove={this.onRemoveExisting}
         />
       )
     }.bind(this))
+  },
+
+  onInputChange(e) {
+    this.setState({
+      fieldName: e.target.value,
+    })
+  },
+
+  onSelectChange(e) {
+    this.setState({
+      schema: R.assoc(this.state.fieldName, e.target.value, this.state.schema),
+      fieldName: "",
+    })
   },
 
   render() {
@@ -49,6 +70,20 @@ const SchemaEditRows = createReactClass({
           <table className="table">
             <tbody>
               {this.getSchemaRows()}
+              <tr>
+                <td><input value={this.state.fieldName} placeholder="Add new field..." onChange={this.onInputChange} /></td>
+                <td colSpan="2">
+                  <select value="" disabled={!this.state.fieldName.length} onChange={this.onSelectChange}>
+                    <option value=""></option>
+                    <option value="string">String</option>
+                    <option value="number">Number</option>
+                    <option value="bool">Bool</option>
+                    <option value="date">Date</option>
+                    <option value="time">Time</option>
+                    <option value="array">Array</option>
+                  </select>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

@@ -9,10 +9,15 @@ const SchemaEditRow = createReactClass({
     field: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
+    onRemove: PropTypes.func.isRequired,
   },
 
   onChange(e) {
     this.props.onChange(this.props.field, e.target.value)
+  },
+
+  onRemove() {
+    this.props.onRemove(this.props.field)
   },
 
   render() {
@@ -29,6 +34,7 @@ const SchemaEditRow = createReactClass({
             <option value="array">Array</option>
           </select>
         </td>
+        <td><a className="site-link" onClick={this.onRemove}>Remove</a></td>
       </tr>
     )
   },
