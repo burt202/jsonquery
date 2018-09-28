@@ -92,16 +92,14 @@ const AddCalculations = createReactClass({
     return (
       <div className="add-calculations-cont">
         <h3>Add Calculations</h3>
+        <p><a className="site-link" onClick={this.props.onCancel}>Back</a></p>
         <textarea className="calculations" value={this.state.calculationsString} onChange={this.onChange} />
         {this.getErrorDisplay()}
         <h4>Sample Data Item</h4>
         <Code language="json">
           {JSON.stringify(this.props.data[0], null, 2)}
         </Code>
-        <ul className="side-options right">
-          <li><a className="site-link" onClick={this.props.onCancel}>Cancel</a></li>
-          <li><a className="site-link" onClick={this.onSave}>Save</a></li>
-        </ul>
+        <button onClick={this.onSave}>Save</button>
       </div>
     )
   },
