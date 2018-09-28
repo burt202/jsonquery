@@ -53,7 +53,7 @@ const Url = createReactClass({
   render() {
     return (
       <div>
-        <p>You can also load in data via the url. The data must be in JSON format and depending on the size of the data set, it may take a long time to load in.</p>
+        <p>You can also load in data via the url. The url must point to a valid JSON file and depending on the size of the data set, it may take a long time to load in.</p>
         <p><input type="text" className="url" value={this.state.url} onChange={this.onUrlChange} /></p>
         <p>
           <label className="checkbox-label">
