@@ -38,7 +38,7 @@ const Results = createReactClass({
   },
 
   limitResults(data) {
-    return (this.props.limit) ? R.take(this.props.limit, data) : data
+    return (this.props.limit) ? dataProcessor.limit(this.props.limit, data) : data
   },
 
   pickIncludedFields(data) {
@@ -69,7 +69,7 @@ const Results = createReactClass({
   formatData(data) {
     if (this.props.groupings.length) {
       const grouped = dataProcessor.group(this.props.groupings, this.props.showCounts, data)
-      return this.props.showCounts ? dataProcessor.sortAndLimitObject(this.props.groupSort, this.props.groupLimit, this.props.combineRemainder, grouped) : grouped
+      return this.props.showCounts ? dataProcessor.groupProcessor(this.props.groupSort, this.props.groupLimit, this.props.combineRemainder, grouped) : grouped
     }
 
     if (this.props.analyse) return this.getAnalysis(data)

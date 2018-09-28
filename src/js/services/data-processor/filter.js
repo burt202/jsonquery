@@ -1,8 +1,6 @@
 const R = require("ramda")
-const flat = require("flat")
 
-const validator = require("./validator")
-const utils = require("../utils")
+const validator = require("../validator")
 
 const parse = require("date-fns/parse")
 const isValid = require("date-fns/is_valid")
@@ -159,14 +157,6 @@ function getArrayFilter(filter) {
   return null
 }
 
-const _group = R.curry(function(groupings, showCounts, data) {
-  data = R.groupBy(R.prop(groupings[0]), data)
-  groupings = R.tail(groupings)
-  if (!groupings.length) return (showCounts) ? R.map(R.length, data) : data
-
-  return R.map(_group(groupings, showCounts), data)
-})
-
 function formatFilters(filters) {
   return R.pipe(
     R.toPairs,
@@ -177,110 +167,27 @@ function formatFilters(filters) {
   )(filters)
 }
 
-const naturalOrders = [
-  ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-  ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-  ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-]
+module.exports = function(data, schema, filters) {
+  const builtFilters = R.reduce(function(acc, filter) {
+    if (!filter.active) return acc
 
-const noMatcherFoundErrorString = `No natural matcher found for data. See supported sets below:
+    const type = schema[filter.name]
+    let filterMethod = null
 
-Full month names: January, February, March...
-Short month names: Jan, Feb, Mar...
-Full day names: Monday, Tuesday, Wednesday...
-Short day names: Mon, Tue, Wed...`
+    if (type === "string") filterMethod = getStringFilter(filter)
+    if (type === "number") filterMethod = getNumberFilter(filter)
+    if (type === "bool") filterMethod = getBoolFilter(filter)
+    if (type === "date") filterMethod = getDateFilter(filter)
+    if (type === "time") filterMethod = getTimeFilter(filter)
+    if (type === "array") filterMethod = getArrayFilter(filter)
 
-module.exports = {
-  filter(data, schema, filters) {
-    const builtFilters = R.reduce(function(acc, filter) {
-      if (!filter.active) return acc
-
-      const type = schema[filter.name]
-      let filterMethod = null
-
-      if (type === "string") filterMethod = getStringFilter(filter)
-      if (type === "number") filterMethod = getNumberFilter(filter)
-      if (type === "bool") filterMethod = getBoolFilter(filter)
-      if (type === "date") filterMethod = getDateFilter(filter)
-      if (type === "time") filterMethod = getTimeFilter(filter)
-      if (type === "array") filterMethod = getArrayFilter(filter)
-
-      if (filterMethod) {
-        if (!acc[filter.name]) acc[filter.name] = []
-        acc[filter.name].push(filterMethod)
-      }
-
-      return acc
-    }, {}, filters)
-
-    return R.filter(R.where(formatFilters(builtFilters)), data)
-  },
-
-  group(groupings, showCounts, data) {
-    const groups = _group(groupings, showCounts, data)
-    return flat(groups, {delimiter: " - ", maxDepth: groupings.length})
-  },
-
-  sort(sorters, data) {
-    return R.sortWith(R.map(function(sorter) {
-      const direction = (sorter.direction === "asc") ? "ascend" : "descend"
-      return R[direction](R.prop(sorter.field))
-    }, sorters), data)
-  },
-
-  sortAndLimitObject(sortField, limit, combineRemainder, data) {
-    let sorters = [R.descend(R.prop("count"))]
-    if (sortField === "asc") sorters = [R.ascend(R.prop("count"))]
-    if (sortField === "nameasc") sorters = [R.ascend(R.prop("name"))]
-    if (sortField === "namedesc") sorters = [R.descend(R.prop("name"))]
-    if (sortField === "pathdesc") sorters = [R.ascend(R.prop("path")), R.descend(R.prop("count"))]
-    if (sortField === "pathasc") sorters = [R.ascend(R.prop("path")), R.ascend(R.prop("count"))]
-
-    const keysAreNumbers = R.all(validator.isStringNumeric)(Object.keys(data))
-    let totalCount = 0
-    let formatted
-
-    if (sortField === "natural") {
-      const fieldsString = R.compose(R.join(""), R.sort(R.ascend(R.identity)), R.keys)(data)
-
-      const matcher = R.find(function(orders) {
-        return R.compose(R.join(""), R.sort(R.ascend(R.identity)))(orders) === fieldsString
-      }, naturalOrders)
-
-      if (matcher) {
-        sorters = [function(a, b) {
-          return matcher.indexOf(a.name) - matcher.indexOf(b.name)
-        }]
-      } else {
-        return noMatcherFoundErrorString
-      }
+    if (filterMethod) {
+      if (!acc[filter.name]) acc[filter.name] = []
+      acc[filter.name].push(filterMethod)
     }
 
-    return R.pipe(
-      R.toPairs,
-      R.map(function(pair) {
-        const path = R.compose(R.join(","), R.init, R.split(" - "))(pair[0])
-        const name = (keysAreNumbers) ? parseFloat(pair[0]) : pair[0]
-        return {name, path, count: pair[1]}
-      }),
-      R.tap(function(d) {
-        formatted = d
-      }),
-      R.sortWith(sorters),
-      R.take(limit || data.length),
-      R.tap(function(d) {
-        const set = (combineRemainder) ? formatted : d
-        totalCount = R.compose(R.sum, R.pluck("count"))(set)
-      }),
-      R.when(R.always(combineRemainder), function(d) {
-        const count = totalCount - R.compose(R.sum, R.pluck("count"))(d)
-        return R.append({name: "Other", count}, d)
-      }),
-      R.map(function(row) {
-        const percentage = utils.round(2, (row.count / totalCount) * 100)
-        return R.compose(R.assoc("percentage", percentage), R.pick(["name", "count"]))(row)
-      })
-    )(data)
-  },
+    return acc
+  }, {}, filters)
+
+  return R.filter(R.where(formatFilters(builtFilters)), data)
 }
