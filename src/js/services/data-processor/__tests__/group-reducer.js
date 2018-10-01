@@ -36,4 +36,14 @@ describe("groupReducer", function() {
       })
     })
   })
+
+  describe("getPercentage", function() {
+    it("should reduce group down to percentage of group size against total items", function() {
+      expect(groupReducer({name: "getPercentage"}, mockDataForGrouping)).to.eql({
+        card: {count: 3, result: 50},
+        cash: {count: 2, result: 33.33},
+        loan: {count: 1, result: 16.67},
+      })
+    })
+  })
 })
