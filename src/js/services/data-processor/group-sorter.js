@@ -17,6 +17,8 @@ Full day names: Monday, Tuesday, Wednesday...
 Short day names: Mon, Tue, Wed...`
 
 module.exports = function(sortField, data) {
+  if (!sortField) return data
+
   let sorters = [R.descend(R.prop("count"))]
   if (sortField === "asc") sorters = [R.ascend(R.prop("count"))]
   if (sortField === "nameasc") sorters = [R.ascend(R.prop("name"))]
@@ -47,13 +49,10 @@ module.exports = function(sortField, data) {
     R.map(function(pair) {
       const path = R.compose(R.join(","), R.init, R.split(" - "))(pair[0])
       const name = (keysAreNumbers) ? parseFloat(pair[0]) : pair[0]
-      const count = (Array.isArray(pair[1])) ? pair[1].length : pair[1].count
-      return {name, path, count, data: pair[1]}
+      const count = pair[1].count
+      return {name, path, count}
     }),
     R.sortWith(sorters),
-    R.map(function(group) {
-      if (Array.isArray(group.data)) return group.data
-      return group
-    })
+    R.map(R.omit(["path"]))
   )(data)
 }
