@@ -25,6 +25,8 @@ module.exports = function(sortField, data) {
   if (sortField === "namedesc") sorters = [R.descend(R.prop("name"))]
   if (sortField === "pathdesc") sorters = [R.ascend(R.prop("path")), R.descend(R.prop("count"))]
   if (sortField === "pathasc") sorters = [R.ascend(R.prop("path")), R.ascend(R.prop("count"))]
+  if (sortField === "reducerdesc") sorters = [R.descend(R.prop("reducer"))]
+  if (sortField === "reducerasc") sorters = [R.ascend(R.prop("reducer"))]
 
   if (sortField === "natural") {
     const fieldsString = R.compose(R.join(""), R.sort(R.ascend(R.identity)), R.keys)(data)
@@ -50,9 +52,10 @@ module.exports = function(sortField, data) {
       const path = R.compose(R.join(","), R.init, R.split(" - "))(pair[0])
       const name = (keysAreNumbers) ? parseFloat(pair[0]) : pair[0]
       const count = pair[1].count
-      return {name, path, count}
+      const reducer = pair[1].reducer
+      return {name, path, count, reducer}
     }),
     R.sortWith(sorters),
-    R.map(R.omit(["path"]))
+    R.map(R.omit(["path", "count"]))
   )(data)
 }

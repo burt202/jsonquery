@@ -30,9 +30,9 @@ describe("groupReducer", function() {
   describe("getLength", function() {
     it("should reduce group down to length of group", function() {
       expect(groupReducer({name: "getLength"}, mockDataForGrouping)).to.eql({
-        card: {count: 3, result: 3},
-        cash: {count: 2, result: 2},
-        loan: {count: 1, result: 1},
+        card: {count: 3, reducer: 3},
+        cash: {count: 2, reducer: 2},
+        loan: {count: 1, reducer: 1},
       })
     })
   })
@@ -40,9 +40,9 @@ describe("groupReducer", function() {
   describe("getPercentage", function() {
     it("should reduce group down to percentage of group size against total items", function() {
       expect(groupReducer({name: "getPercentage"}, mockDataForGrouping)).to.eql({
-        card: {count: 3, result: 50},
-        cash: {count: 2, result: 33.33},
-        loan: {count: 1, result: 16.67},
+        card: {count: 3, reducer: 50},
+        cash: {count: 2, reducer: 33.33},
+        loan: {count: 1, reducer: 16.67},
       })
     })
   })

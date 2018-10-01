@@ -18,7 +18,7 @@ module.exports = function(reducer, data) {
     R.toPairs,
     R.reduce(function(acc, pair) {
       acc[pair[0]] = {
-        result: reducerMap[reducer.name](reducer, totalItemCount, pair[1]),
+        reducer: reducerMap[reducer.name](reducer, totalItemCount, pair[1]),
         count: pair[1].length,
       }
 
