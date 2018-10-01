@@ -19,12 +19,20 @@ describe("groupReducer", function() {
     ],
   }
 
+  it("should return passed in data if reducer is undefined", function() {
+    expect(groupReducer(undefined, mockDataForGrouping)).to.eql(mockDataForGrouping)
+  })
+
+  it("should return passed in data if reducer name is not recognised", function() {
+    expect(groupReducer({name: "invalid"}, mockDataForGrouping)).to.eql(mockDataForGrouping)
+  })
+
   describe("getLength", function() {
     it("should reduce group down to length of group", function() {
       expect(groupReducer({name: "getLength"}, mockDataForGrouping)).to.eql({
-        card: 3,
-        cash: 2,
-        loan: 1,
+        card: {count: 3, result: 3},
+        cash: {count: 2, result: 2},
+        loan: {count: 1, result: 1},
       })
     })
   })

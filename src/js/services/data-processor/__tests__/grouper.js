@@ -13,6 +13,14 @@ describe("grouper", function() {
     {name: "test", type: "card", auto: true},
   ]
 
+  it("should return passed in data if groupings is undefined", function() {
+    expect(grouper(undefined, mockDataForGrouping)).to.eql(mockDataForGrouping)
+  })
+
+  it("should return passed in data if groupings length is 0", function() {
+    expect(grouper([], mockDataForGrouping)).to.eql(mockDataForGrouping)
+  })
+
   it("should group data at 1 level", function() {
     expect(grouper(["type"], mockDataForGrouping)).to.eql({
       cash: [

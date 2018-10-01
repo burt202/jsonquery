@@ -12,7 +12,11 @@ module.exports = function(reducer, data) {
   return R.pipe(
     R.toPairs,
     R.reduce(function(acc, pair) {
-      acc[pair[0]] = reducerMap[reducer.name](reducer, pair[1])
+      acc[pair[0]] = {
+        result: reducerMap[reducer.name](reducer, pair[1]),
+        count: pair[1].length,
+      }
+
       return acc
     }, {})
   )(data)

@@ -10,6 +10,7 @@ const _group = R.curry(function(groupings, data) {
 })
 
 module.exports = function(groupings, data) {
+  if (!groupings || !groupings.length) return data
   const groups = _group(groupings, data)
   return flat(groups, {delimiter: " - ", maxDepth: groupings.length})
 }
