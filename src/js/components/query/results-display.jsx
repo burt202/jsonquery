@@ -11,20 +11,26 @@ const JsonDisplay = require("./results-display-json")
 const TableDisplay = require("./results-display-table")
 const ChartDisplay = require("./results-display-chart")
 
+const dataProcessor = require("../../services/data-processor")
+const utils = require("../../utils")
+
 const DISPLAY_THRESHOLD = 1000
 
 const Results = createReactClass({
   displayName: "ResultsDisplay",
 
   propTypes: {
-    results: PropTypes.any.isRequired,
+    filtered: PropTypes.array.isRequired,
+    filteredLength: PropTypes.number.isRequired,
     groupings: PropTypes.array,
     resultFields: PropTypes.array.isRequired,
     schema: PropTypes.object.isRequired,
     actionCreator: PropTypes.object.isRequired,
     groupReducer: PropTypes.object,
-    filteredLength: PropTypes.number.isRequired,
     analyse: PropTypes.string,
+    groupSort: PropTypes.string.isRequired,
+    groupLimit: PropTypes.number,
+    combineRemainder: PropTypes.bool.isRequired,
   },
 
   getInitialState() {
@@ -69,17 +75,19 @@ const Results = createReactClass({
     }, 3000)
   },
 
-  baseDownloader() {
-    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
+  baseDownloader(results) {
+    return function() {
+      const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
 
-    const formatted = downloadFormatter[type.extension](this.props.groupings, this.props.groupReducer, this.props.results)
-    const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
+      const formatted = downloadFormatter[type.extension](this.props.groupings, this.props.groupReducer, results)
+      const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
 
-    const downloadLink = document.getElementById("hidden-download-link")
-    downloadLink.setAttribute("href", dataStr)
-    downloadLink.setAttribute("download", `${new Date().toISOString()}.${type.extension}`)
-    downloadLink.click()
-    downloadLink.setAttribute("href", "")
+      const downloadLink = document.getElementById("hidden-download-link")
+      downloadLink.setAttribute("href", dataStr)
+      downloadLink.setAttribute("download", `${new Date().toISOString()}.${type.extension}`)
+      downloadLink.click()
+      downloadLink.setAttribute("href", "")
+    }
   },
 
   chartDownloader(chart) {
@@ -114,10 +122,10 @@ const Results = createReactClass({
     return this.props.filteredLength > DISPLAY_THRESHOLD
   },
 
-  getDisplayData() {
+  getDisplayData(results) {
     const type = R.find(R.propEq("view", this.state.type), this.getViewTypes(this.props))
 
-    if (validator.isString(this.props.results)) return <JsonDisplay data={this.props.results} />
+    if (validator.isString(results)) return <JsonDisplay data={results} />
 
     if (type.view === "chart" && (!this.props.groupings.length || !this.props.groupReducer)) {
       return <JsonDisplay data="You must select a grouping with counts to use the charts display" />
@@ -131,82 +139,51 @@ const Results = createReactClass({
       return (
         <JsonDisplay
           data={`Results set too large to display, use download link for .${type.extension} file`}
-          onDownload={this.baseDownloader}
+          onDownload={this.baseDownloader(results)}
         />
       )
     }
 
-    const formatted = downloadFormatter[this.state.type] ? downloadFormatter[this.state.type](this.props.groupings, this.props.groupReducer, this.props.results) : this.props.results
+    const formatted = downloadFormatter[this.state.type] ? downloadFormatter[this.state.type](this.props.groupings, this.props.groupReducer, results) : results
     const Component = type.component
     return <Component data={formatted} onDownload={type.downloader} filteredLength={this.props.filteredLength} onCopy={this.onCopy} />
   },
 
-  onChangeHandler(e) {
-    const field = e.target.name
-    const isPresent = R.contains(field, this.props.resultFields)
-    const updatedFields = (isPresent) ?
-      R.without([field], this.props.resultFields) :
-      R.append(field, this.props.resultFields)
+  getAnalysis(data) {
+    const values = R.pluck(this.props.analyse, data)
 
-    this.props.actionCreator.updateResultFields(updatedFields)
+    return {
+      sum: utils.round(2, R.sum(values)),
+      average: utils.round(2, R.mean(values)),
+      lowest: utils.getMin(values),
+      highest: utils.getMax(values),
+      median: utils.round(2, R.median(values)),
+    }
   },
 
-  getResultFieldOptions() {
-    const schemaKeys = R.sortBy(R.identity, R.keys(this.props.schema))
+  formatData(data) {
+    if (this.props.groupings.length) {
+      const grouped = dataProcessor.group(this.props.groupings, data)
+      return this.props.groupReducer ? dataProcessor.groupProcessor(this.props.groupReducer, this.props.groupSort, this.props.groupLimit, this.props.combineRemainder, grouped) : grouped
+    }
 
-    return schemaKeys.map(function(field) {
-      const checked = R.contains(field, this.props.resultFields)
-      const disabled = R.contains(field, this.props.groupings)
+    if (this.props.analyse) return this.getAnalysis(data)
 
-      return (
-        <label className="checkbox-label" key={field}>
-          <input type="checkbox" name={field} disabled={disabled} checked={checked} onChange={this.onChangeHandler} />
-          {field}
-        </label>
-      )
-    }.bind(this))
-  },
-
-  unSelectResultFields() {
-    this.props.actionCreator.updateResultFields(this.props.groupings)
-  },
-
-  selectResultFields() {
-    this.props.actionCreator.updateResultFields(R.keys(this.props.schema))
-  },
-
-  showResultFields() {
-    return (
-      <div className="include-checkboxes">
-        <span className="label">Include:</span>
-        <div>
-          <span>{this.getResultFieldOptions()}</span>
-          <p>
-            <a className="site-link" style={{marginRight: "15px"}} onClick={this.unSelectResultFields}>Unselect All</a>
-            <a className="site-link" onClick={this.selectResultFields}>Select All</a>
-          </p>
-        </div>
-      </div>
-    )
-  },
-
-  getCheckboxes() {
-    return (!this.isAggregateResult()) ? this.showResultFields() : null
+    return data
   },
 
   render() {
+    const results = this.formatData(this.props.filtered)
+
     return (
       <div className="results-cont">
         <h3>Results</h3>
-        {this.getCheckboxes()}
-
         <div className="results-options">
           <ul className="side-options">
             {this.getViewTypesLinks()}
           </ul>
         </div>
-
-        {this.getDisplayData()}
+        {this.getDisplayData(results)}
         <a id="hidden-download-link" style={{display: "none"}}></a>
       </div>
     )

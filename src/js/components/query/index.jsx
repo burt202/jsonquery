@@ -2,11 +2,18 @@ const React = require("react")
 const PropTypes = require("prop-types")
 const createReactClass = require("create-react-class")
 
-const Filters = require("./filters")
-const Controls = require("./controls")
-const Results = require("./results")
+const R = require("ramda")
+
+const dataProcessor = require("../../services/data-processor")
+
 const SchemaEdit = require("../schema-edit")
 const AddCalculations = require("../add-calculations")
+
+const Filters = require("./filters")
+const Controls = require("./controls")
+const IncludeFields = require("./include-fields")
+const Summary = require("./summary")
+const ResultsDisplay = require("./results-display")
 
 const Query = createReactClass({
   displayName: "Query",
@@ -79,9 +86,36 @@ const Query = createReactClass({
     )
   },
 
+  filterResults(data) {
+    return dataProcessor.filter(data, this.props.schema, this.props.filters)
+  },
+
+  sortResults(data) {
+    return (this.props.sorters.length) ? dataProcessor.sort(this.props.sorters, data) : data
+  },
+
+  limitResults(data) {
+    return (this.props.limit) ? dataProcessor.limit(this.props.limit, data) : data
+  },
+
+  pickIncludedFields(data) {
+    return R.map(R.pickAll(R.sortBy(R.identity, this.props.resultFields)))(data)
+  },
+
+  filterSortAndLimit(data) {
+    return R.pipe(
+      this.filterResults,
+      this.sortResults,
+      this.limitResults,
+      this.pickIncludedFields
+    )(data)
+  },
+
   render() {
     if (this.state.selectedPage === "editSchema") return this.getEditSchemaComponent()
     if (this.state.selectedPage === "addCalc") return this.getAddCalculationComponent()
+
+    const filtered = this.filterSortAndLimit(this.props.data)
 
     return (
       <div className="query-cont">
@@ -90,7 +124,6 @@ const Query = createReactClass({
           <li><a className="site-link" onClick={() => this.setState({selectedPage: "editSchema"})}>Edit Schema</a></li>
           <li><a className="site-link" onClick={this.onReset}>Reset</a></li>
         </ul>
-
         <Filters
           actionCreator={this.props.actionCreator}
           filters={this.props.filters}
@@ -108,11 +141,24 @@ const Query = createReactClass({
           analyse={this.props.analyse}
           combineRemainder={this.props.combineRemainder}
         />
-        <Results
-          data={this.props.data}
-          filters={this.props.filters}
-          sorters={this.props.sorters}
-          limit={this.props.limit}
+        <IncludeFields
+          groupings={this.props.groupings}
+          resultFields={this.props.resultFields}
+          schema={this.props.schema}
+          actionCreator={this.props.actionCreator}
+          groupReducer={this.props.groupReducer}
+          analyse={this.props.analyse}
+        />
+        <Summary
+          rawDataLength={this.props.data.length}
+          filtered={filtered}
+          groupings={this.props.groupings}
+          groupSort={this.props.groupSort}
+          groupLimit={this.props.groupLimit}
+        />
+        <ResultsDisplay
+          filtered={filtered}
+          filteredLength={filtered.length}
           groupings={this.props.groupings}
           resultFields={this.props.resultFields}
           schema={this.props.schema}

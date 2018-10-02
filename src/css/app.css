@@ -265,16 +265,7 @@ textarea.paste {
   margin-bottom: 0;
 }
 
-.include-checkboxes {
-  margin-top: 16px;
-  display: flex;
-}
-
-.include-checkboxes .label {
-  margin-right: 10px;
-}
-
-.include-checkboxes label {
+.include-fields-cont label {
   white-space: nowrap;
   display: inline-block;
 }
