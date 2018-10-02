@@ -265,17 +265,19 @@ textarea.paste {
   margin-bottom: 0;
 }
 
-.include-fields-cont label {
-  white-space: nowrap;
-  display: inline-block;
-}
-
 .chart-options > * {
   margin-right: 10px;
 }
 
 .tableHeaderCell {
   cursor: pointer;
+}
+
+/* Include Fields */
+
+.include-fields-cont label {
+  white-space: nowrap;
+  display: inline-block;
 }
 
 /* Summary */
