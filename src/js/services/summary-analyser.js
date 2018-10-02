@@ -9,7 +9,7 @@ module.exports = {
   },
 
   getGroupLimitedTotal(filtered, rawDataLength, sortedGroups) {
-    const groupedTotal = R.compose(R.sum, R.flatten, R.pluck("count"))(sortedGroups)
+    const groupedTotal = R.compose(R.sum, R.values)(sortedGroups)
     const absolutePercentage = utils.round(2, (groupedTotal / rawDataLength) * 100)
     const relativePercentage = utils.round(2, (groupedTotal / filtered.length) * 100)
     const relativePercentageTitle = `Relative to filtered data: ${relativePercentage}%`
@@ -17,7 +17,7 @@ module.exports = {
   },
 
   getGroupingAnalysis(grouped) {
-    const groupLengths = R.values(grouped)
+    const groupLengths = R.compose(R.map(R.length), R.values)(grouped)
 
     const count = {name: "No. of Groups", value: groupLengths.length}
     const max = {name: "Max Group Size", value: utils.getMax(groupLengths)}
