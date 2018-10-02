@@ -14,17 +14,16 @@ module.exports = {
     return R.take(this.props.limit, data)
   },
   group: grouper,
-  groupProcessor(showCounts, groupSort, groupLimit, combineRemainder, grouped) {
+  groupProcessor(reducer, sortBy, limit, combineRemainder, grouped) {
     return R.pipe(
       function(data) {
-        const reducer = (showCounts) ? {name: "getLength"} : null
         return groupReducer(reducer, data)
       },
       function(data) {
-        return groupSorter(groupSort, data)
+        return groupSorter(sortBy, data)
       },
       function(data) {
-        return groupLimiter(groupLimit, combineRemainder, data)
+        return groupLimiter(limit, combineRemainder, data)
       },
       R.reduce(function(acc, val) {
         acc[val.name] = val.reducer

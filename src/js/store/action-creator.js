@@ -105,10 +105,10 @@ module.exports = function(store) {
       })
     },
 
-    showCounts(showCounts) {
+    groupReducer(groupReducer) {
       store.dispatch({
-        type: "showCounts",
-        value: {showCounts},
+        type: "groupReducer",
+        value: {groupReducer},
       })
     },
 

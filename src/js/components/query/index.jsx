@@ -21,7 +21,7 @@ const Query = createReactClass({
     calculatedFields: PropTypes.array.isRequired,
     calculationsString: PropTypes.string,
     resultFields: PropTypes.array.isRequired,
-    showCounts: PropTypes.bool.isRequired,
+    groupReducer: PropTypes.object,
     groupSort: PropTypes.string.isRequired,
     groupLimit: PropTypes.number,
     limit: PropTypes.number,
@@ -101,7 +101,7 @@ const Query = createReactClass({
           schema={this.props.schema}
           groupings={this.props.groupings}
           sorters={this.props.sorters}
-          showCounts={this.props.showCounts}
+          groupReducer={this.props.groupReducer}
           groupSort={this.props.groupSort}
           groupLimit={this.props.groupLimit}
           limit={this.props.limit}
@@ -117,7 +117,7 @@ const Query = createReactClass({
           resultFields={this.props.resultFields}
           schema={this.props.schema}
           actionCreator={this.props.actionCreator}
-          showCounts={this.props.showCounts}
+          groupReducer={this.props.groupReducer}
           analyse={this.props.analyse}
           groupSort={this.props.groupSort}
           groupLimit={this.props.groupLimit}

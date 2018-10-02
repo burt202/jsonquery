@@ -22,7 +22,7 @@ const Results = createReactClass({
     resultFields: PropTypes.array.isRequired,
     schema: PropTypes.object.isRequired,
     actionCreator: PropTypes.object.isRequired,
-    showCounts: PropTypes.bool.isRequired,
+    groupReducer: PropTypes.object,
     filteredLength: PropTypes.number.isRequired,
     analyse: PropTypes.string,
   },
@@ -72,7 +72,7 @@ const Results = createReactClass({
   baseDownloader() {
     const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
 
-    const formatted = downloadFormatter[type.extension](this.props.groupings, this.props.showCounts, this.props.results)
+    const formatted = downloadFormatter[type.extension](this.props.groupings, this.props.groupReducer, this.props.results)
     const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
 
     const downloadLink = document.getElementById("hidden-download-link")
@@ -107,7 +107,7 @@ const Results = createReactClass({
   },
 
   isAggregateResult() {
-    return this.props.showCounts || this.props.analyse
+    return this.props.groupReducer || this.props.analyse
   },
 
   tooManyResultToShow() {
@@ -119,7 +119,7 @@ const Results = createReactClass({
 
     if (validator.isString(this.props.results)) return <JsonDisplay data={this.props.results} />
 
-    if (type.view === "chart" && (!this.props.groupings.length || !this.props.showCounts)) {
+    if (type.view === "chart" && (!this.props.groupings.length || !this.props.groupReducer)) {
       return <JsonDisplay data="You must select a grouping with counts to use the charts display" />
     }
 
@@ -136,7 +136,7 @@ const Results = createReactClass({
       )
     }
 
-    const formatted = downloadFormatter[this.state.type] ? downloadFormatter[this.state.type](this.props.groupings, this.props.showCounts, this.props.results) : this.props.results
+    const formatted = downloadFormatter[this.state.type] ? downloadFormatter[this.state.type](this.props.groupings, this.props.groupReducer, this.props.results) : this.props.results
     const Component = type.component
     return <Component data={formatted} onDownload={type.downloader} filteredLength={this.props.filteredLength} onCopy={this.onCopy} />
   },

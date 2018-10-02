@@ -8,12 +8,12 @@ const GroupingControl = createReactClass({
   propTypes: {
     groupings: PropTypes.array,
     options: PropTypes.array.isRequired,
-    showCounts: PropTypes.bool.isRequired,
+    groupReducer: PropTypes.object,
     groupSort: PropTypes.string.isRequired,
     groupLimit: PropTypes.number,
     onAdd: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
-    onShowCountsChange: PropTypes.func.isRequired,
+    onGroupReducerChange: PropTypes.func.isRequired,
     onGroupSortChange: PropTypes.func.isRequired,
     onGroupLimitChange: PropTypes.func.isRequired,
     combineRemainder: PropTypes.bool.isRequired,
@@ -24,8 +24,9 @@ const GroupingControl = createReactClass({
     this.props.onAdd(e.target.value)
   },
 
-  onShowCountsChange() {
-    this.props.onShowCountsChange(!this.props.showCounts)
+  onGroupReducerChange(e) {
+    const groupReducer = (e.target.value) ? {name: e.target.value} : null
+    this.props.onGroupReducerChange(groupReducer)
   },
 
   onSortChange(e) {
@@ -54,7 +55,7 @@ const GroupingControl = createReactClass({
   },
 
   getSortAndLimitOptions() {
-    if (!this.props.groupings.length || !this.props.showCounts) return null
+    if (!this.props.groupings.length || !this.props.groupReducer) return null
 
     let options = [
       {value: "desc", name: "Count DESC"},
@@ -80,7 +81,7 @@ const GroupingControl = createReactClass({
       <label className="checkbox-label">
         <input
           type="checkbox"
-          name="showCounts"
+          name="combineRemainder"
           checked={this.props.combineRemainder}
           onChange={this.onCombineRemainderChange}
         />
@@ -119,19 +120,16 @@ const GroupingControl = createReactClass({
     )
   },
 
-  getShowCountsOption() {
+  getGroupReducerOption() {
     if (!this.props.groupings || !this.props.groupings.length) return null
+    const value = this.props.groupReducer ? this.props.groupReducer.name : ""
 
     return (
-      <label className="checkbox-label">
-        <input
-          type="checkbox"
-          name="showCounts"
-          checked={this.props.showCounts}
-          onChange={this.onShowCountsChange}
-        />
-        Show counts
-      </label>
+      <select onChange={this.onGroupReducerChange} value={value}>
+        <option>Reduce by</option>
+        <option value="getLength">Length</option>
+        <option value="getPercentage">Percentage</option>
+      </select>
     )
   },
 
@@ -152,7 +150,7 @@ const GroupingControl = createReactClass({
               <option></option>
               {options}
             </select>
-            {this.getShowCountsOption()}
+            {this.getGroupReducerOption()}
             {this.getSortAndLimitOptions()}
           </div>
         </div>

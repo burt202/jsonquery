@@ -77,22 +77,22 @@ function tableFromGroupedData(json) {
 }
 
 const formatters = {
-  json: R.curry(function(groupings, showCounts, json) {
+  json: R.curry(function(groupings, groupReducer, json) {
     return JSON.stringify(json, null, 2)
   }),
 
-  table: R.curry(function(groupings, showCounts, json) {
+  table: R.curry(function(groupings, groupReducer, json) {
     if (R.isEmpty(json)) return []
     if (Array.isArray(json)) return tableFromArray(json)
-    if (showCounts) return [{type: "header", cols: ["name", "count"]}]
+    if (groupReducer) return [{type: "header", cols: ["name", "count"]}]
       .concat(tableFromObject(flat(json, {delimiter: " - "})))
     if (groupings.length) return tableFromGroupedData(json)
     return tableFromObject(json)
   }),
 
-  csv: R.curry(function(groupings, showCounts, json) {
+  csv: R.curry(function(groupings, groupReducer, json) {
     if (R.isEmpty(json)) return null
-    const rows = formatters.table(groupings, showCounts, json)
+    const rows = formatters.table(groupings, groupReducer, json)
 
     return R.pipe(
       R.map(R.compose(R.join(","), R.map(_makeCsvSafe), R.prop("cols"))),
