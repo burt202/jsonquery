@@ -17,6 +17,10 @@ describe("groupLimiter", function() {
     expect(groupLimiter(undefined, false, mockDataForLimiting)).to.eql(mockDataForLimiting)
   })
 
+  it("should return passed in data if data is a string", function() {
+    expect(groupLimiter(undefined, false, "Error message from sorting")).to.eql("Error message from sorting")
+  })
+
   it("should limit group", function() {
     expect(groupLimiter(3, false, mockDataForLimiting)).to.eql([
       {name: "card - true", reducer: 2},

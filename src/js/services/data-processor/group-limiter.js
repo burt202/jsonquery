@@ -2,6 +2,7 @@ const R = require("ramda")
 
 module.exports = function(limit, combineRemainder, data) {
   if (!limit) return data
+  if (typeof data === "string") return data
 
   return R.pipe(
     R.splitAt(limit),
