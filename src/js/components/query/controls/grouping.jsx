@@ -25,7 +25,7 @@ const GroupingControl = createReactClass({
   },
 
   onGroupReducerChange(e) {
-    const groupReducer = (e.target.value) ? {name: e.target.value} : null
+    const groupReducer = (e.target.value && e.target.value.length) ? {name: e.target.value} : null
     this.props.onGroupReducerChange(groupReducer)
   },
 
@@ -34,7 +34,8 @@ const GroupingControl = createReactClass({
   },
 
   onLimitChange(e) {
-    this.props.onGroupLimitChange(parseInt(e.target.value, 10))
+    const groupLimit = (e.target.value && e.target.value.length) ? parseInt(e.target.value, 10) : null
+    this.props.onGroupLimitChange(groupLimit)
   },
 
   onCombineRemainderChange() {
@@ -96,7 +97,7 @@ const GroupingControl = createReactClass({
           })}
         </select>
         <select onChange={this.onLimitChange} value={this.props.groupLimit || ""}>
-          <option>Show all</option>
+          <option value="">Show all</option>
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -126,7 +127,7 @@ const GroupingControl = createReactClass({
 
     return (
       <select onChange={this.onGroupReducerChange} value={value}>
-        <option>Reduce by</option>
+        <option value="">Reduce by</option>
         <option value="getLength">Length</option>
         <option value="getPercentage">Percentage</option>
       </select>
