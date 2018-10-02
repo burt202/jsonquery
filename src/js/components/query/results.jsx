@@ -21,7 +21,7 @@ const Results = createReactClass({
     schema: PropTypes.object.isRequired,
     data: PropTypes.array.isRequired,
     resultFields: PropTypes.array.isRequired,
-    showCounts: PropTypes.bool.isRequired,
+    groupReducer: PropTypes.object,
     groupSort: PropTypes.string.isRequired,
     groupLimit: PropTypes.number,
     limit: PropTypes.number,
@@ -68,8 +68,8 @@ const Results = createReactClass({
 
   formatData(data) {
     if (this.props.groupings.length) {
-      const grouped = dataProcessor.group(this.props.groupings, this.props.showCounts, data)
-      return this.props.showCounts ? dataProcessor.groupProcessor(this.props.groupSort, this.props.groupLimit, this.props.combineRemainder, grouped) : grouped
+      const grouped = dataProcessor.group(this.props.groupings, data)
+      return this.props.groupReducer ? dataProcessor.groupProcessor(this.props.groupReducer, this.props.groupSort, this.props.groupLimit, this.props.combineRemainder, grouped) : grouped
     }
 
     if (this.props.analyse) return this.getAnalysis(data)
@@ -96,7 +96,7 @@ const Results = createReactClass({
           resultFields={this.props.resultFields}
           schema={this.props.schema}
           actionCreator={this.props.actionCreator}
-          showCounts={this.props.showCounts}
+          groupReducer={this.props.groupReducer}
           filteredLength={filtered.length}
           analyse={this.props.analyse}
         />

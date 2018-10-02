@@ -13,7 +13,7 @@ const defaults = {
   schema: null,
   data: null,
   resultFields: null,
-  showCounts: false,
+  groupReducer: null,
   groupSort: "desc",
   groupLimit: null,
   limit: null,
@@ -100,7 +100,7 @@ const handlers = {
     }
 
     if (!toMerge.groupings.length) {
-      toMerge.showCounts = false
+      toMerge.groupReducer = null
       toMerge.groupSort = "desc"
       toMerge.groupLimit = null
       toMerge.combineRemainder = false
@@ -113,7 +113,7 @@ const handlers = {
     return R.merge(contents, {
       analyse: payload.name,
       groupings: [],
-      showCounts: false,
+      groupReducer: null,
       groupSort: "desc",
       groupLimit: null,
       combineRemainder: false,
@@ -132,12 +132,12 @@ const handlers = {
     })
   },
 
-  showCounts(contents, payload) {
+  groupReducer(contents, payload) {
     const toMerge = {
-      showCounts: payload.showCounts,
+      groupReducer: payload.groupReducer,
     }
 
-    if (!toMerge.showCounts) {
+    if (!toMerge.groupReducer) {
       toMerge.groupSort = "desc"
       toMerge.groupLimit = null
       toMerge.combineRemainder = false

@@ -16,7 +16,7 @@ const Controls = createReactClass({
     groupings: PropTypes.array,
     sorters: PropTypes.array,
     schema: PropTypes.object.isRequired,
-    showCounts: PropTypes.bool.isRequired,
+    groupReducer: PropTypes.object,
     combineRemainder: PropTypes.bool.isRequired,
     groupSort: PropTypes.string.isRequired,
     groupLimit: PropTypes.number,
@@ -53,12 +53,12 @@ const Controls = createReactClass({
       <GroupingControl
         groupings={this.props.groupings}
         options={options}
-        showCounts={this.props.showCounts}
+        groupReducer={this.props.groupReducer}
         groupSort={this.props.groupSort}
         groupLimit={this.props.groupLimit}
         onAdd={this.props.actionCreator.addGrouping}
         onRemove={this.props.actionCreator.removeGrouping}
-        onShowCountsChange={this.props.actionCreator.showCounts}
+        onGroupReducerChange={this.props.actionCreator.groupReducer}
         onGroupSortChange={this.props.actionCreator.groupSort}
         onGroupLimitChange={this.props.actionCreator.groupLimit}
         combineRemainder={this.props.combineRemainder}

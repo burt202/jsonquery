@@ -1,7 +1,6 @@
 const R = require("ramda")
 
 const validator = require("../validator")
-const utils = require("../../utils")
 
 const naturalOrders = [
   ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -17,17 +16,17 @@ Short month names: Jan, Feb, Mar...
 Full day names: Monday, Tuesday, Wednesday...
 Short day names: Mon, Tue, Wed...`
 
-module.exports = function(sortField, limit, combineRemainder, data) {
+module.exports = function(sortField, data) {
+  if (!sortField) return data
+
   let sorters = [R.descend(R.prop("count"))]
   if (sortField === "asc") sorters = [R.ascend(R.prop("count"))]
   if (sortField === "nameasc") sorters = [R.ascend(R.prop("name"))]
   if (sortField === "namedesc") sorters = [R.descend(R.prop("name"))]
   if (sortField === "pathdesc") sorters = [R.ascend(R.prop("path")), R.descend(R.prop("count"))]
   if (sortField === "pathasc") sorters = [R.ascend(R.prop("path")), R.ascend(R.prop("count"))]
-
-  const keysAreNumbers = R.all(validator.isStringNumeric)(Object.keys(data))
-  let totalCount = 0
-  let formatted
+  if (sortField === "reducerdesc") sorters = [R.descend(R.prop("reducer"))]
+  if (sortField === "reducerasc") sorters = [R.ascend(R.prop("reducer"))]
 
   if (sortField === "natural") {
     const fieldsString = R.compose(R.join(""), R.sort(R.ascend(R.identity)), R.keys)(data)
@@ -45,29 +44,18 @@ module.exports = function(sortField, limit, combineRemainder, data) {
     }
   }
 
+  const keysAreNumbers = R.all(validator.isStringNumeric)(Object.keys(data))
+
   return R.pipe(
     R.toPairs,
     R.map(function(pair) {
       const path = R.compose(R.join(","), R.init, R.split(" - "))(pair[0])
       const name = (keysAreNumbers) ? parseFloat(pair[0]) : pair[0]
-      return {name, path, count: pair[1]}
-    }),
-    R.tap(function(d) {
-      formatted = d
+      const count = pair[1].count
+      const reducer = pair[1].reducer
+      return {name, path, count, reducer}
     }),
     R.sortWith(sorters),
-    R.take(limit || data.length),
-    R.tap(function(d) {
-      const set = (combineRemainder) ? formatted : d
-      totalCount = R.compose(R.sum, R.pluck("count"))(set)
-    }),
-    R.when(R.always(combineRemainder), function(d) {
-      const count = totalCount - R.compose(R.sum, R.pluck("count"))(d)
-      return R.append({name: "Other", count}, d)
-    }),
-    R.map(function(row) {
-      const percentage = utils.round(2, (row.count / totalCount) * 100)
-      return R.compose(R.assoc("percentage", percentage), R.pick(["name", "count"]))(row)
-    })
+    R.map(R.omit(["path", "count"]))
   )(data)
 }
