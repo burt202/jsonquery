@@ -7,7 +7,13 @@ module.exports = function(limit, combineRemainder, data) {
     R.splitAt(limit),
     function(split) {
       if (!combineRemainder) return split[0]
-      return split[0]
+      const other = R.pipe(
+        R.takeLast(data.length - limit),
+        R.map(R.prop("reducer")),
+        R.sum
+      )(data)
+
+      return split[0].concat([{name: "Other", reducer: other}])
     }
   )(data)
 }

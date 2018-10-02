@@ -27,8 +27,7 @@ module.exports = {
         return groupLimiter(groupLimit, combineRemainder, data)
       },
       R.reduce(function(acc, val) {
-        const groupingResult = (Array.isArray(val.data)) ? val.data : val.data.result
-        acc[val.name] = groupingResult
+        acc[val.name] = val.reducer
         return acc
       }, {})
     )(grouped)
