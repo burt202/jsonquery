@@ -7,7 +7,7 @@ const R = require("ramda")
 function TableDisplay(props) {
 
   function onDownload() {
-    props.onDownload(props.raw)
+    props.onDownload(props.downloadFormat)
   }
 
   function getHeaderCopyText(index) {
@@ -59,7 +59,7 @@ function TableDisplay(props) {
     downloadLinks.push(
       (
         <li key="copy"><a className="site-link">
-          <CopyToClipboard text={props.copyFormat} onCopy={props.showToast}>
+          <CopyToClipboard text={props.downloadFormat} onCopy={props.showToast}>
             <span>Copy To Clipboard</span>
           </CopyToClipboard></a>
         </li>
@@ -88,9 +88,8 @@ function TableDisplay(props) {
 
 TableDisplay.propTypes = {
   formatted: PropTypes.any.isRequired,
-  raw: PropTypes.any.isRequired,
+  downloadFormat: PropTypes.any.isRequired,
   onDownload: PropTypes.func.isRequired,
-  copyFormat: PropTypes.any.isRequired,
   showToast: PropTypes.func,
 }
 

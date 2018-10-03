@@ -1,12 +1,9 @@
 const R = require("ramda")
 
-const downloadFormatter = require("../../../services/download-formatter")
-
-module.exports = function(groupings, groupReducer) {
+module.exports = function() {
 
   return {
-    base: R.curry(function(extension, mimetype, results) {
-      const formatted = downloadFormatter[extension](groupings, groupReducer, results)
+    base: R.curry(function(extension, mimetype, formatted) {
       const dataStr = URL.createObjectURL(new Blob([formatted], {type: mimetype}))
 
       const downloadLink = document.getElementById("hidden-download-link")

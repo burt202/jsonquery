@@ -7,7 +7,7 @@ const Code = require("../../shared/code")
 function JsonDisplay(props) {
 
   function onDownload() {
-    props.onDownload(props.raw)
+    props.onDownload(props.downloadFormat)
   }
 
   const downloadLinks = []
@@ -44,7 +44,7 @@ function JsonDisplay(props) {
 
 JsonDisplay.propTypes = {
   formatted: PropTypes.any.isRequired,
-  raw: PropTypes.any.isRequired,
+  downloadFormat: PropTypes.any.isRequired,
   onDownload: PropTypes.func.isRequired,
   showToast: PropTypes.func,
 }

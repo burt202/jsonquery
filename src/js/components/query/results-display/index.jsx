@@ -45,7 +45,7 @@ const Results = createReactClass({
   },
 
   getViewTypes() {
-    const downloaders = getDownloaders(this.props.groupings, this.props.groupReducer)
+    const downloaders = getDownloaders()
 
     return {
       json: {name: "JSON", extension: "json", downloader: downloaders.base("json", "application/json"), component: JsonDisplay},
@@ -100,21 +100,22 @@ const Results = createReactClass({
       return <Code language="json">Currently only one level of grouping is supported in the charts display</Code>
     }
 
+    const downloadFormat = downloadFormatter[viewTypes[this.state.type].extension](this.props.groupings, this.props.groupReducer, results)
+
     if (!this.isAggregateResult() && this.tooManyResultToShow()) {
       return (
         <JsonDisplay
           formatted={`Results set too large to display, use download link for .${type.extension} file`}
-          data={results}
+          downloadFormat={results}
           onDownload={viewTypes[this.state.type].downloader}
         />
       )
     }
 
     const formatted = downloadFormatter[this.state.type] ? downloadFormatter[this.state.type](this.props.groupings, this.props.groupReducer, results) : results
-    const copyFormat = this.state.type !== viewTypes[this.state.type].extension ? downloadFormatter[viewTypes[this.state.type].extension](this.props.groupings, this.props.groupReducer, results) : null
 
     const Component = type.component
-    return <Component formatted={formatted} raw={results} onDownload={type.downloader} copyFormat={copyFormat} showToast={this.showToast} />
+    return <Component formatted={formatted} downloadFormat={downloadFormat} onDownload={type.downloader} showToast={this.showToast} />
   },
 
   formatData(data) {
