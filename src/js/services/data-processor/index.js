@@ -3,6 +3,7 @@ const R = require("ramda")
 const filter = require("./filter")
 const sort = require("./sorter")
 const grouper = require("./grouper")
+const analyse = require("./analyse")
 const groupReducer = require("./group-reducer")
 const groupSorter = require("./group-sorter")
 const groupLimiter = require("./group-limiter")
@@ -14,6 +15,7 @@ module.exports = {
     return R.take(this.props.limit, data)
   },
   group: grouper,
+  analyse,
   groupProcessor(reducer, sortBy, limit, combineRemainder, grouped) {
     return R.pipe(
       function(data) {

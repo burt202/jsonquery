@@ -12,7 +12,6 @@ const TableDisplay = require("./results-display-table")
 const ChartDisplay = require("./results-display-chart")
 
 const dataProcessor = require("../../services/data-processor")
-const utils = require("../../utils")
 
 const DISPLAY_THRESHOLD = 1000
 
@@ -149,25 +148,13 @@ const Results = createReactClass({
     return <Component data={formatted} onDownload={type.downloader} filteredLength={this.props.filteredLength} onCopy={this.onCopy} />
   },
 
-  getAnalysis(data) {
-    const values = R.pluck(this.props.analyse, data)
-
-    return {
-      sum: utils.round(2, R.sum(values)),
-      average: utils.round(2, R.mean(values)),
-      lowest: utils.getMin(values),
-      highest: utils.getMax(values),
-      median: utils.round(2, R.median(values)),
-    }
-  },
-
   formatData(data) {
     if (this.props.groupings.length) {
       const grouped = dataProcessor.group(this.props.groupings, data)
       return this.props.groupReducer ? dataProcessor.groupProcessor(this.props.groupReducer, this.props.groupSort, this.props.groupLimit, this.props.combineRemainder, grouped) : grouped
     }
 
-    if (this.props.analyse) return this.getAnalysis(data)
+    if (this.props.analyse) return dataProcessor.analyse(this.props.analyse, data)
 
     return data
   },
