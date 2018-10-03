@@ -128,8 +128,13 @@ th {
 .table > thead:first-child > tr:first-child > th {
   border-top: 0;
 }
+
 .table-striped > tbody > tr:nth-of-type(odd) {
   background-color: #f9f9f9;
+}
+
+.table th.clickable {
+  cursor: pointer;
 }
 
 ul.side-options {
@@ -267,10 +272,6 @@ textarea.paste {
 
 .chart-options > * {
   margin-right: 10px;
-}
-
-.tableHeaderCell {
-  cursor: pointer;
 }
 
 /* Include Fields */

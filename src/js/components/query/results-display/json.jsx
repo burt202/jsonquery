@@ -7,24 +7,35 @@ const Code = require("../../shared/code")
 function JsonDisplay(props) {
 
   function onDownload() {
-    props.onDownload()
+    props.onDownload(props.raw)
   }
 
-  const downloadLink = props.onDownload ? (<ul className="side-options right">
-    <li><a className="site-link">
-      <CopyToClipboard text={props.data} onCopy={props.onCopy}>
-        <span>Copy To Clipboard</span>
-      </CopyToClipboard></a>
-    </li>
-    <li><a className="site-link" onClick={onDownload}>Download</a></li>
-  </ul>) : null
+  const downloadLinks = []
+
+  if (props.showToast) {
+    downloadLinks.push(
+      (
+        <li key="copy"><a className="site-link">
+          <CopyToClipboard text={props.formatted} onCopy={props.showToast}>
+            <span>Copy To Clipboard</span>
+          </CopyToClipboard></a>
+        </li>
+      )
+    )
+  }
+
+  downloadLinks.push(
+    (
+      <li key="download"><a className="site-link" onClick={onDownload}>Download</a></li>
+    )
+  )
 
   return (
     <div>
-      {downloadLink}
-      <div id="copy-cont">
+      <ul className="side-options right">{downloadLinks}</ul>
+      <div>
         <Code language="json">
-          {props.data}
+          {props.formatted}
         </Code>
       </div>
     </div>
@@ -32,9 +43,10 @@ function JsonDisplay(props) {
 }
 
 JsonDisplay.propTypes = {
-  data: PropTypes.any.isRequired,
-  onDownload: PropTypes.func,
-  onCopy: PropTypes.func,
+  formatted: PropTypes.any.isRequired,
+  raw: PropTypes.any.isRequired,
+  onDownload: PropTypes.func.isRequired,
+  showToast: PropTypes.func,
 }
 
 module.exports = JsonDisplay

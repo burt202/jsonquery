@@ -12,6 +12,8 @@ const JsonDisplay = require("./json")
 const TableDisplay = require("./table")
 const ChartDisplay = require("./chart")
 
+const getDownloaders = require("./downloaders")
+const Code = require("../../shared/code")
 
 const DISPLAY_THRESHOLD = 1000
 
@@ -43,28 +45,30 @@ const Results = createReactClass({
   },
 
   getViewTypes() {
-    return [
-      {name: "JSON", view: "json", extension: "json", mimetype: "application/json", downloader: this.baseDownloader, component: JsonDisplay},
-      {name: "Table", view: "table", extension: "csv", mimetype: "text/csv", downloader: this.baseDownloader, component: TableDisplay},
-      {name: "Chart", view: "chart", extension: "png", mimetype: "image/png", downloader: this.chartDownloader, component: ChartDisplay},
-    ]
+    const downloaders = getDownloaders(this.props.groupings, this.props.groupReducer)
+
+    return {
+      json: {name: "JSON", extension: "json", downloader: downloaders.base("json", "application/json"), component: JsonDisplay},
+      table: {name: "Table", extension: "csv", downloader: downloaders.base("csv", "text/csv"), component: TableDisplay},
+      chart: {name: "Chart (BETA)", extension: "png", downloader: downloaders.chart("png", "image/png"), component: ChartDisplay},
+    }
   },
 
   getViewTypesLinks() {
-    return this.getViewTypes().map(function(type) {
+    return R.toPairs(this.getViewTypes()).map(function(pair) {
       const classnames = classNames({
-        "active": this.state.type === type.view,
+        "active": this.state.type === pair[0],
       })
 
       return (
-        <li key={type.view} className={classnames}>
-          <a className="site-link" onClick={this.setType.bind(this, type.view)}>{type.name}</a>
+        <li key={pair[0]} className={classnames}>
+          <a className="site-link" onClick={this.setType.bind(this, pair[0])}>{pair[1].name}</a>
         </li>
       )
     }.bind(this))
   },
 
-  onCopy() {
+  showToast() {
     const actionCreator = this.props.actionCreator
 
     actionCreator.showToast("Copied!")
@@ -72,45 +76,6 @@ const Results = createReactClass({
     setTimeout(function() {
       actionCreator.removeToast()
     }, 3000)
-  },
-
-  baseDownloader(results) {
-    return function() {
-      const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
-
-      const formatted = downloadFormatter[type.extension](this.props.groupings, this.props.groupReducer, results)
-      const dataStr = URL.createObjectURL(new Blob([formatted], {type: type.mimetype}))
-
-      const downloadLink = document.getElementById("hidden-download-link")
-      downloadLink.setAttribute("href", dataStr)
-      downloadLink.setAttribute("download", `${new Date().toISOString()}.${type.extension}`)
-      downloadLink.click()
-      downloadLink.setAttribute("href", "")
-    }
-  },
-
-  chartDownloader(chart) {
-    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes())
-
-    const width = chart.ctx.canvas.width
-    const height = chart.ctx.canvas.height
-
-    const newCanvas = document.createElement("canvas")
-    newCanvas.width = width
-    newCanvas.height = height
-
-    const ctx = newCanvas.getContext("2d")
-    ctx.fillStyle = "white"
-    ctx.fillRect(0, 0, width, height)
-    ctx.drawImage(chart.ctx.canvas, 0, 0)
-
-    const dataStr = newCanvas.toDataURL()
-
-    const downloadLink = document.getElementById("hidden-download-link")
-    downloadLink.setAttribute("href", dataStr)
-    downloadLink.setAttribute("download", `${new Date().toISOString()}.${type.extension}`)
-    downloadLink.click()
-    downloadLink.setAttribute("href", "")
   },
 
   isAggregateResult() {
@@ -122,30 +87,34 @@ const Results = createReactClass({
   },
 
   getDisplayData(results) {
-    const type = R.find(R.propEq("view", this.state.type), this.getViewTypes(this.props))
+    const viewTypes = this.getViewTypes()
+    const type = viewTypes[this.state.type]
 
-    if (validator.isString(results)) return <JsonDisplay data={results} />
+    if (validator.isString(results)) return <Code language="json">{results}</Code>
 
     if (type.view === "chart" && (!this.props.groupings.length || !this.props.groupReducer)) {
-      return <JsonDisplay data="You must select a grouping with counts to use the charts display" />
+      return <Code language="json">You must select a grouping with counts to use the charts display</Code>
     }
 
     if (type.view === "chart" && this.props.groupings.length > 1) {
-      return <JsonDisplay data="Currently only one level of grouping is supported in the charts display" />
+      return <Code language="json">Currently only one level of grouping is supported in the charts display</Code>
     }
 
     if (!this.isAggregateResult() && this.tooManyResultToShow()) {
       return (
         <JsonDisplay
-          data={`Results set too large to display, use download link for .${type.extension} file`}
-          onDownload={this.baseDownloader(results)}
+          formatted={`Results set too large to display, use download link for .${type.extension} file`}
+          data={results}
+          onDownload={viewTypes[this.state.type].downloader}
         />
       )
     }
 
     const formatted = downloadFormatter[this.state.type] ? downloadFormatter[this.state.type](this.props.groupings, this.props.groupReducer, results) : results
+    const copyFormat = this.state.type !== viewTypes[this.state.type].extension ? downloadFormatter[viewTypes[this.state.type].extension](this.props.groupings, this.props.groupReducer, results) : null
+
     const Component = type.component
-    return <Component data={formatted} onDownload={type.downloader} filteredLength={this.props.filteredLength} onCopy={this.onCopy} />
+    return <Component formatted={formatted} raw={results} onDownload={type.downloader} copyFormat={copyFormat} showToast={this.showToast} />
   },
 
   formatData(data) {

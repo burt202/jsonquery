@@ -7,7 +7,7 @@ const R = require("ramda")
 function TableDisplay(props) {
 
   function onDownload() {
-    props.onDownload()
+    props.onDownload(props.raw)
   }
 
   function getHeaderCopyText(index) {
@@ -15,18 +15,18 @@ function TableDisplay(props) {
       R.reject(R.propEq("type", "header")),
       R.map(R.compose(R.prop(index), R.prop("cols"))),
       R.join(",")
-    )(props.data)
+    )(props.formatted)
   }
 
-  const header = R.find(R.propEq("type", "header"), props.data)
+  const header = R.find(R.propEq("type", "header"), props.formatted)
 
   let tableHeader = null
 
   if (header) {
     const headerRow = header.cols.map(function(col, index) {
       return (
-        <th key={index} className="tableHeaderCell" title="Copy column data">
-          <CopyToClipboard text={getHeaderCopyText(index)}><span>{col}</span></CopyToClipboard>
+        <th key={index} className="clickable" title="Copy column data">
+          <CopyToClipboard text={getHeaderCopyText(index)} onCopy={props.showToast}><span>{col}</span></CopyToClipboard>
         </th>
       )
     })
@@ -34,7 +34,7 @@ function TableDisplay(props) {
     tableHeader = <thead><tr>{headerRow}</tr></thead>
   }
 
-  const dataRows = R.reject(R.propEq("type", "header"), props.data)
+  const dataRows = R.reject(R.propEq("type", "header"), props.formatted)
 
   const tableBodyRows = dataRows.map(function(row, index) {
     if (row.type === "title") {
@@ -53,13 +53,29 @@ function TableDisplay(props) {
     return <tr key={index}>{cols}</tr>
   })
 
-  const downloadLink = props.onDownload ? (<ul className="side-options right">
-    <li><a className="site-link" onClick={onDownload}>Download</a></li>
-  </ul>) : null
+  const downloadLinks = []
+
+  if (props.showToast) {
+    downloadLinks.push(
+      (
+        <li key="copy"><a className="site-link">
+          <CopyToClipboard text={props.copyFormat} onCopy={props.showToast}>
+            <span>Copy To Clipboard</span>
+          </CopyToClipboard></a>
+        </li>
+      )
+    )
+  }
+
+  downloadLinks.push(
+    (
+      <li key="download"><a className="site-link" onClick={onDownload}>Download</a></li>
+    )
+  )
 
   return (
     <div>
-      {downloadLink}
+      <ul className="side-options right">{downloadLinks}</ul>
       <table className="table">
         {tableHeader}
         <tbody>
@@ -71,8 +87,11 @@ function TableDisplay(props) {
 }
 
 TableDisplay.propTypes = {
-  data: PropTypes.any.isRequired,
-  onDownload: PropTypes.func,
+  formatted: PropTypes.any.isRequired,
+  raw: PropTypes.any.isRequired,
+  onDownload: PropTypes.func.isRequired,
+  copyFormat: PropTypes.any.isRequired,
+  showToast: PropTypes.func,
 }
 
 module.exports = TableDisplay
