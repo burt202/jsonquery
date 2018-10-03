@@ -84,7 +84,7 @@ const formatters = {
   table: R.curry(function(groupings, groupReducer, json) {
     if (R.isEmpty(json)) return []
     if (Array.isArray(json)) return tableFromArray(json)
-    if (groupReducer) return [{type: "header", cols: ["name", "count"]}]
+    if (groupReducer) return [{type: "header", cols: ["name", groupReducer.name]}]
       .concat(tableFromObject(flat(json, {delimiter: " - "})))
     if (groupings.length) return tableFromGroupedData(json)
     return tableFromObject(json)
