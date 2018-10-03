@@ -2,10 +2,10 @@ const R = require("ramda")
 const utils = require("../../utils")
 
 const reducerMap = {
-  getLength(reducer, totalItemCount, groupItems) {
+  count(reducer, totalItemCount, groupItems) {
     return groupItems.length
   },
-  getPercentage(reducer, totalItemCount, groupItems) {
+  percentage(reducer, totalItemCount, groupItems) {
     return utils.round(2, (groupItems.length / totalItemCount) * 100)
   },
 }

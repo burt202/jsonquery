@@ -32,7 +32,7 @@ describe("downloadFormatter", function() {
           Muse: 1,
         }
 
-        expect(downloadFormatter.table(["artist"], {name: "getLength"}, mockData)).to.eql([
+        expect(downloadFormatter.table(["artist"], {name: "count"}, mockData)).to.eql([
           {type: "header", cols: ["name", "count"]},
           {type: "data", cols: ["Coldplay", 2]},
           {type: "data", cols: ["Muse", 1]},
@@ -45,7 +45,7 @@ describe("downloadFormatter", function() {
           Muse: {Showbiz: 1},
         }
 
-        expect(downloadFormatter.table(["artist", "album"], {name: "getLength"}, mockData)).to.eql([
+        expect(downloadFormatter.table(["artist", "album"], {name: "count"}, mockData)).to.eql([
           {type: "header", cols: ["name", "count"]},
           {type: "data", cols: ["Coldplay - Parachutes", 1]},
           {type: "data", cols: ["Coldplay - X&Y", 1]},
@@ -59,7 +59,7 @@ describe("downloadFormatter", function() {
           {name: "Muse", count: 1},
         ]
 
-        expect(downloadFormatter.table(["artist"], {name: "getLength"}, mockData)).to.eql([
+        expect(downloadFormatter.table(["artist"], {name: "count"}, mockData)).to.eql([
           {type: "header", cols: ["name", "count"]},
           {type: "data", cols: ["Coldplay", 2]},
           {type: "data", cols: ["Muse", 1]},
@@ -73,7 +73,7 @@ describe("downloadFormatter", function() {
           {name: "Muse - Showbiz", count: 1},
         ]
 
-        expect(downloadFormatter.table(["artist", "album"], {name: "getLength"}, mockData)).to.eql([
+        expect(downloadFormatter.table(["artist", "album"], {name: "count"}, mockData)).to.eql([
           {type: "header", cols: ["name", "count"]},
           {type: "data", cols: ["Coldplay - Parachutes", 1]},
           {type: "data", cols: ["Coldplay - X&Y", 1]},
@@ -167,7 +167,7 @@ describe("downloadFormatter", function() {
           Muse: 1,
         }
 
-        expect(downloadFormatter.csv(["artist"], {name: "getLength"}, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], {name: "count"}, mockData)).to.eql(
           "name,count\r\nColdplay,2\r\nMuse,1"
         )
       })
@@ -178,7 +178,7 @@ describe("downloadFormatter", function() {
           Muse: {Showbiz: 1},
         }
 
-        expect(downloadFormatter.csv(["artist", "album"], {name: "getLength"}, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist", "album"], {name: "count"}, mockData)).to.eql(
           "name,count\r\nColdplay - Parachutes,1\r\nColdplay - X&Y,1\r\nMuse - Showbiz,1"
         )
       })
@@ -189,7 +189,7 @@ describe("downloadFormatter", function() {
           Muse: 1,
         }
 
-        expect(downloadFormatter.csv(["artist"], {name: "getLength"}, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], {name: "count"}, mockData)).to.eql(
           "name,count\r\n\"10,000 Days\",2\r\nMuse,1"
         )
       })
@@ -200,7 +200,7 @@ describe("downloadFormatter", function() {
           {name: "Muse", count: 1},
         ]
 
-        expect(downloadFormatter.csv(["artist"], {name: "getLength"}, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], {name: "count"}, mockData)).to.eql(
           "name,count\r\nColdplay,2\r\nMuse,1"
         )
       })
@@ -212,7 +212,7 @@ describe("downloadFormatter", function() {
           {name: "Muse - Showbiz", count: 1},
         ]
 
-        expect(downloadFormatter.csv(["artist", "album"], {name: "getLength"}, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist", "album"], {name: "count"}, mockData)).to.eql(
           "name,count\r\nColdplay - Parachutes,1\r\nColdplay - X&Y,1\r\nMuse - Showbiz,1"
         )
       })
@@ -223,7 +223,7 @@ describe("downloadFormatter", function() {
           {name: "Muse", count: 1},
         ]
 
-        expect(downloadFormatter.csv(["artist"], {name: "getLength"}, mockData)).to.eql(
+        expect(downloadFormatter.csv(["artist"], {name: "count"}, mockData)).to.eql(
           "name,count\r\n\"10,000 Days\",2\r\nMuse,1"
         )
       })

@@ -48,7 +48,7 @@ describe("store", function() {
           sorters: ["baz"],
           limit: "aaa",
           analyse: "bbb",
-          groupReducer: {name: "getLength"},
+          groupReducer: {name: "count"},
         },
       })
 
@@ -58,7 +58,7 @@ describe("store", function() {
       expect(store.getState().sorters).to.eql(["baz"])
       expect(store.getState().limit).to.eql("aaa")
       expect(store.getState().analyse).to.eql("bbb")
-      expect(store.getState().groupReducer).to.eql({name: "getLength"})
+      expect(store.getState().groupReducer).to.eql({name: "count"})
 
       store.dispatch({
         type: "saveJson",
@@ -170,7 +170,7 @@ describe("store", function() {
           filters: [{id: 1, name: "foo", value: "", operator: "eq", active: true}],
           groupings: ["bar"],
           sorters: ["baz"],
-          groupReducer: {name: "getLength"},
+          groupReducer: {name: "count"},
           groupSort: "asc",
           groupLimit: 10,
           limit: "aaa",
@@ -189,7 +189,7 @@ describe("store", function() {
       expect(store.getState().filters[0].name).to.eql("foo")
       expect(store.getState().groupings).to.eql(["bar"])
       expect(store.getState().sorters).to.eql(["baz"])
-      expect(store.getState().groupReducer).to.eql({name: "getLength"})
+      expect(store.getState().groupReducer).to.eql({name: "count"})
       expect(store.getState().groupSort).to.eql("asc")
       expect(store.getState().groupLimit).to.eql(10)
       expect(store.getState().limit).to.eql("aaa")
@@ -306,7 +306,7 @@ describe("store", function() {
       store.dispatch({
         type: "_setState",
         value: {
-          groupReducer: {name: "getLength"},
+          groupReducer: {name: "count"},
           groupSort: "asc",
           groupLimit: 10,
           groupings: ["baz"],
@@ -314,7 +314,7 @@ describe("store", function() {
         },
       })
 
-      expect(store.getState().groupReducer).to.eql({name: "getLength"})
+      expect(store.getState().groupReducer).to.eql({name: "count"})
       expect(store.getState().groupSort).to.eql("asc")
       expect(store.getState().groupLimit).to.eql(10)
       expect(store.getState().combineRemainder).to.eql(true)
@@ -334,7 +334,7 @@ describe("store", function() {
       store.dispatch({
         type: "_setState",
         value: {
-          groupReducer: {name: "getLength"},
+          groupReducer: {name: "count"},
           groupSort: "asc",
           groupLimit: 10,
           groupings: ["bar", "baz"],
@@ -342,7 +342,7 @@ describe("store", function() {
         },
       })
 
-      expect(store.getState().groupReducer).to.eql({name: "getLength"})
+      expect(store.getState().groupReducer).to.eql({name: "count"})
       expect(store.getState().groupSort).to.eql("asc")
       expect(store.getState().groupLimit).to.eql(10)
       expect(store.getState().combineRemainder).to.eql(true)
@@ -352,7 +352,7 @@ describe("store", function() {
         value: {name: "baz"},
       })
 
-      expect(store.getState().groupReducer).to.eql({name: "getLength"})
+      expect(store.getState().groupReducer).to.eql({name: "count"})
       expect(store.getState().groupSort).to.eql("asc")
       expect(store.getState().groupLimit).to.eql(10)
       expect(store.getState().combineRemainder).to.eql(true)
@@ -392,10 +392,10 @@ describe("store", function() {
     it("should update groupReducer", function() {
       store.dispatch({
         type: "groupReducer",
-        value: {groupReducer: {name: "getLength"}},
+        value: {groupReducer: {name: "count"}},
       })
 
-      expect(store.getState().groupReducer).to.eql({name: "getLength"})
+      expect(store.getState().groupReducer).to.eql({name: "count"})
     })
 
     it("should reset groupSort, groupLimit and combineRemainder when set to false", function() {
@@ -428,7 +428,7 @@ describe("store", function() {
         type: "_setState",
         value: {
           groupings: ["bar"],
-          groupReducer: {name: "getLength"},
+          groupReducer: {name: "count"},
           groupSort: "asc",
           groupLimit: 10,
           combineRemainder: true,
@@ -436,7 +436,7 @@ describe("store", function() {
       })
 
       expect(store.getState().groupings).to.eql(["bar"])
-      expect(store.getState().groupReducer).to.eql({name: "getLength"})
+      expect(store.getState().groupReducer).to.eql({name: "count"})
       expect(store.getState().groupSort).to.eql("asc")
       expect(store.getState().groupLimit).to.eql(10)
       expect(store.getState().combineRemainder).to.eql(true)

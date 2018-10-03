@@ -32,7 +32,7 @@ const Summary = createReactClass({
 
   getGroupLimitedTotal(grouped) {
     if (!this.props.groupings.length || !this.props.groupLimit) return null
-    const limitedGroups = dataProcessor.groupProcessor({name: "getLength"}, this.props.groupSort, this.props.groupLimit, false, grouped)
+    const limitedGroups = dataProcessor.groupProcessor({name: "count"}, this.props.groupSort, this.props.groupLimit, false, grouped)
     return summaryAnalyser.getGroupLimitedTotal(this.props.filtered, this.props.rawDataLength, limitedGroups)
   },
 

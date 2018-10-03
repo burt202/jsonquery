@@ -128,8 +128,8 @@ const GroupingControl = createReactClass({
     return (
       <select onChange={this.onGroupReducerChange} value={value}>
         <option value="">Reduce by</option>
-        <option value="getLength">Length</option>
-        <option value="getPercentage">Percentage</option>
+        <option value="count">Length</option>
+        <option value="percentage">Percentage</option>
       </select>
     )
   },
