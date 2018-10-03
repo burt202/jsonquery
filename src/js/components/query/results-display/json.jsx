@@ -2,7 +2,7 @@ const React = require("react")
 const PropTypes = require("prop-types")
 const CopyToClipboard = require("react-copy-to-clipboard").CopyToClipboard
 
-const Code = require("../shared/code")
+const Code = require("../../shared/code")
 
 function JsonDisplay(props) {
 

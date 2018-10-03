@@ -2,10 +2,10 @@ const React = require("react")
 const PropTypes = require("prop-types")
 const createReactClass = require("create-react-class")
 
-const Bar = require("./bar-chart")
-const Pie = require("./pie-chart")
-const Line = require("./line-chart")
-const Doughnut = require("./doughnut-chart")
+const Bar = require("./charts/bar")
+const Pie = require("./charts/pie")
+const Line = require("./charts/line")
+const Doughnut = require("./charts/doughnut")
 
 const chartTypeMap = {
   bar: Bar,

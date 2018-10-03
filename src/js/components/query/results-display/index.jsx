@@ -4,14 +4,14 @@ const createReactClass = require("create-react-class")
 const R = require("ramda")
 const classNames = require("classnames")
 
-const downloadFormatter = require("../../services/download-formatter")
-const validator = require("../../services/validator")
+const downloadFormatter = require("../../../services/download-formatter")
+const validator = require("../../../services/validator")
+const dataProcessor = require("../../../services/data-processor")
 
-const JsonDisplay = require("./results-display-json")
-const TableDisplay = require("./results-display-table")
-const ChartDisplay = require("./results-display-chart")
+const JsonDisplay = require("./json")
+const TableDisplay = require("./table")
+const ChartDisplay = require("./chart")
 
-const dataProcessor = require("../../services/data-processor")
 
 const DISPLAY_THRESHOLD = 1000
 
