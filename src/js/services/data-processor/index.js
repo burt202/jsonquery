@@ -12,7 +12,7 @@ module.exports = {
   filter,
   sort,
   limit(limit, data) {
-    return R.take(this.props.limit, data)
+    return R.take(limit, data)
   },
   group: grouper,
   analyse,
