@@ -182,11 +182,8 @@ textarea.paste {
 
 /* Modal */
 
-html, body {
-  min-height: 100%;
-}
-body {
-  position: relative;
+body.modal-open {
+  overflow-y: hidden;
 }
 
 .overlay {

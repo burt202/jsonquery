@@ -65,10 +65,12 @@ const GroupingControl = createReactClass({
   },
 
   showModal() {
+    document.body.classList.toggle("modal-open")
     this.setState({modalOpen: true})
   },
 
   closeModal() {
+    document.body.classList.toggle("modal-open")
     this.setState({modalOpen: false})
   },
 
