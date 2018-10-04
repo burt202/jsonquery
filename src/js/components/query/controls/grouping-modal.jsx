@@ -18,6 +18,13 @@ const GroupingModal = createReactClass({
     combineRemainder: PropTypes.bool.isRequired,
   },
 
+  onReset() {
+    if (window.confirm("Are you sure you want to reset grouping options?")) {
+      this.props.onGroupReducerChange(null)
+      this.props.onDismiss()
+    }
+  },
+
   onGroupReducerChange(e) {
     const groupReducer = (e.target.value && e.target.value.length) ? {name: e.target.value} : null
     this.props.onGroupReducerChange(groupReducer)
@@ -128,7 +135,7 @@ const GroupingModal = createReactClass({
             </div>
             <div className="modal-footer">
               <ul className="side-options right">
-                <li><a className="site-link">Reset</a></li>
+                {this.props.groupReducer && <li><a className="site-link" onClick={this.onReset}>Reset</a></li>}
                 <li><a className="site-link" onClick={this.props.onDismiss}>OK</a></li>
               </ul>
             </div>
