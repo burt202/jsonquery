@@ -46,4 +46,24 @@ describe("groupReducer", function() {
       })
     })
   })
+
+  describe("countCondition", function() {
+    it("should reduce group down to count based on a condition", function() {
+      expect(groupReducer({name: "countCondition", field: "auto", value: true}, mockDataForGrouping)).to.eql({
+        card: {count: 3, reducer: 2},
+        cash: {count: 2, reducer: 1},
+        loan: {count: 1, reducer: 1},
+      })
+    })
+  })
+
+  describe("percentageCondition", function() {
+    it("should reduce group down to count based on a condition", function() {
+      expect(groupReducer({name: "percentageCondition", field: "auto", value: true}, mockDataForGrouping)).to.eql({
+        card: {count: 3, reducer: 66.67},
+        cash: {count: 2, reducer: 50},
+        loan: {count: 1, reducer: 100},
+      })
+    })
+  })
 })

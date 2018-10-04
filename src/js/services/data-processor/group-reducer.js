@@ -8,6 +8,13 @@ const reducerMap = {
   percentage(reducer, totalItemCount, groupItems) {
     return utils.round(2, (groupItems.length / totalItemCount) * 100)
   },
+  countCondition(reducer, totalItemCount, groupItems) {
+    return R.compose(R.length, R.filter(R.equals(reducer.value)), R.pluck(reducer.field))(groupItems)
+  },
+  percentageCondition(reducer, totalItemCount, groupItems) {
+    const length = R.compose(R.length, R.filter(R.equals(reducer.value)), R.pluck(reducer.field))(groupItems)
+    return utils.round(2, (length / groupItems.length) * 100)
+  },
 }
 
 module.exports = function(reducer, data) {
