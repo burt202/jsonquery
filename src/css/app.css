@@ -209,7 +209,17 @@ body {
   margin-top: -100px;
   background-color: #fff;
   z-index: 10;
-  padding: 15px;
+  padding: 0 15px;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.modal-body {
+  flex-grow: 1;
 }
 
 /* Home */

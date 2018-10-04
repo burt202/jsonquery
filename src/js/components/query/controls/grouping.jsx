@@ -13,12 +13,12 @@ const GroupingControl = createReactClass({
     groupReducer: PropTypes.object,
     groupSort: PropTypes.string.isRequired,
     groupLimit: PropTypes.number,
+    combineRemainder: PropTypes.bool.isRequired,
     onAdd: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
     onGroupReducerChange: PropTypes.func.isRequired,
     onGroupSortChange: PropTypes.func.isRequired,
     onGroupLimitChange: PropTypes.func.isRequired,
-    combineRemainder: PropTypes.bool.isRequired,
     onCombineRemainderChange: PropTypes.func.isRequired,
   },
 
@@ -47,7 +47,21 @@ const GroupingControl = createReactClass({
 
   getGroupingModal() {
     if (!this.state.modalOpen) return null
-    return <GroupingModal onDismiss={this.closeModal} />
+
+    return (
+      <GroupingModal
+        onDismiss={this.closeModal}
+        onGroupReducerChange={this.props.onGroupReducerChange}
+        onGroupSortChange={this.props.onGroupSortChange}
+        onGroupLimitChange={this.props.onGroupLimitChange}
+        onCombineRemainderChange={this.props.onCombineRemainderChange}
+        groupings={this.props.groupings}
+        groupReducer={this.props.groupReducer}
+        groupSort={this.props.groupSort}
+        groupLimit={this.props.groupLimit}
+        combineRemainder={this.props.combineRemainder}
+      />
+    )
   },
 
   showModal() {
@@ -56,6 +70,11 @@ const GroupingControl = createReactClass({
 
   closeModal() {
     this.setState({modalOpen: false})
+  },
+
+  getGroupingOptionsLink() {
+    if (!this.props.groupings.length) return null
+    return <div><a className="site-link" onClick={this.showModal}>Grouping options</a></div>
   },
 
   render() {
@@ -77,7 +96,7 @@ const GroupingControl = createReactClass({
             </select>
           </div>
         </div>
-        <div><a className="site-link" onClick={this.showModal}>Grouping options</a></div>
+        {this.getGroupingOptionsLink()}
         {this.getGroupingModal()}
       </div>
     )
