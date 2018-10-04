@@ -1,6 +1,7 @@
 const React = require("react")
 const PropTypes = require("prop-types")
 const createReactClass = require("create-react-class")
+const R = require("ramda")
 
 const GroupingModal = createReactClass({
   displayName: "GroupingModal",
@@ -36,6 +37,10 @@ const GroupingModal = createReactClass({
     if (e.target.value) this.props.onGroupReducerMetaChange({field: e.target.value})
   },
 
+  onGroupReducerValueChange(e) {
+    if (e.target.value) this.props.onGroupReducerMetaChange({value: e.target.value})
+  },
+
   onSortChange(e) {
     this.props.onGroupSortChange(e.target.value)
   },
@@ -49,26 +54,46 @@ const GroupingModal = createReactClass({
     this.props.onCombineRemainderChange(!this.props.combineRemainder)
   },
 
+  getReducerValueInput(fieldName, comparisonValue) {
+    const fieldType =  this.props.schema[fieldName]
+
+    if (fieldType === "bool") {
+      return (
+        <select onChange={this.onGroupReducerValueChange} value={comparisonValue}>
+          <option value="bool---true">is true</option>
+          <option value="bool---false">is false</option>
+        </select>
+      )
+    }
+
+    return (
+      <span>{" = "}
+        <input type="text" name="reducer-value" value={comparisonValue} onChange={this.onGroupReducerValueChange} />
+      </span>
+    )
+  },
+
   getReducerOption() {
     if (!this.props.groupings || !this.props.groupings.length) return null
 
-    const reducerValue = this.props.groupReducer ? this.props.groupReducer.name : ""
-    const reducerFieldValue = reducerValue.length && this.props.groupReducer.field ? this.props.groupReducer.field : ""
+    const reducerNameValue = this.props.groupReducer ? this.props.groupReducer.name : ""
+    const reducerFieldValue = reducerNameValue.length && this.props.groupReducer.field ? this.props.groupReducer.field : ""
+    const reducerValue = reducerNameValue.length && this.props.groupReducer.value ? this.props.groupReducer.value : ""
 
-    const options = Object.keys(this.props.schema).map(function(value) {
+    const options = R.without(this.props.groupings, Object.keys(this.props.schema)).map(function(value) {
       return (
         <option value={value} key={value}>{value}</option>
       )
     })
 
-    const conditionReducer = (reducerValue === "countCondition") || (reducerValue === "percentageCondition")
+    const conditionReducer = (reducerNameValue === "countCondition") || (reducerNameValue === "percentageCondition")
 
     return (
       <div className="input-control">
         <label>Reduce By:</label>
         <div className="body">
           <div className="row">
-            <select onChange={this.onGroupReducerChange} value={reducerValue}>
+            <select onChange={this.onGroupReducerChange} value={reducerNameValue}>
               <option value=""></option>
               <option value="count">Length</option>
               <option value="percentage">Percentage</option>
@@ -79,6 +104,7 @@ const GroupingModal = createReactClass({
               <option></option>
               {options}
             </select>}
+            {reducerFieldValue && this.getReducerValueInput(reducerFieldValue, reducerValue)}
           </div>
         </div>
       </div>
