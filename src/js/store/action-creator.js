@@ -112,6 +112,13 @@ module.exports = function(store) {
       })
     },
 
+    groupReducerMeta(groupReducerMeta) {
+      store.dispatch({
+        type: "groupReducerMeta",
+        value: {groupReducerMeta},
+      })
+    },
+
     groupSort(groupSort) {
       store.dispatch({
         type: "groupSort",

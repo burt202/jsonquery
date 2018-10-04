@@ -1,6 +1,7 @@
 const React = require("react")
 const PropTypes = require("prop-types")
 const createReactClass = require("create-react-class")
+const R = require("ramda")
 
 const GroupingModal = require("./grouping-modal")
 
@@ -9,7 +10,7 @@ const GroupingControl = createReactClass({
 
   propTypes: {
     groupings: PropTypes.array,
-    options: PropTypes.array.isRequired,
+    schema: PropTypes.object.isRequired,
     groupReducer: PropTypes.object,
     groupSort: PropTypes.string.isRequired,
     groupLimit: PropTypes.number,
@@ -17,6 +18,7 @@ const GroupingControl = createReactClass({
     onAdd: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
     onGroupReducerChange: PropTypes.func.isRequired,
+    onGroupReducerMetaChange: PropTypes.func.isRequired,
     onGroupSortChange: PropTypes.func.isRequired,
     onGroupLimitChange: PropTypes.func.isRequired,
     onCombineRemainderChange: PropTypes.func.isRequired,
@@ -52,6 +54,7 @@ const GroupingControl = createReactClass({
       <GroupingModal
         onDismiss={this.closeModal}
         onGroupReducerChange={this.props.onGroupReducerChange}
+        onGroupReducerMetaChange={this.props.onGroupReducerMetaChange}
         onGroupSortChange={this.props.onGroupSortChange}
         onGroupLimitChange={this.props.onGroupLimitChange}
         onCombineRemainderChange={this.props.onCombineRemainderChange}
@@ -60,6 +63,7 @@ const GroupingControl = createReactClass({
         groupSort={this.props.groupSort}
         groupLimit={this.props.groupLimit}
         combineRemainder={this.props.combineRemainder}
+        schema={this.props.schema}
       />
     )
   },
@@ -80,7 +84,7 @@ const GroupingControl = createReactClass({
   },
 
   render() {
-    const options = this.props.options.map(function(value) {
+    const options = R.without(this.props.groupings, Object.keys(this.props.schema)).map(function(value) {
       return (
         <option value={value} key={value}>{value}</option>
       )

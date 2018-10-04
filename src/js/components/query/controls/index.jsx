@@ -47,18 +47,17 @@ const Controls = createReactClass({
   },
 
   getGroupByControl() {
-    const options = R.without(this.props.groupings, Object.keys(this.props.schema))
-
     return (
       <GroupingControl
         groupings={this.props.groupings}
-        options={options}
+        schema={this.props.schema}
         groupReducer={this.props.groupReducer}
         groupSort={this.props.groupSort}
         groupLimit={this.props.groupLimit}
         onAdd={this.props.actionCreator.addGrouping}
         onRemove={this.props.actionCreator.removeGrouping}
         onGroupReducerChange={this.props.actionCreator.groupReducer}
+        onGroupReducerMetaChange={this.props.actionCreator.groupReducerMeta}
         onGroupSortChange={this.props.actionCreator.groupSort}
         onGroupLimitChange={this.props.actionCreator.groupLimit}
         combineRemainder={this.props.combineRemainder}

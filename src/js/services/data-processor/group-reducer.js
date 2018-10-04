@@ -9,9 +9,11 @@ const reducerMap = {
     return utils.round(2, (groupItems.length / totalItemCount) * 100)
   },
   countCondition(reducer, totalItemCount, groupItems) {
+    if (!reducer.field || !reducer.value) return "N/A"
     return R.compose(R.length, R.filter(R.equals(reducer.value)), R.pluck(reducer.field))(groupItems)
   },
   percentageCondition(reducer, totalItemCount, groupItems) {
+    if (!reducer.field || !reducer.value) return "N/A"
     const length = R.compose(R.length, R.filter(R.equals(reducer.value)), R.pluck(reducer.field))(groupItems)
     return utils.round(2, (length / groupItems.length) * 100)
   },

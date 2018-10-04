@@ -146,6 +146,14 @@ const handlers = {
     return R.merge(contents, toMerge)
   },
 
+  groupReducerMeta(contents, payload) {
+    const toMerge = {
+      groupReducer: R.merge(contents.groupReducer, payload.groupReducerMeta),
+    }
+
+    return R.merge(contents, toMerge)
+  },
+
   groupSort(contents, payload) {
     return R.merge(contents, {
       groupSort: payload.groupSort,

@@ -55,6 +55,14 @@ describe("groupReducer", function() {
         loan: {count: 1, reducer: 1},
       })
     })
+
+    it("should return 'N/A' when field or value is not present", function() {
+      expect(groupReducer({name: "countCondition"}, mockDataForGrouping)).to.eql({
+        card: {count: 3, reducer: "N/A"},
+        cash: {count: 2, reducer: "N/A"},
+        loan: {count: 1, reducer: "N/A"},
+      })
+    })
   })
 
   describe("percentageCondition", function() {
@@ -63,6 +71,14 @@ describe("groupReducer", function() {
         card: {count: 3, reducer: 66.67},
         cash: {count: 2, reducer: 50},
         loan: {count: 1, reducer: 100},
+      })
+    })
+
+    it("should return 'N/A' when field or value is not present", function() {
+      expect(groupReducer({name: "percentageCondition"}, mockDataForGrouping)).to.eql({
+        card: {count: 3, reducer: "N/A"},
+        cash: {count: 2, reducer: "N/A"},
+        loan: {count: 1, reducer: "N/A"},
       })
     })
   })

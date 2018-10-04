@@ -422,6 +422,22 @@ describe("store", function() {
     })
   })
 
+  describe("groupReducerMeta", function() {
+    it("should update groupReducer", function() {
+      store.dispatch({
+        type: "groupReducer",
+        value: {groupReducer: {name: "count"}},
+      })
+
+      store.dispatch({
+        type: "groupReducerMeta",
+        value: {groupReducerMeta: {field: "foo"}},
+      })
+
+      expect(store.getState().groupReducer).to.eql({name: "count", field: "foo"})
+    })
+  })
+
   describe("analyse", function() {
     it("should add analyse and reset groupings, groupReducer, combineRemainder, groupSort and groupLimit", function() {
       store.dispatch({

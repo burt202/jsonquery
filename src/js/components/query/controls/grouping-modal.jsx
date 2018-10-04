@@ -9,6 +9,7 @@ const GroupingModal = createReactClass({
     onDismiss: PropTypes.func.isRequired,
     groupings: PropTypes.array,
     onGroupReducerChange: PropTypes.func.isRequired,
+    onGroupReducerMetaChange: PropTypes.func.isRequired,
     onGroupSortChange: PropTypes.func.isRequired,
     onGroupLimitChange: PropTypes.func.isRequired,
     onCombineRemainderChange: PropTypes.func.isRequired,
@@ -16,6 +17,7 @@ const GroupingModal = createReactClass({
     groupSort: PropTypes.string.isRequired,
     groupLimit: PropTypes.number,
     combineRemainder: PropTypes.bool.isRequired,
+    schema: PropTypes.object.isRequired,
   },
 
   onReset() {
@@ -28,6 +30,10 @@ const GroupingModal = createReactClass({
   onGroupReducerChange(e) {
     const groupReducer = (e.target.value && e.target.value.length) ? {name: e.target.value} : null
     this.props.onGroupReducerChange(groupReducer)
+  },
+
+  onGroupReducerFieldChange(e) {
+    if (e.target.value) this.props.onGroupReducerMetaChange({field: e.target.value})
   },
 
   onSortChange(e) {
@@ -45,18 +51,34 @@ const GroupingModal = createReactClass({
 
   getReducerOption() {
     if (!this.props.groupings || !this.props.groupings.length) return null
-    const value = this.props.groupReducer ? this.props.groupReducer.name : ""
+
+    const reducerValue = this.props.groupReducer ? this.props.groupReducer.name : ""
+    const reducerFieldValue = reducerValue.length && this.props.groupReducer.field ? this.props.groupReducer.field : ""
+
+    const options = Object.keys(this.props.schema).map(function(value) {
+      return (
+        <option value={value} key={value}>{value}</option>
+      )
+    })
+
+    const conditionReducer = (reducerValue === "countCondition") || (reducerValue === "percentageCondition")
 
     return (
       <div className="input-control">
         <label>Reduce By:</label>
         <div className="body">
           <div className="row">
-            <select onChange={this.onGroupReducerChange} value={value}>
+            <select onChange={this.onGroupReducerChange} value={reducerValue}>
               <option value=""></option>
               <option value="count">Length</option>
               <option value="percentage">Percentage</option>
+              <option value="countCondition">Count Condition</option>
+              <option value="percentageCondition">Percentage Condition</option>
             </select>
+            {conditionReducer && <select onChange={this.onGroupReducerFieldChange} value={reducerFieldValue}>
+              <option></option>
+              {options}
+            </select>}
           </div>
         </div>
       </div>
