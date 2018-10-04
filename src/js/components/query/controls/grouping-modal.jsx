@@ -109,16 +109,62 @@ const GroupingModal = createReactClass({
     )
   },
 
-  getGroupReducerOption() {
+  getReducerOption() {
     if (!this.props.groupings || !this.props.groupings.length) return null
     const value = this.props.groupReducer ? this.props.groupReducer.name : ""
 
     return (
-      <select onChange={this.onGroupReducerChange} value={value}>
-        <option value="">Reduce by</option>
-        <option value="count">Length</option>
-        <option value="percentage">Percentage</option>
-      </select>
+      <div className="input-control">
+        <label>Reduce By:</label>
+        <div className="body">
+          <div className="row">
+            <select onChange={this.onGroupReducerChange} value={value}>
+              <option value=""></option>
+              <option value="count">Length</option>
+              <option value="percentage">Percentage</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    )
+  },
+
+  getSortOptions() {
+    let options = [
+      {value: "desc", name: "Count DESC"},
+      {value: "asc", name: "Count ASC"},
+      {value: "namedesc", name: "Name DESC"},
+      {value: "nameasc", name: "Name ASC"},
+    ]
+
+    if (this.props.groupings.length > 1) {
+      options = options.concat([
+        {value: "pathdesc", name: "Path DESC"},
+        {value: "pathasc", name: "Path ASC"},
+      ])
+    }
+
+    if (this.props.groupings.length === 1) {
+      options = options.concat([
+        {value: "natural", name: "Natural"},
+      ])
+    }
+
+    const disabled = !this.props.groupReducer
+
+    return (
+      <div className="input-control">
+        <label>Sort By:</label>
+        <div className="body">
+          <div className="row">
+            <select disabled={disabled} onChange={this.onSortChange} value={this.props.groupSort || ""}>
+              {options.map(function(option) {
+                return <option key={option.value} value={option.value}>{option.name}</option>
+              })}
+            </select>
+          </div>
+        </div>
+      </div>
     )
   },
 
@@ -130,8 +176,8 @@ const GroupingModal = createReactClass({
           <div className="modal-content">
             <div className="modal-body">
               <h3>Grouping Options</h3>
-              {this.getGroupReducerOption()}
-              {this.getSortAndLimitOptions()}
+              {this.getReducerOption()}
+              {this.getSortOptions()}
             </div>
             <div className="modal-footer">
               <ul className="side-options right">
