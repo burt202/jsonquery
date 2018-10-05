@@ -68,7 +68,8 @@ const GroupingModal = createReactClass({
     }
 
     return (
-      <span>{" = "}
+      <span>
+        <span style={{marginRight: "10px"}}>=</span>
         <input type="text" name="reducer-value" value={comparisonValue} onChange={this.onGroupReducerValueChange} />
       </span>
     )
@@ -101,12 +102,14 @@ const GroupingModal = createReactClass({
               <option value="countCondition">Count Condition</option>
               <option value="percentageCondition">Percentage Condition</option>
             </select>
-            {conditionReducer && <select onChange={this.onGroupReducerFieldChange} value={reducerFieldValue}>
+          </div>
+          {conditionReducer && <div className="row">
+            <select onChange={this.onGroupReducerFieldChange} value={reducerFieldValue}>
               <option></option>
               {options}
-            </select>}
+            </select>
             {reducerFieldValue && this.getReducerValueInput(reducerFieldValue, reducerValue)}
-          </div>
+          </div>}
         </div>
       </div>
     )
