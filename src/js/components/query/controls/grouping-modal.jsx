@@ -103,7 +103,7 @@ const GroupingModal = createReactClass({
               <option value="percentageCondition">Percentage Condition</option>
             </select>
           </div>
-          {conditionReducer && <div className="row">
+          {conditionReducer && <div className="row" style={{marginTop: "5px"}}>
             <select onChange={this.onGroupReducerFieldChange} value={reducerFieldValue}>
               <option></option>
               {options}
