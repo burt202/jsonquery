@@ -8,9 +8,9 @@ const Bar = require("react-chartjs-2").Bar
 
 function BarChart(props) {
   const data = {
-    labels: R.pluck("name", props.data),
+    labels: R.keys(props.data),
     datasets: [{
-      data: (props.cumulative) ? utils.getCumulative(R.pluck("count", props.data)) : R.pluck("count", props.data),
+      data: (props.cumulative) ? utils.getCumulative(R.values(props.data)) : R.values(props.data),
       backgroundColor: "#aec6cf",
       hoverBackgroundColor: "#aec6cf",
     }],
@@ -55,7 +55,7 @@ function BarChart(props) {
 }
 
 BarChart.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.object.isRequired,
   title: PropTypes.string,
   cumulative: PropTypes.bool.isRequired,
 }

@@ -14,7 +14,7 @@ const ChartDisplay = createReactClass({
   displayName: "ChartDisplay",
 
   propTypes: {
-    data: PropTypes.any.isRequired,
+    formatted: PropTypes.object.isRequired,
     onDownload: PropTypes.func,
   },
 
@@ -51,7 +51,7 @@ const ChartDisplay = createReactClass({
   render() {
     const Component = chartTypeMap[this.state.type]
 
-    const cumulativeCheckbox = (this.state.type === "bar" || this.state.type === "line") ? (
+    const cumulativeCheckbox = (this.state.type === "bar") ? (
       <label className="checkbox-label">
         <input
           type="checkbox"
@@ -72,13 +72,11 @@ const ChartDisplay = createReactClass({
           <select value={this.state.type} onChange={this.onTypeChange}>
             <option value="bar">Bar</option>
             <option value="pie">Pie</option>
-            <option value="doughnut">Doughnut</option>
-            <option value="line">Line</option>
           </select>
           <input value={this.state.title} onChange={this.onTitleChange} placeholder="Chart name here..." />
           {cumulativeCheckbox}
         </p>
-        <Component data={this.props.data} title={this.state.title} cumulative={this.state.cumulative} />
+        <Component data={this.props.formatted} title={this.state.title} cumulative={this.state.cumulative} />
       </div>
     )
   },

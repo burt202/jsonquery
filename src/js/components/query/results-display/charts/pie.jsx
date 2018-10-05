@@ -6,21 +6,21 @@ const utils = require("../../../../utils")
 
 const Pie = require("react-chartjs-2").Pie
 
-function getColours(data) {
+function getColours(length) {
   let count = 0
 
-  return data.map(function() {
-    return utils.rainbow(data.length, count++)
+  return R.range(1, length).map(function() {
+    return utils.rainbow(length, count++)
   })
 }
 
 function PieChart(props) {
   const data = {
-    labels: R.pluck("name", props.data),
+    labels: R.keys(props.data),
     datasets: [{
-      data: R.pluck("count", props.data),
-      backgroundColor: getColours(props.data),
-      hoverBackgroundColor: getColours(props.data),
+      data: R.values(props.data),
+      backgroundColor: getColours(R.keys(props.data).length),
+      hoverBackgroundColor: getColours(R.keys(props.data).length),
     }],
   }
 
@@ -59,7 +59,7 @@ function PieChart(props) {
 }
 
 PieChart.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.object.isRequired,
   title: PropTypes.string,
 }
 

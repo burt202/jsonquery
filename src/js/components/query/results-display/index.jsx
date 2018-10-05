@@ -92,15 +92,15 @@ const Results = createReactClass({
 
     if (validator.isString(results)) return <Code language="json">{results}</Code>
 
-    if (type.view === "chart" && (!this.props.groupings.length || !this.props.groupReducer)) {
-      return <Code language="json">You must select a grouping with counts to use the charts display</Code>
+    if (this.state.type === "chart" && (!this.props.groupings.length || !this.props.groupReducer)) {
+      return <Code language="json">You must select a grouping with a reducer to use the charts display</Code>
     }
 
-    if (type.view === "chart" && this.props.groupings.length > 1) {
+    if (this.state.type === "chart" && this.props.groupings.length > 1) {
       return <Code language="json">Currently only one level of grouping is supported in the charts display</Code>
     }
 
-    const downloadFormat = downloadFormatter[type.extension](this.props.groupings, this.props.groupReducer, results)
+    const downloadFormat = downloadFormatter[type.extension] ? (this.props.groupings, this.props.groupReducer, results) : results
 
     if (!this.isAggregateResult() && this.tooManyResultToShow()) {
       return (
