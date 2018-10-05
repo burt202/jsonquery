@@ -4,14 +4,10 @@ const createReactClass = require("create-react-class")
 
 const Bar = require("./charts/bar")
 const Pie = require("./charts/pie")
-const Line = require("./charts/line")
-const Doughnut = require("./charts/doughnut")
 
 const chartTypeMap = {
   bar: Bar,
   pie: Pie,
-  line: Line,
-  doughnut: Doughnut,
 }
 
 const ChartDisplay = createReactClass({
