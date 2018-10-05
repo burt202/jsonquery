@@ -121,7 +121,7 @@ const Results = createReactClass({
   formatData(data) {
     if (this.props.groupings.length) {
       const grouped = dataProcessor.group(this.props.groupings, data)
-      return this.props.groupReducer ? dataProcessor.groupProcessor(this.props.groupReducer, this.props.groupSort, this.props.groupLimit, this.props.combineRemainder, grouped) : grouped
+      return this.props.groupReducer ? dataProcessor.groupProcessor(this.props.schema, this.props.groupReducer, this.props.groupSort, this.props.groupLimit, this.props.combineRemainder, grouped) : grouped
     }
 
     if (this.props.analyse) return dataProcessor.analyse(this.props.analyse, data)

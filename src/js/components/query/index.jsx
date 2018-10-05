@@ -155,6 +155,7 @@ const Query = createReactClass({
           groupings={this.props.groupings}
           groupSort={this.props.groupSort}
           groupLimit={this.props.groupLimit}
+          schema={this.props.schema}
         />
         <ResultsDisplay
           filtered={filtered}

@@ -16,10 +16,10 @@ module.exports = {
   },
   group: grouper,
   analyse,
-  groupProcessor(reducer, sortBy, limit, combineRemainder, grouped) {
+  groupProcessor(schema, reducer, sortBy, limit, combineRemainder, grouped) {
     return R.pipe(
       function(data) {
-        return groupReducer(reducer, data)
+        return groupReducer(schema, reducer, data)
       },
       function(data) {
         return groupSorter(sortBy, data)

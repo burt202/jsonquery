@@ -60,8 +60,9 @@ const GroupingModal = createReactClass({
     if (fieldType === "bool") {
       return (
         <select onChange={this.onGroupReducerValueChange} value={comparisonValue}>
-          <option value="bool---true">is true</option>
-          <option value="bool---false">is false</option>
+          <option value=""></option>
+          <option value="true">is true</option>
+          <option value="false">is false</option>
         </select>
       )
     }
