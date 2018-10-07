@@ -50,7 +50,7 @@ const Results = createReactClass({
     return {
       json: {name: "JSON", extension: "json", downloader: downloaders.base("json", "application/json"), component: JsonDisplay},
       table: {name: "Table", extension: "csv", downloader: downloaders.base("csv", "text/csv"), component: TableDisplay},
-      chart: {name: "Chart (BETA)", extension: "png", downloader: downloaders.chart("png", "image/png"), component: ChartDisplay},
+      chart: {name: "Chart (BETA)", extension: "svg", downloader: downloaders.chart("svg", "image/svg+xml"), component: ChartDisplay},
     }
   },
 

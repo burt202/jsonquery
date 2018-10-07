@@ -1,63 +1,46 @@
+/* eslint react/no-find-dom-node: 0 */
+
 const React = require("react")
+const ReactDOM = require("react-dom")
 const PropTypes = require("prop-types")
 
 const R = require("ramda")
-const utils = require("../../../../utils")
 
-const Bar = require("react-chartjs-2").Bar
+const Recharts = require("recharts")
+const {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip} = Recharts
 
-function BarChart(props) {
-  const data = {
-    labels: R.keys(props.data),
-    datasets: [{
-      data: (props.cumulative) ? utils.getCumulative(R.values(props.data)) : R.values(props.data),
-      backgroundColor: "#aec6cf",
-      hoverBackgroundColor: "#aec6cf",
-    }],
-  }
+function BarChartComponent(props) {
+  const data = R.pipe(
+    R.toPairs,
+    R.map(function(pair) {
+      return {name: pair[0], value: pair[1]}
+    })
+  )(props.data)
 
-  const options = {
-    title: {
-      display: !!props.title.length,
-      text: props.title,
-    },
-    tooltips: {
-      displayColors: false,
-    },
-    legend: {
-      display: false,
-    },
-    layout: {
-      padding: {
-        left: 25,
-        right: 25,
-        top: 25,
-        bottom: 25,
-      },
-    },
-    scales: {
-      yAxes: [{
-        gridLines: {
-          display: false,
-        },
-      }],
-      xAxes: [{
-        gridLines: {
-          display: false,
-        },
-      }],
-    },
+  function onDownload() {
+    const chartSVG = ReactDOM.findDOMNode(this.currentChart).children[0]
+    props.onDownload(chartSVG)
   }
 
   return (
-    <Bar data={data} options={options} ref={(c) => this.chartComponent = c} redraw />
+    <div>
+      <ul className="side-options right">
+        <li><a className="site-link" onClick={onDownload}>Download</a></li>
+      </ul>
+      <BarChart width={600} height={300} data={data} ref={(chart) => this.currentChart = chart}>
+        <CartesianGrid strokeDasharray="3 3"/>
+        <XAxis dataKey="name"/>
+        <YAxis />
+        <Tooltip />
+        <Bar dataKey="value" fill="#8884d8" />
+      </BarChart>
+    </div>
   )
 }
 
-BarChart.propTypes = {
+BarChartComponent.propTypes = {
   data: PropTypes.object.isRequired,
-  title: PropTypes.string,
-  cumulative: PropTypes.bool.isRequired,
+  onDownload: PropTypes.func.isRequired,
 }
 
-module.exports = BarChart
+module.exports = BarChartComponent

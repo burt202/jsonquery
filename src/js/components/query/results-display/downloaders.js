@@ -13,19 +13,9 @@ module.exports = function() {
       downloadLink.setAttribute("href", "")
     }),
     chart: R.curry(function(extension, mimetype, chart) {
-      const width = chart.ctx.canvas.width
-      const height = chart.ctx.canvas.height
-
-      const newCanvas = document.createElement("canvas")
-      newCanvas.width = width
-      newCanvas.height = height
-
-      const ctx = newCanvas.getContext("2d")
-      ctx.fillStyle = "white"
-      ctx.fillRect(0, 0, width, height)
-      ctx.drawImage(chart.ctx.canvas, 0, 0)
-
-      const dataStr = newCanvas.toDataURL()
+      const svgURL = new XMLSerializer().serializeToString(chart)
+      const svgBlob = new Blob([svgURL], {type: `${mimetype};charset=utf-8"`})
+      const dataStr = URL.createObjectURL(svgBlob)
 
       const downloadLink = document.getElementById("hidden-download-link")
       downloadLink.setAttribute("href", dataStr)

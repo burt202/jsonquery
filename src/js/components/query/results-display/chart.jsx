@@ -21,13 +21,11 @@ const ChartDisplay = createReactClass({
   getInitialState() {
     return {
       type: "bar",
-      title: "",
-      cumulative: false,
     }
   },
 
-  onDownload() {
-    this.props.onDownload(this.chartComponent.chart_instance)
+  onDownload(chart) {
+    this.props.onDownload(chart)
   },
 
   onTypeChange(e) {
@@ -36,47 +34,19 @@ const ChartDisplay = createReactClass({
     })
   },
 
-  onTitleChange(e) {
-    this.setState({
-      title: e.target.value,
-    })
-  },
-
-  onCumulativeChange() {
-    this.setState({
-      cumulative: !this.state.cumulative,
-    })
-  },
-
   render() {
     const Component = chartTypeMap[this.state.type]
 
-    const cumulativeCheckbox = (this.state.type === "bar") ? (
-      <label className="checkbox-label">
-        <input
-          type="checkbox"
-          name="cumulative"
-          checked={this.state.cumulative}
-          onChange={this.onCumulativeChange}
-        />
-        Cumulative
-      </label>) : null
-
     return (
       <div>
-        <ul className="side-options right">
-          <li><a className="site-link" onClick={this.onDownload}>Download</a></li>
-        </ul>
         <p className="chart-options">
           <label>Type:</label>
           <select value={this.state.type} onChange={this.onTypeChange}>
             <option value="bar">Bar</option>
             <option value="pie">Pie</option>
           </select>
-          <input value={this.state.title} onChange={this.onTitleChange} placeholder="Chart name here..." />
-          {cumulativeCheckbox}
         </p>
-        <Component data={this.props.formatted} title={this.state.title} cumulative={this.state.cumulative} />
+        <Component data={this.props.formatted} onDownload={this.props.onDownload} />
       </div>
     )
   },
