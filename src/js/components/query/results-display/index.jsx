@@ -100,7 +100,7 @@ const Results = createReactClass({
       return <Code language="json">Currently only one level of grouping is supported in the charts display</Code>
     }
 
-    const downloadFormat = downloadFormatter[type.extension] ? (this.props.groupings, this.props.groupReducer, results) : results
+    const downloadFormat = downloadFormatter[type.extension] ? downloadFormatter[type.extension](this.props.groupings, this.props.groupReducer, results) : results
 
     if (!this.isAggregateResult() && this.tooManyResultToShow()) {
       return (
