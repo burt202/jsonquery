@@ -2,7 +2,6 @@ const React = require("react")
 const PropTypes = require("prop-types")
 
 const R = require("ramda")
-const utils = require("../../../../utils")
 
 const Bar = require("react-chartjs-2").Bar
 
@@ -10,7 +9,7 @@ function BarChart(props) {
   const data = {
     labels: R.keys(props.data),
     datasets: [{
-      data: (props.cumulative) ? utils.getCumulative(R.values(props.data)) : R.values(props.data),
+      data: R.values(props.data),
       backgroundColor: "#aec6cf",
       hoverBackgroundColor: "#aec6cf",
     }],
@@ -49,15 +48,24 @@ function BarChart(props) {
     },
   }
 
+  function onDownload() {
+    props.onDownload(this.chartComponent.chartInstance)
+  }
+
   return (
-    <Bar data={data} options={options} ref={(c) => this.chartComponent = c} redraw />
+    <div>
+      <ul className="side-options right">
+        <li><a className="site-link" onClick={onDownload}>Download</a></li>
+      </ul>
+      <Bar data={data} options={options} ref={(c) => this.chartComponent = c} redraw />
+    </div>
   )
 }
 
 BarChart.propTypes = {
   data: PropTypes.object.isRequired,
   title: PropTypes.string,
-  cumulative: PropTypes.bool.isRequired,
+  onDownload: PropTypes.func.isRequired,
 }
 
 module.exports = BarChart

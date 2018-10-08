@@ -53,14 +53,24 @@ function PieChart(props) {
     },
   }
 
+  function onDownload() {
+    props.onDownload(this.chartComponent.chartInstance)
+  }
+
   return (
-    <Pie data={data} options={options} ref={(c) => this.chartComponent = c} redraw />
+    <div>
+      <ul className="side-options right">
+        <li><a className="site-link" onClick={onDownload}>Download</a></li>
+      </ul>
+      <Pie data={data} options={options} ref={(c) => this.chartComponent = c} redraw />
+    </div>
   )
 }
 
 PieChart.propTypes = {
   data: PropTypes.object.isRequired,
   title: PropTypes.string,
+  onDownload: PropTypes.func.isRequired,
 }
 
 module.exports = PieChart
