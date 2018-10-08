@@ -130,6 +130,13 @@ const GroupingModal = createReactClass({
       ])
     }
 
+    if (this.props.groupReducer) {
+      options = options.concat([
+        {value: "reducerdesc", name: "Reducer DESC"},
+        {value: "reducerasc", name: "Reducer ASC"},
+      ])
+    }
+
     if (this.props.groupings.length === 1) {
       options = options.concat([
         {value: "natural", name: "Natural"},

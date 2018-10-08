@@ -7,9 +7,9 @@ const Bar = require("react-chartjs-2").Bar
 
 function BarChart(props) {
   const data = {
-    labels: R.keys(props.data),
+    labels: R.pluck("name", props.data),
     datasets: [{
-      data: R.values(props.data),
+      data: R.pluck("reducer", props.data),
       backgroundColor: "#aec6cf",
       hoverBackgroundColor: "#aec6cf",
     }],
@@ -63,7 +63,7 @@ function BarChart(props) {
 }
 
 BarChart.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
   title: PropTypes.string,
   onDownload: PropTypes.func.isRequired,
 }

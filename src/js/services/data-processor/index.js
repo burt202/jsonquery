@@ -26,14 +26,6 @@ module.exports = {
       },
       function(data) {
         return groupLimiter(limit, combineRemainder, data)
-      },
-      function(data) {
-        if (typeof data === "string") return data
-
-        return R.reduce(function(acc, val) {
-          acc[val.name] = val.reducer
-          return acc
-        }, {}, data)
       }
     )(grouped)
   },

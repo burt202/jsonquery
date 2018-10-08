@@ -16,11 +16,11 @@ function getColours(length) {
 
 function PieChart(props) {
   const data = {
-    labels: R.keys(props.data),
+    labels: R.pluck("name", props.data),
     datasets: [{
-      data: R.values(props.data),
-      backgroundColor: getColours(R.keys(props.data).length),
-      hoverBackgroundColor: getColours(R.keys(props.data).length),
+      data: R.pluck("reducer", props.data),
+      backgroundColor: getColours(props.data.length),
+      hoverBackgroundColor: getColours(props.data.length),
     }],
   }
 
@@ -68,7 +68,7 @@ function PieChart(props) {
 }
 
 PieChart.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
   title: PropTypes.string,
   onDownload: PropTypes.func.isRequired,
 }

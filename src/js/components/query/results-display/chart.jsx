@@ -14,7 +14,7 @@ const ChartDisplay = createReactClass({
   displayName: "ChartDisplay",
 
   propTypes: {
-    formatted: PropTypes.object.isRequired,
+    formatted: PropTypes.any.isRequired,
     onDownload: PropTypes.func,
   },
 

@@ -17,7 +17,7 @@ describe("summaryAnalyser", function() {
 
   describe("getGroupLimitedTotal", function() {
     it("should return total and percentage", function() {
-      const mockLimitedGroups = {red: 4, blue: 1}
+      const mockLimitedGroups = [{reducer: 2}, {reducer: 3}]
       const res = summaryAnalyser.getGroupLimitedTotal(mockFiltered, 8, mockLimitedGroups)
 
       expect(res).to.eql({

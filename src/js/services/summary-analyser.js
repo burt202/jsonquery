@@ -9,7 +9,7 @@ module.exports = {
   },
 
   getGroupLimitedTotal(filtered, rawDataLength, sortedGroups) {
-    const groupedTotal = R.compose(R.sum, R.values)(sortedGroups)
+    const groupedTotal = R.compose(R.sum, R.flatten, R.pluck("reducer"))(sortedGroups)
     const absolutePercentage = utils.round(2, (groupedTotal / rawDataLength) * 100)
     const relativePercentage = utils.round(2, (groupedTotal / filtered.length) * 100)
     const relativePercentageTitle = `Relative to filtered data: ${relativePercentage}%`
