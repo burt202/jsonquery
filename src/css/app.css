@@ -354,19 +354,6 @@ body.modal-open {
   text-align: center;
 }
 
-/* Schema Edit */
-
-.schema-edit-cont .rows {
-  display: flex;
-  align-items: flex-start;
-}
-
-.schema-edit-cont .rows pre {
-  flex-basis: 20%;
-  flex-grow: 1;
-  margin-left: 15px;
-}
-
 /* Calculations */
 
 .add-calculations-cont textarea.calculations {
