@@ -41,9 +41,13 @@ const handlers = {
   },
 
   saveJson(contents, payload) {
-    const toUpdate = R.omit(["data", "schema", "resultFields"], defaults)
+    const toUpdate = R.omit(["data", "schema", "resultFields", "calculationsString", "calculatedFields"], defaults)
     toUpdate[payload.name] = payload.data
-    if (payload.name === "schema") toUpdate.resultFields = R.keys(payload.data)
+
+    if (payload.name === "schema") {
+      toUpdate.resultFields = R.keys(payload.data)
+    }
+
     return R.merge(contents, toUpdate)
   },
 

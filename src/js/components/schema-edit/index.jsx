@@ -46,7 +46,9 @@ const SchemaEdit = createReactClass({
       schema = JSON.parse(schema)
     }
 
-    this.props.onSave(schema)
+    if (window.confirm("Are you sure? This will reset all filters")) {
+      this.props.onSave(schema)
+    }
   },
 
   getRowsComponent() {
