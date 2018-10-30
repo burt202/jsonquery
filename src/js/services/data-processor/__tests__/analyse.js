@@ -13,13 +13,15 @@ describe("analyse", function() {
     {name: "Harry", score: 17},
   ]
 
-  it("should analyse field from data", function() {
-    expect(analyse("score", mockData)).to.eql({
-      average: 14.5,
-      highest: 20,
-      lowest: 9,
-      median: 14.5,
-      sum: 87,
+  describe("number", function() {
+    it("should analyse a number field", function() {
+      expect(analyse("number", "score", mockData)).to.eql({
+        average: 14.5,
+        highest: 20,
+        lowest: 9,
+        median: 14.5,
+        sum: 87,
+      })
     })
   })
 })

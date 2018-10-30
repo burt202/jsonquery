@@ -1,14 +1,28 @@
 const R = require("ramda")
 const utils = require("../../utils")
 
-module.exports = function(field, data) {
+const analysisByType = {
+  string: [],
+  number: ["sum", "average", "lowest", "highest", "median"],
+  bool: [],
+  date: [],
+  time: [],
+  array: [],
+}
+
+const funcs = {
+  sum: (values) => utils.round(2, R.sum(values)),
+  average: (values) => utils.round(2, R.mean(values)),
+  lowest: (values) => utils.getMin(values),
+  highest: (values) => utils.getMax(values),
+  median: (values) => utils.round(2, R.median(values)),
+}
+
+module.exports = function(type, field, data) {
   const values = R.pluck(field, data)
 
-  return {
-    sum: utils.round(2, R.sum(values)),
-    average: utils.round(2, R.mean(values)),
-    lowest: utils.getMin(values),
-    highest: utils.getMax(values),
-    median: utils.round(2, R.median(values)),
-  }
+  return R.reduce(function(acc, val) {
+    acc[val] = funcs[val](values)
+    return acc
+  }, {}, analysisByType[type])
 }
