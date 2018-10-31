@@ -16,10 +16,9 @@ const AnalyseControl = createReactClass({
     this.props.onChange(e.target.value)
   },
 
-  getNumberOptions() {
+  getOptions() {
     const numberOptions = R.pipe(
       R.toPairs,
-      R.filter(R.compose(R.equals("number"), R.prop(1))),
       R.map(R.prop(0))
     )(this.props.schema)
 
@@ -38,7 +37,7 @@ const AnalyseControl = createReactClass({
           <div className="row">
             <select onChange={this.onChange} value={this.props.value || ""}>
               <option></option>
-              {this.getNumberOptions()}
+              {this.getOptions()}
             </select>
           </div>
         </div>

@@ -45,6 +45,26 @@ describe("utils", function() {
     })
   })
 
+  describe("getMode", function() {
+    it("should return the most common value from array", function() {
+      const res = utils.getMode([2, 4, 5, 2])
+
+      expect(res).to.eql(2)
+    })
+
+    it("should return the most common values from array if there is a joint winner", function() {
+      const res = utils.getMode([2, 4, 5, 2, 5])
+
+      expect(res).to.eql([2, 5])
+    })
+
+    it("should return the most common value from array if items are strings", function() {
+      const res = utils.getMode(["pear", "apple", "grapes", "apple"])
+
+      expect(res).to.eql("apple")
+    })
+  })
+
   describe("rainbow", function() {
     it("should return hsl colour string", function() {
       const res = utils.rainbow(10, 5)
