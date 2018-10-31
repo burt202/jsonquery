@@ -11,12 +11,11 @@ const analysisByType = {
 }
 
 const funcs = {
-  highest: (values) => utils.getMax(values),
   lowest: (values) => utils.getMin(values),
+  highest: (values) => utils.getMax(values),
   sum: (values) => utils.round(2, R.sum(values)),
   average: (values) => utils.round(2, R.mean(values)),
   median: (values) => utils.round(2, R.median(values)),
-  range: (values) => utils.getRange(values),
   mode: (values) => utils.getMode(values),
   earliestDate: (values) => R.compose(R.head, (arr) => arr.sort())(values),
   latestDate: (values) => R.compose(R.head, R.reverse, (arr) => arr.sort())(values),
