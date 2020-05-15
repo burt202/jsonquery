@@ -45,12 +45,14 @@ module.exports = {
     historyApiFallback: true,
   },
   plugins: [
-    new CopyWebpackPlugin([
-      {from: "src/favicon.ico", to: "favicon.ico"},
-      {from: "src/gears.svg", to: "gears.svg"},
-      {from: "src/test-data.json", to: "test-data.json"},
-      {from: "CNAME", to: "CNAME", toType: "file"},
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        {from: "src/favicon.ico", to: "favicon.ico"},
+        {from: "src/gears.svg", to: "gears.svg"},
+        {from: "src/test-data.json", to: "test-data.json"},
+        {from: "CNAME", to: "CNAME", toType: "file"},
+      ],
+    }),
 
     new webpack.DefinePlugin({
       VERSION: JSON.stringify(packageJson.version),

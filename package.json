@@ -42,11 +42,11 @@
     "react-syntax-highlighter": "^9.0.1",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
-    "uuid": "^7.0.0"
+    "uuid": "^8.0.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "copy-webpack-plugin": "^5.0.2",
+    "copy-webpack-plugin": "^6.0.0",
     "css-loader": "^3.5.3",
     "eslint": "^7.0.0",
     "eslint-config-prettier": "^6.11.0",
@@ -54,7 +54,7 @@
     "eslint-plugin-react": "^7.20.0",
     "fit-commit-js": "^0.3.2",
     "gh-pages": "^2.2.0",
-    "husky": "^3.0.0",
+    "husky": "^4.2.5",
     "jsx-loader": "^0.13.2",
     "mini-css-extract-plugin": "^0.9.0",
     "mocha": "^7.1.2",
