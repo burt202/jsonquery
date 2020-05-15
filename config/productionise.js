@@ -12,7 +12,7 @@ const prodPlugins = [
   new OptimizeCssAssetsPlugin(),
   new webpack.DefinePlugin({
     "process.env": {
-      "NODE_ENV": JSON.stringify("production"),
+      NODE_ENV: JSON.stringify("production"),
     },
   }),
   new NunjucksWebpackPlugin({
@@ -29,21 +29,23 @@ const prodPlugins = [
   }),
 ]
 
-const prodRules = [{
-  test: /\.css$/,
-  use: [
-    {loader: MiniCssExtractPlugin.loader},
-    {loader: "css-loader"},
-  ],
-}]
+const prodRules = [
+  {
+    test: /\.css$/,
+    use: [{loader: MiniCssExtractPlugin.loader}, {loader: "css-loader"}],
+  },
+]
 
-module.exports = function(webpackConfig) {
+module.exports = function (webpackConfig) {
   const plugins = R.concat(
     prodPlugins,
-    R.slice(0, webpackConfig.plugins.length - 2, webpackConfig.plugins)
+    R.slice(0, webpackConfig.plugins.length - 2, webpackConfig.plugins),
   )
 
-  const oldRules = webpackConfig.module.rules.slice(0, webpackConfig.module.rules.length - 1)
+  const oldRules = webpackConfig.module.rules.slice(
+    0,
+    webpackConfig.module.rules.length - 1,
+  )
   const entry = webpackConfig.entry.slice(-1)
   const result = R.merge(webpackConfig, {plugins, entry, mode: "production"})
 

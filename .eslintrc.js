@@ -1,27 +1,25 @@
 module.exports = {
-  "plugins": [
-    "react"
-  ],
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
-  "env": {
-    "browser": 1,
-    "node": 1,
-    "mocha": 1,
-    "es6": 1
+  plugins: ["react", "prettier"],
+  extends: ["eslint:recommended", "plugin:react/recommended"],
+  env: {
+    browser: 1,
+    node: 1,
+    mocha: 1,
+    es6: 1,
   },
-  "settings": {
-    "react": {
-      "version": "16.0"
-    }
+  settings: {
+    react: {
+      version: "16.0",
+    },
   },
-  "rules": {
+  rules: {
     "react/display-name": 0,
 
     // Separate the rules into blocks based on what plugin they come from.
     // Default rules are split up based on sections found on the eslint rules page.
     // Rules should be sorted alphabetically inside each section.
 
-    "strict": 0,
+    strict: 0,
 
     // Possible Errors
     "comma-dangle": [2, "always-multiline"], // disallow or enforce trailing commas
@@ -53,23 +51,26 @@ module.exports = {
     "no-unused-vars": 2, // disallow declaration of variables that are not used in the code
     "no-use-before-define": [2, "nofunc"], // disallow use of variables before they are defined
     "use-isnan": 2, // disallow comparisons with the value NaN
-    "valid-jsdoc": [1, {
-      "requireReturn": false,
-      "requireReturnDescription": false,
-      "requireReturnType": false
-    }], // Ensure JSDoc comments are valid
+    "valid-jsdoc": [
+      1,
+      {
+        requireReturn: false,
+        requireReturnDescription: false,
+        requireReturnType: false,
+      },
+    ], // Ensure JSDoc comments are valid
     "valid-typeof": 2, // Ensure that the results of typeof are compared against a valid string
 
     // Best Practices
     "accessor-pairs": 2, // Enforces getter/setter pairs in objects
     "block-scoped-var": 0, // treat var statements as if they were block scoped
-    "complexity": 2, // specify the maximum cyclomatic complexity allowed in a program
+    complexity: 2, // specify the maximum cyclomatic complexity allowed in a program
     "consistent-return": 2, // require return statements to either always or never specify values
-    "curly": 0, // specify curly brace conventions for all control statements
+    curly: 0, // specify curly brace conventions for all control statements
     "default-case": 0, // require default case in switch statements
     "dot-location": 0, // enforces consistent newlines before or after dots
     "dot-notation": 2, // encourages use of dot notation whenever possible
-    "eqeqeq": [2, "smart"], // require the use of === and !==
+    eqeqeq: [2, "smart"], // require the use of === and !==
     "guard-for-in": 0, // make sure for-in loops have an if statement
     "no-alert": 0, // disallow the use of alert, confirm, and prompt
     "no-caller": 0, // disallow use of arguments.caller or arguments.callee
@@ -115,26 +116,26 @@ module.exports = {
     "no-void": 0, // disallow use of the void operator
     "no-warning-comments": 0, // disallow usage of configurable warning terms in comments - e.g. TODO or FIXME
     "no-with": 0, // disallow use of the with statement
-    "radix": 0, // require use of the second argument for parseInt()
+    radix: 0, // require use of the second argument for parseInt()
     "vars-on-top": 0, // require declaration of all vars at the top of their containing scope
     "wrap-iife": 0, // require immediate function invocation to be wrapped in parentheses
-    "yoda": 0, // require or disallow Yoda conditions
+    yoda: 0, // require or disallow Yoda conditions
 
     // Stylistic Issues
     "array-bracket-spacing": [2, "never"], // enforce spacing inside array brackets
     "block-spacing": 0, // disallow or enforce spaces inside of single line blocks
     "brace-style": [2, "1tbs"], // enforce one true brace style
-    "camelcase": 2, // require camel case names
+    camelcase: 2, // require camel case names
     "comma-spacing": 2, // enforce spacing before and after comma
     "comma-style": 2, // enforce one true comma style
     "computed-property-spacing": 0, // require or disallow padding inside computed properties
     "consistent-this": 0, // enforce consistent naming when capturing the current execution context
     "eol-last": 2, // enforce newline at the end of file, with no multiple empty lines
     "func-names": 0, // require function expressions to have a name
-    "func-style": [2, "declaration",  {"allowArrowFunctions": true}], // enforce use of function declarations or expressions
+    "func-style": [2, "declaration", {allowArrowFunctions: true}], // enforce use of function declarations or expressions
     "id-length": 0, // this option enforces minimum and maximum identifier lengths (variable names, property names etc.)
     "id-match": 0, // require identifiers to match the provided regular expression
-    "indent": [2, 2], // specify tab or space width for your code
+    indent: [2, 2], // specify tab or space width for your code
     "jsx-quotes": [2, "prefer-double"], // specify whether double or single quotes should be used in JSX attributes
     "key-spacing": 2, // enforce spacing between keys and values in object literal properties
     "keyword-spacing": 2, // require a space after certain keywords
@@ -145,7 +146,7 @@ module.exports = {
     "max-nested-callbacks": 0, // specify the maximum depth callbacks can be nested
     "max-params": 0, // limits the number of parameters that can be used in the function declaration.
     "max-statements": 0, // specify the maximum number of statement allowed in a function
-    "new-cap": [2, { "capIsNew": false }], // require a capital letter for constructors
+    "new-cap": [2, {capIsNew: false}], // require a capital letter for constructors
     "new-parens": 2, // disallow the omission of parentheses when invoking a constructor with no arguments
     "newline-after-var": 0, // require or disallow an empty newline after variable declarations
     "no-array-constructor": 0, // disallow use of the Array constructor
@@ -154,7 +155,7 @@ module.exports = {
     "no-inline-comments": 0, // disallow comments inline after code
     "no-lonely-if": 0, // disallow if as the only statement in an else block
     "no-mixed-spaces-and-tabs": 2, // disallow mixed spaces and tabs for indentation
-    "no-multiple-empty-lines": [1, { "max": 3 }], // disallow multiple empty lines
+    "no-multiple-empty-lines": [1, {max: 3}], // disallow multiple empty lines
     "no-negated-condition": 0, // disallow negated conditions
     "no-nested-ternary": 2, // disallow nested ternary expressions
     "no-new-object": 0, // disallow the use of the Object constructor
@@ -171,9 +172,9 @@ module.exports = {
     "operator-linebreak": 0, // enforce operators to be placed before or after line breaks
     "padded-blocks": 0, // enforce padding within blocks
     "quote-props": 0, // require quotes around object literal property names
-    "quotes": [2, "double"], // specify whether backticks, double or single quotes should be used
+    quotes: [2, "double"], // specify whether backticks, double or single quotes should be used
     "require-jsdoc": 0, // Require JSDoc comment
-    "semi": [2, "never"], // require or disallow use of semicolons instead of ASI
+    semi: [2, "never"], // require or disallow use of semicolons instead of ASI
     "semi-spacing": 0, // enforce spacing before and after semicolons
     "sort-vars": 2, // sort variables within the same declaration block
     "space-before-blocks": 2, // space-before-blocks
@@ -204,6 +205,6 @@ module.exports = {
     "prefer-reflect": 0, // suggest using Reflect methods where applicable
     "prefer-spread": 0, // suggest using the spread operator instead of .apply().
     "prefer-template": 2, // suggest using template literals instead of strings concatenation
-    "require-yield": 0 // disallow generator functions that do not have yield
-  }
+    "require-yield": 0, // disallow generator functions that do not have yield
+  },
 }

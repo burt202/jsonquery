@@ -29,16 +29,11 @@ module.exports = {
     rules: [
       {
         test: /\.jsx$/,
-        use: [
-          {loader: "jsx-loader"},
-        ],
+        use: [{loader: "jsx-loader"}],
       },
       {
         test: /\.css$/,
-        use: [
-          {loader: "style-loader"},
-          {loader: "css-loader"},
-        ],
+        use: [{loader: "style-loader"}, {loader: "css-loader"}],
       },
     ],
   },
@@ -58,7 +53,7 @@ module.exports = {
     ]),
 
     new webpack.DefinePlugin({
-      "VERSION": JSON.stringify(packageJson.version),
+      VERSION: JSON.stringify(packageJson.version),
     }),
 
     new webpack.HotModuleReplacementPlugin(),
