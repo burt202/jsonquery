@@ -15,12 +15,18 @@
     "precommit": "npm run lint && npm run test",
     "prepush": "npm run build; npm run deploy"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run precommit",
+      "pre-push": "npm run prepush"
+    }
+  },
   "dependencies": {
-    "chart.js": "^2.7.2",
+    "chart.js": "^2.9.3",
     "classnames": "^2.2.6",
     "create-react-class": "^15.6.3",
     "date-fns": "^1.29.0",
-    "flat": "^4.1.0",
+    "flat": "^5.0.0",
     "prop-types": "^15.7.2",
     "query-string": "^6.12.1",
     "ramda": "^0.26.0",
@@ -29,9 +35,9 @@
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.4.2",
     "react-syntax-highlighter": "^8.0.1",
-    "redux": "^4.0.0",
+    "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
-    "uuid": "^3.3.2"
+    "uuid": "^7.0.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
@@ -39,8 +45,8 @@
     "css-loader": "^1.0.0",
     "eslint": "^7.0.0",
     "eslint-plugin-react": "^7.20.0",
-    "gh-pages": "^1.2.0",
-    "husky": "^0.14.3",
+    "gh-pages": "^2.2.0",
+    "husky": "^3.0.0",
     "jsx-loader": "^0.13.2",
     "mini-css-extract-plugin": "^0.4.2",
     "mocha": "^7.1.2",
