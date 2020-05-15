@@ -7,7 +7,7 @@ module.exports = {
 
   updateWhere(find, update, data) {
     const index = R.findIndex(R.whereEq(find), data)
-    return R.adjust(R.merge(R.__, update), index, data)
+    return R.adjust(index, R.merge(R.__, update), data)
   },
 
   getMax(arr) {
@@ -32,10 +32,8 @@ module.exports = {
     }
 
     for (i in count) {
-      if (count.hasOwnProperty(i)) {
-        if (count[i] === maxIndex) {
-          modes.push(i)
-        }
+      if (count[i] === maxIndex) {
+        modes.push(i)
       }
     }
 
