@@ -2,7 +2,6 @@ const webpack = require("webpack")
 const NunjucksWebpackPlugin = require("nunjucks-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin")
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
 
 const R = require("ramda")
 
@@ -16,7 +15,6 @@ const prodPlugins = [
       "NODE_ENV": JSON.stringify("production"),
     },
   }),
-  new UglifyJsPlugin({}),
   new NunjucksWebpackPlugin({
     templates: [
       {

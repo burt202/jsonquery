@@ -50,8 +50,6 @@ module.exports = {
     historyApiFallback: true,
   },
   plugins: [
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.NamedModulesPlugin(),
     new CopyWebpackPlugin([
       {from: "src/favicon.ico", to: "favicon.ico"},
       {from: "src/gears.svg", to: "gears.svg"},
