@@ -9,9 +9,7 @@ describe("groupFilterer", function() {
       {name: "foo", type: "cash", auto: true},
       {name: "bar", type: "cash", auto: false},
     ],
-    loan: [
-      {name: "baz", type: "loan", auto: true},
-    ],
+    loan: [{name: "baz", type: "loan", auto: true}],
     card: [
       {name: "abc", type: "card", auto: true},
       {name: "123", type: "card", auto: false},
@@ -39,9 +37,7 @@ describe("groupFilterer", function() {
         {name: "foo", type: "cash", auto: true},
         {name: "bar", type: "cash", auto: false},
       ],
-      loan: [
-        {name: "baz", type: "loan", auto: true},
-      ],
+      loan: [{name: "baz", type: "loan", auto: true}],
     })
   })
 
@@ -51,9 +47,7 @@ describe("groupFilterer", function() {
         {name: "foo", type: "cash", auto: true},
         {name: "bar", type: "cash", auto: false},
       ],
-      loan: [
-        {name: "baz", type: "loan", auto: true},
-      ],
+      loan: [{name: "baz", type: "loan", auto: true}],
       card: [
         {name: "abc", type: "card", auto: true},
         {name: "123", type: "card", auto: false},

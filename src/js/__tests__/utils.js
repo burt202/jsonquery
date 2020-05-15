@@ -4,7 +4,6 @@ const expect = chai.expect
 const utils = require("../utils")
 
 describe("utils", function() {
-
   describe("round", function() {
     it("should round a number to a certain number of decimals", function() {
       const res = utils.round(2, 1.3456)

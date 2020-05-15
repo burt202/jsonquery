@@ -5,7 +5,7 @@ const filterTypes = require("./filter-types")
 
 function getComparator(schema, reducer) {
   const filterType = schema[reducer.field]
-  const operator = (filterType === "bool") ? reducer.value : "eq"
+  const operator = filterType === "bool" ? reducer.value : "eq"
   return filterTypes[filterType](R.merge(reducer, {operator}))
 }
 
@@ -42,6 +42,6 @@ module.exports = function(schema, reducer, data) {
       }
 
       return acc
-    }, {})
+    }, {}),
   )(data)
 }

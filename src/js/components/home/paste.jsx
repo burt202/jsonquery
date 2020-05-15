@@ -7,10 +7,7 @@ const Paste = createReactClass({
 
   propTypes: {
     onAction: PropTypes.func.isRequired,
-    data: PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.object,
-    ]).isRequired,
+    data: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   },
 
   getInitialState() {

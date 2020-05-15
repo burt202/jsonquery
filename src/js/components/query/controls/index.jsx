@@ -38,12 +38,7 @@ const Controls = createReactClass({
   },
 
   getLimitControl() {
-    return (
-      <LimitControl
-        onChange={this.props.actionCreator.limit}
-        value={this.props.limit}
-      />
-    )
+    return <LimitControl onChange={this.props.actionCreator.limit} value={this.props.limit} />
   },
 
   getGroupByControl() {

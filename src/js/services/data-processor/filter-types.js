@@ -30,12 +30,16 @@ const isBetweenDates = R.curry(function(start, end, dataValue) {
 })
 
 const isOneOf = R.curry(function(filterValue, dataValue) {
-  dataValue = (!R.isNil(dataValue)) ? dataValue.toString() : ""
+  dataValue = !R.isNil(dataValue) ? dataValue.toString() : ""
   return R.compose(R.contains(dataValue), R.split(","), R.defaultTo(""))(filterValue)
 })
 
 const containsOneOf = R.curry(function(filterValue, dataValue) {
-  return R.compose(R.any(R.equals(true)), R.map(R.contains(R.__, dataValue)), R.split(","))(filterValue)
+  return R.compose(
+    R.any(R.equals(true)),
+    R.map(R.contains(R.__, dataValue)),
+    R.split(","),
+  )(filterValue)
 })
 
 const isBetween = R.curry(function(start, end, dataValue) {
@@ -44,7 +48,7 @@ const isBetween = R.curry(function(start, end, dataValue) {
 
 const matches = R.curry(function(filterValue, dataValue) {
   const regParts = filterValue.match(/^\/(.*?)\/([gim]*)$/)
-  const regex = (regParts) ? new RegExp(regParts[1], regParts[2]) : new RegExp(filterValue)
+  const regex = regParts ? new RegExp(regParts[1], regParts[2]) : new RegExp(filterValue)
   return R.test(regex, dataValue)
 })
 
@@ -76,8 +80,10 @@ function getNumberFilter(filter) {
     if (filter.operator === "inof") return R.compose(R.not, isOneOf(filter.value))
 
     if (filter.value1 && filter.value1.length) {
-      if (filter.operator === "btw") return isBetween(parseFloat(filter.value), parseFloat(filter.value1))
-      if (filter.operator === "nbtw") return R.compose(R.not, isBetween(parseFloat(filter.value), parseFloat(filter.value1)))
+      if (filter.operator === "btw")
+        return isBetween(parseFloat(filter.value), parseFloat(filter.value1))
+      if (filter.operator === "nbtw")
+        return R.compose(R.not, isBetween(parseFloat(filter.value), parseFloat(filter.value1)))
     }
   }
 
@@ -109,7 +115,8 @@ function getDateFilter(filter) {
 
     if (filter.value1 && filter.value1.length >= 8 && isValidDate(filter.value1)) {
       if (filter.operator === "btw") return isBetweenDates(filter.value, filter.value1)
-      if (filter.operator === "nbtw") return R.compose(R.not, isBetweenDates(filter.value, filter.value1))
+      if (filter.operator === "nbtw")
+        return R.compose(R.not, isBetweenDates(filter.value, filter.value1))
     }
   }
 
@@ -131,7 +138,8 @@ function getTimeFilter(filter) {
 
     if (filter.value1 && filter.value1.length >= 5 && validator.isValidTime(filter.value1)) {
       if (filter.operator === "btw") return isBetween(filter.value, filter.value1)
-      if (filter.operator === "nbtw") return R.compose(R.not, isBetween(filter.value, filter.value1))
+      if (filter.operator === "nbtw")
+        return R.compose(R.not, isBetween(filter.value, filter.value1))
     }
   }
 
@@ -147,11 +155,16 @@ function getArrayFilter(filter) {
     if (filter.operator === "con") return R.contains(parseFloat(filter.value))
     if (filter.operator === "cof") return containsOneOf(filter.value)
     if (filter.operator === "hl") return R.compose(R.equals(parseInt(filter.value, 10)), R.length)
-    if (filter.operator === "dhl") return R.compose(R.not, R.equals(parseInt(filter.value, 10)), R.length)
-    if (filter.operator === "hlgt") return R.compose(R.gt(R.__, parseInt(filter.value, 10)), R.length)
-    if (filter.operator === "hlgte") return R.compose(R.gte(R.__, parseInt(filter.value, 10)), R.length)
-    if (filter.operator === "hllt") return R.compose(R.lt(R.__, parseInt(filter.value, 10)), R.length)
-    if (filter.operator === "hllte") return R.compose(R.lte(R.__, parseInt(filter.value, 10)), R.length)
+    if (filter.operator === "dhl")
+      return R.compose(R.not, R.equals(parseInt(filter.value, 10)), R.length)
+    if (filter.operator === "hlgt")
+      return R.compose(R.gt(R.__, parseInt(filter.value, 10)), R.length)
+    if (filter.operator === "hlgte")
+      return R.compose(R.gte(R.__, parseInt(filter.value, 10)), R.length)
+    if (filter.operator === "hllt")
+      return R.compose(R.lt(R.__, parseInt(filter.value, 10)), R.length)
+    if (filter.operator === "hllte")
+      return R.compose(R.lte(R.__, parseInt(filter.value, 10)), R.length)
   }
 
   return null

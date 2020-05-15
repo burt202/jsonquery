@@ -21,7 +21,8 @@ module.exports = {
   getMode(arr) {
     const modes = []
     const count = []
-    let i, maxIndex = 0
+    let i,
+      maxIndex = 0
 
     for (i = 0; i < arr.length; i += 1) {
       const value = arr[i]
@@ -39,15 +40,15 @@ module.exports = {
 
     let formatted = modes
 
-    if (R.all((m) => !isNaN(m), modes)) {
-      formatted = modes.map((i) => Number(i))
+    if (R.all(m => !isNaN(m), modes)) {
+      formatted = modes.map(i => Number(i))
     }
 
-    return (formatted.length > 1) ? formatted : formatted[0]
+    return formatted.length > 1 ? formatted : formatted[0]
   },
 
   rainbow(count, index) {
-    const value = 360 / count * index
+    const value = (360 / count) * index
     return `hsl(${value}, 90%, 60%)`
   },
 

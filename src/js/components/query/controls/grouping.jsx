@@ -35,16 +35,20 @@ const GroupingControl = createReactClass({
   },
 
   getRows() {
-    return this.props.groupings.map(function(grouping) {
-      return (
-        <div className="row" key={grouping}>
-          <div className="grouping">
-            {grouping}
-            <a className="site-link" onClick={this.props.onRemove.bind(this, grouping)}>remove</a>
+    return this.props.groupings.map(
+      function(grouping) {
+        return (
+          <div className="row" key={grouping}>
+            <div className="grouping">
+              {grouping}
+              <a className="site-link" onClick={this.props.onRemove.bind(this, grouping)}>
+                remove
+              </a>
+            </div>
           </div>
-        </div>
-      )
-    }.bind(this))
+        )
+      }.bind(this),
+    )
   },
 
   getGroupingModal() {
@@ -80,13 +84,23 @@ const GroupingControl = createReactClass({
 
   getGroupingOptionsLink() {
     if (!this.props.groupings.length) return null
-    return <div><a className="site-link" onClick={this.showModal}>Grouping options</a></div>
+    return (
+      <div>
+        <a className="site-link" onClick={this.showModal}>
+          Grouping options
+        </a>
+      </div>
+    )
   },
 
   render() {
-    const options = R.without(this.props.groupings, Object.keys(this.props.schema)).map(function(value) {
+    const options = R.without(this.props.groupings, Object.keys(this.props.schema)).map(function(
+      value,
+    ) {
       return (
-        <option value={value} key={value}>{value}</option>
+        <option value={value} key={value}>
+          {value}
+        </option>
       )
     })
 

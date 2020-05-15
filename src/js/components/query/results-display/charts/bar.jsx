@@ -8,11 +8,13 @@ const Bar = require("react-chartjs-2").Bar
 function BarChart(props) {
   const data = {
     labels: R.pluck("name", props.data),
-    datasets: [{
-      data: R.pluck("reducer", props.data),
-      backgroundColor: "#aec6cf",
-      hoverBackgroundColor: "#aec6cf",
-    }],
+    datasets: [
+      {
+        data: R.pluck("reducer", props.data),
+        backgroundColor: "#aec6cf",
+        hoverBackgroundColor: "#aec6cf",
+      },
+    ],
   }
 
   const options = {
@@ -35,16 +37,20 @@ function BarChart(props) {
       },
     },
     scales: {
-      yAxes: [{
-        gridLines: {
-          display: false,
+      yAxes: [
+        {
+          gridLines: {
+            display: false,
+          },
         },
-      }],
-      xAxes: [{
-        gridLines: {
-          display: false,
+      ],
+      xAxes: [
+        {
+          gridLines: {
+            display: false,
+          },
         },
-      }],
+      ],
     },
   }
 
@@ -55,9 +61,13 @@ function BarChart(props) {
   return (
     <div>
       <ul className="side-options right">
-        <li><a className="site-link" onClick={onDownload}>Download</a></li>
+        <li>
+          <a className="site-link" onClick={onDownload}>
+            Download
+          </a>
+        </li>
       </ul>
-      <Bar data={data} options={options} ref={(c) => this.chartComponent = c} redraw />
+      <Bar data={data} options={options} ref={c => (this.chartComponent = c)} redraw />
     </div>
   )
 }

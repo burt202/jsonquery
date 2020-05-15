@@ -59,10 +59,7 @@ const tests = [
       allTransactionsConfirmedTotal: 901,
       allTransactionsTotal: 1062,
       autoAccountsTotal: 5,
-      autoAccountsTypes: [
-        "credit",
-        "current",
-      ],
+      autoAccountsTypes: ["credit", "current"],
       beforeRegistrationTransactionsConfirmedTotal: 492,
       beforeRegistrationTransactionsTotal: 509,
       dateRegistered: "2017-02-01T11:28:26",
@@ -109,9 +106,7 @@ const tests = [
 ]
 
 describe("schemaGenerator", function() {
-
   describe("generate", function() {
-
     tests.forEach(function(test) {
       it(`should translate ${test.name} data into a schema correctly`, function() {
         expect(schemaGenerator.generate(test.data)).to.eql(test.expected)

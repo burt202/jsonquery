@@ -41,7 +41,10 @@ const handlers = {
   },
 
   saveJson(contents, payload) {
-    const toUpdate = R.omit(["data", "schema", "resultFields", "calculationsString", "calculatedFields"], defaults)
+    const toUpdate = R.omit(
+      ["data", "schema", "resultFields", "calculationsString", "calculatedFields"],
+      defaults,
+    )
     toUpdate[payload.name] = payload.data
 
     if (payload.name === "schema") {
@@ -62,7 +65,10 @@ const handlers = {
     const operator = initialOperators[filterType] || "eq"
 
     return R.merge(contents, {
-      filters: R.append({id: uuid.v4(), name: payload.name, value: "", operator, active: true}, contents.filters),
+      filters: R.append(
+        {id: uuid.v4(), name: payload.name, value: "", operator, active: true},
+        contents.filters,
+      ),
     })
   },
 
@@ -85,9 +91,13 @@ const handlers = {
   },
 
   reset(contents) {
-    return R.merge(contents, R.omit([
-      "data", "schema", "resultFields", "calculationsString", "calculatedFields",
-    ], defaults))
+    return R.merge(
+      contents,
+      R.omit(
+        ["data", "schema", "resultFields", "calculationsString", "calculatedFields"],
+        defaults,
+      ),
+    )
   },
 
   addGrouping(contents, payload) {

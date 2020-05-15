@@ -27,6 +27,6 @@ module.exports = function(filter, data) {
       }
 
       return acc
-    }, {})
+    }, {}),
   )(data)
 }

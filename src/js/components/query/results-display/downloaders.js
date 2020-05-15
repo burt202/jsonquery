@@ -1,7 +1,6 @@
 const R = require("ramda")
 
 module.exports = function() {
-
   return {
     base: R.curry(function(extension, mimetype, formatted) {
       const dataStr = URL.createObjectURL(new Blob([formatted], {type: mimetype}))

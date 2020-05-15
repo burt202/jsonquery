@@ -3,7 +3,20 @@ const R = require("ramda")
 const validator = require("../validator")
 
 const naturalOrders = [
-  ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+  [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
   ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
   ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
   ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -36,9 +49,11 @@ module.exports = function(sortField, data) {
     }, naturalOrders)
 
     if (matcher) {
-      sorters = [function(a, b) {
-        return matcher.indexOf(a.name) - matcher.indexOf(b.name)
-      }]
+      sorters = [
+        function(a, b) {
+          return matcher.indexOf(a.name) - matcher.indexOf(b.name)
+        },
+      ]
     } else {
       return noMatcherFoundErrorString
     }
@@ -50,12 +65,12 @@ module.exports = function(sortField, data) {
     R.toPairs,
     R.map(function(pair) {
       const path = R.compose(R.join(","), R.init, R.split(" - "))(pair[0])
-      const name = (keysAreNumbers) ? parseFloat(pair[0]) : pair[0]
+      const name = keysAreNumbers ? parseFloat(pair[0]) : pair[0]
       const count = pair[1].count
       const reducer = pair[1].reducer
       return {name, path, count, reducer}
     }),
     R.sortWith(sorters),
-    R.map(R.omit(["path", "count"]))
+    R.map(R.omit(["path", "count"])),
   )(data)
 }

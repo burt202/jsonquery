@@ -17,11 +17,13 @@ function getColours(length) {
 function PieChart(props) {
   const data = {
     labels: R.pluck("name", props.data),
-    datasets: [{
-      data: R.pluck("reducer", props.data),
-      backgroundColor: getColours(props.data.length),
-      hoverBackgroundColor: getColours(props.data.length),
-    }],
+    datasets: [
+      {
+        data: R.pluck("reducer", props.data),
+        backgroundColor: getColours(props.data.length),
+        hoverBackgroundColor: getColours(props.data.length),
+      },
+    ],
   }
 
   const options = {
@@ -44,12 +46,16 @@ function PieChart(props) {
       },
     },
     scales: {
-      yAxes: [{
-        display: false,
-      }],
-      xAxes: [{
-        display: false,
-      }],
+      yAxes: [
+        {
+          display: false,
+        },
+      ],
+      xAxes: [
+        {
+          display: false,
+        },
+      ],
     },
   }
 
@@ -60,9 +66,13 @@ function PieChart(props) {
   return (
     <div>
       <ul className="side-options right">
-        <li><a className="site-link" onClick={onDownload}>Download</a></li>
+        <li>
+          <a className="site-link" onClick={onDownload}>
+            Download
+          </a>
+        </li>
       </ul>
-      <Pie data={data} options={options} ref={(c) => this.chartComponent = c} redraw />
+      <Pie data={data} options={options} ref={c => (this.chartComponent = c)} redraw />
     </div>
   )
 }

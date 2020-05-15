@@ -17,14 +17,13 @@ const AnalyseControl = createReactClass({
   },
 
   getOptions() {
-    const numberOptions = R.pipe(
-      R.toPairs,
-      R.map(R.prop(0))
-    )(this.props.schema)
+    const numberOptions = R.pipe(R.toPairs, R.map(R.prop(0)))(this.props.schema)
 
     return numberOptions.map(function(value) {
       return (
-        <option value={value} key={value}>{value}</option>
+        <option value={value} key={value}>
+          {value}
+        </option>
       )
     })
   },

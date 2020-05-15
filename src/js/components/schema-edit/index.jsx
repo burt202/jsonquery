@@ -26,7 +26,7 @@ const SchemaEdit = createReactClass({
   },
 
   showError(message) {
-    this.setState({"errorDate": Date.now()})
+    this.setState({errorDate: Date.now()})
     alert(message)
   },
 
@@ -74,13 +74,29 @@ const SchemaEdit = createReactClass({
     return (
       <div className="schema-edit-cont">
         <h3>Edit Schema</h3>
-        <p><a className="site-link" onClick={this.props.onCancel}>Back</a></p>
+        <p>
+          <a className="site-link" onClick={this.props.onCancel}>
+            Back
+          </a>
+        </p>
         <p>Override the automatically generated schema:</p>
         <br />
         <ul className="side-options">
-          <li className={rowsActive}><a className="site-link" onClick={this.selectTab.bind(this, "rows")}>By Rows</a></li>
-          <li className={pasteActive}><a className="site-link" onClick={this.selectTab.bind(this, "paste")}>By Pasting</a></li>
-          <li className={uploadActive}><a className="site-link" onClick={this.selectTab.bind(this, "upload")}>By Upload</a></li>
+          <li className={rowsActive}>
+            <a className="site-link" onClick={this.selectTab.bind(this, "rows")}>
+              By Rows
+            </a>
+          </li>
+          <li className={pasteActive}>
+            <a className="site-link" onClick={this.selectTab.bind(this, "paste")}>
+              By Pasting
+            </a>
+          </li>
+          <li className={uploadActive}>
+            <a className="site-link" onClick={this.selectTab.bind(this, "upload")}>
+              By Upload
+            </a>
+          </li>
         </ul>
         {this.getRowsComponent()}
         {this.getPasteComponent()}

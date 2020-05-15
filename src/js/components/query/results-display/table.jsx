@@ -5,7 +5,6 @@ const CopyToClipboard = require("react-copy-to-clipboard").CopyToClipboard
 const R = require("ramda")
 
 function TableDisplay(props) {
-
   function onDownload() {
     props.onDownload(props.downloadFormat)
   }
@@ -14,7 +13,7 @@ function TableDisplay(props) {
     return R.pipe(
       R.reject(R.propEq("type", "header")),
       R.map(R.compose(R.prop(index), R.prop("cols"))),
-      R.join(",")
+      R.join(","),
     )(props.formatted)
   }
 
@@ -26,12 +25,18 @@ function TableDisplay(props) {
     const headerRow = header.cols.map(function(col, index) {
       return (
         <th key={index} className="clickable" title="Copy column data">
-          <CopyToClipboard text={getHeaderCopyText(index)} onCopy={props.showToast}><span>{col}</span></CopyToClipboard>
+          <CopyToClipboard text={getHeaderCopyText(index)} onCopy={props.showToast}>
+            <span>{col}</span>
+          </CopyToClipboard>
         </th>
       )
     })
 
-    tableHeader = <thead><tr>{headerRow}</tr></thead>
+    tableHeader = (
+      <thead>
+        <tr>{headerRow}</tr>
+      </thead>
+    )
   }
 
   const dataRows = R.reject(R.propEq("type", "header"), props.formatted)
@@ -40,7 +45,9 @@ function TableDisplay(props) {
     if (row.type === "title") {
       return (
         <tr key={index}>
-          <td colSpan={row.span} style={{fontWeight: "bold"}}>{row.cols[0]}</td>
+          <td colSpan={row.span} style={{fontWeight: "bold"}}>
+            {row.cols[0]}
+          </td>
         </tr>
       )
     }
@@ -57,20 +64,22 @@ function TableDisplay(props) {
 
   if (props.showToast) {
     downloadLinks.push(
-      (
-        <li key="copy"><a className="site-link">
+      <li key="copy">
+        <a className="site-link">
           <CopyToClipboard text={props.downloadFormat} onCopy={props.showToast}>
             <span>Copy To Clipboard</span>
-          </CopyToClipboard></a>
-        </li>
-      )
+          </CopyToClipboard>
+        </a>
+      </li>,
     )
   }
 
   downloadLinks.push(
-    (
-      <li key="download"><a className="site-link" onClick={onDownload}>Download</a></li>
-    )
+    <li key="download">
+      <a className="site-link" onClick={onDownload}>
+        Download
+      </a>
+    </li>,
   )
 
   return (
@@ -78,9 +87,7 @@ function TableDisplay(props) {
       <ul className="side-options right">{downloadLinks}</ul>
       <table className="table">
         {tableHeader}
-        <tbody>
-          {tableBodyRows}
-        </tbody>
+        <tbody>{tableBodyRows}</tbody>
       </table>
     </div>
   )

@@ -4,7 +4,6 @@ const expect = chai.expect
 const validator = require("../validator")
 
 describe("validator", function() {
-
   describe("isString", function() {
     it("should return true when data is string", function() {
       expect(validator.isString("dd")).to.eql(true)
@@ -88,7 +87,7 @@ describe("validator", function() {
 
   describe("isValidJSON", function() {
     it("should return true if string is json", function() {
-      expect(validator.isValidJSON("{\"foo\": \"bar\"}")).to.eql(true)
+      expect(validator.isValidJSON('{"foo": "bar"}')).to.eql(true)
     })
 
     it("should return false if string is not json", function() {

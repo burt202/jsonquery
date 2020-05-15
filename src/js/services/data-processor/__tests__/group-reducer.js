@@ -9,9 +9,7 @@ describe("groupReducer", function() {
       {name: "foo", type: "cash", auto: true},
       {name: "bar", type: "cash", auto: false},
     ],
-    loan: [
-      {name: "baz", type: "loan", auto: true},
-    ],
+    loan: [{name: "baz", type: "loan", auto: true}],
     card: [
       {name: "abc", type: "card", auto: true},
       {name: "123", type: "card", auto: false},
@@ -49,7 +47,13 @@ describe("groupReducer", function() {
 
   describe("countCondition", function() {
     it("should reduce group down to count based on a condition", function() {
-      expect(groupReducer({auto: "bool"}, {name: "countCondition", field: "auto", value: "true"}, mockDataForGrouping)).to.eql({
+      expect(
+        groupReducer(
+          {auto: "bool"},
+          {name: "countCondition", field: "auto", value: "true"},
+          mockDataForGrouping,
+        ),
+      ).to.eql({
         card: {count: 3, reducer: 2},
         cash: {count: 2, reducer: 1},
         loan: {count: 1, reducer: 1},
@@ -67,7 +71,13 @@ describe("groupReducer", function() {
 
   describe("percentageCondition", function() {
     it("should reduce group down to count based on a condition", function() {
-      expect(groupReducer({auto: "bool"}, {name: "percentageCondition", field: "auto", value: "true"}, mockDataForGrouping)).to.eql({
+      expect(
+        groupReducer(
+          {auto: "bool"},
+          {name: "percentageCondition", field: "auto", value: "true"},
+          mockDataForGrouping,
+        ),
+      ).to.eql({
         card: {count: 3, reducer: 66.67},
         cash: {count: 2, reducer: 50},
         loan: {count: 1, reducer: 100},

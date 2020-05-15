@@ -4,7 +4,6 @@ const expect = chai.expect
 const store = require("../index")
 
 describe("store", function() {
-
   beforeEach(function() {
     expect(store.getState()).to.eql({
       filters: [],
@@ -402,7 +401,9 @@ describe("store", function() {
       store.dispatch({
         type: "_setState",
         value: {
-          groupSort: "asc", groupLimit: 10, combineRemainder: true,
+          groupSort: "asc",
+          groupLimit: 10,
+          combineRemainder: true,
         },
       })
 

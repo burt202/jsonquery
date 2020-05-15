@@ -23,9 +23,9 @@ const IncludeFields = createReactClass({
   onChangeHandler(e) {
     const field = e.target.name
     const isPresent = R.contains(field, this.props.resultFields)
-    const updatedFields = (isPresent) ?
-      R.without([field], this.props.resultFields) :
-      R.append(field, this.props.resultFields)
+    const updatedFields = isPresent
+      ? R.without([field], this.props.resultFields)
+      : R.append(field, this.props.resultFields)
 
     this.props.actionCreator.updateResultFields(updatedFields)
   },
@@ -33,17 +33,25 @@ const IncludeFields = createReactClass({
   getResultFieldOptions() {
     const schemaKeys = R.sortBy(R.identity, R.keys(this.props.schema))
 
-    return schemaKeys.map(function(field) {
-      const checked = R.contains(field, this.props.resultFields)
-      const disabled = R.contains(field, this.props.groupings)
+    return schemaKeys.map(
+      function(field) {
+        const checked = R.contains(field, this.props.resultFields)
+        const disabled = R.contains(field, this.props.groupings)
 
-      return (
-        <label className="checkbox-label" key={field}>
-          <input type="checkbox" name={field} disabled={disabled} checked={checked} onChange={this.onChangeHandler} />
-          {field}
-        </label>
-      )
-    }.bind(this))
+        return (
+          <label className="checkbox-label" key={field}>
+            <input
+              type="checkbox"
+              name={field}
+              disabled={disabled}
+              checked={checked}
+              onChange={this.onChangeHandler}
+            />
+            {field}
+          </label>
+        )
+      }.bind(this),
+    )
   },
 
   unSelectResultFields() {
@@ -63,8 +71,16 @@ const IncludeFields = createReactClass({
         <div>
           <span>{this.getResultFieldOptions()}</span>
           <p>
-            <a className="site-link" style={{marginRight: "15px"}} onClick={this.unSelectResultFields}>Unselect All</a>
-            <a className="site-link" onClick={this.selectResultFields}>Select All</a>
+            <a
+              className="site-link"
+              style={{marginRight: "15px"}}
+              onClick={this.unSelectResultFields}
+            >
+              Unselect All
+            </a>
+            <a className="site-link" onClick={this.selectResultFields}>
+              Select All
+            </a>
           </p>
         </div>
       </div>

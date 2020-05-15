@@ -27,7 +27,7 @@ const Home = createReactClass({
   },
 
   showError(message) {
-    this.setState({"errorDate": Date.now()})
+    this.setState({errorDate: Date.now()})
     alert(message)
   },
 
@@ -82,12 +82,28 @@ const Home = createReactClass({
     return (
       <div className="home-cont">
         <p>Online JSON Querying Tool. Query your JSON with ease.</p>
-        <p>Takes a JSON array and allows you to add multiple filters, groupings and sorting to manipulate the data in many ways. Use the inputs below to supply your data. We do not do anything with your data!</p>
+        <p>
+          Takes a JSON array and allows you to add multiple filters, groupings and sorting to
+          manipulate the data in many ways. Use the inputs below to supply your data. We do not do
+          anything with your data!
+        </p>
         <br />
         <ul className="side-options">
-          <li className={pasteActive}><a className="site-link" onClick={this.selectTab.bind(this, "paste")}>By Pasting</a></li>
-          <li className={uploadActive}><a className="site-link" onClick={this.selectTab.bind(this, "upload")}>By Upload</a></li>
-          <li className={urlActive}><a className="site-link" onClick={this.selectTab.bind(this, "url")}>By Url</a></li>
+          <li className={pasteActive}>
+            <a className="site-link" onClick={this.selectTab.bind(this, "paste")}>
+              By Pasting
+            </a>
+          </li>
+          <li className={uploadActive}>
+            <a className="site-link" onClick={this.selectTab.bind(this, "upload")}>
+              By Upload
+            </a>
+          </li>
+          <li className={urlActive}>
+            <a className="site-link" onClick={this.selectTab.bind(this, "url")}>
+              By Url
+            </a>
+          </li>
         </ul>
         {this.getPasteComponent()}
         {this.getUploadComponent()}

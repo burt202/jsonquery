@@ -17,7 +17,7 @@ module.exports = {
         }
 
         return acc
-      }, {})
+      }, {}),
     )(data)
   },
 }

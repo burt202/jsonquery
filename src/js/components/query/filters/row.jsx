@@ -91,24 +91,39 @@ const FilterRow = createReactClass({
     if (!filterConfig[this.props.type]) return "Invalid Type"
 
     const options = filterConfig[this.props.type].map(function(option) {
-      return <option key={option.value} value={option.value}>{option.text}</option>
+      return (
+        <option key={option.value} value={option.value}>
+          {option.text}
+        </option>
+      )
     })
 
     let inputs = []
-    const selectedOperator = R.find(R.propEq("value", this.props.filter.operator), filterConfig[this.props.type])
+    const selectedOperator = R.find(
+      R.propEq("value", this.props.filter.operator),
+      filterConfig[this.props.type],
+    )
 
     if (selectedOperator && selectedOperator.inputs) {
-      inputs = selectedOperator.inputs.map(function(inputConfig, index) {
-        const inc = (index) ? index : ""
+      inputs = selectedOperator.inputs.map(
+        function(inputConfig, index) {
+          const inc = index ? index : ""
 
-        return React.createElement("input", R.merge({
-          key: this.props.filter.id + inc,
-          type: "text",
-          name: this.props.filter.id + inc,
-          value: this.props.filter[`value${inc}`] || "",
-          onChange: this.updateFilter.bind(this, `value${inc}`),
-        }, inputConfig))
-      }.bind(this))
+          return React.createElement(
+            "input",
+            R.merge(
+              {
+                key: this.props.filter.id + inc,
+                type: "text",
+                name: this.props.filter.id + inc,
+                value: this.props.filter[`value${inc}`] || "",
+                onChange: this.updateFilter.bind(this, `value${inc}`),
+              },
+              inputConfig,
+            ),
+          )
+        }.bind(this),
+      )
     }
 
     const classnames = classNames("filter-controls", this.props.type)
@@ -122,9 +137,7 @@ const FilterRow = createReactClass({
         >
           {options}
         </select>
-        <div className="inputs">
-          {inputs}
-        </div>
+        <div className="inputs">{inputs}</div>
       </div>
     )
   },
@@ -144,14 +157,22 @@ const FilterRow = createReactClass({
   },
 
   render() {
-    const toggleClass = (this.props.filter.active) ? "active" : "inactive"
+    const toggleClass = this.props.filter.active ? "active" : "inactive"
 
     return (
       <tr key={this.props.filter.id} className={toggleClass}>
         <td>{this.props.filter.name}</td>
         <td>{this.getInputControlByType()}</td>
-        <td><a className="site-link" onClick={this.toggleFilter}>Toggle</a></td>
-        <td><a className="site-link" onClick={this.deleteFilter}>Remove</a></td>
+        <td>
+          <a className="site-link" onClick={this.toggleFilter}>
+            Toggle
+          </a>
+        </td>
+        <td>
+          <a className="site-link" onClick={this.deleteFilter}>
+            Remove
+          </a>
+        </td>
       </tr>
     )
   },

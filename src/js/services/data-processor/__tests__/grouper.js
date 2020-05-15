@@ -27,9 +27,7 @@ describe("grouper", function() {
         {name: "foo", type: "cash", auto: true},
         {name: "bar", type: "cash", auto: false},
       ],
-      loan: [
-        {name: "baz", type: "loan", auto: true},
-      ],
+      loan: [{name: "baz", type: "loan", auto: true}],
       card: [
         {name: "abc", type: "card", auto: true},
         {name: "123", type: "card", auto: false},
@@ -43,7 +41,10 @@ describe("grouper", function() {
       "cash - true": [{name: "foo", type: "cash", auto: true}],
       "cash - false": [{name: "bar", type: "cash", auto: false}],
       "loan - true": [{name: "baz", type: "loan", auto: true}],
-      "card - true": [{name: "abc", type: "card", auto: true}, {name: "test", type: "card", auto: true}],
+      "card - true": [
+        {name: "abc", type: "card", auto: true},
+        {name: "test", type: "card", auto: true},
+      ],
       "card - false": [{name: "123", type: "card", auto: false}],
     })
   })

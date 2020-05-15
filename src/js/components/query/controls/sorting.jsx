@@ -23,31 +23,40 @@ const SortingControl = createReactClass({
     const toSet = {}
     toSet[prop] = e.target.value
 
-    this.setState(toSet, function() {
-      if (this.state.field !== null && this.state.direction !== null) {
-        this.props.onAdd(this.state)
-        this.setState(this.getInitialState())
-      }
-    }.bind(this))
+    this.setState(
+      toSet,
+      function() {
+        if (this.state.field !== null && this.state.direction !== null) {
+          this.props.onAdd(this.state)
+          this.setState(this.getInitialState())
+        }
+      }.bind(this),
+    )
   },
 
   getRows() {
-    return this.props.sorters.map(function(sorter) {
-      return (
-        <div className="row" key={sorter.field}>
-          <div className="sorter">
-            {sorter.field} - {sorter.direction.toUpperCase()}
-            <a className="site-link" onClick={this.props.onRemove.bind(this, sorter.field)}>remove</a>
+    return this.props.sorters.map(
+      function(sorter) {
+        return (
+          <div className="row" key={sorter.field}>
+            <div className="sorter">
+              {sorter.field} - {sorter.direction.toUpperCase()}
+              <a className="site-link" onClick={this.props.onRemove.bind(this, sorter.field)}>
+                remove
+              </a>
+            </div>
           </div>
-        </div>
-      )
-    }.bind(this))
+        )
+      }.bind(this),
+    )
   },
 
   render() {
     const options = this.props.options.map(function(value) {
       return (
-        <option value={value} key={value}>{value}</option>
+        <option value={value} key={value}>
+          {value}
+        </option>
       )
     })
 
@@ -61,7 +70,10 @@ const SortingControl = createReactClass({
               <option></option>
               {options}
             </select>
-            <select onChange={this.onChange.bind(this, "direction")} value={this.state.direction || ""}>
+            <select
+              onChange={this.onChange.bind(this, "direction")}
+              value={this.state.direction || ""}
+            >
               <option></option>
               <option value="asc">ASC</option>
               <option value="desc">DESC</option>

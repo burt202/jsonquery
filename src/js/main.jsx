@@ -38,34 +38,31 @@ const Main = createReactClass({
       const parsed = queryString.parse(location.search)
 
       if (parsed.dataUrl) {
-        return <FromUrl
-          actionCreator={actionCreator}
-          params={parsed}
-        />
+        return <FromUrl actionCreator={actionCreator} params={parsed} />
       }
 
-      return <Home
-        actionCreator={actionCreator}
-      />
+      return <Home actionCreator={actionCreator} />
     }
 
-    return <Query
-      actionCreator={actionCreator}
-      filters={state.filters}
-      groupings={state.groupings}
-      sorters={state.sorters}
-      schema={state.schema}
-      data={state.data}
-      calculatedFields={state.calculatedFields}
-      calculationsString={state.calculationsString}
-      resultFields={state.resultFields}
-      groupReducer={state.groupReducer}
-      groupSort={state.groupSort}
-      groupLimit={state.groupLimit}
-      limit={state.limit}
-      analyse={state.analyse}
-      combineRemainder={state.combineRemainder}
-    />
+    return (
+      <Query
+        actionCreator={actionCreator}
+        filters={state.filters}
+        groupings={state.groupings}
+        sorters={state.sorters}
+        schema={state.schema}
+        data={state.data}
+        calculatedFields={state.calculatedFields}
+        calculationsString={state.calculationsString}
+        resultFields={state.resultFields}
+        groupReducer={state.groupReducer}
+        groupSort={state.groupSort}
+        groupLimit={state.groupLimit}
+        limit={state.limit}
+        analyse={state.analyse}
+        combineRemainder={state.combineRemainder}
+      />
+    )
   },
 
   getToast() {
@@ -86,8 +83,15 @@ const Main = createReactClass({
     return (
       <div>
         <div className="header">
-          <h1><a href="/">JSONQuery</a></h1>
-          <span>v{this.props.version} - <a className="site-link" href="https://github.com/burt202/jsonquery">Github</a></span>
+          <h1>
+            <a href="/">JSONQuery</a>
+          </h1>
+          <span>
+            v{this.props.version} -{" "}
+            <a className="site-link" href="https://github.com/burt202/jsonquery">
+              Github
+            </a>
+          </span>
         </div>
         {this.getToast()}
         {this.getContent()}

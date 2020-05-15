@@ -37,17 +37,19 @@ const SchemaEditRows = createReactClass({
   },
 
   getSchemaRows() {
-    return R.toPairs(this.state.schema).map(function(pair) {
-      return (
-        <SchemaEditRow
-          key={pair[0]}
-          field={pair[0]}
-          type={pair[1]}
-          onChange={this.onChangeExisting}
-          onRemove={this.onRemoveExisting}
-        />
-      )
-    }.bind(this))
+    return R.toPairs(this.state.schema).map(
+      function(pair) {
+        return (
+          <SchemaEditRow
+            key={pair[0]}
+            field={pair[0]}
+            type={pair[1]}
+            onChange={this.onChangeExisting}
+            onRemove={this.onRemoveExisting}
+          />
+        )
+      }.bind(this),
+    )
   },
 
   onInputChange(e) {
@@ -71,9 +73,19 @@ const SchemaEditRows = createReactClass({
             <tbody>
               {this.getSchemaRows()}
               <tr>
-                <td><input value={this.state.fieldName} placeholder="Add new field..." onChange={this.onInputChange} /></td>
+                <td>
+                  <input
+                    value={this.state.fieldName}
+                    placeholder="Add new field..."
+                    onChange={this.onInputChange}
+                  />
+                </td>
                 <td colSpan="2">
-                  <select value="" disabled={!this.state.fieldName.length} onChange={this.onSelectChange}>
+                  <select
+                    value=""
+                    disabled={!this.state.fieldName.length}
+                    onChange={this.onSelectChange}
+                  >
                     <option value=""></option>
                     <option value="string">String</option>
                     <option value="number">Number</option>

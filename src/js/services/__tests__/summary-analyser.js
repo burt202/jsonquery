@@ -6,7 +6,6 @@ const summaryAnalyser = require("../summary-analyser")
 const mockFiltered = [{}, {}, {}, {}, {}, {}]
 
 describe("summaryAnalyser", function() {
-
   describe("getFilteredTotal", function() {
     it("should return total and percentage", function() {
       const res = summaryAnalyser.getFilteredTotal(mockFiltered, 8)

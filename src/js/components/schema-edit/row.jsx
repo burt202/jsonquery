@@ -34,7 +34,11 @@ const SchemaEditRow = createReactClass({
             <option value="array">Array</option>
           </select>
         </td>
-        <td><a className="site-link" onClick={this.onRemove}>Remove</a></td>
+        <td>
+          <a className="site-link" onClick={this.onRemove}>
+            Remove
+          </a>
+        </td>
       </tr>
     )
   },

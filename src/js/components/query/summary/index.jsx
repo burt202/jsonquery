@@ -19,7 +19,9 @@ const Summary = createReactClass({
   },
 
   getGrouping() {
-    return (this.props.groupings.length) ? dataProcessor.group(this.props.groupings, this.props.filtered) : null
+    return this.props.groupings.length
+      ? dataProcessor.group(this.props.groupings, this.props.filtered)
+      : null
   },
 
   getTotal() {
@@ -33,8 +35,19 @@ const Summary = createReactClass({
 
   getGroupLimitedTotal(grouped) {
     if (!this.props.groupings.length || !this.props.groupLimit) return null
-    const limitedGroups = dataProcessor.groupProcessor(this.props.schema, {name: "count"}, this.props.groupSort, this.props.groupLimit, false, grouped)
-    return summaryAnalyser.getGroupLimitedTotal(this.props.filtered, this.props.rawDataLength, limitedGroups)
+    const limitedGroups = dataProcessor.groupProcessor(
+      this.props.schema,
+      {name: "count"},
+      this.props.groupSort,
+      this.props.groupLimit,
+      false,
+      grouped,
+    )
+    return summaryAnalyser.getGroupLimitedTotal(
+      this.props.filtered,
+      this.props.rawDataLength,
+      limitedGroups,
+    )
   },
 
   getGroupingAnalysis(grouped) {
@@ -56,16 +69,14 @@ const Summary = createReactClass({
       R.flatten,
       R.reject(R.isNil),
       R.map(function(obj) {
-        return (<p key={obj.name} title={obj.title}>{`${obj.name}: ${obj.value}`}</p>)
-      })
+        return <p key={obj.name} title={obj.title}>{`${obj.name}: ${obj.value}`}</p>
+      }),
     )(summaryData)
 
     return (
       <div className="summary-cont">
         <h3>Summary</h3>
-        <div className="stats">
-          {fields}
-        </div>
+        <div className="stats">{fields}</div>
       </div>
     )
   },

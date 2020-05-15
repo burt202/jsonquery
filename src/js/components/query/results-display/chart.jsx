@@ -52,9 +52,17 @@ const ChartDisplay = createReactClass({
             <option value="bar">Bar</option>
             <option value="pie">Pie</option>
           </select>
-          <input value={this.state.title} onChange={this.onTitleChange} placeholder="Chart name here..." />
+          <input
+            value={this.state.title}
+            onChange={this.onTitleChange}
+            placeholder="Chart name here..."
+          />
         </p>
-        <Component data={this.props.formatted} title={this.state.title} onDownload={this.props.onDownload} />
+        <Component
+          data={this.props.formatted}
+          title={this.state.title}
+          onDownload={this.props.onDownload}
+        />
       </div>
     )
   },

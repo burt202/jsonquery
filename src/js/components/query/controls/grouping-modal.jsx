@@ -29,7 +29,7 @@ const GroupingModal = createReactClass({
   },
 
   onGroupReducerChange(e) {
-    const groupReducer = (e.target.value && e.target.value.length) ? {name: e.target.value} : null
+    const groupReducer = e.target.value && e.target.value.length ? {name: e.target.value} : null
     this.props.onGroupReducerChange(groupReducer)
   },
 
@@ -46,7 +46,7 @@ const GroupingModal = createReactClass({
   },
 
   onLimitChange(e) {
-    const groupLimit = (e.target.value && e.target.value.length) ? parseInt(e.target.value, 10) : null
+    const groupLimit = e.target.value && e.target.value.length ? parseInt(e.target.value, 10) : null
     this.props.onGroupLimitChange(groupLimit)
   },
 
@@ -55,7 +55,7 @@ const GroupingModal = createReactClass({
   },
 
   getReducerValueInput(fieldName, comparisonValue) {
-    const fieldType =  this.props.schema[fieldName]
+    const fieldType = this.props.schema[fieldName]
 
     if (fieldType === "bool") {
       return (
@@ -70,7 +70,12 @@ const GroupingModal = createReactClass({
     return (
       <span>
         <span style={{marginRight: "10px"}}>=</span>
-        <input type="text" name="reducer-value" value={comparisonValue} onChange={this.onGroupReducerValueChange} />
+        <input
+          type="text"
+          name="reducer-value"
+          value={comparisonValue}
+          onChange={this.onGroupReducerValueChange}
+        />
       </span>
     )
   },
@@ -79,16 +84,23 @@ const GroupingModal = createReactClass({
     if (!this.props.groupings || !this.props.groupings.length) return null
 
     const reducerNameValue = this.props.groupReducer ? this.props.groupReducer.name : ""
-    const reducerFieldValue = reducerNameValue.length && this.props.groupReducer.field ? this.props.groupReducer.field : ""
-    const reducerValue = reducerNameValue.length && this.props.groupReducer.value ? this.props.groupReducer.value : ""
+    const reducerFieldValue =
+      reducerNameValue.length && this.props.groupReducer.field ? this.props.groupReducer.field : ""
+    const reducerValue =
+      reducerNameValue.length && this.props.groupReducer.value ? this.props.groupReducer.value : ""
 
-    const options = R.without(this.props.groupings, Object.keys(this.props.schema)).map(function(value) {
+    const options = R.without(this.props.groupings, Object.keys(this.props.schema)).map(function(
+      value,
+    ) {
       return (
-        <option value={value} key={value}>{value}</option>
+        <option value={value} key={value}>
+          {value}
+        </option>
       )
     })
 
-    const conditionReducer = (reducerNameValue === "countCondition") || (reducerNameValue === "percentageCondition")
+    const conditionReducer =
+      reducerNameValue === "countCondition" || reducerNameValue === "percentageCondition"
 
     return (
       <div className="input-control">
@@ -103,13 +115,15 @@ const GroupingModal = createReactClass({
               <option value="percentageCondition">Percentage Condition</option>
             </select>
           </div>
-          {conditionReducer && <div className="row" style={{marginTop: "5px"}}>
-            <select onChange={this.onGroupReducerFieldChange} value={reducerFieldValue}>
-              <option></option>
-              {options}
-            </select>
-            {reducerFieldValue && this.getReducerValueInput(reducerFieldValue, reducerValue)}
-          </div>}
+          {conditionReducer && (
+            <div className="row" style={{marginTop: "5px"}}>
+              <select onChange={this.onGroupReducerFieldChange} value={reducerFieldValue}>
+                <option></option>
+                {options}
+              </select>
+              {reducerFieldValue && this.getReducerValueInput(reducerFieldValue, reducerValue)}
+            </div>
+          )}
         </div>
       </div>
     )
@@ -138,9 +152,7 @@ const GroupingModal = createReactClass({
     }
 
     if (this.props.groupings.length === 1) {
-      options = options.concat([
-        {value: "natural", name: "Natural"},
-      ])
+      options = options.concat([{value: "natural", name: "Natural"}])
     }
 
     const disabled = !this.props.groupReducer
@@ -150,9 +162,17 @@ const GroupingModal = createReactClass({
         <label>Sort By:</label>
         <div className="body">
           <div className="row">
-            <select disabled={disabled} onChange={this.onSortChange} value={this.props.groupSort || ""}>
+            <select
+              disabled={disabled}
+              onChange={this.onSortChange}
+              value={this.props.groupSort || ""}
+            >
               {options.map(function(option) {
-                return <option key={option.value} value={option.value}>{option.name}</option>
+                return (
+                  <option key={option.value} value={option.value}>
+                    {option.name}
+                  </option>
+                )
               })}
             </select>
           </div>
@@ -162,7 +182,7 @@ const GroupingModal = createReactClass({
   },
 
   getLimitOptions() {
-    const combineRemainderInput = (this.props.groupLimit) ? (
+    const combineRemainderInput = this.props.groupLimit ? (
       <label className="checkbox-label">
         <input
           type="checkbox"
@@ -171,7 +191,8 @@ const GroupingModal = createReactClass({
           onChange={this.onCombineRemainderChange}
         />
         Combine remainder
-      </label>) : null
+      </label>
+    ) : null
 
     const disabled = !this.props.groupReducer
 
@@ -180,7 +201,11 @@ const GroupingModal = createReactClass({
         <label>Limit By:</label>
         <div className="body">
           <div className="row">
-            <select disabled={disabled} onChange={this.onLimitChange} value={this.props.groupLimit || ""}>
+            <select
+              disabled={disabled}
+              onChange={this.onLimitChange}
+              value={this.props.groupLimit || ""}
+            >
               <option value="">Show all</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -221,8 +246,18 @@ const GroupingModal = createReactClass({
             </div>
             <div className="modal-footer">
               <ul className="side-options right">
-                {this.props.groupReducer && <li><a className="site-link" onClick={this.onReset}>Reset</a></li>}
-                <li><a className="site-link" onClick={this.props.onDismiss}>OK</a></li>
+                {this.props.groupReducer && (
+                  <li>
+                    <a className="site-link" onClick={this.onReset}>
+                      Reset
+                    </a>
+                  </li>
+                )}
+                <li>
+                  <a className="site-link" onClick={this.props.onDismiss}>
+                    OK
+                  </a>
+                </li>
               </ul>
             </div>
           </div>

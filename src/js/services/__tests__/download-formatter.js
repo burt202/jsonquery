@@ -4,7 +4,6 @@ const expect = chai.expect
 const downloadFormatter = require("../download-formatter")
 
 describe("downloadFormatter", function() {
-
   describe("table", function() {
     it("should return empty array if data set is empty", function() {
       expect(downloadFormatter.table([], null, [])).to.eql([])
@@ -83,10 +82,12 @@ describe("downloadFormatter", function() {
     })
 
     describe("when grouped", function() {
-
       it("should format correctly", function() {
         const mockData = {
-          Coldplay: [{artist: "Coldplay", album: "Parachutes", title: "Shiver"}, {artist: "Coldplay", album: "X&Y", title: "Square One"}],
+          Coldplay: [
+            {artist: "Coldplay", album: "Parachutes", title: "Shiver"},
+            {artist: "Coldplay", album: "X&Y", title: "Square One"},
+          ],
           Muse: [{artist: "Muse", album: "Showbiz", title: "Sunburn"}],
         }
 
@@ -154,9 +155,7 @@ describe("downloadFormatter", function() {
           average: 4,
         }
 
-        expect(downloadFormatter.csv([], null, mockData)).to.eql(
-          "sum,20\r\naverage,4"
-        )
+        expect(downloadFormatter.csv([], null, mockData)).to.eql("sum,20\r\naverage,4")
       })
     })
 
@@ -168,7 +167,7 @@ describe("downloadFormatter", function() {
         }
 
         expect(downloadFormatter.csv(["artist"], {name: "count"}, mockData)).to.eql(
-          "name,count\r\nColdplay,2\r\nMuse,1"
+          "name,count\r\nColdplay,2\r\nMuse,1",
         )
       })
 
@@ -179,7 +178,7 @@ describe("downloadFormatter", function() {
         }
 
         expect(downloadFormatter.csv(["artist", "album"], {name: "count"}, mockData)).to.eql(
-          "name,count\r\nColdplay - Parachutes,1\r\nColdplay - X&Y,1\r\nMuse - Showbiz,1"
+          "name,count\r\nColdplay - Parachutes,1\r\nColdplay - X&Y,1\r\nMuse - Showbiz,1",
         )
       })
 
@@ -190,7 +189,7 @@ describe("downloadFormatter", function() {
         }
 
         expect(downloadFormatter.csv(["artist"], {name: "count"}, mockData)).to.eql(
-          "name,count\r\n\"10,000 Days\",2\r\nMuse,1"
+          'name,count\r\n"10,000 Days",2\r\nMuse,1',
         )
       })
 
@@ -201,7 +200,7 @@ describe("downloadFormatter", function() {
         ]
 
         expect(downloadFormatter.csv(["artist"], {name: "count"}, mockData)).to.eql(
-          "name,count\r\nColdplay,2\r\nMuse,1"
+          "name,count\r\nColdplay,2\r\nMuse,1",
         )
       })
 
@@ -213,7 +212,7 @@ describe("downloadFormatter", function() {
         ]
 
         expect(downloadFormatter.csv(["artist", "album"], {name: "count"}, mockData)).to.eql(
-          "name,count\r\nColdplay - Parachutes,1\r\nColdplay - X&Y,1\r\nMuse - Showbiz,1"
+          "name,count\r\nColdplay - Parachutes,1\r\nColdplay - X&Y,1\r\nMuse - Showbiz,1",
         )
       })
 
@@ -224,21 +223,23 @@ describe("downloadFormatter", function() {
         ]
 
         expect(downloadFormatter.csv(["artist"], {name: "count"}, mockData)).to.eql(
-          "name,count\r\n\"10,000 Days\",2\r\nMuse,1"
+          'name,count\r\n"10,000 Days",2\r\nMuse,1',
         )
       })
     })
 
     describe("when grouped", function() {
-
       it("should format correctly", function() {
         const mockData = {
-          Coldplay: [{artist: "Coldplay", album: "Parachutes", title: "Shiver"}, {artist: "Coldplay", album: "X&Y", title: "Square One"}],
+          Coldplay: [
+            {artist: "Coldplay", album: "Parachutes", title: "Shiver"},
+            {artist: "Coldplay", album: "X&Y", title: "Square One"},
+          ],
           Muse: [{artist: "Muse", album: "Showbiz", title: "Sunburn"}],
         }
 
         expect(downloadFormatter.csv(["artist"], null, mockData)).to.eql(
-          "artist,album,title\r\nColdplay\r\nColdplay,Parachutes,Shiver\r\nColdplay,X&Y,Square One\r\nMuse\r\nMuse,Showbiz,Sunburn"
+          "artist,album,title\r\nColdplay\r\nColdplay,Parachutes,Shiver\r\nColdplay,X&Y,Square One\r\nMuse\r\nMuse,Showbiz,Sunburn",
         )
       })
 
@@ -254,7 +255,7 @@ describe("downloadFormatter", function() {
         }
 
         expect(downloadFormatter.csv(["artist", "album"], null, mockData)).to.eql(
-          "artist,album,title\r\nColdplay - Parachutes\r\nColdplay,Parachutes,Shiver\r\nColdplay - X&Y\r\nColdplay,X&Y,Square One\r\nMuse - Showbiz\r\nMuse,Showbiz,Sunburn"
+          "artist,album,title\r\nColdplay - Parachutes\r\nColdplay,Parachutes,Shiver\r\nColdplay - X&Y\r\nColdplay,X&Y,Square One\r\nMuse - Showbiz\r\nMuse,Showbiz,Sunburn",
         )
       })
 
@@ -264,17 +265,19 @@ describe("downloadFormatter", function() {
         }
 
         expect(downloadFormatter.csv(["artist"], null, mockData)).to.eql(
-          "artist,album,title\r\nTool\r\nTool,\"10,000 Days\",Schism"
+          'artist,album,title\r\nTool\r\nTool,"10,000 Days",Schism',
         )
       })
 
       it("should cope when there is an array value", function() {
         const mockData = {
-          Coldplay: [{artist: "Coldplay", album: "Parachutes", title: "Shiver", genres: ["Rock", "Indie"]}],
+          Coldplay: [
+            {artist: "Coldplay", album: "Parachutes", title: "Shiver", genres: ["Rock", "Indie"]},
+          ],
         }
 
         expect(downloadFormatter.csv(["artist"], null, mockData)).to.eql(
-          "artist,album,title,genres\r\nColdplay\r\nColdplay,Parachutes,Shiver,\"Rock,Indie\""
+          'artist,album,title,genres\r\nColdplay\r\nColdplay,Parachutes,Shiver,"Rock,Indie"',
         )
       })
 
@@ -284,7 +287,7 @@ describe("downloadFormatter", function() {
         }
 
         expect(downloadFormatter.csv(["artist"], null, mockData)).to.eql(
-          "artist,album,title\r\n\"10,000 Days\"\r\nTool,\"10,000 Days\",Schism"
+          'artist,album,title\r\n"10,000 Days"\r\nTool,"10,000 Days",Schism',
         )
       })
     })
@@ -298,17 +301,15 @@ describe("downloadFormatter", function() {
         ]
 
         expect(downloadFormatter.csv([], null, mockData)).to.eql(
-          "artist,album,title\r\nColdplay,Parachutes,Shiver\r\nColdplay,X&Y,Square One\r\nMuse,Showbiz,Sunburn"
+          "artist,album,title\r\nColdplay,Parachutes,Shiver\r\nColdplay,X&Y,Square One\r\nMuse,Showbiz,Sunburn",
         )
       })
 
       it("should cope when there is a string value with a comma", function() {
-        const mockData = [
-          {artist: "Tool", album: "10,000 Days", title: "Schism"},
-        ]
+        const mockData = [{artist: "Tool", album: "10,000 Days", title: "Schism"}]
 
         expect(downloadFormatter.csv([], null, mockData)).to.eql(
-          "artist,album,title\r\nTool,\"10,000 Days\",Schism"
+          'artist,album,title\r\nTool,"10,000 Days",Schism',
         )
       })
 
@@ -318,17 +319,22 @@ describe("downloadFormatter", function() {
         ]
 
         expect(downloadFormatter.csv([], null, mockData)).to.eql(
-          "artist,album,title,genres\r\nColdplay,Parachutes,Shiver,\"Rock,Indie\""
+          'artist,album,title,genres\r\nColdplay,Parachutes,Shiver,"Rock,Indie"',
         )
       })
 
       it("should cope when there is an object value", function() {
         const mockData = [
-          {artist: "Coldplay", album: "Parachutes", title: "Shiver", genres: {Rock: true, Indie: false}},
+          {
+            artist: "Coldplay",
+            album: "Parachutes",
+            title: "Shiver",
+            genres: {Rock: true, Indie: false},
+          },
         ]
 
         expect(downloadFormatter.csv([], null, mockData)).to.eql(
-          "artist,album,title,genres\r\nColdplay,Parachutes,Shiver,\"{\"Rock\":true,\"Indie\":false}\""
+          'artist,album,title,genres\r\nColdplay,Parachutes,Shiver,"{"Rock":true,"Indie":false}"',
         )
       })
     })

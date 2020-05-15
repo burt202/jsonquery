@@ -48,24 +48,43 @@ const Results = createReactClass({
     const downloaders = getDownloaders()
 
     return {
-      json: {name: "JSON", extension: "json", downloader: downloaders.base("json", "application/json"), component: JsonDisplay},
-      table: {name: "Table", extension: "csv", downloader: downloaders.base("csv", "text/csv"), component: TableDisplay},
-      chart: {name: "Chart (BETA)", extension: "png", downloader: downloaders.chart("png", "image/png"), component: ChartDisplay},
+      json: {
+        name: "JSON",
+        extension: "json",
+        downloader: downloaders.base("json", "application/json"),
+        component: JsonDisplay,
+      },
+      table: {
+        name: "Table",
+        extension: "csv",
+        downloader: downloaders.base("csv", "text/csv"),
+        component: TableDisplay,
+      },
+      chart: {
+        name: "Chart (BETA)",
+        extension: "png",
+        downloader: downloaders.chart("png", "image/png"),
+        component: ChartDisplay,
+      },
     }
   },
 
   getViewTypesLinks() {
-    return R.toPairs(this.getViewTypes()).map(function(pair) {
-      const classnames = classNames({
-        "active": this.state.type === pair[0],
-      })
+    return R.toPairs(this.getViewTypes()).map(
+      function(pair) {
+        const classnames = classNames({
+          active: this.state.type === pair[0],
+        })
 
-      return (
-        <li key={pair[0]} className={classnames}>
-          <a className="site-link" onClick={this.setType.bind(this, pair[0])}>{pair[1].name}</a>
-        </li>
-      )
-    }.bind(this))
+        return (
+          <li key={pair[0]} className={classnames}>
+            <a className="site-link" onClick={this.setType.bind(this, pair[0])}>
+              {pair[1].name}
+            </a>
+          </li>
+        )
+      }.bind(this),
+    )
   },
 
   showToast() {
@@ -93,14 +112,24 @@ const Results = createReactClass({
     if (validator.isString(results)) return <Code language="json">{results}</Code>
 
     if (this.state.type === "chart" && (!this.props.groupings.length || !this.props.groupReducer)) {
-      return <Code language="json">You must select a grouping with a reducer to use the charts display</Code>
+      return (
+        <Code language="json">
+          You must select a grouping with a reducer to use the charts display
+        </Code>
+      )
     }
 
     if (this.state.type === "chart" && this.props.groupings.length > 1) {
-      return <Code language="json">Currently only one level of grouping is supported in the charts display</Code>
+      return (
+        <Code language="json">
+          Currently only one level of grouping is supported in the charts display
+        </Code>
+      )
     }
 
-    const downloadFormat = downloadFormatter[type.extension] ? downloadFormatter[type.extension](this.props.groupings, this.props.groupReducer, results) : results
+    const downloadFormat = downloadFormatter[type.extension]
+      ? downloadFormatter[type.extension](this.props.groupings, this.props.groupReducer, results)
+      : results
 
     if (!this.isAggregateResult() && this.tooManyResultToShow()) {
       return (
@@ -112,19 +141,38 @@ const Results = createReactClass({
       )
     }
 
-    const formatted = downloadFormatter[this.state.type] ? downloadFormatter[this.state.type](this.props.groupings, this.props.groupReducer, results) : results
+    const formatted = downloadFormatter[this.state.type]
+      ? downloadFormatter[this.state.type](this.props.groupings, this.props.groupReducer, results)
+      : results
 
     const Component = type.component
-    return <Component formatted={formatted} downloadFormat={downloadFormat} onDownload={type.downloader} showToast={this.showToast} />
+    return (
+      <Component
+        formatted={formatted}
+        downloadFormat={downloadFormat}
+        onDownload={type.downloader}
+        showToast={this.showToast}
+      />
+    )
   },
 
   formatData(data) {
     if (this.props.groupings.length) {
       const grouped = dataProcessor.group(this.props.groupings, data)
-      return this.props.groupReducer ? dataProcessor.groupProcessor(this.props.schema, this.props.groupReducer, this.props.groupSort, this.props.groupLimit, this.props.combineRemainder, grouped) : grouped
+      return this.props.groupReducer
+        ? dataProcessor.groupProcessor(
+            this.props.schema,
+            this.props.groupReducer,
+            this.props.groupSort,
+            this.props.groupLimit,
+            this.props.combineRemainder,
+            grouped,
+          )
+        : grouped
     }
 
-    if (this.props.analyse) return dataProcessor.analyse(this.props.schema[this.props.analyse], this.props.analyse, data)
+    if (this.props.analyse)
+      return dataProcessor.analyse(this.props.schema[this.props.analyse], this.props.analyse, data)
 
     return data
   },
@@ -136,9 +184,7 @@ const Results = createReactClass({
       <div className="results-cont">
         <h3>Results</h3>
         <div className="results-options">
-          <ul className="side-options">
-            {this.getViewTypesLinks()}
-          </ul>
+          <ul className="side-options">{this.getViewTypesLinks()}</ul>
         </div>
         {this.getDisplayData(results)}
         <a id="hidden-download-link" style={{display: "none"}}></a>

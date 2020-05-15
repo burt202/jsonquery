@@ -30,7 +30,7 @@ module.exports = {
       },
       function(data) {
         return groupLimiter(limit, combineRemainder, data)
-      }
+      },
     )(grouped)
   },
 }

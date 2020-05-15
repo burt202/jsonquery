@@ -18,7 +18,9 @@ describe("groupLimiter", function() {
   })
 
   it("should return passed in data if data is a string", function() {
-    expect(groupLimiter(undefined, false, "Error message from sorting")).to.eql("Error message from sorting")
+    expect(groupLimiter(undefined, false, "Error message from sorting")).to.eql(
+      "Error message from sorting",
+    )
   })
 
   it("should limit group", function() {

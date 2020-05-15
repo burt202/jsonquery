@@ -4,10 +4,7 @@ const React = require("react")
 const ReactDOM = require("react-dom")
 const Main = require("./main")
 
-ReactDOM.render(
-  <Main version={VERSION} />,
-  document.body.querySelector(".container")
-)
+ReactDOM.render(<Main version={VERSION} />, document.body.querySelector(".container"))
 
 // Hot Module Replacement API
 if (module.hot) {
@@ -19,7 +16,7 @@ if (module.hot) {
       <AppContainer>
         <Main version={VERSION} />
       </AppContainer>,
-      document.body.querySelector(".container")
+      document.body.querySelector(".container"),
     )
   })
 }

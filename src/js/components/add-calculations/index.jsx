@@ -61,12 +61,18 @@ const AddCalculations = createReactClass({
     }
 
     const schemaForCalculations = schemaGenerator.generate(calculationFn(fns, this.props.data[0]))
-    const schema = R.merge(R.omit(this.props.calculatedFields, this.props.schema), schemaForCalculations)
+    const schema = R.merge(
+      R.omit(this.props.calculatedFields, this.props.schema),
+      schemaForCalculations,
+    )
 
-    const data = R.map(function(row) {
-      const calculations = calculationFn(fns, row)
-      return R.merge(R.omit(this.props.calculatedFields, row), calculations)
-    }.bind(this), this.props.data)
+    const data = R.map(
+      function(row) {
+        const calculations = calculationFn(fns, row)
+        return R.merge(R.omit(this.props.calculatedFields, row), calculations)
+      }.bind(this),
+      this.props.data,
+    )
 
     this.props.onSave(schema, data, this.state.calculationsString, R.keys(schemaForCalculations))
   },
@@ -81,24 +87,26 @@ const AddCalculations = createReactClass({
   getErrorDisplay() {
     if (!this.state.errors.length) return null
 
-    return (
-      <Code language="json">
-        {this.state.errors}
-      </Code>
-    )
+    return <Code language="json">{this.state.errors}</Code>
   },
 
   render() {
     return (
       <div className="add-calculations-cont">
         <h3>Add Calculations</h3>
-        <p><a className="site-link" onClick={this.props.onCancel}>Back</a></p>
-        <textarea className="calculations" value={this.state.calculationsString} onChange={this.onChange} />
+        <p>
+          <a className="site-link" onClick={this.props.onCancel}>
+            Back
+          </a>
+        </p>
+        <textarea
+          className="calculations"
+          value={this.state.calculationsString}
+          onChange={this.onChange}
+        />
         {this.getErrorDisplay()}
         <h4>Sample Data Item</h4>
-        <Code language="json">
-          {JSON.stringify(this.props.data[0], null, 2)}
-        </Code>
+        <Code language="json">{JSON.stringify(this.props.data[0], null, 2)}</Code>
         <button onClick={this.onSave}>Save</button>
       </div>
     )

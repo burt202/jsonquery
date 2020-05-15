@@ -28,9 +28,7 @@ describe("filter", function() {
       {name: "deleted", operator: "false", active: true},
     ])
 
-    expect(res).to.eql([
-      {name: "bar", type: "cash", num: 2, deleted: false},
-    ])
+    expect(res).to.eql([{name: "bar", type: "cash", num: 2, deleted: false}])
   })
 
   it("should filter on the same field multiple times", function() {
@@ -39,9 +37,7 @@ describe("filter", function() {
       {name: "num", value: "2", operator: "lt", active: true},
     ])
 
-    expect(res).to.eql([
-      {name: "foo", type: "cash", num: 1, deleted: true},
-    ])
+    expect(res).to.eql([{name: "foo", type: "cash", num: 1, deleted: true}])
   })
 
   it("should ignore inactive filters", function() {
@@ -65,7 +61,6 @@ describe("filter", function() {
   })
 
   describe("string", function() {
-
     const mockDataForFiltering = [
       {name: "foo", type: "cash"},
       {name: "bar", type: "cash"},
@@ -106,9 +101,7 @@ describe("filter", function() {
         {name: "type", operator: "nl", active: true},
       ])
 
-      expect(res).to.eql([
-        {name: "abc", type: null},
-      ])
+      expect(res).to.eql([{name: "abc", type: null}])
     })
 
     it("should filter when operator is 'nnl'", function() {
@@ -172,7 +165,6 @@ describe("filter", function() {
   })
 
   describe("number", function() {
-
     const mockDataForFiltering = [
       {name: "foo", code: 101},
       {name: "bar", code: 102},
@@ -191,9 +183,7 @@ describe("filter", function() {
         {name: "code", operator: "eq", value: "102", active: true},
       ])
 
-      expect(res).to.eql([
-        {name: "bar", code: 102},
-      ])
+      expect(res).to.eql([{name: "bar", code: 102}])
     })
 
     it("should filter when operator is 'neq'", function() {
@@ -215,9 +205,7 @@ describe("filter", function() {
         {name: "code", operator: "nl", active: true},
       ])
 
-      expect(res).to.eql([
-        {name: "123", code: null},
-      ])
+      expect(res).to.eql([{name: "123", code: null}])
     })
 
     it("should filter when operator is 'nnl'", function() {
@@ -333,9 +321,7 @@ describe("filter", function() {
         {name: "code", operator: "btw", value: "101", value1: "103", active: true},
       ])
 
-      expect(res).to.eql([
-        {name: "bar", code: 102},
-      ])
+      expect(res).to.eql([{name: "bar", code: 102}])
     })
 
     it("should filter when operator is 'nbtw'", function() {
@@ -362,14 +348,11 @@ describe("filter", function() {
         {name: "code", operator: "gt", value: "101.9", active: true},
       ])
 
-      expect(res).to.eql([
-        {name: "bar", code: 102},
-      ])
+      expect(res).to.eql([{name: "bar", code: 102}])
     })
   })
 
   describe("bool", function() {
-
     const mockDataForFiltering = [
       {name: "foo", deleted: true},
       {name: "bar", deleted: false},
@@ -409,9 +392,7 @@ describe("filter", function() {
         {name: "deleted", operator: "nl", active: true},
       ])
 
-      expect(res).to.eql([
-        {name: "baz", deleted: null},
-      ])
+      expect(res).to.eql([{name: "baz", deleted: null}])
     })
 
     it("should filter when not null", function() {
@@ -446,9 +427,7 @@ describe("filter", function() {
         {name: "dateCreated", operator: "eq", value: "2016-07-11T17:16:27", active: true},
       ])
 
-      expect(res).to.eql([
-        {name: "123", dateCreated: "2016-07-11T17:16:27"},
-      ])
+      expect(res).to.eql([{name: "123", dateCreated: "2016-07-11T17:16:27"}])
     })
 
     it("should filter when operator is 'neq'", function() {
@@ -469,9 +448,7 @@ describe("filter", function() {
         {name: "dateCreated", operator: "nl", value: "", active: true},
       ])
 
-      expect(res).to.eql([
-        {name: "abc", dateCreated: null},
-      ])
+      expect(res).to.eql([{name: "abc", dateCreated: null}])
     })
 
     it("should filter when operator is 'nnl'", function() {
@@ -492,9 +469,7 @@ describe("filter", function() {
         {name: "dateCreated", operator: "sd", value: "20160611", active: true},
       ])
 
-      expect(res).to.eql([
-        {name: "baz", dateCreated: "2016-06-11T17:16:27"},
-      ])
+      expect(res).to.eql([{name: "baz", dateCreated: "2016-06-11T17:16:27"}])
     })
 
     it("should filter when operator is 'be'", function() {
@@ -550,14 +525,18 @@ describe("filter", function() {
         {name: "dateCreated", operator: "btw", value: "20160712", value1: "20160910", active: true},
       ])
 
-      expect(res).to.eql([
-        {name: "bar", dateCreated: "2016-08-11T17:16:27"},
-      ])
+      expect(res).to.eql([{name: "bar", dateCreated: "2016-08-11T17:16:27"}])
     })
 
     it("should filter when operator is 'nbtw'", function() {
       const res = filter(mockDataForFiltering, mockSchema, [
-        {name: "dateCreated", operator: "nbtw", value: "20160712", value1: "20160910", active: true},
+        {
+          name: "dateCreated",
+          operator: "nbtw",
+          value: "20160712",
+          value1: "20160910",
+          active: true,
+        },
       ])
 
       expect(res).to.eql([
@@ -570,7 +549,13 @@ describe("filter", function() {
 
     it("should filter when operator is 'btw' for datetime strings", function() {
       const res = filter(mockDataForFiltering, mockSchema, [
-        {name: "dateCreated", operator: "btw", value: "20160711 0345", value1: "20160911 1854", active: true},
+        {
+          name: "dateCreated",
+          operator: "btw",
+          value: "20160711 0345",
+          value1: "20160911 1854",
+          active: true,
+        },
       ])
 
       expect(res).to.eql([
@@ -582,7 +567,13 @@ describe("filter", function() {
 
     it("should filter when operator is 'nbtw' for datetime strings", function() {
       const res = filter(mockDataForFiltering, mockSchema, [
-        {name: "dateCreated", operator: "nbtw", value: "20160711 0345", value1: "20160911 1854", active: true},
+        {
+          name: "dateCreated",
+          operator: "nbtw",
+          value: "20160711 0345",
+          value1: "20160911 1854",
+          active: true,
+        },
       ])
 
       expect(res).to.eql([
@@ -610,9 +601,7 @@ describe("filter", function() {
         {name: "time", operator: "eq", value: "15:02:30", active: true},
       ])
 
-      expect(res).to.eql([
-        {time: "15:02:30", value: 65},
-      ])
+      expect(res).to.eql([{time: "15:02:30", value: 65}])
     })
 
     it("should filter when operator is 'neq'", function() {
@@ -633,9 +622,7 @@ describe("filter", function() {
         {name: "time", operator: "nl", value: "", active: true},
       ])
 
-      expect(res).to.eql([
-        {time: null, value: 64},
-      ])
+      expect(res).to.eql([{time: null, value: 64}])
     })
 
     it("should filter when operator is 'nnl'", function() {
@@ -678,9 +665,7 @@ describe("filter", function() {
         {name: "time", operator: "btw", value: "02:08:56", value1: "09:08", active: true},
       ])
 
-      expect(res).to.eql([
-        {time: "08:00:10", value: 63},
-      ])
+      expect(res).to.eql([{time: "08:00:10", value: 63}])
     })
 
     it("should filter when operator is 'nbtw'", function() {
@@ -698,7 +683,6 @@ describe("filter", function() {
   })
 
   describe("array", function() {
-
     const mockDataForFiltering = [
       {name: "foo", types: ["cash"]},
       {name: "bar", types: ["cash", "card"]},
@@ -716,9 +700,7 @@ describe("filter", function() {
         {name: "types", operator: "con", value: "101", active: true},
       ])
 
-      expect(res).to.eql([
-        {name: "abc", types: ["card", 101]},
-      ])
+      expect(res).to.eql([{name: "abc", types: ["card", 101]}])
     })
 
     it("should filter when operator is 'cos'", function() {
@@ -749,9 +731,7 @@ describe("filter", function() {
         {name: "types", operator: "hl", value: "0", active: true},
       ])
 
-      expect(res).to.eql([
-        {name: "baz", types: []},
-      ])
+      expect(res).to.eql([{name: "baz", types: []}])
     })
 
     it("should filter when operator is 'dhl'", function() {

@@ -26,7 +26,9 @@ const Filters = createReactClass({
   getFilterControl() {
     const options = Object.keys(this.props.schema).map(function(value) {
       return (
-        <option value={value} key={value}>{value}</option>
+        <option value={value} key={value}>
+          {value}
+        </option>
       )
     })
 
@@ -48,19 +50,25 @@ const Filters = createReactClass({
   getFilterRows() {
     if (!this.props.filters.length)
       return (
-        <tr><td>No filters</td></tr>
+        <tr>
+          <td>No filters</td>
+        </tr>
       )
 
-    return this.props.filters.map(function(filter) {
-      return <FilterRow
-        key={filter.id}
-        filter={filter}
-        type={this.props.schema[filter.name]}
-        onToggle={this.props.actionCreator.toggleFilter}
-        onUpdate={this.props.actionCreator.updateFilter}
-        onDelete={this.props.actionCreator.deleteFilter}
-      />
-    }.bind(this))
+    return this.props.filters.map(
+      function(filter) {
+        return (
+          <FilterRow
+            key={filter.id}
+            filter={filter}
+            type={this.props.schema[filter.name]}
+            onToggle={this.props.actionCreator.toggleFilter}
+            onUpdate={this.props.actionCreator.updateFilter}
+            onDelete={this.props.actionCreator.deleteFilter}
+          />
+        )
+      }.bind(this),
+    )
   },
 
   render() {
@@ -76,9 +84,7 @@ const Filters = createReactClass({
               <th></th>
             </tr>
           </thead>
-          <tbody>
-            {this.getFilterRows()}
-          </tbody>
+          <tbody>{this.getFilterRows()}</tbody>
         </table>
         {this.getFilterControl()}
       </div>

@@ -91,11 +91,11 @@ const Query = createReactClass({
   },
 
   sortResults(data) {
-    return (this.props.sorters.length) ? dataProcessor.sort(this.props.sorters, data) : data
+    return this.props.sorters.length ? dataProcessor.sort(this.props.sorters, data) : data
   },
 
   limitResults(data) {
-    return (this.props.limit) ? dataProcessor.limit(this.props.limit, data) : data
+    return this.props.limit ? dataProcessor.limit(this.props.limit, data) : data
   },
 
   pickIncludedFields(data) {
@@ -107,7 +107,7 @@ const Query = createReactClass({
       this.filterResults,
       this.sortResults,
       this.limitResults,
-      this.pickIncludedFields
+      this.pickIncludedFields,
     )(data)
   },
 
@@ -120,9 +120,21 @@ const Query = createReactClass({
     return (
       <div className="query-cont">
         <ul className="side-options right">
-          <li><a className="site-link" onClick={() => this.setState({selectedPage: "addCalc"})}>Add Calculations</a></li>
-          <li><a className="site-link" onClick={() => this.setState({selectedPage: "editSchema"})}>Edit Schema</a></li>
-          <li><a className="site-link" onClick={this.onReset}>Reset</a></li>
+          <li>
+            <a className="site-link" onClick={() => this.setState({selectedPage: "addCalc"})}>
+              Add Calculations
+            </a>
+          </li>
+          <li>
+            <a className="site-link" onClick={() => this.setState({selectedPage: "editSchema"})}>
+              Edit Schema
+            </a>
+          </li>
+          <li>
+            <a className="site-link" onClick={this.onReset}>
+              Reset
+            </a>
+          </li>
         </ul>
         <Filters
           actionCreator={this.props.actionCreator}

@@ -5,7 +5,6 @@ const CopyToClipboard = require("react-copy-to-clipboard").CopyToClipboard
 const Code = require("../../shared/code")
 
 function JsonDisplay(props) {
-
   function onDownload() {
     props.onDownload(props.downloadFormat)
   }
@@ -14,29 +13,29 @@ function JsonDisplay(props) {
 
   if (props.showToast) {
     downloadLinks.push(
-      (
-        <li key="copy"><a className="site-link">
+      <li key="copy">
+        <a className="site-link">
           <CopyToClipboard text={props.formatted} onCopy={props.showToast}>
             <span>Copy To Clipboard</span>
-          </CopyToClipboard></a>
-        </li>
-      )
+          </CopyToClipboard>
+        </a>
+      </li>,
     )
   }
 
   downloadLinks.push(
-    (
-      <li key="download"><a className="site-link" onClick={onDownload}>Download</a></li>
-    )
+    <li key="download">
+      <a className="site-link" onClick={onDownload}>
+        Download
+      </a>
+    </li>,
   )
 
   return (
     <div>
       <ul className="side-options right">{downloadLinks}</ul>
       <div>
-        <Code language="json">
-          {props.formatted}
-        </Code>
+        <Code language="json">{props.formatted}</Code>
       </div>
     </div>
   )

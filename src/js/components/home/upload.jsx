@@ -28,7 +28,6 @@ const Upload = createReactClass({
     e.preventDefault()
   },
 
-
   onDragLeave() {
     this.setState({
       isDragActive: false,
@@ -64,7 +63,9 @@ const Upload = createReactClass({
 
     return (
       <div>
-        <p><input type="file" key={this.props.errorDate} onChange={this.onFileUploadStart} /></p>
+        <p>
+          <input type="file" key={this.props.errorDate} onChange={this.onFileUploadStart} />
+        </p>
         <div
           style={style}
           className="drag-drop-area"
