@@ -1,6 +1,5 @@
 const React = require("react")
 const PropTypes = require("prop-types")
-const CopyToClipboard = require("react-copy-to-clipboard").CopyToClipboard
 
 const Code = require("../../shared/code")
 
@@ -15,9 +14,13 @@ function JsonDisplay(props) {
     downloadLinks.push(
       <li key="copy">
         <a className="site-link">
-          <CopyToClipboard text={props.formatted} onCopy={props.showToast}>
-            <span>Copy To Clipboard</span>
-          </CopyToClipboard>
+          <span
+            onClick={() => {
+              navigator.clipboard.writeText(props.formatted).then(() => props.showToast())
+            }}
+          >
+            Copy To Clipboard
+          </span>
         </a>
       </li>,
     )

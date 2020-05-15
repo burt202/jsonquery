@@ -1,6 +1,5 @@
 const React = require("react")
 const PropTypes = require("prop-types")
-const CopyToClipboard = require("react-copy-to-clipboard").CopyToClipboard
 
 const R = require("ramda")
 
@@ -25,9 +24,13 @@ function TableDisplay(props) {
     const headerRow = header.cols.map(function(col, index) {
       return (
         <th key={index} className="clickable" title="Copy column data">
-          <CopyToClipboard text={getHeaderCopyText(index)} onCopy={props.showToast}>
-            <span>{col}</span>
-          </CopyToClipboard>
+          <span
+            onClick={() => {
+              navigator.clipboard.writeText(getHeaderCopyText(index)).then(() => props.showToast())
+            }}
+          >
+            {col}
+          </span>
         </th>
       )
     })
@@ -66,9 +69,13 @@ function TableDisplay(props) {
     downloadLinks.push(
       <li key="copy">
         <a className="site-link">
-          <CopyToClipboard text={props.downloadFormat} onCopy={props.showToast}>
-            <span>Copy To Clipboard</span>
-          </CopyToClipboard>
+          <span
+            onClick={() => {
+              navigator.clipboard.writeText(props.downloadFormat).then(() => props.showToast())
+            }}
+          >
+            Copy To Clipboard
+          </span>
         </a>
       </li>,
     )
