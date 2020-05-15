@@ -36,16 +36,13 @@ const prodRules = [
   },
 ]
 
-module.exports = function (webpackConfig) {
+module.exports = function(webpackConfig) {
   const plugins = R.concat(
     prodPlugins,
     R.slice(0, webpackConfig.plugins.length - 2, webpackConfig.plugins),
   )
 
-  const oldRules = webpackConfig.module.rules.slice(
-    0,
-    webpackConfig.module.rules.length - 1,
-  )
+  const oldRules = webpackConfig.module.rules.slice(0, webpackConfig.module.rules.length - 1)
   const entry = webpackConfig.entry.slice(-1)
   const result = R.merge(webpackConfig, {plugins, entry, mode: "production"})
 
