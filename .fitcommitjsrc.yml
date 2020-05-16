@@ -16,6 +16,6 @@ validators:
   subjectPeriod:
     enabled: false
   capitalizedSubject:
-    enabled: true
+    enabled: false
   wip:
     enabled: true
