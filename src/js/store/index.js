@@ -130,6 +130,7 @@ const handlers = {
       groupSort: "desc",
       groupLimit: null,
       combineRemainder: false,
+      resultFields: Object.keys(contents.schema || {}),
     })
   },
 
