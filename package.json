@@ -41,8 +41,7 @@
     "react-dom": "^16.13.1",
     "react-syntax-highlighter": "^9.0.1",
     "redux": "^4.0.5",
-    "redux-logger": "^3.0.6",
-    "uuid": "^8.0.0"
+    "redux-logger": "^3.0.6"
   },
   "devDependencies": {
     "chai": "^4.2.0",

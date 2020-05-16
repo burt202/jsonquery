@@ -1,5 +1,4 @@
 const R = require("ramda")
-const uuid = require("uuid")
 const {applyMiddleware, createStore} = require("redux")
 
 const utils = require("../utils")
@@ -66,7 +65,7 @@ const handlers = {
 
     return R.merge(contents, {
       filters: R.append(
-        {id: uuid.v4(), name: payload.name, value: "", operator, active: true},
+        {id: Date.now().toString(), name: payload.name, value: "", operator, active: true},
         contents.filters,
       ),
     })
