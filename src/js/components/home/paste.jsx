@@ -1,39 +1,33 @@
 const React = require("react")
+const useState = React.useState
 const PropTypes = require("prop-types")
-const createReactClass = require("create-react-class")
 
-const Paste = createReactClass({
-  displayName: "Paste",
+function Paste(props) {
+  const [state, setState] = useState({
+    data: JSON.stringify(props.data, null, 2),
+  })
 
-  propTypes: {
-    onAction: PropTypes.func.isRequired,
-    data: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-  },
-
-  getInitialState() {
-    return {
-      data: JSON.stringify(this.props.data, null, 2),
-    }
-  },
-
-  onChange(e) {
-    this.setState({
+  const onChange = e => {
+    setState({
       data: e.target.value,
     })
-  },
+  }
 
-  onGo() {
-    this.props.onAction(this.state.data)
-  },
+  const onGo = () => {
+    props.onAction(state.data)
+  }
 
-  render() {
-    return (
-      <div>
-        <textarea className="paste" value={this.state.data} onChange={this.onChange} />
-        <button onClick={this.onGo}>Go</button>
-      </div>
-    )
-  },
-})
+  return (
+    <div>
+      <textarea className="paste" value={state.data} onChange={onChange} />
+      <button onClick={onGo}>Go</button>
+    </div>
+  )
+}
+
+Paste.propTypes = {
+  onAction: PropTypes.func.isRequired,
+  data: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+}
 
 module.exports = Paste

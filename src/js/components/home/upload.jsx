@@ -1,84 +1,78 @@
 const React = require("react")
+const useState = React.useState
 const PropTypes = require("prop-types")
-const createReactClass = require("create-react-class")
 
-const Upload = createReactClass({
-  displayName: "Upload",
+function Upload(props) {
+  const [state, setState] = useState({
+    isDragActive: false,
+  })
 
-  propTypes: {
-    onAction: PropTypes.func.isRequired,
-    errorDate: PropTypes.number,
-  },
-
-  getInitialState() {
-    return {
-      isDragActive: false,
-    }
-  },
-
-  onDragOver(e) {
+  const onDragOver = e => {
     e.preventDefault()
 
-    this.setState({
+    setState({
       isDragActive: true,
     })
-  },
+  }
 
-  onDragEnter(e) {
+  const onDragEnter = e => {
     e.preventDefault()
-  },
+  }
 
-  onDragLeave() {
-    this.setState({
+  const onDragLeave = () => {
+    setState({
       isDragActive: false,
     })
-  },
+  }
 
-  onDrop(e) {
+  const onDrop = e => {
     e.preventDefault()
 
-    this.setState({
+    setState({
       isDragActive: false,
     })
 
     const reader = new FileReader()
-    reader.onload = this.onFileUploadEnd
+    reader.onload = onFileUploadEnd
     reader.readAsText(e.dataTransfer.files[0])
-  },
+  }
 
-  onFileUploadStart(e) {
+  const onFileUploadStart = e => {
     const reader = new FileReader()
-    reader.onload = this.onFileUploadEnd
+    reader.onload = onFileUploadEnd
     reader.readAsText(e.target.files[0])
-  },
+  }
 
-  onFileUploadEnd(e) {
-    this.props.onAction(e.target.result)
-  },
+  const onFileUploadEnd = e => {
+    props.onAction(e.target.result)
+  }
 
-  render() {
-    const style = {
-      borderColor: this.state.isDragActive ? "#000" : "#AAA",
-    }
+  const style = {
+    borderColor: state.isDragActive ? "#000" : "#AAA",
+  }
 
-    return (
-      <div>
-        <p>
-          <input type="file" key={this.props.errorDate} onChange={this.onFileUploadStart} />
-        </p>
-        <div
-          style={style}
-          className="drag-drop-area"
-          onDragLeave={this.onDragLeave}
-          onDragOver={this.onDragOver}
-          onDragEnter={this.onDragEnter}
-          onDrop={this.onDrop}
-        >
-          <h3>Drop file here</h3>
-        </div>
+  return (
+    <div>
+      <p>
+        <input type="file" key={props.errorDate} onChange={onFileUploadStart} />
+      </p>
+      <div
+        style={style}
+        className="drag-drop-area"
+        onDragLeave={onDragLeave}
+        onDragOver={onDragOver}
+        onDragEnter={onDragEnter}
+        onDrop={onDrop}
+      >
+        <h3>Drop file here</h3>
       </div>
-    )
-  },
-})
+    </div>
+  )
+}
+
+Upload.propTypes = {
+  onAction: PropTypes.func.isRequired,
+  errorDate: PropTypes.number,
+}
 
 module.exports = Upload

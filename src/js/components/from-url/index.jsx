@@ -1,6 +1,6 @@
 const React = require("react")
+const useState = React.useState
 const PropTypes = require("prop-types")
-const createReactClass = require("create-react-class")
 
 const validator = require("../../services/validator")
 const schemaGenerator = require("../../services/schema-generator")
@@ -11,7 +11,7 @@ function fetchData(url, withCredentials) {
   const opts = {method: "get"}
   if (withCredentials) opts.credentials = "include"
 
-  return fetch(url, opts).then(function(response) {
+  return fetch(url, opts).then(response => {
     if (!response.ok) {
       throw Error(response.statusText)
     }
@@ -20,30 +20,12 @@ function fetchData(url, withCredentials) {
   })
 }
 
-const FromUrl = createReactClass({
-  displayName: "FromUrl",
+function FromUrl(props) {
+  const [state, setState] = useState({
+    errors: null,
+  })
 
-  propTypes: {
-    actionCreator: PropTypes.object.isRequired,
-    params: PropTypes.object.isRequired,
-  },
-
-  getInitialState() {
-    return {
-      errors: null,
-    }
-  },
-
-  componentDidMount() {
-    fetchData(
-      this.props.params.dataUrl,
-      Object.prototype.hasOwnProperty.call(this.props.params, "withCredentials"),
-    )
-      .then(this.onFetchComplete)
-      .catch(this.onFetchError)
-  },
-
-  onFetchComplete(data) {
+  const onFetchComplete = data => {
     const errors = []
 
     if (!data) {
@@ -60,8 +42,8 @@ const FromUrl = createReactClass({
 
     let schema = null
 
-    if (this.props.params.schema) {
-      const fromUrl = decodeURIComponent(this.props.params.schema)
+    if (props.params.schema) {
+      const fromUrl = decodeURIComponent(props.params.schema)
 
       if (!validator.isValidJSON(fromUrl)) {
         errors.push("Schema must be valid JSON")
@@ -75,37 +57,44 @@ const FromUrl = createReactClass({
     }
 
     if (errors.length) {
-      this.setState({errors})
+      setState({errors})
       return
     }
 
     if (!schema) schema = schemaGenerator.generate(data[0])
 
-    this.props.actionCreator.saveJson("data", data)
-    this.props.actionCreator.saveJson("schema", schema)
-  },
+    props.actionCreator.saveJson("data", data)
+    props.actionCreator.saveJson("schema", schema)
+  }
 
-  onFetchError(err) {
-    this.setState({errors: [err.message]})
-  },
+  const onFetchError = err => {
+    setState({errors: [err.message]})
+  }
 
-  render() {
-    if (this.state.errors) {
-      return (
-        <div>
-          <br />
-          <Code language="json">{JSON.stringify(this.state.errors, null, 2)}</Code>
-        </div>
-      )
-    }
+  fetchData(props.params.dataUrl, props.params.withCredentials)
+    .then(onFetchComplete)
+    .catch(onFetchError)
 
+  if (state.errors) {
     return (
-      <div className="from-url-cont">
-        <img src="./gears.svg" />
-        <p>Working, please wait...</p>
+      <div>
+        <br />
+        <Code language="json">{JSON.stringify(state.errors, null, 2)}</Code>
       </div>
     )
-  },
-})
+  }
+
+  return (
+    <div className="from-url-cont">
+      <img src="./gears.svg" />
+      <p>Working, please wait...</p>
+    </div>
+  )
+}
+
+FromUrl.propTypes = {
+  actionCreator: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
+}
 
 module.exports = FromUrl

@@ -1,6 +1,6 @@
 const React = require("react")
+const useState = React.useState
 const PropTypes = require("prop-types")
-const createReactClass = require("create-react-class")
 
 const schemaGenerator = require("../../services/schema-generator")
 const formatDate = require("date-fns/format")
@@ -23,94 +23,79 @@ function addCalculations(fns, item) {
 
 const fns = {formatDate, differenceInDays, round: utils.round}
 
-const AddCalculations = createReactClass({
-  displayName: "AddCalculations",
+function AddCalculations(props) {
+  const [state, setState] = useState({
+    calculationsString: props.calculationsString || calculationsWrapper,
+    errors: "",
+  })
 
-  propTypes: {
-    schema: PropTypes.object.isRequired,
-    data: PropTypes.array.isRequired,
-    calculationsString: PropTypes.string,
-    calculatedFields: PropTypes.array.isRequired,
-    onSave: PropTypes.func.isRequired,
-    onCancel: PropTypes.func.isRequired,
-  },
-
-  getInitialState() {
-    return {
-      calculationsString: this.props.calculationsString || calculationsWrapper,
-      errors: "",
-    }
-  },
-
-  onSave() {
-    if (!this.state.calculationsString.length) {
-      this.props.onSave(this.props.schema, this.props.data, calculationsWrapper, [])
+  const onSave = () => {
+    if (!state.calculationsString.length) {
+      props.onSave(props.schema, props.data, calculationsWrapper, [])
       return
     }
 
     let calculationFn
 
     try {
-      calculationFn = eval(`(${this.state.calculationsString})`)
-      calculationFn(fns, this.props.data[0])
+      calculationFn = eval(`(${state.calculationsString})`)
+      calculationFn(fns, props.data[0])
     } catch (e) {
-      this.setState({
+      setState({
+        ...state,
         errors: e.stack,
       })
       return
     }
 
-    const schemaForCalculations = schemaGenerator.generate(calculationFn(fns, this.props.data[0]))
-    const schema = R.merge(
-      R.omit(this.props.calculatedFields, this.props.schema),
-      schemaForCalculations,
-    )
+    const schemaForCalculations = schemaGenerator.generate(calculationFn(fns, props.data[0]))
+    const schema = R.merge(R.omit(props.calculatedFields, props.schema), schemaForCalculations)
 
-    const data = R.map(
-      function(row) {
-        const calculations = calculationFn(fns, row)
-        return R.merge(R.omit(this.props.calculatedFields, row), calculations)
-      }.bind(this),
-      this.props.data,
-    )
+    const data = R.map(row => {
+      const calculations = calculationFn(fns, row)
+      return R.merge(R.omit(props.calculatedFields, row), calculations)
+    }, props.data)
 
-    this.props.onSave(schema, data, this.state.calculationsString, R.keys(schemaForCalculations))
-  },
+    props.onSave(schema, data, state.calculationsString, R.keys(schemaForCalculations))
+  }
 
-  onChange(e) {
-    this.setState({
+  const onChange = e => {
+    setState({
       calculationsString: e.target.value,
       errors: "",
     })
-  },
+  }
 
-  getErrorDisplay() {
-    if (!this.state.errors.length) return null
+  const getErrorDisplay = () => {
+    if (!state.errors.length) return null
 
-    return <Code language="json">{this.state.errors}</Code>
-  },
+    return <Code language="json">{state.errors}</Code>
+  }
 
-  render() {
-    return (
-      <div className="add-calculations-cont">
-        <h3>Add Calculations</h3>
-        <p>
-          <a className="site-link" onClick={this.props.onCancel}>
-            Back
-          </a>
-        </p>
-        <textarea
-          className="calculations"
-          value={this.state.calculationsString}
-          onChange={this.onChange}
-        />
-        {this.getErrorDisplay()}
-        <h4>Sample Data Item</h4>
-        <Code language="json">{JSON.stringify(this.props.data[0], null, 2)}</Code>
-        <button onClick={this.onSave}>Save</button>
-      </div>
-    )
-  },
-})
+  return (
+    <div className="add-calculations-cont">
+      <h3>Add Calculations</h3>
+      <p>
+        <a className="site-link" onClick={props.onCancel}>
+          Back
+        </a>
+      </p>
+      <textarea className="calculations" value={state.calculationsString} onChange={onChange} />
+      {getErrorDisplay()}
+      <h4>Sample Data Item</h4>
+      <Code language="json">{JSON.stringify(props.data[0], null, 2)}</Code>
+      <button onClick={onSave}>Save</button>
+    </div>
+  )
+}
+
+AddCalculations.propTypes = {
+  schema: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
+  calculationsString: PropTypes.string,
+  calculatedFields: PropTypes.array.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+}
 
 module.exports = AddCalculations
