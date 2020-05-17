@@ -1,8 +1,8 @@
 const React = require("react")
 const PropTypes = require("prop-types")
-const createReactClass = require("create-react-class")
-const R = require("ramda")
 const classNames = require("classnames")
+
+const R = require("ramda")
 
 const defaultInput = {}
 const dateInput = {placeholder: "YYYYMMDD", maxLength: 8}
@@ -76,21 +76,11 @@ const filterConfig = {
   ],
 }
 
-const FilterRow = createReactClass({
-  displayName: "FilterRow",
+function FilterRow(props) {
+  const getInputControlByType = () => {
+    if (!filterConfig[props.type]) return "Invalid Type"
 
-  propTypes: {
-    type: PropTypes.string.isRequired,
-    filter: PropTypes.object.isRequired,
-    onToggle: PropTypes.func.isRequired,
-    onDelete: PropTypes.func.isRequired,
-    onUpdate: PropTypes.func.isRequired,
-  },
-
-  getInputControlByType() {
-    if (!filterConfig[this.props.type]) return "Invalid Type"
-
-    const options = filterConfig[this.props.type].map(function(option) {
+    const options = filterConfig[props.type].map(function(option) {
       return (
         <option key={option.value} value={option.value}>
           {option.text}
@@ -100,82 +90,86 @@ const FilterRow = createReactClass({
 
     let inputs = []
     const selectedOperator = R.find(
-      R.propEq("value", this.props.filter.operator),
-      filterConfig[this.props.type],
+      R.propEq("value", props.filter.operator),
+      filterConfig[props.type],
     )
 
     if (selectedOperator && selectedOperator.inputs) {
-      inputs = selectedOperator.inputs.map(
-        function(inputConfig, index) {
-          const inc = index ? index : ""
+      inputs = selectedOperator.inputs.map(function(inputConfig, index) {
+        const inc = index ? index : ""
 
-          return React.createElement(
-            "input",
-            R.merge(
-              {
-                key: this.props.filter.id + inc,
-                type: "text",
-                name: this.props.filter.id + inc,
-                value: this.props.filter[`value${inc}`] || "",
-                onChange: this.updateFilter.bind(this, `value${inc}`),
-              },
-              inputConfig,
-            ),
-          )
-        }.bind(this),
-      )
+        return React.createElement(
+          "input",
+          R.merge(
+            {
+              key: props.filter.id + inc,
+              type: "text",
+              name: props.filter.id + inc,
+              value: props.filter[`value${inc}`] || "",
+              onChange: e => updateFilter(e, `value${inc}`),
+            },
+            inputConfig,
+          ),
+        )
+      })
     }
 
-    const classnames = classNames("filter-controls", this.props.type)
+    const classnames = classNames("filter-controls", props.type)
 
     return (
       <div className={classnames}>
         <select
-          name={this.props.filter.id}
-          value={this.props.filter.operator}
-          onChange={this.updateFilter.bind(this, "operator")}
+          name={props.filter.id}
+          value={props.filter.operator}
+          onChange={e => updateFilter(e, "operator")}
         >
           {options}
         </select>
         <div className="inputs">{inputs}</div>
       </div>
     )
-  },
+  }
 
-  toggleFilter() {
-    this.props.onToggle(this.props.filter.id, !this.props.filter.active)
-  },
+  const toggleFilter = () => {
+    props.onToggle(props.filter.id, !props.filter.active)
+  }
 
-  deleteFilter() {
-    this.props.onDelete(this.props.filter.id)
-  },
+  const deleteFilter = () => {
+    props.onDelete(props.filter.id)
+  }
 
-  updateFilter(prop, e) {
+  const updateFilter = (e, prop) => {
     const toUpdate = {}
     toUpdate[prop] = e.target.value
-    this.props.onUpdate(this.props.filter.id, toUpdate)
-  },
+    props.onUpdate(props.filter.id, toUpdate)
+  }
 
-  render() {
-    const toggleClass = this.props.filter.active ? "active" : "inactive"
+  const toggleClass = props.filter.active ? "active" : "inactive"
 
-    return (
-      <tr key={this.props.filter.id} className={toggleClass}>
-        <td>{this.props.filter.name}</td>
-        <td>{this.getInputControlByType()}</td>
-        <td>
-          <a className="site-link" onClick={this.toggleFilter}>
-            Toggle
-          </a>
-        </td>
-        <td>
-          <a className="site-link" onClick={this.deleteFilter}>
-            Remove
-          </a>
-        </td>
-      </tr>
-    )
-  },
-})
+  return (
+    <tr key={props.filter.id} className={toggleClass}>
+      <td>{props.filter.name}</td>
+      <td>{getInputControlByType()}</td>
+      <td>
+        <a className="site-link" onClick={toggleFilter}>
+          Toggle
+        </a>
+      </td>
+      <td>
+        <a className="site-link" onClick={deleteFilter}>
+          Remove
+        </a>
+      </td>
+    </tr>
+  )
+}
+
+FilterRow.propTypes = {
+  type: PropTypes.string.isRequired,
+  filter: PropTypes.object.isRequired,
+  onToggle: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+}
 
 module.exports = FilterRow
