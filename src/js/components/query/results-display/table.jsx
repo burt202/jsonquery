@@ -92,10 +92,14 @@ function TableDisplay(props) {
   return (
     <div>
       <ul className="side-options right">{downloadLinks}</ul>
-      <table className="table">
-        {tableHeader}
-        <tbody>{tableBodyRows}</tbody>
-      </table>
+      {props.resultFields.length === 0 ? (
+        "No columns selected"
+      ) : (
+        <table className="table">
+          {tableHeader}
+          <tbody>{tableBodyRows}</tbody>
+        </table>
+      )}
     </div>
   )
 }
@@ -104,6 +108,7 @@ TableDisplay.propTypes = {
   formatted: PropTypes.any.isRequired,
   downloadFormat: PropTypes.any.isRequired,
   onDownload: PropTypes.func.isRequired,
+  resultFields: PropTypes.array.isRequired,
   showToast: PropTypes.func,
 }
 

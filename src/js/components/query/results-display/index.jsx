@@ -133,6 +133,7 @@ function Results(props) {
         downloadFormat={downloadFormat}
         onDownload={type.downloader}
         showToast={showToast}
+        resultFields={props.resultFields}
       />
     )
   }

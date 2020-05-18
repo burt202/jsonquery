@@ -38,7 +38,9 @@ function JsonDisplay(props) {
     <div>
       <ul className="side-options right">{downloadLinks}</ul>
       <div>
-        <Code language="json">{props.formatted}</Code>
+        <Code language="json">
+          {props.resultFields.length === 0 ? "No columns selected" : props.formatted}
+        </Code>
       </div>
     </div>
   )
@@ -48,6 +50,7 @@ JsonDisplay.propTypes = {
   formatted: PropTypes.any.isRequired,
   downloadFormat: PropTypes.any.isRequired,
   onDownload: PropTypes.func.isRequired,
+  resultFields: PropTypes.array.isRequired,
   showToast: PropTypes.func,
 }
 
