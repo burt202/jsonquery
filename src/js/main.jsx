@@ -1,6 +1,8 @@
 const React = require("react")
+const useEffect = React.useEffect
+const useState = React.useState
 const PropTypes = require("prop-types")
-const createReactClass = require("create-react-class")
+
 const queryString = require("query-string")
 
 const store = require("./store/index")
@@ -12,28 +14,18 @@ const Query = require("./components/query")
 
 require("../css/app.css")
 
-const Main = createReactClass({
-  displayName: "Main",
+function Main(props) {
+  const [state, setState] = useState(store.getState())
 
-  propTypes: {
-    version: PropTypes.string.isRequired,
-  },
+  useEffect(() => {
+    const unsubscribe = store.subscribe(() => setState(store.getState()))
 
-  componentDidMount() {
-    this.unsubscribe = store.subscribe(this.update)
-  },
+    return () => {
+      unsubscribe()
+    }
+  }, [])
 
-  componentWillUnmount() {
-    this.unsubscribe()
-  },
-
-  update() {
-    this.forceUpdate()
-  },
-
-  getContent() {
-    const state = store.getState()
-
+  const getContent = () => {
     if (!state.schema || !state.data || !state.resultFields) {
       const parsed = queryString.parse(location.search)
 
@@ -63,11 +55,9 @@ const Main = createReactClass({
         combineRemainder={state.combineRemainder}
       />
     )
-  },
+  }
 
-  getToast() {
-    const state = store.getState()
-
+  const getToast = () => {
     if (state.toast) {
       return (
         <div className="toast-outer">
@@ -77,27 +67,29 @@ const Main = createReactClass({
     }
 
     return undefined
-  },
+  }
 
-  render() {
-    return (
-      <div>
-        <div className="header">
-          <h1>
-            <a href="/">JSONQuery</a>
-          </h1>
-          <span>
-            v{this.props.version} -{" "}
-            <a className="site-link" href="https://github.com/burt202/jsonquery">
-              Github
-            </a>
-          </span>
-        </div>
-        {this.getToast()}
-        {this.getContent()}
+  return (
+    <div>
+      <div className="header">
+        <h1>
+          <a href="/">JSONQuery</a>
+        </h1>
+        <span>
+          v{props.version} -{" "}
+          <a className="site-link" href="https://github.com/burt202/jsonquery">
+            Github
+          </a>
+        </span>
       </div>
-    )
-  },
-})
+      {getToast()}
+      {getContent()}
+    </div>
+  )
+}
+
+Main.propTypes = {
+  version: PropTypes.string.isRequired,
+}
 
 module.exports = Main

@@ -1,6 +1,6 @@
 const React = require("react")
+const useState = React.useState
 const PropTypes = require("prop-types")
-const createReactClass = require("create-react-class")
 
 const Bar = require("./charts/bar")
 const Pie = require("./charts/pie")
@@ -10,62 +10,46 @@ const chartTypeMap = {
   pie: Pie,
 }
 
-const ChartDisplay = createReactClass({
-  displayName: "ChartDisplay",
+function ChartDisplay(props) {
+  const [state, setState] = useState({
+    type: "bar",
+    title: "",
+  })
 
-  propTypes: {
-    formatted: PropTypes.any.isRequired,
-    onDownload: PropTypes.func,
-  },
-
-  getInitialState() {
-    return {
-      type: "bar",
-      title: "",
-    }
-  },
-
-  onDownload(chartInstance) {
-    this.props.onDownload(chartInstance)
-  },
-
-  onTypeChange(e) {
-    this.setState({
+  const onTypeChange = e => {
+    setState({
+      ...state,
       type: e.target.value,
     })
-  },
+  }
 
-  onTitleChange(e) {
-    this.setState({
+  const onTitleChange = e => {
+    setState({
+      ...state,
       title: e.target.value,
     })
-  },
+  }
 
-  render() {
-    const Component = chartTypeMap[this.state.type]
+  const Component = chartTypeMap[state.type]
 
-    return (
-      <div>
-        <p className="chart-options">
-          <label>Type:</label>
-          <select value={this.state.type} onChange={this.onTypeChange}>
-            <option value="bar">Bar</option>
-            <option value="pie">Pie</option>
-          </select>
-          <input
-            value={this.state.title}
-            onChange={this.onTitleChange}
-            placeholder="Chart name here..."
-          />
-        </p>
-        <Component
-          data={this.props.formatted}
-          title={this.state.title}
-          onDownload={this.props.onDownload}
-        />
-      </div>
-    )
-  },
-})
+  return (
+    <div>
+      <p className="chart-options">
+        <label>Type:</label>
+        <select value={state.type} onChange={onTypeChange}>
+          <option value="bar">Bar</option>
+          <option value="pie">Pie</option>
+        </select>
+        <input value={state.title} onChange={onTitleChange} placeholder="Chart name here..." />
+      </p>
+      <Component data={props.formatted} title={state.title} onDownload={props.onDownload} />
+    </div>
+  )
+}
+
+ChartDisplay.propTypes = {
+  formatted: PropTypes.any.isRequired,
+  onDownload: PropTypes.func,
+}
 
 module.exports = ChartDisplay

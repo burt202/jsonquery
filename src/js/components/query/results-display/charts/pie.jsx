@@ -1,4 +1,5 @@
 const React = require("react")
+const useRef = React.useRef
 const PropTypes = require("prop-types")
 
 const R = require("ramda")
@@ -15,6 +16,8 @@ function getColours(length) {
 }
 
 function PieChart(props) {
+  const chartComponent = useRef(null)
+
   const data = {
     labels: R.pluck("name", props.data),
     datasets: [
@@ -60,7 +63,7 @@ function PieChart(props) {
   }
 
   function onDownload() {
-    props.onDownload(this.chartComponent.chartInstance)
+    props.onDownload(chartComponent.chartInstance)
   }
 
   return (
@@ -72,7 +75,7 @@ function PieChart(props) {
           </a>
         </li>
       </ul>
-      <Pie data={data} options={options} ref={c => (this.chartComponent = c)} redraw />
+      <Pie data={data} options={options} ref={chartComponent} redraw />
     </div>
   )
 }

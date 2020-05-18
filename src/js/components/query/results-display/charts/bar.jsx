@@ -1,4 +1,5 @@
 const React = require("react")
+const useRef = React.useRef
 const PropTypes = require("prop-types")
 
 const R = require("ramda")
@@ -6,6 +7,8 @@ const R = require("ramda")
 const Bar = require("react-chartjs-2").Bar
 
 function BarChart(props) {
+  const chartComponent = useRef(null)
+
   const data = {
     labels: R.pluck("name", props.data),
     datasets: [
@@ -55,7 +58,7 @@ function BarChart(props) {
   }
 
   function onDownload() {
-    props.onDownload(this.chartComponent.chartInstance)
+    props.onDownload(chartComponent.chartInstance)
   }
 
   return (
@@ -67,7 +70,7 @@ function BarChart(props) {
           </a>
         </li>
       </ul>
-      <Bar data={data} options={options} ref={c => (this.chartComponent = c)} redraw />
+      <Bar data={data} options={options} ref={chartComponent} redraw />
     </div>
   )
 }

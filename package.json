@@ -30,7 +30,6 @@
   "dependencies": {
     "chart.js": "^2.9.3",
     "classnames": "^2.2.6",
-    "create-react-class": "^15.6.3",
     "date-fns": "^1.29.0",
     "flat": "^5.0.0",
     "prop-types": "^15.7.2",

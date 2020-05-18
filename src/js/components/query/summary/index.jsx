@@ -1,85 +1,75 @@
 const React = require("react")
 const PropTypes = require("prop-types")
-const createReactClass = require("create-react-class")
+
 const R = require("ramda")
 
 const dataProcessor = require("../../../services/data-processor")
 const summaryAnalyser = require("../../../services/summary-analyser")
 
-const Summary = createReactClass({
-  displayName: "ResultsSummary",
+function Summary(props) {
+  const getGrouping = () => {
+    return props.groupings.length ? dataProcessor.group(props.groupings, props.filtered) : null
+  }
 
-  propTypes: {
-    rawDataLength: PropTypes.number.isRequired,
-    filtered: PropTypes.array.isRequired,
-    groupings: PropTypes.array,
-    groupSort: PropTypes.string,
-    groupLimit: PropTypes.number,
-    schema: PropTypes.object.isRequired,
-  },
+  const getTotal = () => {
+    return {name: "Total", value: props.rawDataLength}
+  }
 
-  getGrouping() {
-    return this.props.groupings.length
-      ? dataProcessor.group(this.props.groupings, this.props.filtered)
-      : null
-  },
+  const getFilteredTotal = () => {
+    if (props.filtered.length === props.rawDataLength) return null
+    return summaryAnalyser.getFilteredTotal(props.filtered, props.rawDataLength)
+  }
 
-  getTotal() {
-    return {name: "Total", value: this.props.rawDataLength}
-  },
-
-  getFilteredTotal() {
-    if (this.props.filtered.length === this.props.rawDataLength) return null
-    return summaryAnalyser.getFilteredTotal(this.props.filtered, this.props.rawDataLength)
-  },
-
-  getGroupLimitedTotal(grouped) {
-    if (!this.props.groupings.length || !this.props.groupLimit) return null
+  const getGroupLimitedTotal = grouped => {
+    if (!props.groupings.length || !props.groupLimit) return null
     const limitedGroups = dataProcessor.groupProcessor(
-      this.props.schema,
+      props.schema,
       {name: "count"},
-      this.props.groupSort,
-      this.props.groupLimit,
+      props.groupSort,
+      props.groupLimit,
       false,
       grouped,
     )
-    return summaryAnalyser.getGroupLimitedTotal(
-      this.props.filtered,
-      this.props.rawDataLength,
-      limitedGroups,
-    )
-  },
+    return summaryAnalyser.getGroupLimitedTotal(props.filtered, props.rawDataLength, limitedGroups)
+  }
 
-  getGroupingAnalysis(grouped) {
-    if (!grouped || this.props.groupLimit) return null
+  const getGroupingAnalysis = grouped => {
+    if (!grouped || props.groupLimit) return null
     return summaryAnalyser.getGroupingAnalysis(grouped)
-  },
+  }
 
-  render() {
-    const grouped = this.getGrouping()
+  const grouped = getGrouping()
 
-    const summaryData = [
-      this.getTotal(),
-      this.getFilteredTotal(),
-      this.getGroupLimitedTotal(grouped),
-      this.getGroupingAnalysis(grouped),
-    ]
+  const summaryData = [
+    getTotal(),
+    getFilteredTotal(),
+    getGroupLimitedTotal(grouped),
+    getGroupingAnalysis(grouped),
+  ]
 
-    const fields = R.pipe(
-      R.flatten,
-      R.reject(R.isNil),
-      R.map(function(obj) {
-        return <p key={obj.name} title={obj.title}>{`${obj.name}: ${obj.value}`}</p>
-      }),
-    )(summaryData)
+  const fields = R.pipe(
+    R.flatten,
+    R.reject(R.isNil),
+    R.map(function(obj) {
+      return <p key={obj.name} title={obj.title}>{`${obj.name}: ${obj.value}`}</p>
+    }),
+  )(summaryData)
 
-    return (
-      <div className="summary-cont">
-        <h3>Summary</h3>
-        <div className="stats">{fields}</div>
-      </div>
-    )
-  },
-})
+  return (
+    <div className="summary-cont">
+      <h3>Summary</h3>
+      <div className="stats">{fields}</div>
+    </div>
+  )
+}
+
+Summary.propTypes = {
+  rawDataLength: PropTypes.number.isRequired,
+  filtered: PropTypes.array.isRequired,
+  groupings: PropTypes.array,
+  groupSort: PropTypes.string,
+  groupLimit: PropTypes.number,
+  schema: PropTypes.object.isRequired,
+}
 
 module.exports = Summary

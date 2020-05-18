@@ -1,8 +1,9 @@
 const React = require("react")
+const useState = React.useState
 const PropTypes = require("prop-types")
-const createReactClass = require("create-react-class")
-const R = require("ramda")
 const classNames = require("classnames")
+
+const R = require("ramda")
 
 const downloadFormatter = require("../../../services/download-formatter")
 const validator = require("../../../services/validator")
@@ -17,34 +18,16 @@ const Code = require("../../shared/code")
 
 const DISPLAY_THRESHOLD = 1000
 
-const Results = createReactClass({
-  displayName: "ResultsDisplay",
+function Results(props) {
+  const [state, setState] = useState({
+    type: "json",
+  })
 
-  propTypes: {
-    filtered: PropTypes.array.isRequired,
-    filteredLength: PropTypes.number.isRequired,
-    groupings: PropTypes.array,
-    resultFields: PropTypes.array.isRequired,
-    schema: PropTypes.object.isRequired,
-    actionCreator: PropTypes.object.isRequired,
-    groupReducer: PropTypes.object,
-    analyse: PropTypes.string,
-    groupSort: PropTypes.string.isRequired,
-    groupLimit: PropTypes.number,
-    combineRemainder: PropTypes.bool.isRequired,
-  },
+  const setType = type => {
+    setState({type})
+  }
 
-  getInitialState() {
-    return {
-      type: "json",
-    }
-  },
-
-  setType(type) {
-    this.setState({type})
-  },
-
-  getViewTypes() {
+  const getViewTypes = () => {
     const downloaders = getDownloaders()
 
     return {
@@ -67,51 +50,49 @@ const Results = createReactClass({
         component: ChartDisplay,
       },
     }
-  },
+  }
 
-  getViewTypesLinks() {
-    return R.toPairs(this.getViewTypes()).map(
-      function(pair) {
-        const classnames = classNames({
-          active: this.state.type === pair[0],
-        })
+  const getViewTypesLinks = () => {
+    return R.toPairs(getViewTypes()).map(function(pair) {
+      const classnames = classNames({
+        active: state.type === pair[0],
+      })
 
-        return (
-          <li key={pair[0]} className={classnames}>
-            <a className="site-link" onClick={this.setType.bind(this, pair[0])}>
-              {pair[1].name}
-            </a>
-          </li>
-        )
-      }.bind(this),
-    )
-  },
+      return (
+        <li key={pair[0]} className={classnames}>
+          <a className="site-link" onClick={() => setType(pair[0])}>
+            {pair[1].name}
+          </a>
+        </li>
+      )
+    })
+  }
 
-  showToast() {
-    const actionCreator = this.props.actionCreator
+  const showToast = () => {
+    const actionCreator = props.actionCreator
 
     actionCreator.showToast("Copied!")
 
     setTimeout(function() {
       actionCreator.removeToast()
     }, 3000)
-  },
+  }
 
-  isAggregateResult() {
-    return this.props.groupReducer || this.props.analyse
-  },
+  const isAggregateResult = () => {
+    return props.groupReducer || props.analyse
+  }
 
-  tooManyResultToShow() {
-    return this.props.filteredLength > DISPLAY_THRESHOLD
-  },
+  const tooManyResultToShow = () => {
+    return props.filteredLength > DISPLAY_THRESHOLD
+  }
 
-  getDisplayData(results) {
-    const viewTypes = this.getViewTypes()
-    const type = viewTypes[this.state.type]
+  const getDisplayData = results => {
+    const viewTypes = getViewTypes()
+    const type = viewTypes[state.type]
 
     if (validator.isString(results)) return <Code language="json">{results}</Code>
 
-    if (this.state.type === "chart" && (!this.props.groupings.length || !this.props.groupReducer)) {
+    if (state.type === "chart" && (!props.groupings.length || !props.groupReducer)) {
       return (
         <Code language="json">
           You must select a grouping with a reducer to use the charts display
@@ -119,7 +100,7 @@ const Results = createReactClass({
       )
     }
 
-    if (this.state.type === "chart" && this.props.groupings.length > 1) {
+    if (state.type === "chart" && props.groupings.length > 1) {
       return (
         <Code language="json">
           Currently only one level of grouping is supported in the charts display
@@ -128,21 +109,21 @@ const Results = createReactClass({
     }
 
     const downloadFormat = downloadFormatter[type.extension]
-      ? downloadFormatter[type.extension](this.props.groupings, this.props.groupReducer, results)
+      ? downloadFormatter[type.extension](props.groupings, props.groupReducer, results)
       : results
 
-    if (!this.isAggregateResult() && this.tooManyResultToShow()) {
+    if (!isAggregateResult() && tooManyResultToShow()) {
       return (
         <JsonDisplay
           formatted={`Results set too large to display, use download link for .${type.extension} file`}
           downloadFormat={downloadFormat}
-          onDownload={viewTypes[this.state.type].downloader}
+          onDownload={viewTypes[state.type].downloader}
         />
       )
     }
 
-    const formatted = downloadFormatter[this.state.type]
-      ? downloadFormatter[this.state.type](this.props.groupings, this.props.groupReducer, results)
+    const formatted = downloadFormatter[state.type]
+      ? downloadFormatter[state.type](props.groupings, props.groupReducer, results)
       : results
 
     const Component = type.component
@@ -151,46 +132,58 @@ const Results = createReactClass({
         formatted={formatted}
         downloadFormat={downloadFormat}
         onDownload={type.downloader}
-        showToast={this.showToast}
+        showToast={showToast}
       />
     )
-  },
+  }
 
-  formatData(data) {
-    if (this.props.groupings.length) {
-      const grouped = dataProcessor.group(this.props.groupings, data)
-      return this.props.groupReducer
+  const formatData = data => {
+    if (props.groupings.length) {
+      const grouped = dataProcessor.group(props.groupings, data)
+      return props.groupReducer
         ? dataProcessor.groupProcessor(
-            this.props.schema,
-            this.props.groupReducer,
-            this.props.groupSort,
-            this.props.groupLimit,
-            this.props.combineRemainder,
+            props.schema,
+            props.groupReducer,
+            props.groupSort,
+            props.groupLimit,
+            props.combineRemainder,
             grouped,
           )
         : grouped
     }
 
-    if (this.props.analyse)
-      return dataProcessor.analyse(this.props.schema[this.props.analyse], this.props.analyse, data)
+    if (props.analyse)
+      return dataProcessor.analyse(props.schema[props.analyse], props.analyse, data)
 
     return data
-  },
+  }
 
-  render() {
-    const results = this.formatData(this.props.filtered)
+  const results = formatData(props.filtered)
 
-    return (
-      <div className="results-cont">
-        <h3>Results</h3>
-        <div className="results-options">
-          <ul className="side-options">{this.getViewTypesLinks()}</ul>
-        </div>
-        {this.getDisplayData(results)}
-        <a id="hidden-download-link" style={{display: "none"}}></a>
+  return (
+    <div className="results-cont">
+      <h3>Results</h3>
+      <div className="results-options">
+        <ul className="side-options">{getViewTypesLinks()}</ul>
       </div>
-    )
-  },
-})
+      {getDisplayData(results)}
+      <a id="hidden-download-link" style={{display: "none"}}></a>
+    </div>
+  )
+}
+
+Results.propTypes = {
+  filtered: PropTypes.array.isRequired,
+  filteredLength: PropTypes.number.isRequired,
+  groupings: PropTypes.array,
+  resultFields: PropTypes.array.isRequired,
+  schema: PropTypes.object.isRequired,
+  actionCreator: PropTypes.object.isRequired,
+  groupReducer: PropTypes.object,
+  analyse: PropTypes.string,
+  groupSort: PropTypes.string.isRequired,
+  groupLimit: PropTypes.number,
+  combineRemainder: PropTypes.bool.isRequired,
+}
 
 module.exports = Results
