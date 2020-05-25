@@ -2,7 +2,7 @@ const R = require("ramda")
 const utils = require("../../utils")
 
 const analysisByType = {
-  string: ["mostCommonValue"],
+  string: ["mostCommonValue", "uniqueValues"],
   number: ["lowest", "highest", "sum", "average", "median", "mode"],
   bool: [],
   date: ["earliestDate", "latestDate"],
@@ -22,6 +22,7 @@ const funcs = {
   highestLength: values => R.compose(utils.getMax, R.map(R.length))(values),
   averageLength: values => R.compose(utils.round(2), R.mean, R.map(R.length))(values),
   mostCommonValue: values => R.compose(utils.getMode, R.flatten, R.map(R.identity))(values),
+  uniqueValues: values => R.uniq(values),
 }
 
 module.exports = function(type, field, data) {
