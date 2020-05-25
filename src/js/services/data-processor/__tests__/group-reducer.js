@@ -3,7 +3,7 @@ const expect = chai.expect
 
 const groupReducer = require("../group-reducer")
 
-describe("groupReducer", function() {
+describe("groupReducer", () => {
   const mockDataForGrouping = {
     cash: [
       {name: "foo", type: "cash", auto: true},
@@ -17,16 +17,16 @@ describe("groupReducer", function() {
     ],
   }
 
-  it("should return passed in data if reducer is undefined", function() {
+  it("should return passed in data if reducer is undefined", () => {
     expect(groupReducer({}, undefined, mockDataForGrouping)).to.eql(mockDataForGrouping)
   })
 
-  it("should return passed in data if reducer name is not recognised", function() {
+  it("should return passed in data if reducer name is not recognised", () => {
     expect(groupReducer({}, {name: "invalid"}, mockDataForGrouping)).to.eql(mockDataForGrouping)
   })
 
-  describe("count", function() {
-    it("should reduce group down to length of group", function() {
+  describe("count", () => {
+    it("should reduce group down to length of group", () => {
       expect(groupReducer({}, {name: "count"}, mockDataForGrouping)).to.eql({
         card: {count: 3, reducer: 3},
         cash: {count: 2, reducer: 2},
@@ -35,8 +35,8 @@ describe("groupReducer", function() {
     })
   })
 
-  describe("percentage", function() {
-    it("should reduce group down to percentage of group size against total items", function() {
+  describe("percentage", () => {
+    it("should reduce group down to percentage of group size against total items", () => {
       expect(groupReducer({}, {name: "percentage"}, mockDataForGrouping)).to.eql({
         card: {count: 3, reducer: 50},
         cash: {count: 2, reducer: 33.33},
@@ -45,8 +45,8 @@ describe("groupReducer", function() {
     })
   })
 
-  describe("countCondition", function() {
-    it("should reduce group down to count based on a condition", function() {
+  describe("countCondition", () => {
+    it("should reduce group down to count based on a condition", () => {
       expect(
         groupReducer(
           {auto: "bool"},
@@ -60,7 +60,7 @@ describe("groupReducer", function() {
       })
     })
 
-    it("should return 'N/A' when field or value is not present", function() {
+    it("should return 'N/A' when field or value is not present", () => {
       expect(groupReducer({}, {name: "countCondition"}, mockDataForGrouping)).to.eql({
         card: {count: 3, reducer: "N/A"},
         cash: {count: 2, reducer: "N/A"},
@@ -69,8 +69,8 @@ describe("groupReducer", function() {
     })
   })
 
-  describe("percentageCondition", function() {
-    it("should reduce group down to count based on a condition", function() {
+  describe("percentageCondition", () => {
+    it("should reduce group down to count based on a condition", () => {
       expect(
         groupReducer(
           {auto: "bool"},
@@ -84,7 +84,7 @@ describe("groupReducer", function() {
       })
     })
 
-    it("should return 'N/A' when field or value is not present", function() {
+    it("should return 'N/A' when field or value is not present", () => {
       expect(groupReducer({}, {name: "percentageCondition"}, mockDataForGrouping)).to.eql({
         card: {count: 3, reducer: "N/A"},
         cash: {count: 2, reducer: "N/A"},

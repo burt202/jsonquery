@@ -15,7 +15,7 @@ function Filters(props) {
   }
 
   const getFilterControl = () => {
-    const options = Object.keys(props.schema).map(function(value) {
+    const options = Object.keys(props.schema).map(value => {
       return (
         <option value={value} key={value}>
           {value}
@@ -46,7 +46,7 @@ function Filters(props) {
         </tr>
       )
 
-    return props.filters.map(function(filter) {
+    return props.filters.map(filter => {
       return (
         <FilterRow
           key={filter.id}

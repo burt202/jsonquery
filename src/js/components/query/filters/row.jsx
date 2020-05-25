@@ -80,7 +80,7 @@ function FilterRow(props) {
   const getInputControlByType = () => {
     if (!filterConfig[props.type]) return "Invalid Type"
 
-    const options = filterConfig[props.type].map(function(option) {
+    const options = filterConfig[props.type].map(option => {
       return (
         <option key={option.value} value={option.value}>
           {option.text}
@@ -95,7 +95,7 @@ function FilterRow(props) {
     )
 
     if (selectedOperator && selectedOperator.inputs) {
-      inputs = selectedOperator.inputs.map(function(inputConfig, index) {
+      inputs = selectedOperator.inputs.map((inputConfig, index) => {
         const inc = index ? index : ""
 
         return React.createElement(

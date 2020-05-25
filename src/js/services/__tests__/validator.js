@@ -3,56 +3,56 @@ const expect = chai.expect
 
 const validator = require("../validator")
 
-describe("validator", function() {
-  describe("isString", function() {
-    it("should return true when data is string", function() {
+describe("validator", () => {
+  describe("isString", () => {
+    it("should return true when data is string", () => {
       expect(validator.isString("dd")).to.eql(true)
     })
 
-    it("should return false when data is not string", function() {
+    it("should return false when data is not string", () => {
       expect(validator.isString({})).to.eql(false)
     })
   })
 
-  describe("isNumber", function() {
-    it("should return true when data is number", function() {
+  describe("isNumber", () => {
+    it("should return true when data is number", () => {
       expect(validator.isNumber(33)).to.eql(true)
     })
 
-    it("should return false when data is not number", function() {
+    it("should return false when data is not number", () => {
       expect(validator.isNumber({})).to.eql(false)
     })
   })
 
-  describe("isBool", function() {
-    it("should return true when data is boolean", function() {
+  describe("isBool", () => {
+    it("should return true when data is boolean", () => {
       expect(validator.isBool(true)).to.eql(true)
     })
 
-    it("should return false when data is not boolean", function() {
+    it("should return false when data is not boolean", () => {
       expect(validator.isBool({})).to.eql(false)
     })
   })
 
-  describe("isValidDate", function() {
-    it("should return true when data is a date", function() {
+  describe("isValidDate", () => {
+    it("should return true when data is a date", () => {
       expect(validator.isValidDate("2009-09")).to.eql(true)
     })
 
-    it("should return false when data is not a date", function() {
+    it("should return false when data is not a date", () => {
       expect(validator.isValidDate("date")).to.eql(false)
     })
   })
 
-  describe("isValidTime", function() {
-    it("should return true when data is a time stamp", function() {
+  describe("isValidTime", () => {
+    it("should return true when data is a time stamp", () => {
       expect(validator.isValidTime("22:16")).to.eql(true)
       expect(validator.isValidTime("10:16")).to.eql(true)
       expect(validator.isValidTime("00:16")).to.eql(true)
       expect(validator.isValidTime("00:16:09")).to.eql(true)
     })
 
-    it("should return false when data is not a time stamp", function() {
+    it("should return false when data is not a time stamp", () => {
       expect(validator.isValidTime("time")).to.eql(false)
       expect(validator.isValidTime("22:66")).to.eql(false)
       expect(validator.isValidTime("22:66a")).to.eql(false)
@@ -65,42 +65,42 @@ describe("validator", function() {
     })
   })
 
-  describe("isArray", function() {
-    it("should return true when data is array", function() {
+  describe("isArray", () => {
+    it("should return true when data is array", () => {
       expect(validator.isArray(["foo"])).to.eql(true)
     })
 
-    it("should return false when data is not array", function() {
+    it("should return false when data is not array", () => {
       expect(validator.isArray({})).to.eql(false)
     })
   })
 
-  describe("isObject", function() {
-    it("should return true when data is object", function() {
+  describe("isObject", () => {
+    it("should return true when data is object", () => {
       expect(validator.isObject({})).to.eql(true)
     })
 
-    it("should return false when data is not object", function() {
+    it("should return false when data is not object", () => {
       expect(validator.isObject(["foo"])).to.eql(false)
     })
   })
 
-  describe("isValidJSON", function() {
-    it("should return true if string is json", function() {
+  describe("isValidJSON", () => {
+    it("should return true if string is json", () => {
       expect(validator.isValidJSON('{"foo": "bar"}')).to.eql(true)
     })
 
-    it("should return false if string is not json", function() {
+    it("should return false if string is not json", () => {
       expect(validator.isValidJSON("jhfds")).to.eql(false)
     })
   })
 
-  describe("isStringNumeric", function() {
-    it("should return true when string is valid number", function() {
+  describe("isStringNumeric", () => {
+    it("should return true when string is valid number", () => {
       expect(validator.isStringNumeric("2.12")).to.eql(true)
     })
 
-    it("should return false when string is not valid number", function() {
+    it("should return false when string is not valid number", () => {
       expect(validator.isStringNumeric("foo")).to.eql(false)
     })
   })

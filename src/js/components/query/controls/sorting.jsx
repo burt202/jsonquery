@@ -14,7 +14,7 @@ function SortingControl(props) {
     const toSet = {}
     toSet[prop] = e.target.value
 
-    setState(toSet, function() {
+    setState(toSet, () => {
       if (state.field !== null && state.direction !== null) {
         props.onAdd(state)
         setState(initialState)
@@ -23,7 +23,7 @@ function SortingControl(props) {
   }
 
   const getRows = () => {
-    return props.sorters.map(function(sorter) {
+    return props.sorters.map(sorter => {
       return (
         <div className="row" key={sorter.field}>
           <div className="sorter">
@@ -37,7 +37,7 @@ function SortingControl(props) {
     })
   }
 
-  const options = props.options.map(function(value) {
+  const options = props.options.map(value => {
     return (
       <option value={value} key={value}>
         {value}

@@ -10,7 +10,7 @@ const Pie = require("react-chartjs-2").Pie
 function getColours(length) {
   let count = 0
 
-  return R.range(1, length).map(function() {
+  return R.range(1, length).map(() => {
     return utils.rainbow(length, count++)
   })
 }

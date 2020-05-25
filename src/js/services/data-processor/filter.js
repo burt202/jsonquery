@@ -5,16 +5,16 @@ const filterTypes = require("./filter-types")
 function formatFilters(filters) {
   return R.pipe(
     R.toPairs,
-    R.reduce(function(acc, pair) {
+    R.reduce((acc, pair) => {
       acc[pair[0]] = R.allPass(pair[1])
       return acc
     }, {}),
   )(filters)
 }
 
-module.exports = function(data, schema, filters) {
+module.exports = (data, schema, filters) => {
   const builtFilters = R.reduce(
-    function(acc, filter) {
+    (acc, filter) => {
       if (!filter.active) return acc
 
       const type = schema[filter.name]

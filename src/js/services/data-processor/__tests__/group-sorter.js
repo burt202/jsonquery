@@ -3,7 +3,7 @@ const expect = chai.expect
 
 const groupSorter = require("../group-sorter")
 
-describe("groupSorter", function() {
+describe("groupSorter", () => {
   const mockDataForSorting = {
     "cash - true": {count: 1, reducer: 1},
     "loan - true": {count: 1, reducer: 1},
@@ -12,11 +12,11 @@ describe("groupSorter", function() {
     "card - false": {count: 1, reducer: 1},
   }
 
-  it("should return passed in data if sortField is undefined", function() {
+  it("should return passed in data if sortField is undefined", () => {
     expect(groupSorter(undefined, mockDataForSorting)).to.eql(mockDataForSorting)
   })
 
-  it("should return object in order of count descending", function() {
+  it("should return object in order of count descending", () => {
     expect(groupSorter("desc", mockDataForSorting)).to.eql([
       {name: "card - true", reducer: 2},
       {name: "cash - true", reducer: 1},
@@ -26,7 +26,7 @@ describe("groupSorter", function() {
     ])
   })
 
-  it("should return object in order of count ascending", function() {
+  it("should return object in order of count ascending", () => {
     expect(groupSorter("asc", mockDataForSorting)).to.eql([
       {name: "cash - true", reducer: 1},
       {name: "loan - true", reducer: 1},
@@ -36,7 +36,7 @@ describe("groupSorter", function() {
     ])
   })
 
-  it("should return object in order of name descending", function() {
+  it("should return object in order of name descending", () => {
     expect(groupSorter("namedesc", mockDataForSorting)).to.eql([
       {name: "loan - true", reducer: 1},
       {name: "cash - true", reducer: 1},
@@ -46,7 +46,7 @@ describe("groupSorter", function() {
     ])
   })
 
-  it("should return object in order of name ascending", function() {
+  it("should return object in order of name ascending", () => {
     expect(groupSorter("nameasc", mockDataForSorting)).to.eql([
       {name: "card - false", reducer: 1},
       {name: "card - true", reducer: 2},
@@ -56,7 +56,7 @@ describe("groupSorter", function() {
     ])
   })
 
-  it("should return object in order of path/count descending", function() {
+  it("should return object in order of path/count descending", () => {
     expect(groupSorter("pathdesc", mockDataForSorting)).to.eql([
       {name: "card - true", reducer: 2},
       {name: "card - false", reducer: 1},
@@ -66,7 +66,7 @@ describe("groupSorter", function() {
     ])
   })
 
-  it("should return object in order of path/count ascending", function() {
+  it("should return object in order of path/count ascending", () => {
     expect(groupSorter("pathasc", mockDataForSorting)).to.eql([
       {name: "card - false", reducer: 1},
       {name: "card - true", reducer: 2},
@@ -76,7 +76,7 @@ describe("groupSorter", function() {
     ])
   })
 
-  it("should return object in order of reducer descending", function() {
+  it("should return object in order of reducer descending", () => {
     expect(groupSorter("reducerdesc", mockDataForSorting)).to.eql([
       {name: "card - true", reducer: 2},
       {name: "cash - true", reducer: 1},
@@ -86,7 +86,7 @@ describe("groupSorter", function() {
     ])
   })
 
-  it("should return object in order of reducer ascending", function() {
+  it("should return object in order of reducer ascending", () => {
     expect(groupSorter("reducerasc", mockDataForSorting)).to.eql([
       {name: "cash - true", reducer: 1},
       {name: "loan - true", reducer: 1},
@@ -96,7 +96,7 @@ describe("groupSorter", function() {
     ])
   })
 
-  it("should return object in natural order of full month name", function() {
+  it("should return object in natural order of full month name", () => {
     const data = {
       November: {count: 4081, reducer: 4081},
       April: {count: 5777, reducer: 5777},
@@ -128,7 +128,7 @@ describe("groupSorter", function() {
     ])
   })
 
-  it("should return object in natural order of short month name", function() {
+  it("should return object in natural order of short month name", () => {
     const data = {
       Nov: {count: 4081, reducer: 4081},
       Apr: {count: 5777, reducer: 5777},
@@ -160,7 +160,7 @@ describe("groupSorter", function() {
     ])
   })
 
-  it("should return object in natural order of full day name", function() {
+  it("should return object in natural order of full day name", () => {
     const data = {
       Friday: {count: 4081, reducer: 4081},
       Wednesday: {count: 5777, reducer: 5777},
@@ -182,7 +182,7 @@ describe("groupSorter", function() {
     ])
   })
 
-  it("should return object in natural order of short day name", function() {
+  it("should return object in natural order of short day name", () => {
     const data = {
       Fri: {count: 4081, reducer: 4081},
       Wed: {count: 5777, reducer: 5777},
@@ -204,7 +204,7 @@ describe("groupSorter", function() {
     ])
   })
 
-  it("should sort name descending naturally if all numbers", function() {
+  it("should sort name descending naturally if all numbers", () => {
     const data = {
       "52": {count: 4081, reducer: 4081},
       "100": {count: 5777, reducer: 5777},
@@ -226,7 +226,7 @@ describe("groupSorter", function() {
     ])
   })
 
-  it("should return error when no matcher is found for data", function() {
+  it("should return error when no matcher is found for data", () => {
     const data = {
       "52": {count: 4081},
       "100": {count: 5777},

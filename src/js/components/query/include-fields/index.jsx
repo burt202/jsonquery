@@ -21,7 +21,7 @@ function IncludeFields(props) {
   const getResultFieldOptions = () => {
     const schemaKeys = R.sortBy(R.identity, R.keys(props.schema))
 
-    return schemaKeys.map(function(field) {
+    return schemaKeys.map(field => {
       const checked = R.contains(field, props.resultFields)
       const disabled = R.contains(field, props.groupings)
 

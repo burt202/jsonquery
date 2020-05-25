@@ -3,7 +3,7 @@ const expect = chai.expect
 
 const groupFilterer = require("../group-filterer")
 
-describe("groupFilterer", function() {
+describe("groupFilterer", () => {
   const mockDataForGrouping = {
     cash: [
       {name: "foo", type: "cash", auto: true},
@@ -17,11 +17,11 @@ describe("groupFilterer", function() {
     ],
   }
 
-  it("should return passed in data if filter is undefined", function() {
+  it("should return passed in data if filter is undefined", () => {
     expect(groupFilterer(undefined, mockDataForGrouping)).to.eql(mockDataForGrouping)
   })
 
-  it("should return groups with length = 3", function() {
+  it("should return groups with length = 3", () => {
     expect(groupFilterer({operator: "eq", value: 3}, mockDataForGrouping)).to.eql({
       card: [
         {name: "abc", type: "card", auto: true},
@@ -31,7 +31,7 @@ describe("groupFilterer", function() {
     })
   })
 
-  it("should return groups with length < 3", function() {
+  it("should return groups with length < 3", () => {
     expect(groupFilterer({operator: "lt", value: 3}, mockDataForGrouping)).to.eql({
       cash: [
         {name: "foo", type: "cash", auto: true},
@@ -41,7 +41,7 @@ describe("groupFilterer", function() {
     })
   })
 
-  it("should return groups with length <= 3", function() {
+  it("should return groups with length <= 3", () => {
     expect(groupFilterer({operator: "lte", value: 3}, mockDataForGrouping)).to.eql({
       cash: [
         {name: "foo", type: "cash", auto: true},
@@ -56,7 +56,7 @@ describe("groupFilterer", function() {
     })
   })
 
-  it("should return groups with length > 1", function() {
+  it("should return groups with length > 1", () => {
     expect(groupFilterer({operator: "gt", value: 1}, mockDataForGrouping)).to.eql({
       cash: [
         {name: "foo", type: "cash", auto: true},
@@ -70,7 +70,7 @@ describe("groupFilterer", function() {
     })
   })
 
-  it("should return groups with length >= 2", function() {
+  it("should return groups with length >= 2", () => {
     expect(groupFilterer({operator: "gte", value: 2}, mockDataForGrouping)).to.eql({
       cash: [
         {name: "foo", type: "cash", auto: true},

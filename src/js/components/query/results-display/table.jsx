@@ -21,7 +21,7 @@ function TableDisplay(props) {
   let tableHeader = null
 
   if (header) {
-    const headerRow = header.cols.map(function(col, index) {
+    const headerRow = header.cols.map((col, index) => {
       return (
         <th key={index} className="clickable" title="Copy column data">
           <span
@@ -44,7 +44,7 @@ function TableDisplay(props) {
 
   const dataRows = R.reject(R.propEq("type", "header"), props.formatted)
 
-  const tableBodyRows = dataRows.map(function(row, index) {
+  const tableBodyRows = dataRows.map((row, index) => {
     if (row.type === "title") {
       return (
         <tr key={index}>
@@ -55,7 +55,7 @@ function TableDisplay(props) {
       )
     }
 
-    const cols = row.cols.map(function(col, index) {
+    const cols = row.cols.map((col, index) => {
       if (typeof col === "boolean") col = col.toString()
       return <td key={index}>{col}</td>
     })

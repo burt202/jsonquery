@@ -5,7 +5,7 @@ module.exports = {
   generate(data) {
     return R.pipe(
       R.toPairs,
-      R.reduce(function(acc, pair) {
+      R.reduce((acc, pair) => {
         acc[pair[0]] = "string"
 
         if (pair[1] !== null && pair[1] !== undefined) {

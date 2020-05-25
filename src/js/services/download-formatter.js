@@ -16,7 +16,7 @@ function tableFromArray(json) {
   const header = {type: "header", cols: R.keys(json[0])}
 
   return R.pipe(
-    R.map(function(row) {
+    R.map(row => {
       return {type: "data", cols: R.compose(R.map(_makeTableSafe), R.values)(row)}
     }),
     R.prepend(header),
@@ -26,7 +26,7 @@ function tableFromArray(json) {
 function tableFromObject(json) {
   return R.pipe(
     R.toPairs,
-    R.map(function(row) {
+    R.map(row => {
       return {type: "data", cols: R.map(_makeTableSafe)(row)}
     }),
   )(json)
@@ -35,7 +35,7 @@ function tableFromObject(json) {
 function _getHeader(obj) {
   return R.pipe(
     R.toPairs,
-    R.map(function(pair) {
+    R.map(pair => {
       if (Array.isArray(pair[1])) return R.compose(R.keys, R.head)(pair[1])
       return _getHeader(pair[1])
     }),
@@ -47,14 +47,14 @@ function _getHeader(obj) {
 function _getGroupedData(obj) {
   return R.pipe(
     R.toPairs,
-    R.map(function(pair) {
+    R.map(pair => {
       if (Array.isArray(pair[1])) {
         const span = R.keys(pair[1][0]).length
 
         return [{type: "title", cols: [_makeTableSafe(pair[0])], span}].concat(
           R.map(
             R.compose(
-              function(cols) {
+              cols => {
                 return {type: "data", cols}
               },
               R.map(_makeTableSafe),
@@ -67,7 +67,7 @@ function _getGroupedData(obj) {
 
       return _getGroupedData(
         R.reduce(
-          function(acc, val) {
+          (acc, val) => {
             const key = `${pair[0]} - ${val[0]}`
             acc[key] = val[1]
             return acc
@@ -88,11 +88,11 @@ function tableFromGroupedData(json) {
 }
 
 const formatters = {
-  json: R.curry(function(groupings, groupReducer, json) {
+  json: R.curry((groupings, groupReducer, json) => {
     return JSON.stringify(json, null, 2)
   }),
 
-  table: R.curry(function(groupings, groupReducer, json) {
+  table: R.curry((groupings, groupReducer, json) => {
     if (R.isEmpty(json)) return []
     if (Array.isArray(json)) return tableFromArray(json)
     if (groupReducer)
@@ -103,7 +103,7 @@ const formatters = {
     return tableFromObject(json)
   }),
 
-  csv: R.curry(function(groupings, groupReducer, json) {
+  csv: R.curry((groupings, groupReducer, json) => {
     if (R.isEmpty(json)) return null
     const rows = formatters.table(groupings, groupReducer, json)
 

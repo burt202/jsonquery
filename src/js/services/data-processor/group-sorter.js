@@ -29,7 +29,7 @@ Short month names: Jan, Feb, Mar...
 Full day names: Monday, Tuesday, Wednesday...
 Short day names: Mon, Tue, Wed...`
 
-module.exports = function(sortField, data) {
+module.exports = (sortField, data) => {
   if (!sortField) return data
 
   let sorters = [R.descend(R.prop("count"))]
@@ -44,13 +44,13 @@ module.exports = function(sortField, data) {
   if (sortField === "natural") {
     const fieldsString = R.compose(R.join(""), R.sort(R.ascend(R.identity)), R.keys)(data)
 
-    const matcher = R.find(function(orders) {
+    const matcher = R.find(orders => {
       return R.compose(R.join(""), R.sort(R.ascend(R.identity)))(orders) === fieldsString
     }, naturalOrders)
 
     if (matcher) {
       sorters = [
-        function(a, b) {
+        (a, b) => {
           return matcher.indexOf(a.name) - matcher.indexOf(b.name)
         },
       ]
@@ -63,7 +63,7 @@ module.exports = function(sortField, data) {
 
   return R.pipe(
     R.toPairs,
-    R.map(function(pair) {
+    R.map(pair => {
       const path = R.compose(R.join(","), R.init, R.split(" - "))(pair[0])
       const name = keysAreNumbers ? parseFloat(pair[0]) : pair[0]
       const count = pair[1].count

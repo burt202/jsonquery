@@ -1,8 +1,8 @@
 const R = require("ramda")
 
-module.exports = function() {
+module.exports = () => {
   return {
-    base: R.curry(function(extension, mimetype, formatted) {
+    base: R.curry((extension, mimetype, formatted) => {
       const dataStr = URL.createObjectURL(new Blob([formatted], {type: mimetype}))
 
       const downloadLink = document.getElementById("hidden-download-link")
@@ -11,7 +11,7 @@ module.exports = function() {
       downloadLink.click()
       downloadLink.setAttribute("href", "")
     }),
-    chart: R.curry(function(extension, mimetype, chart) {
+    chart: R.curry((extension, mimetype, chart) => {
       const width = chart.ctx.canvas.width
       const height = chart.ctx.canvas.height
 

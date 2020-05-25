@@ -1,10 +1,10 @@
 const R = require("ramda")
 
-module.exports = function(limit, combineRemainder, data) {
+module.exports = (limit, combineRemainder, data) => {
   if (!limit) return data
   if (typeof data === "string") return data
 
-  return R.pipe(R.splitAt(limit), function(split) {
+  return R.pipe(R.splitAt(limit), split => {
     if (!combineRemainder) return split[0]
     const other = R.pipe(R.takeLast(data.length - limit), R.map(R.prop("reducer")), R.sum)(data)
 

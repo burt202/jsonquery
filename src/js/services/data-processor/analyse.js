@@ -25,11 +25,11 @@ const funcs = {
   uniqueValues: values => R.uniq(values),
 }
 
-module.exports = function(type, field, data) {
+module.exports = (type, field, data) => {
   const values = R.pluck(field, data)
 
   return R.reduce(
-    function(acc, val) {
+    (acc, val) => {
       acc[val] = funcs[val](values)
       return acc
     },

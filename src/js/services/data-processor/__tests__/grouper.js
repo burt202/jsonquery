@@ -3,7 +3,7 @@ const expect = chai.expect
 
 const grouper = require("../grouper")
 
-describe("grouper", function() {
+describe("grouper", () => {
   const mockDataForGrouping = [
     {name: "foo", type: "cash", auto: true},
     {name: "bar", type: "cash", auto: false},
@@ -13,15 +13,15 @@ describe("grouper", function() {
     {name: "test", type: "card", auto: true},
   ]
 
-  it("should return passed in data if groupings is undefined", function() {
+  it("should return passed in data if groupings is undefined", () => {
     expect(grouper(undefined, mockDataForGrouping)).to.eql(mockDataForGrouping)
   })
 
-  it("should return passed in data if groupings length is 0", function() {
+  it("should return passed in data if groupings length is 0", () => {
     expect(grouper([], mockDataForGrouping)).to.eql(mockDataForGrouping)
   })
 
-  it("should group data at 1 level", function() {
+  it("should group data at 1 level", () => {
     expect(grouper(["type"], mockDataForGrouping)).to.eql({
       cash: [
         {name: "foo", type: "cash", auto: true},
@@ -36,7 +36,7 @@ describe("grouper", function() {
     })
   })
 
-  it("should group data at 2 levels", function() {
+  it("should group data at 2 levels", () => {
     expect(grouper(["type", "auto"], mockDataForGrouping)).to.eql({
       "cash - true": [{name: "foo", type: "cash", auto: true}],
       "cash - false": [{name: "bar", type: "cash", auto: false}],

@@ -1,11 +1,11 @@
 const R = require("ramda")
 
-module.exports = function(filter, data) {
+module.exports = (filter, data) => {
   if (!filter) return data
 
   return R.pipe(
     R.toPairs,
-    R.reduce(function(acc, pair) {
+    R.reduce((acc, pair) => {
       if (filter.operator === "eq" && pair[1].length === filter.value) {
         acc[pair[0]] = pair[1]
       }

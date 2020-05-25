@@ -105,15 +105,15 @@ const tests = [
   },
 ]
 
-describe("schemaGenerator", function() {
-  describe("generate", function() {
-    tests.forEach(function(test) {
-      it(`should translate ${test.name} data into a schema correctly`, function() {
+describe("schemaGenerator", () => {
+  describe("generate", () => {
+    tests.forEach(test => {
+      it(`should translate ${test.name} data into a schema correctly`, () => {
         expect(schemaGenerator.generate(test.data)).to.eql(test.expected)
       })
     })
 
-    it("should default to 'string' if value is null", function() {
+    it("should default to 'string' if value is null", () => {
       expect(schemaGenerator.generate({foo: null})).to.eql({foo: "string"})
     })
   })

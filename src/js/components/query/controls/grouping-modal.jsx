@@ -72,7 +72,7 @@ function GroupingModal(props) {
     const reducerValue =
       reducerNameValue.length && props.groupReducer.value ? props.groupReducer.value : ""
 
-    const options = R.without(props.groupings, Object.keys(props.schema)).map(function(value) {
+    const options = R.without(props.groupings, Object.keys(props.schema)).map(value => {
       return (
         <option value={value} key={value}>
           {value}
@@ -144,7 +144,7 @@ function GroupingModal(props) {
         <div className="body">
           <div className="row">
             <select disabled={disabled} onChange={onSortChange} value={props.groupSort || ""}>
-              {options.map(function(option) {
+              {options.map(option => {
                 return (
                   <option key={option.value} value={option.value}>
                     {option.name}

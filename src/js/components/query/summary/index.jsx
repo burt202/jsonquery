@@ -50,7 +50,7 @@ function Summary(props) {
   const fields = R.pipe(
     R.flatten,
     R.reject(R.isNil),
-    R.map(function(obj) {
+    R.map(obj => {
       return <p key={obj.name} title={obj.title}>{`${obj.name}: ${obj.value}`}</p>
     }),
   )(summaryData)

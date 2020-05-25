@@ -3,7 +3,7 @@ const expect = chai.expect
 
 const groupLimiter = require("../group-limiter")
 
-describe("groupLimiter", function() {
+describe("groupLimiter", () => {
   const mockDataForLimiting = [
     {name: "card - true", reducer: 2},
     {name: "cash - true", reducer: 1},
@@ -13,17 +13,17 @@ describe("groupLimiter", function() {
     {name: "loan - false", reducer: 1},
   ]
 
-  it("should return passed in data if limit is undefined", function() {
+  it("should return passed in data if limit is undefined", () => {
     expect(groupLimiter(undefined, false, mockDataForLimiting)).to.eql(mockDataForLimiting)
   })
 
-  it("should return passed in data if data is a string", function() {
+  it("should return passed in data if data is a string", () => {
     expect(groupLimiter(undefined, false, "Error message from sorting")).to.eql(
       "Error message from sorting",
     )
   })
 
-  it("should limit group", function() {
+  it("should limit group", () => {
     expect(groupLimiter(3, false, mockDataForLimiting)).to.eql([
       {name: "card - true", reducer: 2},
       {name: "cash - true", reducer: 1},
@@ -31,7 +31,7 @@ describe("groupLimiter", function() {
     ])
   })
 
-  it("should limit group and combine remainder", function() {
+  it("should limit group and combine remainder", () => {
     expect(groupLimiter(3, true, mockDataForLimiting)).to.eql([
       {name: "card - true", reducer: 2},
       {name: "cash - true", reducer: 1},

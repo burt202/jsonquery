@@ -53,7 +53,7 @@ function Results(props) {
   }
 
   const getViewTypesLinks = () => {
-    return R.toPairs(getViewTypes()).map(function(pair) {
+    return R.toPairs(getViewTypes()).map(pair => {
       const classnames = classNames({
         active: state.type === pair[0],
       })
@@ -73,7 +73,7 @@ function Results(props) {
 
     actionCreator.showToast("Copied!")
 
-    setTimeout(function() {
+    setTimeout(() => {
       actionCreator.removeToast()
     }, 3000)
   }

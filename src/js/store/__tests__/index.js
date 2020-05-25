@@ -3,8 +3,8 @@ const expect = chai.expect
 
 const store = require("../index")
 
-describe("store", function() {
-  beforeEach(function() {
+describe("store", () => {
+  beforeEach(() => {
     expect(store.getState()).to.eql({
       filters: [],
       groupings: [],
@@ -24,12 +24,12 @@ describe("store", function() {
     })
   })
 
-  afterEach(function() {
+  afterEach(() => {
     store.dispatch({type: "_resetState"})
   })
 
-  describe("saveJson", function() {
-    it("should save json under the passed prop name", function() {
+  describe("saveJson", () => {
+    it("should save json under the passed prop name", () => {
       store.dispatch({
         type: "saveJson",
         value: {name: "schema", data: {foo: "string"}},
@@ -38,7 +38,7 @@ describe("store", function() {
       expect(store.getState().schema).to.eql({foo: "string"})
     })
 
-    it("should reset filters, groupings and sortBy values to their defaults", function() {
+    it("should reset filters, groupings and sortBy values to their defaults", () => {
       store.dispatch({
         type: "_setState",
         value: {
@@ -73,8 +73,8 @@ describe("store", function() {
     })
   })
 
-  describe("updateResultFields", function() {
-    it("should save field names", function() {
+  describe("updateResultFields", () => {
+    it("should save field names", () => {
       store.dispatch({
         type: "updateResultFields",
         value: {fields: ["foo"]},
@@ -84,8 +84,8 @@ describe("store", function() {
     })
   })
 
-  describe("addFilter", function() {
-    it("should add filter", function() {
+  describe("addFilter", () => {
+    it("should add filter", () => {
       store.dispatch({
         type: "addFilter",
         value: {name: "foo"},
@@ -103,8 +103,8 @@ describe("store", function() {
     })
   })
 
-  describe("deleteFilter", function() {
-    beforeEach(function() {
+  describe("deleteFilter", () => {
+    beforeEach(() => {
       store.dispatch({
         type: "_setState",
         value: {
@@ -113,7 +113,7 @@ describe("store", function() {
       })
     })
 
-    it("should delete filter", function() {
+    it("should delete filter", () => {
       expect(store.getState().filters.length).to.eql(1)
       expect(store.getState().filters[0].name).to.eql("foo")
 
@@ -126,8 +126,8 @@ describe("store", function() {
     })
   })
 
-  describe("updateFilter", function() {
-    beforeEach(function() {
+  describe("updateFilter", () => {
+    beforeEach(() => {
       store.dispatch({
         type: "_setState",
         value: {
@@ -136,7 +136,7 @@ describe("store", function() {
       })
     })
 
-    it("should update filter", function() {
+    it("should update filter", () => {
       expect(store.getState().filters.length).to.eql(1)
       expect(store.getState().filters[0].value).to.eql("")
 
@@ -150,8 +150,8 @@ describe("store", function() {
     })
   })
 
-  describe("limit", function() {
-    it("limit", function() {
+  describe("limit", () => {
+    it("limit", () => {
       store.dispatch({
         type: "limit",
         value: {number: 2},
@@ -161,8 +161,8 @@ describe("store", function() {
     })
   })
 
-  describe("reset", function() {
-    beforeEach(function() {
+  describe("reset", () => {
+    beforeEach(() => {
       store.dispatch({
         type: "_setState",
         value: {
@@ -183,7 +183,7 @@ describe("store", function() {
       })
     })
 
-    it("should reset filters, groupings and sortBy values to their defaults", function() {
+    it("should reset filters, groupings and sortBy values to their defaults", () => {
       expect(store.getState().filters.length).to.eql(1)
       expect(store.getState().filters[0].name).to.eql("foo")
       expect(store.getState().groupings).to.eql(["bar"])
@@ -209,7 +209,7 @@ describe("store", function() {
       expect(store.getState().analyse).to.eql(null)
     })
 
-    it("should not reset some fields", function() {
+    it("should not reset some fields", () => {
       store.dispatch({
         type: "reset",
         value: {},
@@ -223,8 +223,8 @@ describe("store", function() {
     })
   })
 
-  describe("addGrouping", function() {
-    it("should add groupings and nullify analyse", function() {
+  describe("addGrouping", () => {
+    it("should add groupings and nullify analyse", () => {
       store.dispatch({
         type: "_setState",
         value: {
@@ -243,7 +243,7 @@ describe("store", function() {
       expect(store.getState().analyse).to.eql(null)
     })
 
-    it("should ensure groupings field is included in results", function() {
+    it("should ensure groupings field is included in results", () => {
       store.dispatch({
         type: "_setState",
         value: {
@@ -262,7 +262,7 @@ describe("store", function() {
       expect(store.getState().resultFields).to.eql(["baz"])
     })
 
-    it("should make sure result fields array contains unique values", function() {
+    it("should make sure result fields array contains unique values", () => {
       store.dispatch({
         type: "_setState",
         value: {
@@ -282,8 +282,8 @@ describe("store", function() {
     })
   })
 
-  describe("removeGrouping", function() {
-    it("should remove field from grouping", function() {
+  describe("removeGrouping", () => {
+    it("should remove field from grouping", () => {
       store.dispatch({
         type: "_setState",
         value: {
@@ -301,7 +301,7 @@ describe("store", function() {
       expect(store.getState().groupings).to.eql([])
     })
 
-    it("should reset groupReducer, combineRemainder, groupSort and groupLimit if groupings is deselected", function() {
+    it("should reset groupReducer, combineRemainder, groupSort and groupLimit if groupings is deselected", () => {
       store.dispatch({
         type: "_setState",
         value: {
@@ -329,7 +329,7 @@ describe("store", function() {
       expect(store.getState().combineRemainder).to.eql(false)
     })
 
-    it("should not reset groupReducer, combineRemainder, groupSort and groupLimit if groupings is still at least 1", function() {
+    it("should not reset groupReducer, combineRemainder, groupSort and groupLimit if groupings is still at least 1", () => {
       store.dispatch({
         type: "_setState",
         value: {
@@ -358,8 +358,8 @@ describe("store", function() {
     })
   })
 
-  describe("addSorter", function() {
-    it("should add sorter", function() {
+  describe("addSorter", () => {
+    it("should add sorter", () => {
       store.dispatch({
         type: "addSorter",
         value: {sorter: {field: "foo", direction: "desc"}},
@@ -369,8 +369,8 @@ describe("store", function() {
     })
   })
 
-  describe("removeSorter", function() {
-    it("should remove sorter", function() {
+  describe("removeSorter", () => {
+    it("should remove sorter", () => {
       store.dispatch({
         type: "_setState",
         value: {
@@ -387,8 +387,8 @@ describe("store", function() {
     })
   })
 
-  describe("groupReducer", function() {
-    it("should update groupReducer", function() {
+  describe("groupReducer", () => {
+    it("should update groupReducer", () => {
       store.dispatch({
         type: "groupReducer",
         value: {groupReducer: {name: "count"}},
@@ -397,7 +397,7 @@ describe("store", function() {
       expect(store.getState().groupReducer).to.eql({name: "count"})
     })
 
-    it("should reset groupSort, groupLimit and combineRemainder when set to false", function() {
+    it("should reset groupSort, groupLimit and combineRemainder when set to false", () => {
       store.dispatch({
         type: "_setState",
         value: {
@@ -423,8 +423,8 @@ describe("store", function() {
     })
   })
 
-  describe("groupReducerMeta", function() {
-    it("should update groupReducer", function() {
+  describe("groupReducerMeta", () => {
+    it("should update groupReducer", () => {
       store.dispatch({
         type: "groupReducer",
         value: {groupReducer: {name: "count"}},
@@ -439,8 +439,8 @@ describe("store", function() {
     })
   })
 
-  describe("analyse", function() {
-    it("should add analyse and reset groupings, groupReducer, combineRemainder, groupSort and groupLimit", function() {
+  describe("analyse", () => {
+    it("should add analyse and reset groupings, groupReducer, combineRemainder, groupSort and groupLimit", () => {
       store.dispatch({
         type: "_setState",
         value: {
@@ -472,8 +472,8 @@ describe("store", function() {
     })
   })
 
-  describe("groupSort", function() {
-    it("should add group sort", function() {
+  describe("groupSort", () => {
+    it("should add group sort", () => {
       store.dispatch({
         type: "groupSort",
         value: {groupSort: "foo"},
@@ -483,8 +483,8 @@ describe("store", function() {
     })
   })
 
-  describe("groupLimit", function() {
-    it("should add group limit", function() {
+  describe("groupLimit", () => {
+    it("should add group limit", () => {
       store.dispatch({
         type: "groupLimit",
         value: {groupLimit: "foo"},
@@ -493,7 +493,7 @@ describe("store", function() {
       expect(store.getState().groupLimit).to.eql("foo")
     })
 
-    it("should add reset combineRemainder if group limit is unset", function() {
+    it("should add reset combineRemainder if group limit is unset", () => {
       store.dispatch({
         type: "_setState",
         value: {
@@ -511,8 +511,8 @@ describe("store", function() {
     })
   })
 
-  describe("combineRemainder", function() {
-    it("should add group limit", function() {
+  describe("combineRemainder", () => {
+    it("should add group limit", () => {
       store.dispatch({
         type: "combineRemainder",
         value: {combineRemainder: "foo"},
@@ -522,8 +522,8 @@ describe("store", function() {
     })
   })
 
-  describe("saveCalculatedFields", function() {
-    it("should save calculated fields", function() {
+  describe("saveCalculatedFields", () => {
+    it("should save calculated fields", () => {
       store.dispatch({
         type: "saveCalculatedFields",
         value: {calculatedFields: "foo"},
@@ -533,8 +533,8 @@ describe("store", function() {
     })
   })
 
-  describe("saveCalculationsString", function() {
-    it("should save the calculation string", function() {
+  describe("saveCalculationsString", () => {
+    it("should save the calculation string", () => {
       store.dispatch({
         type: "saveCalculationsString",
         value: {calculationsString: "foo"},

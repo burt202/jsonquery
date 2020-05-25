@@ -16,7 +16,7 @@ function GroupingControl(props) {
   }
 
   const getRows = () => {
-    return props.groupings.map(function(grouping) {
+    return props.groupings.map(grouping => {
       return (
         <div className="row" key={grouping}>
           <div className="grouping">
@@ -72,7 +72,7 @@ function GroupingControl(props) {
     )
   }
 
-  const options = R.without(props.groupings, Object.keys(props.schema)).map(function(value) {
+  const options = R.without(props.groupings, Object.keys(props.schema)).map(value => {
     return (
       <option value={value} key={value}>
         {value}

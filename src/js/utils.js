@@ -1,7 +1,7 @@
 const R = require("ramda")
 
 module.exports = {
-  round: R.curry(function(decimals, num) {
+  round: R.curry((decimals, num) => {
     return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals)
   }),
 
@@ -55,7 +55,7 @@ module.exports = {
   getCumulative(data) {
     const mapIndexed = R.addIndex(R.map)
 
-    return mapIndexed(function(val, idx) {
+    return mapIndexed((val, idx) => {
       return R.compose(R.sum, R.slice(0, idx + 1))(data)
     }, data)
   },

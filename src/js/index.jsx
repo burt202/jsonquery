@@ -8,7 +8,7 @@ ReactDOM.render(<Main version={VERSION} />, document.body.querySelector(".contai
 
 // Hot Module Replacement API
 if (module.hot) {
-  module.hot.accept("./main", function() {
+  module.hot.accept("./main", () => {
     const AppContainer = require("react-hot-loader").AppContainer
     const Main = require("./main")
 

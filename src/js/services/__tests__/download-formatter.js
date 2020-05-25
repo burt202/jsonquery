@@ -3,15 +3,15 @@ const expect = chai.expect
 
 const downloadFormatter = require("../download-formatter")
 
-describe("downloadFormatter", function() {
-  describe("table", function() {
-    it("should return empty array if data set is empty", function() {
+describe("downloadFormatter", () => {
+  describe("table", () => {
+    it("should return empty array if data set is empty", () => {
       expect(downloadFormatter.table([], null, [])).to.eql([])
       expect(downloadFormatter.table([], null, {})).to.eql([])
     })
 
-    describe("when analysed", function() {
-      it("should format correctly", function() {
+    describe("when analysed", () => {
+      it("should format correctly", () => {
         const mockData = {
           sum: 20,
           average: 4,
@@ -24,8 +24,8 @@ describe("downloadFormatter", function() {
       })
     })
 
-    describe("when grouped counts", function() {
-      it("should format correctly when object", function() {
+    describe("when grouped counts", () => {
+      it("should format correctly when object", () => {
         const mockData = {
           Coldplay: 2,
           Muse: 1,
@@ -38,7 +38,7 @@ describe("downloadFormatter", function() {
         ])
       })
 
-      it("should format correctly when object for mutiple groupings", function() {
+      it("should format correctly when object for mutiple groupings", () => {
         const mockData = {
           Coldplay: {Parachutes: 1, "X&Y": 1},
           Muse: {Showbiz: 1},
@@ -52,7 +52,7 @@ describe("downloadFormatter", function() {
         ])
       })
 
-      it("should format correctly when array", function() {
+      it("should format correctly when array", () => {
         const mockData = [
           {name: "Coldplay", count: 2},
           {name: "Muse", count: 1},
@@ -65,7 +65,7 @@ describe("downloadFormatter", function() {
         ])
       })
 
-      it("should format correctly when array for mutiple groupings", function() {
+      it("should format correctly when array for mutiple groupings", () => {
         const mockData = [
           {name: "Coldplay - Parachutes", count: 1},
           {name: "Coldplay - X&Y", count: 1},
@@ -81,8 +81,8 @@ describe("downloadFormatter", function() {
       })
     })
 
-    describe("when grouped", function() {
-      it("should format correctly", function() {
+    describe("when grouped", () => {
+      it("should format correctly", () => {
         const mockData = {
           Coldplay: [
             {artist: "Coldplay", album: "Parachutes", title: "Shiver"},
@@ -101,7 +101,7 @@ describe("downloadFormatter", function() {
         ])
       })
 
-      it("should format correctly for mutiple", function() {
+      it("should format correctly for mutiple", () => {
         const mockData = {
           Coldplay: {
             Parachutes: [{artist: "Coldplay", album: "Parachutes", title: "Shiver"}],
@@ -124,8 +124,8 @@ describe("downloadFormatter", function() {
       })
     })
 
-    describe("when array", function() {
-      it("should format correctly", function() {
+    describe("when array", () => {
+      it("should format correctly", () => {
         const mockData = [
           {artist: "Coldplay", album: "Parachutes", title: "Shiver"},
           {artist: "Coldplay", album: "X&Y", title: "Square One"},
@@ -142,14 +142,14 @@ describe("downloadFormatter", function() {
     })
   })
 
-  describe("csv", function() {
-    it("should return null if data set is empty", function() {
+  describe("csv", () => {
+    it("should return null if data set is empty", () => {
       expect(downloadFormatter.csv([], null, [])).to.eql(null)
       expect(downloadFormatter.csv([], null, {})).to.eql(null)
     })
 
-    describe("when analysed", function() {
-      it("should format correctly", function() {
+    describe("when analysed", () => {
+      it("should format correctly", () => {
         const mockData = {
           sum: 20,
           average: 4,
@@ -159,8 +159,8 @@ describe("downloadFormatter", function() {
       })
     })
 
-    describe("when grouped counts", function() {
-      it("should format correctly when object", function() {
+    describe("when grouped counts", () => {
+      it("should format correctly when object", () => {
         const mockData = {
           Coldplay: 2,
           Muse: 1,
@@ -171,7 +171,7 @@ describe("downloadFormatter", function() {
         )
       })
 
-      it("should format correctly when object for mutiple groupings", function() {
+      it("should format correctly when object for mutiple groupings", () => {
         const mockData = {
           Coldplay: {Parachutes: 1, "X&Y": 1},
           Muse: {Showbiz: 1},
@@ -182,7 +182,7 @@ describe("downloadFormatter", function() {
         )
       })
 
-      it("should cope when the count field has a comma when object", function() {
+      it("should cope when the count field has a comma when object", () => {
         const mockData = {
           "10,000 Days": 2,
           Muse: 1,
@@ -193,7 +193,7 @@ describe("downloadFormatter", function() {
         )
       })
 
-      it("should format correctly when array", function() {
+      it("should format correctly when array", () => {
         const mockData = [
           {name: "Coldplay", count: 2},
           {name: "Muse", count: 1},
@@ -204,7 +204,7 @@ describe("downloadFormatter", function() {
         )
       })
 
-      it("should format correctly when array for mutiple groupings", function() {
+      it("should format correctly when array for mutiple groupings", () => {
         const mockData = [
           {name: "Coldplay - Parachutes", count: 1},
           {name: "Coldplay - X&Y", count: 1},
@@ -216,7 +216,7 @@ describe("downloadFormatter", function() {
         )
       })
 
-      it("should cope when the count field has a comma when array", function() {
+      it("should cope when the count field has a comma when array", () => {
         const mockData = [
           {name: "10,000 Days", count: 2},
           {name: "Muse", count: 1},
@@ -228,8 +228,8 @@ describe("downloadFormatter", function() {
       })
     })
 
-    describe("when grouped", function() {
-      it("should format correctly", function() {
+    describe("when grouped", () => {
+      it("should format correctly", () => {
         const mockData = {
           Coldplay: [
             {artist: "Coldplay", album: "Parachutes", title: "Shiver"},
@@ -243,7 +243,7 @@ describe("downloadFormatter", function() {
         )
       })
 
-      it("should format correctly for mutiple", function() {
+      it("should format correctly for mutiple", () => {
         const mockData = {
           Coldplay: {
             Parachutes: [{artist: "Coldplay", album: "Parachutes", title: "Shiver"}],
@@ -259,7 +259,7 @@ describe("downloadFormatter", function() {
         )
       })
 
-      it("should cope when there is a string value with a comma", function() {
+      it("should cope when there is a string value with a comma", () => {
         const mockData = {
           Tool: [{artist: "Tool", album: "10,000 Days", title: "Schism"}],
         }
@@ -269,7 +269,7 @@ describe("downloadFormatter", function() {
         )
       })
 
-      it("should cope when there is an array value", function() {
+      it("should cope when there is an array value", () => {
         const mockData = {
           Coldplay: [
             {artist: "Coldplay", album: "Parachutes", title: "Shiver", genres: ["Rock", "Indie"]},
@@ -281,7 +281,7 @@ describe("downloadFormatter", function() {
         )
       })
 
-      it("should cope when there is a group heading value with a comma", function() {
+      it("should cope when there is a group heading value with a comma", () => {
         const mockData = {
           "10,000 Days": [{artist: "Tool", album: "10,000 Days", title: "Schism"}],
         }
@@ -292,8 +292,8 @@ describe("downloadFormatter", function() {
       })
     })
 
-    describe("when array", function() {
-      it("should format correctly", function() {
+    describe("when array", () => {
+      it("should format correctly", () => {
         const mockData = [
           {artist: "Coldplay", album: "Parachutes", title: "Shiver"},
           {artist: "Coldplay", album: "X&Y", title: "Square One"},
@@ -305,7 +305,7 @@ describe("downloadFormatter", function() {
         )
       })
 
-      it("should cope when there is a string value with a comma", function() {
+      it("should cope when there is a string value with a comma", () => {
         const mockData = [{artist: "Tool", album: "10,000 Days", title: "Schism"}]
 
         expect(downloadFormatter.csv([], null, mockData)).to.eql(
@@ -313,7 +313,7 @@ describe("downloadFormatter", function() {
         )
       })
 
-      it("should cope when there is an array value", function() {
+      it("should cope when there is an array value", () => {
         const mockData = [
           {artist: "Coldplay", album: "Parachutes", title: "Shiver", genres: ["Rock", "Indie"]},
         ]
@@ -323,7 +323,7 @@ describe("downloadFormatter", function() {
         )
       })
 
-      it("should cope when there is an object value", function() {
+      it("should cope when there is an object value", () => {
         const mockData = [
           {
             artist: "Coldplay",

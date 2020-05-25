@@ -11,7 +11,7 @@ function AnalyseControl(props) {
   const getOptions = () => {
     const numberOptions = R.pipe(R.toPairs, R.map(R.prop(0)))(props.schema)
 
-    return numberOptions.map(function(value) {
+    return numberOptions.map(value => {
       return (
         <option value={value} key={value}>
           {value}

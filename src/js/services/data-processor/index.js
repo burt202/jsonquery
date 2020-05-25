@@ -19,16 +19,16 @@ module.exports = {
   analyse,
   groupProcessor(schema, reducer, sortBy, limit, combineRemainder, grouped) {
     return R.pipe(
-      function(data) {
+      data => {
         return groupFilterer(undefined, data)
       },
-      function(data) {
+      data => {
         return groupReducer(schema, reducer, data)
       },
-      function(data) {
+      data => {
         return groupSorter(sortBy, data)
       },
-      function(data) {
+      data => {
         return groupLimiter(limit, combineRemainder, data)
       },
     )(grouped)

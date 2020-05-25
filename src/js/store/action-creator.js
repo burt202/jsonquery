@@ -1,4 +1,4 @@
-module.exports = function(store) {
+module.exports = store => {
   return {
     saveJson(name, data) {
       store.dispatch({

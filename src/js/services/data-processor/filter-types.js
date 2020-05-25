@@ -13,28 +13,28 @@ function isValidDate(date) {
   return isValid(parse(date))
 }
 
-const isSameDayAs = R.curry(function(filterValue, dataValue) {
+const isSameDayAs = R.curry((filterValue, dataValue) => {
   return isSameDay(filterValue, dataValue)
 })
 
-const isBefore = R.curry(function(filterValue, dataValue) {
+const isBefore = R.curry((filterValue, dataValue) => {
   return isDateBefore(dataValue, filterValue)
 })
 
-const isAfter = R.curry(function(filterValue, dataValue) {
+const isAfter = R.curry((filterValue, dataValue) => {
   return isDateAfter(dataValue, filterValue)
 })
 
-const isBetweenDates = R.curry(function(start, end, dataValue) {
+const isBetweenDates = R.curry((start, end, dataValue) => {
   return isWithinRange(dataValue, start, end)
 })
 
-const isOneOf = R.curry(function(filterValue, dataValue) {
+const isOneOf = R.curry((filterValue, dataValue) => {
   dataValue = !R.isNil(dataValue) ? dataValue.toString() : ""
   return R.compose(R.contains(dataValue), R.split(","), R.defaultTo(""))(filterValue)
 })
 
-const containsOneOf = R.curry(function(filterValue, dataValue) {
+const containsOneOf = R.curry((filterValue, dataValue) => {
   return R.compose(
     R.any(R.equals(true)),
     R.map(R.contains(R.__, dataValue)),
@@ -42,11 +42,11 @@ const containsOneOf = R.curry(function(filterValue, dataValue) {
   )(filterValue)
 })
 
-const isBetween = R.curry(function(start, end, dataValue) {
+const isBetween = R.curry((start, end, dataValue) => {
   return R.allPass([R.gt(R.__, start), R.lt(R.__, end)])(dataValue)
 })
 
-const matches = R.curry(function(filterValue, dataValue) {
+const matches = R.curry((filterValue, dataValue) => {
   const regParts = filterValue.match(/^\/(.*?)\/([gim]*)$/)
   const regex = regParts ? new RegExp(regParts[1], regParts[2]) : new RegExp(filterValue)
   return R.test(regex, dataValue)

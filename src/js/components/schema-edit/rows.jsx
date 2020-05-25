@@ -31,7 +31,7 @@ function SchemaEditRows(props) {
   }
 
   const getSchemaRows = () => {
-    return R.toPairs(state.schema).map(function(pair) {
+    return R.toPairs(state.schema).map(pair => {
       return (
         <SchemaEditRow
           key={pair[0]}

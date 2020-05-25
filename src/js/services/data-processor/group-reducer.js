@@ -29,13 +29,13 @@ const reducerMap = {
   },
 }
 
-module.exports = function(schema, reducer, data) {
+module.exports = (schema, reducer, data) => {
   if (!reducer || !reducerMap[reducer.name]) return data
   const totalItemCount = R.compose(R.length, R.flatten, R.values)(data)
 
   return R.pipe(
     R.toPairs,
-    R.reduce(function(acc, pair) {
+    R.reduce((acc, pair) => {
       acc[pair[0]] = {
         reducer: reducerMap[reducer.name](schema, reducer, totalItemCount, pair[1]),
         count: pair[1].length,
