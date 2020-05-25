@@ -10,7 +10,7 @@ function IncludeFields(props) {
 
   const onChangeHandler = e => {
     const field = e.target.name
-    const isPresent = R.contains(field, props.resultFields)
+    const isPresent = props.resultFields.includes(field)
     const updatedFields = isPresent
       ? R.without([field], props.resultFields)
       : R.append(field, props.resultFields)
@@ -22,8 +22,8 @@ function IncludeFields(props) {
     const schemaKeys = R.sortBy(R.identity, R.keys(props.schema))
 
     return schemaKeys.map(field => {
-      const checked = R.contains(field, props.resultFields)
-      const disabled = R.contains(field, props.groupings)
+      const checked = props.resultFields.includes(field)
+      const disabled = props.groupings.includes(field)
 
       return (
         <label className="checkbox-label" key={field}>

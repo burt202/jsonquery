@@ -49,11 +49,11 @@ function AddCalculations(props) {
     }
 
     const schemaForCalculations = schemaGenerator.generate(calculationFn(fns, props.data[0]))
-    const schema = R.merge(R.omit(props.calculatedFields, props.schema), schemaForCalculations)
+    const schema = R.mergeRight(R.omit(props.calculatedFields, props.schema), schemaForCalculations)
 
     const data = R.map(row => {
       const calculations = calculationFn(fns, row)
-      return R.merge(R.omit(props.calculatedFields, row), calculations)
+      return R.mergeRight(R.omit(props.calculatedFields, row), calculations)
     }, props.data)
 
     props.onSave(schema, data, state.calculationsString, R.keys(schemaForCalculations))

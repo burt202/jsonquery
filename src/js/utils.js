@@ -7,7 +7,7 @@ module.exports = {
 
   updateWhere(find, update, data) {
     const index = R.findIndex(R.whereEq(find), data)
-    return R.adjust(index, R.merge(R.__, update), data)
+    return R.adjust(index, R.mergeRight(R.__, update), data)
   },
 
   getMax(arr) {

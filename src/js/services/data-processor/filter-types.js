@@ -31,13 +31,13 @@ const isBetweenDates = R.curry((start, end, dataValue) => {
 
 const isOneOf = R.curry((filterValue, dataValue) => {
   dataValue = !R.isNil(dataValue) ? dataValue.toString() : ""
-  return R.compose(R.contains(dataValue), R.split(","), R.defaultTo(""))(filterValue)
+  return R.compose(R.includes(dataValue), R.split(","), R.defaultTo(""))(filterValue)
 })
 
-const containsOneOf = R.curry((filterValue, dataValue) => {
+const includesOneOf = R.curry((filterValue, dataValue) => {
   return R.compose(
     R.any(R.equals(true)),
-    R.map(R.contains(R.__, dataValue)),
+    R.map(R.includes(R.__, dataValue)),
     R.split(","),
   )(filterValue)
 })
@@ -151,9 +151,9 @@ function getTimeFilter(filter) {
 
 function getArrayFilter(filter) {
   if (filter.value && filter.value.length) {
-    if (filter.operator === "cos") return R.contains(filter.value)
-    if (filter.operator === "con") return R.contains(parseFloat(filter.value))
-    if (filter.operator === "cof") return containsOneOf(filter.value)
+    if (filter.operator === "cos") return R.includes(filter.value)
+    if (filter.operator === "con") return R.includes(parseFloat(filter.value))
+    if (filter.operator === "cof") return includesOneOf(filter.value)
     if (filter.operator === "hl") return R.compose(R.equals(parseInt(filter.value, 10)), R.length)
     if (filter.operator === "dhl")
       return R.compose(R.not, R.equals(parseInt(filter.value, 10)), R.length)

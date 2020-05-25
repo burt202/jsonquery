@@ -100,7 +100,7 @@ function FilterRow(props) {
 
         return React.createElement(
           "input",
-          R.merge(
+          R.mergeRight(
             {
               key: props.filter.id + inc,
               type: "text",

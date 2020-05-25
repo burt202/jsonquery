@@ -36,7 +36,7 @@ const handlers = {
   },
 
   _setState(contents, payload) {
-    return R.merge({}, payload)
+    return Object.assign({}, payload)
   },
 
   saveJson(contents, payload) {
@@ -50,61 +50,56 @@ const handlers = {
       toUpdate.resultFields = R.keys(payload.data)
     }
 
-    return R.merge(contents, toUpdate)
+    return {...contents, ...toUpdate}
   },
 
   updateResultFields(contents, payload) {
-    return R.merge(contents, {
-      resultFields: payload.fields,
-    })
+    return {...contents, resultFields: payload.fields}
   },
 
   addFilter(contents, payload) {
     const filterType = (contents.schema || {})[payload.name] || "string"
     const operator = initialOperators[filterType] || "eq"
 
-    return R.merge(contents, {
+    return {
+      ...contents,
       filters: R.append(
         {id: Date.now().toString(), name: payload.name, value: "", operator, active: true},
         contents.filters,
       ),
-    })
+    }
   },
 
   deleteFilter(contents, payload) {
-    return R.merge(contents, {
-      filters: R.reject(R.propEq("id", payload.id), contents.filters),
-    })
+    return {...contents, filters: R.reject(R.propEq("id", payload.id), contents.filters)}
   },
 
   updateFilter(contents, payload) {
-    return R.merge(contents, {
+    return {
+      ...contents,
       filters: utils.updateWhere({id: payload.id}, payload.value, contents.filters),
-    })
+    }
   },
 
   limit(contents, payload) {
-    return R.merge(contents, {
-      limit: payload.number,
-    })
+    return {...contents, limit: payload.number}
   },
 
   reset(contents) {
-    return R.merge(
-      contents,
-      R.omit(
-        ["data", "schema", "resultFields", "calculationsString", "calculatedFields"],
-        defaults,
-      ),
+    const toOmit = R.omit(
+      ["data", "schema", "resultFields", "calculationsString", "calculatedFields"],
+      defaults,
     )
+    return {...contents, ...toOmit}
   },
 
   addGrouping(contents, payload) {
-    return R.merge(contents, {
+    return {
+      ...contents,
       analyse: null,
       groupings: R.append(payload.name, contents.groupings),
       resultFields: R.compose(R.uniq, R.append(payload.name))(contents.resultFields),
-    })
+    }
   },
 
   removeGrouping(contents, payload) {
@@ -119,11 +114,12 @@ const handlers = {
       toMerge.combineRemainder = false
     }
 
-    return R.merge(contents, toMerge)
+    return {...contents, ...toMerge}
   },
 
   analyse(contents, payload) {
-    return R.merge(contents, {
+    return {
+      ...contents,
       analyse: payload.name,
       groupings: [],
       groupReducer: null,
@@ -131,19 +127,15 @@ const handlers = {
       groupLimit: null,
       combineRemainder: false,
       resultFields: Object.keys(contents.schema || {}),
-    })
+    }
   },
 
   addSorter(contents, payload) {
-    return R.merge(contents, {
-      sorters: R.append(payload.sorter, contents.sorters),
-    })
+    return {...contents, sorters: R.append(payload.sorter, contents.sorters)}
   },
 
   removeSorter(contents, payload) {
-    return R.merge(contents, {
-      sorters: R.reject(R.propEq("field", payload.name), contents.sorters),
-    })
+    return {...contents, sorters: R.reject(R.propEq("field", payload.name), contents.sorters)}
   },
 
   groupReducer(contents, payload) {
@@ -157,21 +149,19 @@ const handlers = {
       toMerge.combineRemainder = false
     }
 
-    return R.merge(contents, toMerge)
+    return {...contents, ...toMerge}
   },
 
   groupReducerMeta(contents, payload) {
     const toMerge = {
-      groupReducer: R.merge(contents.groupReducer, payload.groupReducerMeta),
+      groupReducer: {...contents.groupReducer, ...payload.groupReducerMeta},
     }
 
-    return R.merge(contents, toMerge)
+    return {...contents, ...toMerge}
   },
 
   groupSort(contents, payload) {
-    return R.merge(contents, {
-      groupSort: payload.groupSort,
-    })
+    return {...contents, groupSort: payload.groupSort}
   },
 
   groupLimit(contents, payload) {
@@ -183,31 +173,23 @@ const handlers = {
       toMerge.combineRemainder = false
     }
 
-    return R.merge(contents, toMerge)
+    return {...contents, ...toMerge}
   },
 
   combineRemainder(contents, payload) {
-    return R.merge(contents, {
-      combineRemainder: payload.combineRemainder,
-    })
+    return {...contents, combineRemainder: payload.combineRemainder}
   },
 
   saveCalculatedFields(contents, payload) {
-    return R.merge(contents, {
-      calculatedFields: payload.calculatedFields,
-    })
+    return {...contents, calculatedFields: payload.calculatedFields}
   },
 
   saveCalculationsString(contents, payload) {
-    return R.merge(contents, {
-      calculationsString: payload.calculationsString,
-    })
+    return {...contents, calculationsString: payload.calculationsString}
   },
 
   updateToast(contents, payload) {
-    return R.merge(contents, {
-      toast: payload.toast,
-    })
+    return {...contents, toast: payload.toast}
   },
 }
 
