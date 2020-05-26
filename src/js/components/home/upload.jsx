@@ -2,6 +2,9 @@ const React = require("react")
 const useState = React.useState
 const PropTypes = require("prop-types")
 
+const {Typography} = require("antd")
+const {Text} = Typography
+
 function Upload(props) {
   const [state, setState] = useState({
     isDragActive: false,
@@ -48,14 +51,14 @@ function Upload(props) {
   }
 
   const style = {
-    borderColor: state.isDragActive ? "#000" : "#AAA",
+    borderColor: state.isDragActive ? "#1890ff" : "#AAA",
   }
 
   return (
     <div>
-      <p>
+      <div style={{marginBottom: 16}}>
         <input type="file" key={props.errorDate} onChange={onFileUploadStart} />
-      </p>
+      </div>
       <div
         style={style}
         className="drag-drop-area"
@@ -64,7 +67,7 @@ function Upload(props) {
         onDragEnter={onDragEnter}
         onDrop={onDrop}
       >
-        <h3>Drop file here</h3>
+        <Text strong>Drop file here</Text>
       </div>
     </div>
   )

@@ -12,7 +12,11 @@ const Home = require("./components/home")
 const FromUrl = require("./components/from-url")
 const Query = require("./components/query")
 
+const {Typography, message} = require("antd")
+const {Title} = Typography
+
 require("../css/app.css")
+require("antd/dist/antd.css")
 
 function Main(props) {
   const [state, setState] = useState(store.getState())
@@ -59,11 +63,7 @@ function Main(props) {
 
   const getToast = () => {
     if (state.toast) {
-      return (
-        <div className="toast-outer">
-          <div className="toast-inner">{state.toast}</div>
-        </div>
-      )
+      message.success(state.toast)
     }
 
     return undefined
@@ -72,9 +72,9 @@ function Main(props) {
   return (
     <div>
       <div className="header">
-        <h1>
+        <Title style={{marginTop: 16}}>
           <a href="/">JSONQuery</a>
-        </h1>
+        </Title>
         <span>
           v{props.version} -{" "}
           <a className="site-link" href="https://github.com/burt202/jsonquery">

@@ -1,7 +1,6 @@
 const React = require("react")
 const useState = React.useState
 const PropTypes = require("prop-types")
-const classNames = require("classnames")
 
 const validator = require("../../services/validator")
 const schemaGenerator = require("../../services/schema-generator")
@@ -10,11 +9,15 @@ const Paste = require("./paste")
 const Upload = require("./upload")
 const Url = require("./url")
 
+const {Tabs, Typography} = require("antd")
+const {Title, Text} = Typography
+const {TabPane} = Tabs
+
 const testData = require("../../../test-data.json")
 
 function Home(props) {
   const [state, setState] = useState({
-    selectedTab: "paste",
+    selectedTab: "1",
     errorDate: null,
   })
 
@@ -52,54 +55,27 @@ function Home(props) {
     props.actionCreator.saveJson("schema", schemaGenerator.generate(json[0]))
   }
 
-  const getPasteComponent = () => {
-    if (state.selectedTab !== "paste") return null
-    return <Paste onAction={onAction} data={testData} />
-  }
-
-  const getUploadComponent = () => {
-    if (state.selectedTab !== "upload") return null
-    return <Upload onAction={onAction} errorDate={state.errorDate} />
-  }
-
-  const getUrlComponent = () => {
-    if (state.selectedTab !== "url") return null
-    return <Url />
-  }
-
-  const pasteActive = classNames({active: state.selectedTab === "paste"})
-  const uploadActive = classNames({active: state.selectedTab === "upload"})
-  const urlActive = classNames({active: state.selectedTab === "url"})
-
   return (
     <div className="home-cont">
-      <p>Online JSON Querying Tool. Query your JSON with ease.</p>
-      <p>
-        Takes a JSON array and allows you to add multiple filters, groupings and sorting to
-        manipulate the data in many ways. Use the inputs below to supply your data. We do not do
-        anything with your data!
-      </p>
-      <br />
-      <ul className="side-options">
-        <li className={pasteActive}>
-          <a className="site-link" onClick={() => selectTab("paste")}>
-            By Pasting
-          </a>
-        </li>
-        <li className={uploadActive}>
-          <a className="site-link" onClick={() => selectTab("upload")}>
-            By Upload
-          </a>
-        </li>
-        <li className={urlActive}>
-          <a className="site-link" onClick={() => selectTab("url")}>
-            By Url
-          </a>
-        </li>
-      </ul>
-      {getPasteComponent()}
-      {getUploadComponent()}
-      {getUrlComponent()}
+      <div style={{marginTop: 16, marginBottom: 32}}>
+        <Title level={4}>Online JSON Querying Tool. Query your JSON with ease.</Title>
+        <Text>
+          Takes a JSON array and allows you to add multiple filters, groupings and sorting to
+          manipulate the data in many ways. Use the inputs below to supply your data. We do not do
+          anything with your data!
+        </Text>
+      </div>
+      <Tabs onChange={selectTab} activeKey={state.selectedTab}>
+        <TabPane tab="By Pasting" key="1">
+          <Paste onAction={onAction} data={testData} />
+        </TabPane>
+        <TabPane tab="By Upload" key="2">
+          <Upload onAction={onAction} errorDate={state.errorDate} />
+        </TabPane>
+        <TabPane tab="By Url" key="3">
+          <Url />
+        </TabPane>
+      </Tabs>
     </div>
   )
 }
