@@ -2,6 +2,10 @@ const React = require("react")
 const useState = React.useState
 const PropTypes = require("prop-types")
 
+const {Button, Modal} = require("antd")
+const {WarningOutlined} = require("@ant-design/icons")
+const {confirm} = Modal
+
 const R = require("ramda")
 
 const dataProcessor = require("../../services/data-processor")
@@ -21,7 +25,13 @@ function Query(props) {
   })
 
   const onReset = () => {
-    props.actionCreator.reset()
+    confirm({
+      title: "Are you sure?",
+      icon: <WarningOutlined />,
+      onOk: () => {
+        props.actionCreator.reset()
+      },
+    })
   }
 
   const onCancel = () => {
@@ -85,23 +95,17 @@ function Query(props) {
 
   return (
     <div className="query-cont">
-      <ul className="side-options right">
-        <li>
-          <a className="site-link" onClick={() => setState({selectedPage: "addCalc"})}>
-            Add Calculations
-          </a>
-        </li>
-        <li>
-          <a className="site-link" onClick={() => setState({selectedPage: "editSchema"})}>
-            Edit Schema
-          </a>
-        </li>
-        <li>
-          <a className="site-link" onClick={onReset}>
-            Reset
-          </a>
-        </li>
-      </ul>
+      <div className="side-options right">
+        <Button type="link" onClick={() => setState({selectedPage: "addCalc"})}>
+          Add Calculations
+        </Button>
+        <Button type="link" onClick={() => setState({selectedPage: "editSchema"})}>
+          Edit Schema
+        </Button>
+        <Button type="link" danger onClick={onReset}>
+          Reset
+        </Button>
+      </div>
       <Filters actionCreator={props.actionCreator} filters={props.filters} schema={props.schema} />
       <Controls
         actionCreator={props.actionCreator}

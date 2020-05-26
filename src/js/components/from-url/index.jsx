@@ -2,6 +2,9 @@ const React = require("react")
 const useState = React.useState
 const PropTypes = require("prop-types")
 
+const {Typography} = require("antd")
+const {Text} = Typography
+
 const validator = require("../../services/validator")
 const schemaGenerator = require("../../services/schema-generator")
 
@@ -77,8 +80,7 @@ function FromUrl(props) {
 
   if (state.errors) {
     return (
-      <div>
-        <br />
+      <div style={{marginTop: 16}}>
         <Code language="json">{JSON.stringify(state.errors, null, 2)}</Code>
       </div>
     )
@@ -86,8 +88,12 @@ function FromUrl(props) {
 
   return (
     <div className="from-url-cont">
-      <img src="./gears.svg" />
-      <p>Working, please wait...</p>
+      <div>
+        <img src="./gears.svg" />
+        <div style={{marginTop: 16}}>
+          <Text>Working, please wait...</Text>
+        </div>
+      </div>
     </div>
   )
 }
